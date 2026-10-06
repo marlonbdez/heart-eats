@@ -35,6 +35,17 @@ Páginas de contenido: Sobre el proyecto · Cómo verificamos · Para restaurant
 Moderación (acceso con magic link): Cola ──► Detalle de sugerencia ──► Aprobar / Rechazar
 ```
 
+### Cabecera y menú lateral
+
+Cabecera fija: botón de menú (☰) · logo · "Proponer un local"; debajo, buscador y filtros de comida. El ☰ abre un **panel lateral** (cierra con ×, tocando fuera o con Esc) con:
+
+- **Navegar:** Mapa · Lista de locales
+- **Colaborar:** Proponer un local · Corregir un dato · Soy de un negocio
+- **Sobre HeartEats:** Qué es · Cómo verificamos · Privacidad y datos · Contacto
+- **Pie:** selector de idioma (ES/EN) y lema del proyecto
+
+En escritorio el panel puede quedar fijo a la izquierda. Todo accesible por teclado, con foco atrapado mientras está abierto.
+
 ## 4. Flujos
 
 ### F1 · Descubrir y ver una ficha (principal)
@@ -118,6 +129,7 @@ Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no ven
 | 8 | **Sin gamificación, sin puntuaciones ni reseñas** en el MVP | No es el objetivo |
 | 9 | **Filtros por tipo de comida**, no por discapacidad. La inclusión se muestra como sello sobrio ("Equipo inclusivo") | Promocionar el negocio, no etiquetar a las personas |
 | 10 | **Cada ficha destaca 1–3 platos estrella** (nombre, descripción corta, foto opcional) | Es lo que mueve a ir |
+| 12 | **Cabecera con menú lateral (☰)** que agrupa navegación, colaboración e información | Pantalla principal limpia y todo fácil de encontrar |
 | 11 | En la ficha, el bloque de verificación va **después** del contenido gastronómico | Transparente pero sin protagonismo |
 
 ## 9. Gate de aprobación
