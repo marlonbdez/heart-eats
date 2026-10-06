@@ -58,14 +58,13 @@ En escritorio el panel puede quedar fijo a la izquierda. Todo accesible por tecl
 - Estados: cargando, sin resultados (sugerir ampliar filtros o proponer un local), error de red (reintentar), sin permiso de ubicación.
 
 ### F2 · Proponer un local nuevo
-1. Botón "Proponer un local" (mapa y menú).
-2. **Paso 1 · Datos básicos**: nombre, dirección (con geocodificación y ajuste del pin), tipo, cocina.
-3. **Paso 2 · Inclusión**: tipos de inclusión, ¿es negocio independiente? (con ayuda sobre la regla de cadenas).
-4. **Paso 3 · Evidencias**: enlaces/documentos que lo acrediten; cómo conoces el negocio.
-5. **Paso 4 · Contacto** (opcional, no público) y envío.
-6. Confirmación: "Gracias, lo revisaremos" + qué pasa ahora y plazos aproximados.
-- La propuesta de terceros **no** incluye detalle del equipo: eso solo lo confirma el negocio (F3).
-- Antispam: honeypot, rate limit. Validación en línea, guarda borrador si se sale ❓.
+Desde el menú ☰, la cabecera o los estados vacíos. Formulario de **4 pasos** con barra de progreso, botones Atrás/Continuar y validación en línea:
+1. **El local:** nombre (obligatorio), dirección, ciudad, código postal, tipo de comida (categorías con icono, multi-selección).
+2. **Platos:** de 1 a 3 platos estrella (nombre + descripción corta opcional). Fotos: las aporta el negocio o se usan con su permiso; no se piden aquí.
+3. **Equipo:** cómo conoce el negocio quien propone, un enlace que lo confirme y casilla "negocio independiente". Aviso: **no escribir nombres ni datos de salud de personas**; el detalle del equipo lo cuenta solo el negocio con consentimiento (F3).
+4. **Enviar:** correo opcional (no público), resumen y aviso de privacidad.
+Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
+- Antispam: honeypot y rate limit. ❓ Guardar borrador si se sale.
 
 ### F3 · Negocio confirma su ficha y elige nivel de equipo
 1. Moderación contacta al negocio (por canal oficial) o este llega desde "Para restaurantes".
