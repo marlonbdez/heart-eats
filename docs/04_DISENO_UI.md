@@ -50,7 +50,7 @@ En escritorio el panel puede quedar fijo a la izquierda. Todo accesible por tecl
 
 ### F1 · Descubrir y ver una ficha (principal)
 1. Abre la app → mapa centrado en la zona del usuario (o Madrid si no da permiso de ubicación ❓ geolocalización: pedir solo tras gesto del usuario).
-2. Ve marcadores y clusters; usa el buscador (plato, local o zona) o filtros **de comida** (pizza, pasteles, café, tapas, menú del día…).
+2. Ve marcadores y clusters. El **buscador** encuentra **locales, ciudades/barrios y códigos postales** (si escribe una comida, sugiere la categoría como atajo). La **fila de categorías con icono** filtra por comida: pizza, hamburguesas, sushi, italiana, café, postres, tapas, menú del día, panadería, vegetariano.
 3. Toca un marcador → **tarjeta de vista previa**: lidera el **plato estrella** (foto + nombre), después el local, distancia, sello "Equipo inclusivo" e insignia.
 4. Toca la tarjeta → **ficha completa**.
 5. Desde la ficha: cómo llegar (abre app de mapas del dispositivo), llamar, web, **Sugerir corrección**.
@@ -129,6 +129,7 @@ Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no ven
 | 8 | **Sin gamificación, sin puntuaciones ni reseñas** en el MVP | No es el objetivo |
 | 9 | **Filtros por tipo de comida**, no por discapacidad. La inclusión se muestra como sello sobrio ("Equipo inclusivo") | Promocionar el negocio, no etiquetar a las personas |
 | 10 | **Cada ficha destaca 1–3 platos estrella** (nombre, descripción corta, foto opcional) | Es lo que mueve a ir |
+| 13 | **Buscador = sitios** (local, ciudad/barrio, código postal); **comida = categorías con icono**. Direcciones exactas fuera del MVP (requieren geocodificador, P4) | Cada cosa en su sitio, sin duplicar |
 | 12 | **Cabecera con menú lateral (☰)** que agrupa navegación, colaboración e información | Pantalla principal limpia y todo fácil de encontrar |
 | 11 | En la ficha, el bloque de verificación va **después** del contenido gastronómico | Transparente pero sin protagonismo |
 

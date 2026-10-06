@@ -90,7 +90,7 @@
 | Restaurant | `slug` único | detalle |
 | Restaurant | `{status, address.country, address.city}` | listados |
 | Restaurant | `{status, foodTags}`, `{status, cuisineTypes}` | filtros públicos de comida |
-| Restaurant | texto en `name`, `description.*` | búsqueda básica ❓ (índice de texto con i18n es limitado) |
+| Restaurant | texto en `name`, `address.neighborhood`, `address.city`; `address.postalCode` | buscador de sitios; los platos se encuentran por `foodTags` ❓ (índice de texto con i18n es limitado) |
 | Team | `restaurantId` único | |
 | Suggestion | `{status, createdAt}` | cola de moderación |
 | User | `email` único | |
