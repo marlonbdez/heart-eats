@@ -90,7 +90,7 @@
 | P4 | **Geocodificación** | Nominatim (con límites), Photon, MapTiler Geocoding | Antes de implementar el formulario |
 | P5 | **Autenticación** | MVP: sin cuentas para lectura; JWT/magic link para quien envía o modera. Valorar login social | Fase 0 (spec API) |
 | P6 | **Estructura legal** | Asociación sin ánimo de lucro en España (cuándo constituirla) | Antes de recibir donaciones o subvenciones |
-| P7 | **Idiomas iniciales** | ES + EN como mínimo | Fase 0 |
+| P7 ✅ | **Idiomas iniciales** (resuelta: ver `adr/0003-idiomas-y-rutas.md`) | ES + EN | Resuelta |
 | P8 | **Revisión de marca** | Consulta en bases de datos de marcas (OEPM, EUIPO) | Antes del lanzamiento público |
 | P9 | **Moderación** | Quién modera Madrid al inicio (Marlon) y criterios de ascenso a moderador | Fase 0 |
 

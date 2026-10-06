@@ -1,6 +1,10 @@
 // Tipos de lectura pública. Reflejan docs/01_ESPECIFICACION_DATOS.md.
 // Cuando haya backend, estos tipos pasarán a shared/types.
 
+// Texto con una versión por idioma: { es: '...', en: '...' }. Si falta el
+// idioma pedido, se usa el del lanzamiento (es).
+export type LocalizedText = Record<string, string>;
+
 export type BusinessType =
   'restaurant' | 'cafe' | 'bar' | 'bakery' | 'catering' | 'social_project';
 
@@ -44,7 +48,7 @@ export interface OpeningHours {
 export interface Restaurant {
   slug: string;
   name: string;
-  description?: string;
+  description?: LocalizedText;
   businessType: BusinessType;
   cuisineTypes: string[];
   foodTags: string[];
@@ -75,9 +79,9 @@ export interface Restaurant {
   isDemo: true;
 }
 
+// La etiqueta de cada categoría vive en messages/<idioma>.json (foodTags.<key>).
 export interface FoodTag {
   key: string;
-  label: string;
   icon: string;
 }
 
