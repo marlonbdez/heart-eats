@@ -43,7 +43,7 @@
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: 12px;
+  bottom: 84px; /* encima del conmutador Mapa/Lista */
   z-index: 5;
   max-width: 420px;
   padding: 14px 40px 14px 14px;

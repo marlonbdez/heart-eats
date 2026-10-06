@@ -105,25 +105,30 @@ export function Discover({
           </div>
         )}
         <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
-        <div className={styles.bar}>
-          <p role="status" className={styles.count}>
-            {t('results.count', { count: visible.length })}
-          </p>
-          <ViewSwitch view={view} query={query} />
-        </div>
       </div>
 
-      <div className={view === 'map' ? styles.mapArea : styles.listArea}>
+      <div className={styles.area}>
+        <ViewSwitch view={view} query={query} />
         {view === 'map' ? (
-          <MapLoader restaurants={visible} focus={hasFilters} />
+          <>
+            <p role="status" className={styles.srOnly}>
+              {t('results.count', { count: visible.length })}
+            </p>
+            <MapLoader restaurants={visible} focus={hasFilters} />
+          </>
         ) : (
-          <ul className={styles.list} aria-label={t('results.listLabel')}>
-            {visible.map((r) => (
-              <li key={r.slug} className={styles.item}>
-                <RestaurantCard restaurant={r} />
-              </li>
-            ))}
-          </ul>
+          <div className={styles.listScroll}>
+            <p role="status" className={styles.count}>
+              {t('results.count', { count: visible.length })}
+            </p>
+            <ul className={styles.list} aria-label={t('results.listLabel')}>
+              {visible.map((r) => (
+                <li key={r.slug} className={styles.item}>
+                  <RestaurantCard restaurant={r} />
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
         {visible.length === 0 && suggestions.length === 0 && (
           <div className={styles.empty}>
