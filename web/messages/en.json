@@ -41,7 +41,8 @@
     "label": "Map of places",
     "loadError": "The map could not be loaded on this device.",
     "markerLabel": "{name}, show preview",
-    "loadErrorLink": "Browse places in a list"
+    "loadErrorLink": "Browse places in a list",
+    "you": "Your location"
   },
   "card": {
     "label": "Place preview",
@@ -139,5 +140,15 @@
       "autism_spectrum": "autism spectrum disorder",
       "other": "another disability"
     }
+  },
+  "nearMe": {
+    "button": "Near me",
+    "asking": "Finding your location…",
+    "privacy": "It is only used in your browser to work out distances; it is not stored or sent.",
+    "active": "Sorted by distance from your location.",
+    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; meanwhile, we stay in Madrid.",
+    "unavailable": "We couldn’t get your location. We stay in Madrid.",
+    "outside": "There are no places near you yet. We stay in Madrid.",
+    "distanceLabel": "{distance} away"
   }
 }

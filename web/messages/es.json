@@ -41,7 +41,8 @@
     "label": "Mapa de locales",
     "loadError": "No se ha podido cargar el mapa en este dispositivo.",
     "markerLabel": "{name}, ver vista previa",
-    "loadErrorLink": "Ver los locales en una lista"
+    "loadErrorLink": "Ver los locales en una lista",
+    "you": "Tu ubicación"
   },
   "card": {
     "label": "Vista previa del local",
@@ -139,5 +140,15 @@
       "autism_spectrum": "trastorno del espectro autista",
       "other": "otra discapacidad"
     }
+  },
+  "nearMe": {
+    "button": "Cerca de mí",
+    "asking": "Buscando tu ubicación…",
+    "privacy": "Solo se usa en tu navegador para calcular distancias; no se guarda ni se envía.",
+    "active": "Ordenado por distancia desde tu ubicación.",
+    "denied": "No tenemos permiso para usar tu ubicación. Puedes activarlo en los ajustes del navegador; mientras tanto, seguimos en Madrid.",
+    "unavailable": "No hemos podido obtener tu ubicación. Seguimos en Madrid.",
+    "outside": "Aún no hay locales cerca de ti. Seguimos en Madrid.",
+    "distanceLabel": "a {distance}"
   }
 }

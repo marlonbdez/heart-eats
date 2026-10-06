@@ -36,11 +36,51 @@
 }
 /* Recuento: en la lista se ve (arriba); en el mapa solo se anuncia. */
 .count {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 12px 16px 0;
+  margin: 0;
   font-size: 0.9rem;
   color: var(--muted);
+}
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 12px 0 16px;
+}
+.nearMe {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+}
+.mapNotice,
+.listNotice {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.mapNotice {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 170px;
+  z-index: 6;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+}
+.listNotice {
+  max-width: 696px;
+  margin: 8px 12px 0;
+}
+@media (min-width: 744px) {
+  .listNotice {
+    margin: 8px auto 0;
+  }
 }
 .srOnly {
   position: absolute;

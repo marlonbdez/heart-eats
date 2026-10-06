@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
 import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
+import { useLocation } from './LocationProvider';
 import { RestaurantCard } from './RestaurantCard';
 import styles from './MapView.module.css';
 
@@ -28,6 +29,8 @@ export function MapView({
   focus?: boolean;
 }) {
   const t = useTranslations();
+  const { position } = useLocation();
+  const youRef = useRef<Marker | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -134,6 +137,30 @@ export function MapView({
       markers.current.set(r.slug, { marker, el });
     }
   }, [restaurants, t, ready]);
+
+  // Punto de "tu posición" y, al compartirla, centrar el mapa en ella.
+  useEffect(() => {
+    const map = mapRef.current;
+    const lib = libRef.current;
+    if (!ready || !map || !lib) return;
+    youRef.current?.remove();
+    youRef.current = null;
+    if (!position) return;
+    const el = document.createElement('div');
+    el.className = styles.you;
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', t('map.you'));
+    youRef.current = new lib.Marker({ element: el })
+      .setLngLat([position.lng, position.lat])
+      .addTo(map);
+    map.easeTo({
+      center: [position.lng, position.lat],
+      zoom: 14,
+      duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 0
+        : 600,
+    });
+  }, [position, ready, t]);
 
   // Encuadrar los resultados cuando hay búsqueda; volver a la vista inicial si no.
   const resultKey = restaurants.map((r) => r.slug).join(',');
