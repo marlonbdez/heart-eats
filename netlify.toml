@@ -1,0 +1,23 @@
+# Despliegue del frontend (web/) en Netlify. El backend se despliega aparte.
+[build]
+  base    = "web"
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Todas las rutas se generan como HTML estático en el build, así que no hace
+# falta el fallback a /index.html; las rutas inexistentes sirven out/404.html.
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
