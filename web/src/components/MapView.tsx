@@ -29,7 +29,10 @@ export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
     const onSchemeChange = () => map?.setStyle(styleUrl());
 
     (async () => {
-      const { Map, Marker, NavigationControl } = await import('maplibre-gl');
+      const { Map, Marker, NavigationControl, setWorkerUrl } =
+        await import('maplibre-gl');
+      // Ver scripts/copy-maplibre-worker.mjs
+      setWorkerUrl(`${window.location.origin}/maplibre/maplibre-gl-worker.mjs`);
       if (cancelled || !containerRef.current) return;
       try {
         map = new Map({
