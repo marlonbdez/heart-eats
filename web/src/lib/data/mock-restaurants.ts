@@ -1,0 +1,233 @@
+import type { FoodTag, Restaurant } from '../types';
+
+export const foodTags: FoodTag[] = [
+  { key: 'pizza', label: 'Pizza', icon: '🍕' },
+  { key: 'burgers', label: 'Hamburguesas', icon: '🍔' },
+  { key: 'sushi', label: 'Sushi', icon: '🍣' },
+  { key: 'italian', label: 'Italiana', icon: '🍝' },
+  { key: 'coffee', label: 'Café', icon: '☕' },
+  { key: 'desserts', label: 'Postres', icon: '🍰' },
+  { key: 'tapas', label: 'Tapas', icon: '🫒' },
+  { key: 'set_menu', label: 'Menú del día', icon: '🍽️' },
+  { key: 'bakery', label: 'Panadería', icon: '🥖' },
+  { key: 'vegetarian', label: 'Vegetariano', icon: '🥗' },
+];
+
+const week = (open: string, close: string, days: number[]) =>
+  days.map((day) => ({
+    day: day as 0 | 1 | 2 | 3 | 4 | 5 | 6,
+    open,
+    close,
+  }));
+
+// Datos ficticios. Nada de esto es un negocio real.
+export const restaurants: Restaurant[] = [
+  {
+    slug: 'demo-la-masa-madre',
+    name: '[DEMO] La Masa Madre',
+    description: 'Pizzería de barrio con masa de 48 horas.',
+    businessType: 'restaurant',
+    cuisineTypes: ['italian'],
+    foodTags: ['pizza', 'italian'],
+    address: {
+      street: 'Calle de Ejemplo 12',
+      postalCode: '28012',
+      neighborhood: 'Lavapiés',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.4085, lng: -3.7012 },
+    contact: { phone: '+34 600 000 001', website: 'https://example.org' },
+    openingHours: week('13:00', '23:30', [0, 2, 3, 4, 5, 6]),
+    signatureDishes: [
+      {
+        name: 'Margarita de la casa',
+        description: 'Tomate, mozzarella fresca y albahaca.',
+      },
+      { name: 'Focaccia de romero' },
+    ],
+    team: {
+      level: 'medium',
+      summary: { totalStaff: 11, staffWithDisability: 4 },
+      roles: [
+        { role: 'Cocina', disabilityCategory: 'hearing_impairment', count: 2 },
+        {
+          role: 'Sala',
+          disabilityCategory: 'intellectual_disability',
+          count: 2,
+        },
+      ],
+    },
+    verification: {
+      level: 'admin',
+      method: 'visit',
+      lastVerifiedAt: '2026-09-02T00:00:00Z',
+      needsReview: false,
+    },
+    isDemo: true,
+  },
+  {
+    slug: 'demo-cafe-paso-a-paso',
+    name: '[DEMO] Café Paso a Paso',
+    description: 'Cafetería de especialidad y repostería casera.',
+    businessType: 'cafe',
+    cuisineTypes: [],
+    foodTags: ['coffee', 'desserts', 'bakery'],
+    address: {
+      street: 'Calle de Muestra 5',
+      postalCode: '28004',
+      neighborhood: 'Malasaña',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.4263, lng: -3.7041 },
+    contact: { instagram: '@ejemplo' },
+    openingHours: week('08:00', '20:00', [1, 2, 3, 4, 5, 6]),
+    signatureDishes: [
+      { name: 'Tarta de zanahoria', description: 'Con frosting de queso.' },
+    ],
+    team: {
+      level: 'minimal',
+      summary: { totalStaff: 6, staffWithDisability: 2 },
+    },
+    verification: {
+      level: 'community',
+      method: 'owner_confirmed',
+      lastVerifiedAt: '2026-07-15T00:00:00Z',
+      needsReview: false,
+    },
+    isDemo: true,
+  },
+  {
+    slug: 'demo-taberna-la-vereda',
+    name: '[DEMO] Taberna La Vereda',
+    description: 'Tapas y menú del día con producto de temporada.',
+    businessType: 'bar',
+    cuisineTypes: ['spanish'],
+    foodTags: ['tapas', 'set_menu'],
+    address: {
+      street: 'Plaza de Prueba 3',
+      postalCode: '28005',
+      neighborhood: 'La Latina',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.4125, lng: -3.7083 },
+    contact: { phone: '+34 600 000 003' },
+    openingHours: week('12:00', '00:00', [0, 1, 2, 3, 4, 5, 6]),
+    signatureDishes: [
+      { name: 'Croquetas de jamón' },
+      { name: 'Menú del día', description: 'Primero, segundo y postre.' },
+    ],
+    team: {
+      level: 'full',
+      summary: { totalStaff: 9, staffWithDisability: 3 },
+      roles: [
+        { role: 'Barra', disabilityCategory: 'physical_disability', count: 1 },
+      ],
+      stories: [
+        {
+          displayName: 'Persona de ejemplo',
+          role: 'Cocina',
+          storyText: 'Texto ficticio de ejemplo para maquetar la historia.',
+        },
+      ],
+    },
+    verification: {
+      level: 'admin',
+      method: 'documentation',
+      lastVerifiedAt: '2025-08-01T00:00:00Z',
+      needsReview: true,
+    },
+    isDemo: true,
+  },
+  {
+    slug: 'demo-verde-que-te-quiero',
+    name: '[DEMO] Verde que te quiero',
+    description: 'Cocina vegetariana de temporada.',
+    businessType: 'restaurant',
+    cuisineTypes: ['vegetarian'],
+    foodTags: ['vegetarian', 'set_menu'],
+    address: {
+      street: 'Calle de Ensayo 20',
+      postalCode: '28010',
+      neighborhood: 'Chamberí',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.4339, lng: -3.7028 },
+    contact: { website: 'https://example.org' },
+    openingHours: week('13:00', '16:30', [1, 2, 3, 4, 5]),
+    signatureDishes: [{ name: 'Bol de legumbres y verduras asadas' }],
+    team: {
+      level: 'minimal',
+      summary: { totalStaff: 8, staffWithDisability: 3 },
+    },
+    verification: {
+      level: 'community',
+      method: 'call',
+      lastVerifiedAt: '2026-06-20T00:00:00Z',
+      needsReview: false,
+    },
+    isDemo: true,
+  },
+  {
+    slug: 'demo-panaderia-el-horno',
+    name: '[DEMO] Panadería El Horno',
+    businessType: 'bakery',
+    cuisineTypes: [],
+    foodTags: ['bakery', 'desserts', 'coffee'],
+    address: {
+      street: 'Calle de Demostración 7',
+      postalCode: '28045',
+      neighborhood: 'Arganzuela',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.3979, lng: -3.6957 },
+    contact: {},
+    openingHours: week('07:00', '15:00', [1, 2, 3, 4, 5, 6]),
+    signatureDishes: [{ name: 'Pan de masa madre' }],
+    verification: {
+      level: 'admin',
+      method: 'visit',
+      lastVerifiedAt: '2026-08-10T00:00:00Z',
+      needsReview: false,
+    },
+    isDemo: true,
+  },
+  {
+    slug: 'demo-burger-del-barrio',
+    name: '[DEMO] Burger del Barrio',
+    businessType: 'restaurant',
+    cuisineTypes: ['american'],
+    foodTags: ['burgers'],
+    address: {
+      street: 'Calle de Maqueta 31',
+      postalCode: '28028',
+      neighborhood: 'Salamanca',
+      city: 'Madrid',
+      country: 'ES',
+    },
+    location: { lat: 40.4297, lng: -3.6773 },
+    contact: { phone: '+34 600 000 006' },
+    openingHours: week('13:00', '23:00', [0, 1, 2, 3, 4, 5, 6]),
+    signatureDishes: [
+      {
+        name: 'Hamburguesa clásica',
+        description: 'Carne de ternera y cheddar.',
+      },
+    ],
+    team: {
+      level: 'minimal',
+      summary: { totalStaff: 14, staffWithDisability: 5 },
+    },
+    verification: {
+      level: 'community',
+      method: 'owner_confirmed',
+      lastVerifiedAt: '2026-09-18T00:00:00Z',
+      needsReview: false,
+    },
+    isDemo: true,
+  },
+];
