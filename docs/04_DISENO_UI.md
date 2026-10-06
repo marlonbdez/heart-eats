@@ -95,20 +95,27 @@ Desde la ficha: elegir qué está mal (dirección, horario, ha cerrado, informac
 - **Tarjeta de restaurante** (reutilizada en mapa y lista).
 - **Chip de filtro**, **stepper** del formulario, **bloque de consentimiento**.
 
-## 7. Identidad visual (propuesta inicial ❓)
+## 7. Identidad visual (propuesta inicial)
 
 - Motivo: corazón + tenedor/cuchillo. Paleta cálida (terracota/ámbar sobre crema), alto contraste de texto.
 - Tipografía de alta legibilidad (valorar una pensada para dislexia para el cuerpo de texto).
 - Modo claro y oscuro. Respeta `prefers-reduced-motion`.
 - Iconos siempre con etiqueta de texto; la información nunca depende solo del color.
 
-## 8. Decisiones de diseño abiertas
+## 8. Decisiones de diseño (cerradas el 2026-10-06)
 
-1. ❓ Idiomas del prototipo: ES con EN preparado.
-2. ❓ ¿Se muestra la insignia en el marcador del mapa o solo en la tarjeta?
-3. ❓ Distancia: ¿pedir ubicación al abrir o tras pulsar "cerca de mí"? (propuesto: tras pulsar).
-4. ❓ ¿Cuántas fotos por ficha en el MVP y quién las sube? (derechos de imagen).
-5. ❓ ¿"Para restaurantes" incluye un formulario de contacto propio o solo información y correo?
+Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no vender.**
+
+| # | Decisión | Motivo |
+|---|---|---|
+| 1 | Prototipo en **español**, con textos preparados para i18n (EN después) | Lanzamiento en Madrid |
+| 2 | **Marcador del mapa uniforme**; la insignia de verificación va en la tarjeta y en la ficha | Un mapa limpio se lee mejor; la transparencia sigue visible al primer toque |
+| 3 | **Ubicación solo tras pulsar "Cerca de mí"**; mientras tanto, mapa de Madrid | Privacidad y cero fricción |
+| 4 | **Una foto por ficha en el MVP**, aportada por el negocio o con su permiso; sin foto, ilustración neutra | Evita problemas de derechos de imagen y mantiene el MVP simple |
+| 5 | "Para restaurantes" es **página informativa + correo de contacto**, sin formulario propio | Menos que construir y moderar |
+| 6 | **Tipografía del sistema** legible, sin fuentes externas | Carga rápida, accesible, sin dependencias |
+| 7 | **Sin cuenta para el público**: ver, buscar y proponer sin registrarse | Cero barreras |
+| 8 | **Sin gamificación, sin puntuaciones ni reseñas** en el MVP | No es el objetivo |
 
 ## 9. Gate de aprobación
 
