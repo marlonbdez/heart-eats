@@ -2,7 +2,9 @@
   position: absolute;
   inset: 0;
 }
-.map {
+/* Más específico que .maplibregl-map (position: relative), sin depender del
+   orden en que se cargan las hojas de estilo. */
+.wrap > .map {
   position: absolute;
   inset: 0;
 }

@@ -7,15 +7,19 @@ import { matchFoodTags, matchesQuery } from '@/lib/search';
 import type { FoodTag, Restaurant } from '@/lib/types';
 import { FoodFilters } from './FoodFilters';
 import { MapLoader } from './MapLoader';
+import { RestaurantCard } from './RestaurantCard';
 import { SearchBar } from './SearchBar';
+import { ViewSwitch } from './ViewSwitch';
 import styles from './Discover.module.css';
 
-// Pantalla principal: buscador + categorías de comida + mapa. El estado vive
+// Pantalla principal: buscador + categorías de comida + mapa o lista. El estado vive
 // en la URL (?q=…&food=a,b) para poder compartir o recargar una búsqueda.
 export function Discover({
+  view = 'map',
   restaurants,
   foodTags,
 }: {
+  view?: 'map' | 'list';
   restaurants: Restaurant[];
   foodTags: FoodTag[];
 }) {
@@ -69,6 +73,10 @@ export function Discover({
     );
   // Si lo escrito parece una comida, la sugerencia ya es la ayuda: no se avisa
   // de "sin resultados" a la vez.
+  const query: Record<string, string> = {};
+  if (q.trim()) query.q = q.trim();
+  if (food.length) query.food = food.join(',');
+
   const clearAll = () => {
     setQ('');
     setFood([]);
@@ -97,13 +105,26 @@ export function Discover({
           </div>
         )}
         <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
+        <div className={styles.bar}>
+          <p role="status" className={styles.count}>
+            {t('results.count', { count: visible.length })}
+          </p>
+          <ViewSwitch view={view} query={query} />
+        </div>
       </div>
 
-      <div className={styles.mapArea}>
-        <MapLoader restaurants={visible} focus={hasFilters} />
-        <p role="status" className={styles.count}>
-          {t('results.count', { count: visible.length })}
-        </p>
+      <div className={view === 'map' ? styles.mapArea : styles.listArea}>
+        {view === 'map' ? (
+          <MapLoader restaurants={visible} focus={hasFilters} />
+        ) : (
+          <ul className={styles.list} aria-label={t('results.listLabel')}>
+            {visible.map((r) => (
+              <li key={r.slug} className={styles.item}>
+                <RestaurantCard restaurant={r} />
+              </li>
+            ))}
+          </ul>
+        )}
         {visible.length === 0 && suggestions.length === 0 && (
           <div className={styles.empty}>
             <h2 className={styles.emptyTitle}>{t('results.emptyTitle')}</h2>

@@ -4,6 +4,7 @@ import type { Map as MapLibreMap, Marker } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from '@/i18n/navigation';
 import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { RestaurantCard } from './RestaurantCard';
@@ -192,7 +193,8 @@ export function MapView({
       />
       {failed && (
         <p role="alert" className={styles.error}>
-          {t('map.loadError')}
+          {t('map.loadError')}{' '}
+          <Link href="/lista">{t('map.loadErrorLink')}</Link>
         </p>
       )}
       {current && (

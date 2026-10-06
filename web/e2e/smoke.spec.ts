@@ -148,3 +148,33 @@ test('el buscador y las categorías filtran los marcadores', async ({
   await page.locator('button[aria-pressed]').first().click();
   await expect.poll(() => markers.count()).toBeLessThan(total);
 });
+
+test('la lista muestra los mismos locales y conserva la búsqueda', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  const markers = page.locator('[data-marker]');
+  await expect(markers.first()).toBeVisible();
+  const total = await markers.count();
+
+  await page
+    .getByRole('navigation')
+    .last()
+    .locator('a[href^="/es/lista"]')
+    .click();
+  await expect(page).toHaveURL(/\/es\/lista$/);
+  const items = page.getByRole('list').last().getByRole('listitem');
+  await expect(items).toHaveCount(total);
+
+  await page.getByRole('searchbox').fill('lavapies');
+  await expect(items).toHaveCount(1);
+
+  // Volver al mapa lleva la búsqueda consigo.
+  await page
+    .getByRole('navigation')
+    .last()
+    .locator('a[href="/es?q=lavapies"]')
+    .click();
+  await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
+  await expect(markers).toHaveCount(1);
+});

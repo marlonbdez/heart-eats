@@ -34,15 +34,37 @@
   flex: 1;
   min-height: 0;
 }
-/* El número de resultados se anuncia a lectores de pantalla; no se ve. */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* El número de resultados se ve y, con role="status", también se anuncia. */
 .count {
-  position: absolute;
-  width: 1px;
-  height: 1px;
   margin: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.listArea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.list {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px;
+  list-style: none;
+}
+.item {
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 .empty {
   position: absolute;

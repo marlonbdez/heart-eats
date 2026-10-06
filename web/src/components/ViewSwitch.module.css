@@ -1,0 +1,23 @@
+.switch {
+  display: inline-flex;
+  flex: none;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 64px;
+  min-height: 44px;
+  justify-content: center;
+  padding: 0 14px;
+  color: var(--fg);
+  text-decoration: none;
+  border-radius: 999px;
+}
+.item[aria-current='page'] {
+  font-weight: 600;
+  color: var(--on-accent);
+  background: var(--accent);
+}
