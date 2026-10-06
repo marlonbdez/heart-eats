@@ -10,7 +10,7 @@ Empieza por [`docs/00_HANDOFF.md`](docs/00_HANDOFF.md) y el índice en [`docs/RE
 
 ## Desarrollo local
 
-Requiere Node.js 20.9 o superior (se usa la 22).
+Requiere Node.js 20.9 o superior (se usa la 24, LTS).
 
 ```bash
 cd web

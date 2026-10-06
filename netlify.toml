@@ -5,7 +5,7 @@
   publish = "out"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "24"
 
 # Todas las rutas se generan como HTML estático en el build, así que no hace
 # falta el fallback a /index.html; las rutas inexistentes sirven out/404.html.
