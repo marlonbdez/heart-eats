@@ -1,0 +1,6 @@
+.next
+out
+public/maplibre
+playwright-report
+test-results
+package-lock.json

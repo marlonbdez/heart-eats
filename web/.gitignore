@@ -3,3 +3,7 @@ next-env.d.ts
 
 # Copiado en predev/prebuild desde node_modules
 public/maplibre/
+
+# Playwright
+test-results/
+playwright-report/
