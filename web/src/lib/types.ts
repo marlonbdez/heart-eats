@@ -70,6 +70,9 @@ export interface Restaurant {
   openingHours: OpeningHours[];
   signatureDishes: SignatureDish[]; // 1-3
   team?: Team;
+  // El negocio sabe que aparece y ha dado el visto bueno. Sin esto, el equipo
+  // no se muestra con detalle (ver lib/team.ts).
+  ownerConfirmedAt?: string; // ISO
   verification: {
     level: VerificationLevel;
     method: VerificationMethod;

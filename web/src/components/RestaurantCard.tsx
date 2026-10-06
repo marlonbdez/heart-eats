@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import type { Restaurant } from '@/lib/types';
 import { VerificationBadge } from './VerificationBadge';
 import styles from './RestaurantCard.module.css';
@@ -32,6 +33,9 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>
         <VerificationBadge verification={restaurant.verification} />
+        <Link className={styles.more} href={`/local/${restaurant.slug}`}>
+          {t('viewLocal')}
+        </Link>
       </div>
     </div>
   );

@@ -58,7 +58,8 @@
       "call": "phone call",
       "documentation": "documentation",
       "owner_confirmed": "confirmed by the business"
-    }
+    },
+    "viewLocal": "View place →"
   },
   "foodTags": {
     "pizza": "Pizza",
@@ -98,5 +99,45 @@
     "label": "View",
     "map": "Map",
     "list": "List"
+  },
+  "_view": "View place →",
+  "detail": {
+    "back": "Back",
+    "seal": "Business with an inclusive team",
+    "dishes": "What you have to try",
+    "actions": "Actions",
+    "directions": "Directions",
+    "call": "Call",
+    "website": "Website",
+    "hours": "Opening hours",
+    "dayRange": "{from} to {to}",
+    "closed": "Closed",
+    "verifiedAdmin": "Verified details",
+    "verifiedCommunity": "Details confirmed by the community",
+    "howWeVerify": "How do we verify?",
+    "suggest": "Suggest a correction",
+    "businessTypes": {
+      "restaurant": "Restaurant",
+      "cafe": "Café",
+      "bar": "Bar",
+      "bakery": "Bakery",
+      "catering": "Catering",
+      "social_project": "Social project"
+    }
+  },
+  "team": {
+    "title": "The team behind every dish",
+    "summary": "<b>{with} of {total} people</b> on the team have a disability.",
+    "role": "{role}: {count, plural, one {# person} other {# people}} with {category}",
+    "storyConsent": "Story shared with the person’s consent, which they can withdraw at any time.",
+    "categories": {
+      "intellectual_disability": "an intellectual disability",
+      "physical_disability": "a physical disability",
+      "hearing_impairment": "a hearing disability",
+      "visual_impairment": "a visual disability",
+      "mental_health": "a mental health condition",
+      "autism_spectrum": "autism spectrum disorder",
+      "other": "another disability"
+    }
   }
 }
