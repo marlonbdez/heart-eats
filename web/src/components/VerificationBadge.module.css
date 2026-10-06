@@ -1,0 +1,11 @@
+.badge {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.review {
+  font-weight: 600;
+  color: var(--accent-text);
+}

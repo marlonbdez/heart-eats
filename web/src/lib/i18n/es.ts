@@ -30,6 +30,29 @@ export const es = {
     language: 'Idioma',
     soonEnglish: 'English (próximamente)',
   },
+  map: {
+    label: 'Mapa de locales',
+    loadError:
+      'No se ha podido cargar el mapa en este dispositivo. Pronto podrás ver los locales en una lista.',
+    markerLabel: (name: string) => `${name}, ver vista previa`,
+  },
+  card: {
+    label: 'Vista previa del local',
+    close: 'Cerrar vista previa',
+    inclusiveSeal: 'Equipo inclusivo',
+    signatureDish: 'Plato estrella',
+    noPhoto: 'Sin foto',
+    verifiedAdmin: 'Verificado',
+    verifiedCommunity: 'Confirmado',
+    needsReview: 'Pendiente de revisión',
+    methods: {
+      visit: 'visita presencial',
+      call: 'llamada',
+      documentation: 'documentación',
+      owner_confirmed: 'confirmado por el negocio',
+    },
+    updated: 'actualizado',
+  },
   placeholder: {
     title: 'Esta pantalla llega pronto',
     body: 'Seguimos construyendo HeartEats pantalla a pantalla.',
