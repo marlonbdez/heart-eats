@@ -86,7 +86,7 @@
 |---|---|---|---|
 | P1 | **Hosting del backend** | Railway (~5 $/mes tras crédito de prueba), Render (gratis con "sleep" tras inactividad), Fly.io, VPS pequeño | Antes de la Fase 1 |
 | P2 ✅ | **Licencia definitiva** (resuelta: ver `adr/0001-licencias.md`) | Código: AGPL-3.0. Datos: ODbL o CC BY-SA 4.0. Confirmar combinación | Antes del primer commit público |
-| P3 | **Proveedor de teselas de mapa** | MapTiler, Stadia Maps, OpenFreeMap, Protomaps (self-host) — ver §12 | Durante diseño del mapa |
+| P3 ✅ | **Proveedor de teselas de mapa** (resuelta: ver `adr/0002-mapa-maplibre-openfreemap.md`) | MapLibre GL + OpenFreeMap | Resuelta |
 | P4 | **Geocodificación** | Nominatim (con límites), Photon, MapTiler Geocoding | Antes de implementar el formulario |
 | P5 | **Autenticación** | MVP: sin cuentas para lectura; JWT/magic link para quien envía o modera. Valorar login social | Fase 0 (spec API) |
 | P6 | **Estructura legal** | Asociación sin ánimo de lucro en España (cuándo constituirla) | Antes de recibir donaciones o subvenciones |
