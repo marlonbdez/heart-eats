@@ -7,6 +7,15 @@
 [build.environment]
   NODE_VERSION = "24"
 
+# Idioma: la raíz (/) lleva a /en si el navegador está en inglés. En cualquier
+# otro caso, la página raíz redirige al idioma por defecto (es).
+[[redirects]]
+  from       = "/"
+  to         = "/en"
+  status     = 302
+  force      = true
+  conditions = { Language = ["en"] }
+
 # Todas las rutas se generan como HTML estático en el build, así que no hace
 # falta el fallback a /index.html; las rutas inexistentes sirven out/404.html.
 

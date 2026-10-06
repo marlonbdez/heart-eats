@@ -1,46 +1,43 @@
-import { es } from './i18n/es';
-
 export interface NavLink {
   href: string;
-  label: string;
+  key: string; // clave en messages: menu.links.<key>
 }
 
 export interface NavGroup {
-  title: string;
+  key: string; // clave en messages: menu.groups.<key>
   links: NavLink[];
 }
 
-const l = es.menu.links;
-
 export const navGroups: NavGroup[] = [
   {
-    title: es.menu.groups.navigate,
+    key: 'navigate',
     links: [
-      { href: '/', label: l.map },
-      { href: '/lista', label: l.list },
+      { href: '/', key: 'map' },
+      { href: '/lista', key: 'list' },
     ],
   },
   {
-    title: es.menu.groups.collaborate,
+    key: 'collaborate',
     links: [
-      { href: '/proponer', label: l.propose },
-      { href: '/corregir', label: l.correct },
-      { href: '/negocios', label: l.business },
+      { href: '/proponer', key: 'propose' },
+      { href: '/corregir', key: 'correct' },
+      { href: '/negocios', key: 'business' },
     ],
   },
   {
-    title: es.menu.groups.about,
+    key: 'about',
     links: [
-      { href: '/sobre', label: l.what },
-      { href: '/verificacion', label: l.verify },
-      { href: '/privacidad', label: l.privacy },
-      { href: '/contacto', label: l.contact },
+      { href: '/sobre', key: 'what' },
+      { href: '/verificacion', key: 'verify' },
+      { href: '/privacidad', key: 'privacy' },
+      { href: '/contacto', key: 'contact' },
     ],
   },
 ];
 
 // Rutas del menú que aún no tienen pantalla propia: las sirve la página
 // "llega pronto" hasta que se construyan (una ruta real tiene prioridad).
+// Las rutas son iguales en todos los idiomas.
 export const pendingRoutes = navGroups
   .flatMap((g) => g.links.map((link) => link.href.slice(1)))
   .filter((slug) => slug !== '');

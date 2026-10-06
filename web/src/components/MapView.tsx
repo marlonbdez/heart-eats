@@ -2,8 +2,8 @@
 
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { es } from '@/lib/i18n/es';
 import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { RestaurantCard } from './RestaurantCard';
@@ -13,6 +13,7 @@ const HEART_PATH =
   'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
 
 export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
+  const t = useTranslations();
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLElement>(null);
   const markerEls = useRef(new Map<string, HTMLButtonElement>());
@@ -63,7 +64,7 @@ export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
         el.type = 'button';
         el.className = styles.marker;
         el.dataset.marker = r.slug;
-        el.setAttribute('aria-label', es.map.markerLabel(r.name));
+        el.setAttribute('aria-label', t('map.markerLabel', { name: r.name }));
         el.innerHTML = `<svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true" focusable="false"><path d="${HEART_PATH}"/></svg>`;
         el.addEventListener('click', () => setSelected(r.slug));
         els.set(r.slug, el);
@@ -79,7 +80,7 @@ export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
       map?.remove();
       els.clear();
     };
-  }, [restaurants]);
+  }, [restaurants, t]);
 
   // Marcador seleccionado y foco en la tarjeta.
   useEffect(() => {
@@ -103,18 +104,18 @@ export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
         ref={containerRef}
         className={styles.map}
         role="region"
-        aria-label={es.map.label}
+        aria-label={t('map.label')}
       />
       {failed && (
         <p role="alert" className={styles.error}>
-          {es.map.loadError}
+          {t('map.loadError')}
         </p>
       )}
       {current && (
         <aside
           ref={cardRef}
           className={styles.preview}
-          aria-label={es.card.label}
+          aria-label={t('card.label')}
           tabIndex={-1}
           onKeyDown={(e) => {
             if (e.key === 'Escape') close();
@@ -123,7 +124,7 @@ export function MapView({ restaurants }: { restaurants: Restaurant[] }) {
           <button
             type="button"
             className={styles.close}
-            aria-label={es.card.close}
+            aria-label={t('card.close')}
             onClick={close}
           >
             <span aria-hidden="true">×</span>

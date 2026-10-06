@@ -71,7 +71,7 @@ test('el mapa se dibuja y muestra los locales', async ({ page }) => {
   });
   page.on('pageerror', (e) => errors.push(e.message));
 
-  await page.goto('/');
+  await page.goto('/es');
   await expect(page.locator('[data-marker]')).toHaveCount(6);
 
   // Una capa que depende del worker de MapLibre se dibuja de verdad.
@@ -93,7 +93,7 @@ test('el mapa se dibuja y muestra los locales', async ({ page }) => {
 test('al pulsar un marcador se abre la vista previa y Esc la cierra', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/es');
   const marker = page.getByRole('button', { name: /La Masa Madre/ });
   await marker.focus();
   await page.keyboard.press('Enter');
@@ -111,13 +111,47 @@ test('al pulsar un marcador se abre la vista previa y Esc la cierra', async ({
 });
 
 test('el menú lateral abre, navega y se cierra', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/es');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
   const menu = page.getByRole('dialog');
   await expect(menu).toBeVisible();
 
   await menu.getByRole('link', { name: 'Lista de locales' }).click();
-  await expect(page).toHaveURL(/\/lista$/);
+  await expect(page).toHaveURL(/\/es\/lista$/);
   await expect(menu).toBeHidden();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});
+
+test('la raíz lleva al idioma por defecto', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/es\/?$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+});
+
+test('se puede cambiar a inglés y se conserva la pantalla', async ({
+  page,
+}) => {
+  await page.goto('/es/lista');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await page.getByRole('dialog').getByRole('link', { name: 'English' }).click();
+
+  await expect(page).toHaveURL(/\/en\/lista$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(
+    page.getByRole('heading', { name: 'This screen is coming soon' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'Suggest a place' }),
+  ).toBeVisible();
+});
+
+test('el botón de proponer es solo icono en móvil y conserva su nombre', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  const cta = page.getByRole('link', { name: 'Proponer un local' });
+  await expect(cta).toBeVisible();
+  const box = await cta.boundingBox();
+  expect(box!.width).toBeLessThan(80);
+  expect(box!.height).toBeGreaterThanOrEqual(44);
 });

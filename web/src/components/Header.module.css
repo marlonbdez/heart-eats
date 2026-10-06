@@ -57,20 +57,40 @@
 .cta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
   min-height: 44px;
-  padding: 0 16px;
+  padding: 0 10px;
   font-weight: 600;
   color: var(--on-accent);
   background: var(--accent);
   border-radius: 999px;
   text-decoration: none;
 }
-.longOnly {
-  display: none;
+.ctaIcon {
+  flex: none;
+  fill: currentColor;
+}
+/* Solo para lectores de pantalla en móvil: el icono ya comunica la acción. */
+.ctaText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 @media (min-width: 480px) {
-  .longOnly {
-    display: inline;
+  .cta {
+    padding: 0 16px 0 12px;
+  }
+  .ctaText {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
   }
 }
 
@@ -160,11 +180,25 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-.lang {
+.langList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
   margin: 4px 0 12px;
+  padding: 0;
+  list-style: none;
 }
-.muted {
-  color: var(--muted);
+.langCurrent,
+.langLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.langCurrent {
+  font-weight: 700;
+}
+.langLink {
+  color: var(--accent-text);
 }
 .tagline {
   margin: 0;

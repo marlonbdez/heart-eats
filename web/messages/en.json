@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "title": "HeartEats",
+    "description": "Discover and support food businesses with inclusive teams."
+  },
+  "app": {
+    "name": "HeartEats",
+    "tagline": "Great food, with teams that make a difference."
+  },
+  "header": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "propose": "Suggest a place",
+    "skipToContent": "Skip to content"
+  },
+  "menu": {
+    "title": "Menu",
+    "groups": {
+      "navigate": "Browse",
+      "collaborate": "Contribute",
+      "about": "About HeartEats"
+    },
+    "links": {
+      "map": "Map",
+      "list": "List of places",
+      "propose": "Suggest a place",
+      "correct": "Correct a detail",
+      "business": "I run a business",
+      "what": "What is HeartEats",
+      "verify": "How we verify",
+      "privacy": "Privacy and data",
+      "contact": "Contact"
+    },
+    "language": "Language"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "map": {
+    "label": "Map of places",
+    "loadError": "The map could not be loaded on this device. Soon you will be able to browse places in a list.",
+    "markerLabel": "{name}, show preview"
+  },
+  "card": {
+    "label": "Place preview",
+    "close": "Close preview",
+    "inclusiveSeal": "Inclusive team",
+    "signatureDish": "Signature dish",
+    "noPhoto": "No photo",
+    "verifiedAdmin": "Verified",
+    "verifiedCommunity": "Confirmed",
+    "needsReview": "Due for review",
+    "updated": "updated",
+    "methods": {
+      "visit": "in-person visit",
+      "call": "phone call",
+      "documentation": "documentation",
+      "owner_confirmed": "confirmed by the business"
+    }
+  },
+  "foodTags": {
+    "pizza": "Pizza",
+    "burgers": "Burgers",
+    "sushi": "Sushi",
+    "italian": "Italian",
+    "coffee": "Coffee",
+    "desserts": "Desserts",
+    "tapas": "Tapas",
+    "set_menu": "Set menu",
+    "bakery": "Bakery",
+    "vegetarian": "Vegetarian"
+  },
+  "placeholder": {
+    "title": "This screen is coming soon",
+    "body": "We are building HeartEats one screen at a time.",
+    "back": "Back to the map"
+  }
+}
