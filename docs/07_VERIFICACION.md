@@ -31,7 +31,7 @@ Propuesta (F2) → Filtro automático → Revisión humana → Contacto con el n
 | 🟡 Confirmado (`community`) | Confirmado por el propio negocio con evidencia, o por varias personas independientes | Negocio / comunidad |
 | ⚪ Sin verificar (`unverified`) | Propuesto, pendiente | Nadie aún |
 
-**Decisión recomendada (pendiente de confirmar ❓):** en el MVP solo se publican fichas **🟡 o 🟢**. El nivel ⚪ es interno y no aparece en el mapa, para evitar "inclusion-washing".
+**Decisión (2026-10-06):** en el MVP solo se publican fichas **verificadas (🟡 o 🟢)**. El nivel ⚪ es interno y no aparece en el mapa, para evitar "inclusion-washing". **El negocio da siempre el último sí** antes de que su ficha se publique.
 
 ## Métodos de verificación (por solidez)
 
@@ -64,6 +64,5 @@ Se aceptan negocios independientes y proyectos con impacto social. Se rechazan g
 
 ## Preguntas abiertas
 
-1. ❓ ¿Se publican fichas ⚪? (propuesta: no)
-2. ❓ Plazo objetivo de respuesta a una propuesta (propuesta: 14 días).
-3. ❓ Criterio para ascender a moderador/a local.
+1. ❓ Plazo objetivo de respuesta a una propuesta (propuesta: 14 días).
+2. ❓ Criterio para ascender a moderador/a local.
