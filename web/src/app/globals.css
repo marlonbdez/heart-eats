@@ -1,0 +1,31 @@
+:root {
+  --bg: #fbf5ea;
+  --fg: #2b211c;
+  --accent: #b5482a;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1815;
+    --fg: #f3e9dc;
+    --accent: #e0805f;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+}
