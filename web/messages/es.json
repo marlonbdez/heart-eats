@@ -58,7 +58,8 @@
       "call": "llamada",
       "documentation": "documentación",
       "owner_confirmed": "confirmado por el negocio"
-    }
+    },
+    "viewLocal": "Ver local →"
   },
   "foodTags": {
     "pizza": "Pizza",
@@ -98,5 +99,45 @@
     "label": "Vista",
     "map": "Mapa",
     "list": "Lista"
+  },
+  "_view": "Ver local →",
+  "detail": {
+    "back": "Volver",
+    "seal": "Negocio con equipo inclusivo",
+    "dishes": "Lo que tienes que probar",
+    "actions": "Acciones",
+    "directions": "Cómo llegar",
+    "call": "Llamar",
+    "website": "Web",
+    "hours": "Horario",
+    "dayRange": "{from} a {to}",
+    "closed": "Cerrado",
+    "verifiedAdmin": "Datos verificados",
+    "verifiedCommunity": "Datos confirmados por la comunidad",
+    "howWeVerify": "¿Cómo verificamos?",
+    "suggest": "Sugerir una corrección",
+    "businessTypes": {
+      "restaurant": "Restaurante",
+      "cafe": "Cafetería",
+      "bar": "Bar",
+      "bakery": "Panadería",
+      "catering": "Catering",
+      "social_project": "Proyecto social"
+    }
+  },
+  "team": {
+    "title": "El equipo detrás de cada plato",
+    "summary": "<b>{with} de {total} personas</b> del equipo tienen discapacidad.",
+    "role": "{role}: {count, plural, one {# persona} other {# personas}} con {category}",
+    "storyConsent": "Historia compartida con el consentimiento de la persona, que puede retirarlo cuando quiera.",
+    "categories": {
+      "intellectual_disability": "discapacidad intelectual",
+      "physical_disability": "discapacidad física",
+      "hearing_impairment": "discapacidad auditiva",
+      "visual_impairment": "discapacidad visual",
+      "mental_health": "problemas de salud mental",
+      "autism_spectrum": "trastorno del espectro autista",
+      "other": "otra discapacidad"
+    }
   }
 }

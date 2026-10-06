@@ -46,6 +46,7 @@ export const restaurants: Restaurant[] = [
       },
       { name: 'Focaccia de romero' },
     ],
+    ownerConfirmedAt: '2026-09-01T00:00:00Z',
     team: {
       level: 'medium',
       summary: { totalStaff: 11, staffWithDisability: 4 },
@@ -119,6 +120,7 @@ export const restaurants: Restaurant[] = [
       { name: 'Croquetas de jamón' },
       { name: 'Menú del día', description: 'Primero, segundo y postre.' },
     ],
+    ownerConfirmedAt: '2026-09-01T00:00:00Z',
     team: {
       level: 'full',
       summary: { totalStaff: 9, staffWithDisability: 3 },

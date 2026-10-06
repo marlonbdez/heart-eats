@@ -178,3 +178,18 @@ test('la lista muestra los mismos locales y conserva la búsqueda', async ({
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
   await expect(markers).toHaveCount(1);
 });
+
+test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
+  page,
+}) => {
+  await page.goto('/es/lista');
+  await page.getByRole('link', { name: 'Ver local →' }).first().click();
+  await expect(page).toHaveURL(/\/es\/local\/demo-/);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('[DEMO]');
+  await expect(
+    page.getByRole('heading', { name: /equipo detrás/i }),
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Horario' })).toBeVisible();
+  await page.getByRole('link', { name: /Volver/ }).click();
+  await expect(page).toHaveURL(/\/es\/?$/);
+});
