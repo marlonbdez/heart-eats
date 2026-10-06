@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
-import { MapLoader } from '@/components/MapLoader';
-import { getRestaurants } from '@/lib/data';
+import { Discover } from '@/components/Discover';
+import { getFoodTags, getRestaurants } from '@/lib/data';
 
 export default async function Home({
   params,
@@ -9,10 +9,13 @@ export default async function Home({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const restaurants = await getRestaurants();
+  const [restaurants, foodTags] = await Promise.all([
+    getRestaurants(),
+    getFoodTags(),
+  ]);
   return (
     <main id="contenido" tabIndex={-1}>
-      <MapLoader restaurants={restaurants} />
+      <Discover restaurants={restaurants} foodTags={foodTags} />
     </main>
   );
 }

@@ -75,5 +75,21 @@
     "title": "This screen is coming soon",
     "body": "We are building HeartEats one screen at a time.",
     "back": "Back to the map"
+  },
+  "search": {
+    "label": "Search for a place, neighbourhood, city or postcode",
+    "placeholder": "Place, area or postcode",
+    "clear": "Clear search",
+    "suggestFood": "Filter by {food}"
+  },
+  "filters": {
+    "label": "Type of food"
+  },
+  "results": {
+    "count": "{count, plural, =0 {No places} one {# place} other {# places}}",
+    "emptyTitle": "No places match your search",
+    "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
+    "clearFilters": "Clear filters",
+    "propose": "Suggest a place"
   }
 }

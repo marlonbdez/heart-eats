@@ -75,5 +75,21 @@
     "title": "Esta pantalla llega pronto",
     "body": "Seguimos construyendo HeartEats pantalla a pantalla.",
     "back": "Volver al mapa"
+  },
+  "search": {
+    "label": "Buscar un local, barrio, ciudad o código postal",
+    "placeholder": "Local, barrio o código postal",
+    "clear": "Borrar búsqueda",
+    "suggestFood": "Filtrar por {food}"
+  },
+  "filters": {
+    "label": "Tipo de comida"
+  },
+  "results": {
+    "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",
+    "emptyTitle": "No hay locales con esa búsqueda",
+    "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
+    "clearFilters": "Quitar filtros",
+    "propose": "Proponer un local"
   }
 }
