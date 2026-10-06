@@ -66,12 +66,15 @@ Desde el menú ☰, la cabecera o los estados vacíos. Formulario de **4 pasos**
 Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
 - Antispam: honeypot y rate limit. ❓ Guardar borrador si se sale.
 
-### F3 · Negocio confirma su ficha y elige nivel de equipo
-1. Moderación contacta al negocio (por canal oficial) o este llega desde "Para restaurantes".
-2. El negocio elige nivel: **Mínimo / Medio / Máximo** con ejemplo visual de cómo se verá cada uno.
-3. Si elige Máximo: por cada persona, **consentimiento explícito, informado y revocable** (texto claro, fácil de leer) antes de escribir su historia.
-4. Revisión final ("así se verá") → envío a moderación.
-- Siempre visible cómo **retirarse o cambiar de nivel**.
+### F3 · Negocio cuenta su equipo y da los consentimientos
+Pantalla para el negocio (acceso desde el menú "Soy de un negocio" o desde el contacto de moderación). **4 pasos**:
+1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 7 días ❓).
+2. **Nivel:** tres tarjetas con ejemplo de cómo se verá: **Solo cifras** (recomendado para empezar), **Áreas y tipos**, **Historias con nombre** (solo con permiso de cada persona).
+3. **Datos:** personas en el equipo y cuántas tienen discapacidad (validaciones: ≥1, ≤ total); en nivel medio, áreas y tipos de discapacidad sin identificar; en nivel máximo, hasta 3 historias, cada una con **su propio consentimiento** (la persona o su representante legal).
+   - Equipos de menos de 5 personas ❓: aviso y generalización de los datos en niveles medio y máximo.
+4. **Revisión:** vista previa fiel de la ficha ("así se verá") y casilla de responsabilidad; envío a moderación.
+- El texto de consentimiento es **provisional** y debe revisarlo un profesional antes del lanzamiento.
+- Una historia sin consentimiento marcado no se puede enviar.
 
 ### F4 · Sugerir corrección
 Desde la ficha: elegir qué está mal (dirección, horario, ha cerrado, información del equipo, otro) → describir + evidencia opcional → enviar. Mismo patrón que F2, más corto.
