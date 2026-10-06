@@ -82,3 +82,18 @@
   border: 1px solid var(--line);
   border-radius: 12px;
 }
+
+/* El botón "Cerca de mí" ocupa la esquina superior derecha: los controles de
+   zoom quedan justo debajo. */
+.wrap :global(.maplibregl-ctrl-top-right) {
+  margin-top: 56px;
+}
+
+.you {
+  width: 18px;
+  height: 18px;
+  background: #1b6ef3;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgb(27 110 243 / 0.35);
+}

@@ -3,10 +3,13 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
+import { sortByDistance } from '@/lib/geo';
 import { matchFoodTags, matchesQuery } from '@/lib/search';
 import type { FoodTag, Restaurant } from '@/lib/types';
 import { FoodFilters } from './FoodFilters';
+import { useLocation } from './LocationProvider';
 import { MapLoader } from './MapLoader';
+import { NearMeButton, NearMeNotice } from './NearMe';
 import { RestaurantCard } from './RestaurantCard';
 import { SearchBar } from './SearchBar';
 import { ViewSwitch } from './ViewSwitch';
@@ -27,6 +30,7 @@ export function Discover({
   const [q, setQ] = useState('');
   const [food, setFood] = useState<string[]>([]);
   const hydrated = useRef(false);
+  const { position, status } = useLocation();
 
   // Leer la búsqueda de la URL una vez, ya en el navegador.
   useEffect(() => {
@@ -52,10 +56,11 @@ export function Discover({
     );
   }, [q, food]);
 
-  const visible = useMemo(
-    () => restaurants.filter((r) => matchesQuery(r, { q, food })),
-    [restaurants, q, food],
-  );
+  // Con ubicación compartida, los más cercanos primero.
+  const visible = useMemo(() => {
+    const found = restaurants.filter((r) => matchesQuery(r, { q, food }));
+    return position ? sortByDistance(found, position) : found;
+  }, [restaurants, q, food, position]);
   const hasFilters = q.trim() !== '' || food.length > 0;
 
   // Etiquetas traducidas para sugerir una categoría al escribir ("piz" → Pizza).
@@ -115,12 +120,22 @@ export function Discover({
               {t('results.count', { count: visible.length })}
             </p>
             <MapLoader restaurants={visible} focus={hasFilters} />
+            <div className={styles.nearMe}>
+              <NearMeButton />
+            </div>
+            {status !== 'idle' && <NearMeNotice className={styles.mapNotice} />}
           </>
         ) : (
           <div className={styles.listScroll}>
-            <p role="status" className={styles.count}>
-              {t('results.count', { count: visible.length })}
-            </p>
+            <div className={styles.listHeader}>
+              <p role="status" className={styles.count}>
+                {t('results.count', { count: visible.length })}
+              </p>
+              <NearMeButton />
+            </div>
+            {status !== 'idle' && (
+              <NearMeNotice className={styles.listNotice} />
+            )}
             <ul className={styles.list} aria-label={t('results.listLabel')}>
               {visible.map((r) => (
                 <li key={r.slug} className={styles.item}>

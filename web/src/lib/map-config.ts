@@ -12,3 +12,10 @@ export const defaultView = {
   center: [-3.7038, 40.4168] as [number, number],
   zoom: 12,
 };
+
+// Zona con locales. Fuera de ella, "Cerca de mí" avisa y se queda en Madrid.
+// Al abrir otra ciudad se añade su zona aquí.
+export const coverage = {
+  center: defaultView.center,
+  radiusKm: 60,
+};

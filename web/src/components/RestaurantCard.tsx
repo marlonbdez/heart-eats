@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import type { Restaurant } from '@/lib/types';
+import { Distance } from './Distance';
 import { VerificationBadge } from './VerificationBadge';
 import styles from './RestaurantCard.module.css';
 
@@ -28,7 +29,10 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         <p className={styles.dishLabel}>{t('signatureDish')}</p>
         <p className={styles.dish}>{dish.name}</p>
         <h2 className={styles.name}>{restaurant.name}</h2>
-        <p className={styles.place}>{place}</p>
+        <p className={styles.place}>
+          {place}
+          <Distance location={restaurant.location} />
+        </p>
         <p className={styles.seal}>
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>

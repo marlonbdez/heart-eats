@@ -2,6 +2,7 @@ import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import type { Restaurant } from '@/lib/types';
+import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
 import { TeamBlock } from './TeamBlock';
 import styles from './RestaurantDetail.module.css';
@@ -63,6 +64,7 @@ export function RestaurantDetail({
           <h1>{r.name}</h1>
           <p className={styles.muted}>
             {t(`businessTypes.${r.businessType}`)} · {address}
+            <Distance location={r.location} />
           </p>
           <p className={styles.seal}>
             <span aria-hidden="true">♥</span> {t('seal')}

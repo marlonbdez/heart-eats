@@ -193,3 +193,40 @@ test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   await page.getByRole('link', { name: /Volver/ }).click();
   await expect(page).toHaveURL(/\/es\/?$/);
 });
+
+test.describe('Cerca de mí', () => {
+  test.use({ permissions: ['geolocation'] });
+
+  test('ordena la lista por distancia y muestra la distancia', async ({
+    context,
+    page,
+  }) => {
+    await context.setGeolocation({ latitude: 40.4085, longitude: -3.7012 });
+    await page.goto('/es/lista');
+    await page.getByRole('button', { name: 'Cerca de mí' }).click();
+    await expect(page.getByText(/Ordenado por distancia/)).toBeVisible();
+    const first = page.getByRole('listitem').first();
+    await expect(first).toContainText('La Masa Madre');
+    await expect(first).toContainText(/\d+\s?m\b/);
+  });
+
+  test('fuera de la zona avisa y no ordena', async ({ context, page }) => {
+    await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
+    await page.goto('/es/lista');
+    await page.getByRole('button', { name: 'Cerca de mí' }).click();
+    await expect(page.getByText(/Aún no hay locales cerca/)).toBeVisible();
+  });
+});
+
+test('sin permiso de ubicación, avisa y la web sigue usable', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    navigator.geolocation.getCurrentPosition = (_ok, fail) =>
+      fail?.({ code: 1, PERMISSION_DENIED: 1 } as GeolocationPositionError);
+  });
+  await page.goto('/es');
+  await page.getByRole('button', { name: 'Cerca de mí' }).click();
+  await expect(page.getByText(/No tenemos permiso/)).toBeVisible();
+  await expect(page.locator('[data-marker]').first()).toBeVisible();
+});
