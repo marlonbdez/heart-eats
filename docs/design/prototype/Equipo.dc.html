@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cuenta tu equipo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2118}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+input,textarea{font-family:inherit;box-sizing:border-box}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #1B4B8F;outline-offset:2px}
+</style>
+</helmet>
+<div style="width:390px;height:844px;background:#FBF6EE;display:flex;flex-direction:column;overflow:hidden">
+
+  <div style="flex:none;height:64px;box-sizing:border-box;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 #E6DCCB">
+    <a href="Main.dc.html" aria-label="Volver al mapa" style="flex:none;width:48px;height:48px;margin-left:-8px;border-radius:24px;display:flex;align-items:center;justify-content:center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </a>
+    <span style="font-size:18px;font-weight:700">Cuenta tu equipo</span>
+  </div>
+
+  <sc-if value="{{inForm}}" hint-placeholder-val="{{true}}">
+    <div style="flex:none;padding:12px 16px 4px">
+      <div style="font-size:14px;font-weight:700;color:#5A4D40">Paso {{step}} de 4 · {{stepName}}</div>
+      <div style="margin-top:8px;height:8px;border-radius:4px;background:#E6DCCB"><div style="height:8px;border-radius:4px;background:#B4432A;width:{{pct}}"></div></div>
+    </div>
+
+    <div style="flex-grow:1;min-height:0;overflow-y:auto;padding:12px 16px 16px;display:flex;flex-direction:column;gap:16px">
+
+      <!-- Paso 1: antes de empezar -->
+      <sc-if value="{{s1}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h1 style="margin:0;font-size:24px;line-height:1.25">Tú decides cuánto contar</h1>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#2B2118">Tu local aparece en HeartEats por su comida. Esta parte es opcional: es para que, si quieres, cuentes quién forma tu equipo.</p>
+          <div style="background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.5">
+            <div><strong>Tú eliges el nivel.</strong> Puedes contar solo una cifra o, con permiso, historias personales.</div>
+            <div><strong>Nadie aparece sin su permiso.</strong> Cada persona decide por sí misma.</div>
+            <div><strong>Puedes cambiarlo o retirarlo</strong> cuando quieras, y lo borramos en un máximo de 7 días.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Paso 2: nivel -->
+      <sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">Elige qué quieres mostrar en la ficha de tu local. Puedes empezar por lo más sencillo y ampliar después.</p>
+          <div role="radiogroup" aria-label="Nivel de información del equipo" style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{levels}}" as="l" hint-placeholder-count="3">
+              <button onClick="{{l.pick}}" role="radio" aria-checked="{{l.on}}" style="text-align:left;display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;border:2px solid {{l.border}};background:{{l.bg}};color:#2B2118">
+                <span style="font-size:12px;font-weight:700;letter-spacing:.4px;color:{{l.tagColor}}">{{l.tag}}</span>
+                <span style="font-size:18px;font-weight:700">{{l.title}}</span>
+                <span style="font-size:14px;line-height:1.45;color:#4a3d30">Se verá así: {{l.ex}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Paso 3: datos -->
+      <sc-if value="{{s3}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="e-total" style="font-size:15px;font-weight:700">Personas en el equipo</label>
+              <input id="e-total" type="text" inputmode="numeric" value="{{total}}" onChange="{{onTotal}}" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="e-dis" style="font-size:15px;font-weight:700">Con discapacidad</label>
+              <input id="e-dis" type="text" inputmode="numeric" value="{{dis}}" onChange="{{onDis}}" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+            </div>
+          </div>
+
+          <sc-if value="{{smallTeam}}" hint-placeholder-val="{{false}}">
+            <div style="font-size:14px;line-height:1.5;background:#FFF1D0;border:1.5px solid #E0B55A;border-radius:12px;padding:12px;color:#2B2118">En equipos pequeños, dar detalles puede hacer reconocible a una persona. Por eso mostraremos esa información de forma más general.</div>
+          </sc-if>
+
+          <sc-if value="{{showMed}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:15px;font-weight:700">¿En qué áreas trabajan? <span style="font-weight:400;color:#5A4D40">(opcional)</span></div>
+                <div role="group" aria-label="Áreas" style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{areas}}" as="c" hint-placeholder-count="4">
+                    <button onClick="{{c.toggle}}" aria-pressed="{{c.on}}" style="min-height:44px;padding:0 14px;border-radius:22px;font-size:15px;font-weight:600;border:1.5px solid {{c.border}};background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:15px;font-weight:700">Tipos de discapacidad en el equipo <span style="font-weight:400;color:#5A4D40">(sin identificar a nadie)</span></div>
+                <div role="group" aria-label="Tipos" style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{cats}}" as="c" hint-placeholder-count="4">
+                    <button onClick="{{c.toggle}}" aria-pressed="{{c.on}}" style="min-height:44px;padding:0 14px;border-radius:22px;font-size:15px;font-weight:600;border:1.5px solid {{c.border}};background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showFull}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:18px;font-weight:700">Historias personales</div>
+              <p style="margin:0;font-size:14px;line-height:1.5;color:#4a3d30">Solo para quien quiera contarla. Cada persona da su propio permiso. Máximo 3.</p>
+              <sc-for list="{{people}}" as="p" hint-placeholder-count="1">
+                <div style="background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;align-items:center">
+                    <div style="flex-grow:1;font-size:14px;font-weight:700;color:#5A4D40">Persona {{p.n}}</div>
+                    <sc-if value="{{p.canRemove}}" hint-placeholder-val="{{false}}"><button onClick="{{p.remove}}" style="min-height:44px;padding:0 10px;border:0;background:transparent;color:#8F3320;font-size:14px;font-weight:700;text-decoration:underline">Quitar</button></sc-if>
+                  </div>
+                  <label for="{{p.idN}}" style="font-size:15px;font-weight:700">Nombre o seudónimo</label>
+                  <input id="{{p.idN}}" type="text" value="{{p.name}}" onChange="{{p.onName}}" style="height:48px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px">
+                  <label for="{{p.idR}}" style="font-size:15px;font-weight:700">Puesto</label>
+                  <input id="{{p.idR}}" type="text" value="{{p.role}}" onChange="{{p.onRole}}" style="height:48px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px">
+                  <label for="{{p.idS}}" style="font-size:15px;font-weight:700">Su historia, con sus palabras</label>
+                  <textarea id="{{p.idS}}" rows="3" maxlength="400" onChange="{{p.onStory}}" style="border:1.5px solid #CDBFA9;border-radius:12px;padding:12px 14px;font-size:16px;line-height:1.4;resize:none">{{p.story}}</textarea>
+                  <div style="font-size:14px;font-weight:700">¿Quién da el permiso?</div>
+                  <div role="radiogroup" aria-label="Quién da el permiso" style="display:flex;gap:8px">
+                    <button onClick="{{p.whoSelf}}" role="radio" aria-checked="{{p.isSelf}}" style="flex:1;min-height:48px;border-radius:12px;font-size:14px;font-weight:700;border:1.5px solid {{p.selfBorder}};background:{{p.selfBg}};color:{{p.selfFg}}">La propia persona</button>
+                    <button onClick="{{p.whoRep}}" role="radio" aria-checked="{{p.isRep}}" style="flex:1;min-height:48px;border-radius:12px;font-size:14px;font-weight:700;border:1.5px solid {{p.repBorder}};background:{{p.repBg}};color:{{p.repFg}}">Su representante legal</button>
+                  </div>
+                  <button onClick="{{p.toggleConsent}}" role="checkbox" aria-checked="{{p.consent}}" style="display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:12px;border:1.5px solid {{p.consentBorder}};background:#FBF6EE;text-align:left;font-size:14px;line-height:1.5;color:#2B2118">
+                    <span style="flex:none;width:28px;height:28px;border-radius:6px;border:2px solid #2B2118;background:{{p.consentBg}};color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700">{{p.consentMark}}</span>
+                    <span>Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto y lo escrito arriba. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.</span>
+                  </button>
+                </div>
+              </sc-for>
+              <sc-if value="{{canAddPerson}}" hint-placeholder-val="{{true}}">
+                <button onClick="{{addPerson}}" style="min-height:48px;border-radius:12px;border:1.5px dashed #8F3320;background:transparent;color:#8F3320;font-size:16px;font-weight:700">+ Añadir otra persona</button>
+              </sc-if>
+              <div style="font-size:12px;color:#5A4D40;line-height:1.4">Texto de consentimiento provisional: debe revisarlo un profesional antes del lanzamiento.</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- Paso 4: revisión -->
+      <sc-if value="{{s4}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">Así se verá en la ficha de tu local:</p>
+          <section style="display:flex;flex-direction:column;gap:12px;background:#fff;border:1.5px solid #E6DCCB;border-radius:16px;padding:16px">
+            <h2 style="margin:0;font-size:20px">El equipo detrás de cada plato</h2>
+            <p style="margin:0;font-size:17px;line-height:1.5"><strong>{{dis}} de {{total}} personas</strong> del equipo tienen discapacidad.</p>
+            <sc-if value="{{pvAreas}}" hint-placeholder-val="{{false}}"><div style="font-size:15px;line-height:1.5">Áreas: {{areaText}}</div></sc-if>
+            <sc-if value="{{pvCats}}" hint-placeholder-val="{{false}}"><div style="font-size:15px;line-height:1.5">Discapacidad: {{catText}}</div></sc-if>
+            <sc-for list="{{valid}}" as="v" hint-placeholder-count="0">
+              <div style="display:flex;flex-direction:column;gap:4px;background:#FBF6EE;border-radius:12px;padding:12px">
+                <div style="font-size:16px;font-weight:700">{{v.name}} <span style="font-weight:400;color:#4a3d30">· {{v.role}}</span></div>
+                <div style="font-size:15px;line-height:1.5">{{v.story}}</div>
+                <div style="font-size:13px;color:#4a3d30">Compartido con su permiso, que puede retirar cuando quiera.</div>
+              </div>
+            </sc-for>
+          </section>
+          <button onClick="{{toggleAck}}" role="checkbox" aria-checked="{{ack}}" style="display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:12px;border:1.5px solid {{ackBorder}};background:#fff;text-align:left;font-size:14px;line-height:1.5;color:#2B2118">
+            <span style="flex:none;width:28px;height:28px;border-radius:6px;border:2px solid #2B2118;background:{{ackBg}};color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700">{{ackMark}}</span>
+            <span>Soy responsable del negocio, la información es correcta y entiendo que puedo cambiarla o retirarla cuando quiera.</span>
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{hasErr}}" hint-placeholder-val="{{false}}">
+        <div role="alert" style="font-size:15px;font-weight:700;color:#A12B14;background:#FCE8E4;border:1.5px solid #A12B14;border-radius:12px;padding:12px;line-height:1.4">{{err}}</div>
+      </sc-if>
+    </div>
+
+    <div style="flex:none;padding:12px 16px 16px;display:flex;gap:10px;background:#FBF6EE;box-shadow:0 -1px 0 #E6DCCB">
+      <sc-if value="{{canBack}}" hint-placeholder-val="{{false}}">
+        <button onClick="{{back}}" style="flex:none;min-height:52px;padding:0 20px;border-radius:12px;border:1.5px solid #2B2118;background:#fff;font-size:16px;font-weight:700;color:#2B2118">Atrás</button>
+      </sc-if>
+      <button onClick="{{next}}" style="flex-grow:1;min-height:52px;border-radius:12px;border:0;background:#B4432A;color:#fff;font-size:17px;font-weight:700">{{nextLabel}}</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+    <div style="flex-grow:1;padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21C5 16 2 12.5 2 8.5 2 5.5 4.3 3.5 7 3.5c2 0 3.8 1.1 5 3 1.2-1.9 3-3 5-3 2.7 0 5 2 5 5 0 4-3 7.5-10 12.5z"/></svg>
+      <h1 style="margin:0;font-size:26px;line-height:1.2">¡Gracias!</h1>
+      <p style="margin:0;font-size:16px;line-height:1.55;color:#4a3d30">Revisaremos la información y tu local aparecerá en el mapa cuando esté verificada. Puedes cambiarla o retirarla en cualquier momento escribiéndonos.</p>
+      <a href="Main.dc.html" style="margin-top:8px;min-height:52px;padding:0 28px;border-radius:12px;background:#B4432A;color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center">Volver al mapa</a>
+      <button onClick="{{again}}" style="min-height:48px;border:0;background:transparent;color:#8F3320;font-size:16px;font-weight:700;text-decoration:underline">Volver a empezar</button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = this.fresh();
+  }
+  fresh() {
+    return { step: 1, level: null, total: '', dis: '', areas: [], cats: [], people: [{ name: '', role: '', story: '', who: 'self', consent: false }], ack: false, err: '', done: false };
+  }
+  setPerson(i, patch) {
+    const people = this.state.people.map((p, k) => k === i ? { ...p, ...patch } : p);
+    this.setState({ people, err: '' });
+  }
+  renderVals() {
+    const st = this.state;
+    const NAMES = ['Antes de empezar', 'Elige el nivel', 'Tu equipo', 'Revisión'];
+    const AREAS = ['Cocina', 'Sala', 'Barra', 'Obrador', 'Reparto'];
+    const CATS = ['Auditiva', 'Visual', 'Física', 'Intelectual', 'Salud mental', 'Autismo', 'Otra'];
+    const toInt = v => /^\d+$/.test(String(v).trim()) ? parseInt(v, 10) : NaN;
+    const total = toInt(st.total), dis = toInt(st.dis);
+    const lvl = st.level;
+    const chip = (list, key) => list.map(label => {
+      const on = st[key].includes(label);
+      return { label, on, bg: on ? '#2B2118' : '#fff', fg: on ? '#fff' : '#2B2118', border: on ? '#2B2118' : '#CDBFA9',
+        toggle: () => this.setState({ [key]: on ? st[key].filter(x => x !== label) : [...st[key], label], err: '' }) };
+    });
+    const LV = [
+      { k: 'min', title: 'Solo cifras', tag: 'MÁS PRIVADO · RECOMENDADO PARA EMPEZAR', ex: '“3 de 11 personas del equipo tienen discapacidad.”' },
+      { k: 'med', title: 'Áreas y tipos', tag: 'INTERMEDIO', ex: 'las cifras, más en qué áreas trabajan y qué tipos de discapacidad hay, sin identificar a nadie.' },
+      { k: 'full', title: 'Historias con nombre', tag: 'SOLO CON EL PERMISO DE CADA PERSONA', ex: 'además, quien quiera cuenta su historia con su nombre (o un seudónimo) y su puesto.' }
+    ];
+    const valid = st.people.filter(p => p.name.trim() && p.role.trim() && p.consent).map(p => ({ name: p.name.trim(), role: p.role.trim(), story: p.story.trim() }));
+    const validate = () => {
+      if (st.step === 2 && !lvl) return 'Elige uno de los tres niveles para continuar.';
+      if (st.step === 3) {
+        if (isNaN(total) || total < 1) return 'Indica cuántas personas forman el equipo.';
+        if (isNaN(dis) || dis < 0) return 'Indica cuántas personas del equipo tienen discapacidad.';
+        if (dis > total) return 'No puede haber más personas con discapacidad que personas en el equipo.';
+        if (dis < 1) return 'Para aparecer en HeartEats al menos una persona del equipo debe tener discapacidad.';
+        if (lvl === 'full') {
+          const any = st.people.some(p => p.name.trim() || p.role.trim() || p.story.trim() || p.consent);
+          if (any && st.people.some(p => (p.name.trim() || p.role.trim() || p.story.trim()) && !p.consent)) return 'Falta el permiso de una persona. Sin permiso no podemos publicar su historia.';
+        }
+      }
+      if (st.step === 4 && !st.ack) return 'Marca la casilla para poder enviar.';
+      return '';
+    };
+    return {
+      inForm: !st.done, done: st.done,
+      step: st.step, stepName: NAMES[st.step - 1], pct: (st.step * 25) + '%',
+      s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4,
+      levels: LV.map(l => {
+        const on = lvl === l.k;
+        return { ...l, on, bg: on ? '#F1E7D4' : '#fff', border: on ? '#2B2118' : '#CDBFA9', tagColor: l.k === 'min' ? '#1F6B45' : '#5A4D40',
+          pick: () => this.setState({ level: l.k, err: '' }) };
+      }),
+      total: st.total, dis: st.dis,
+      onTotal: e => this.setState({ total: e.target.value, err: '' }),
+      onDis: e => this.setState({ dis: e.target.value, err: '' }),
+      smallTeam: !isNaN(total) && total > 0 && total < 5 && lvl !== 'min',
+      showMed: lvl === 'med' || lvl === 'full',
+      showFull: lvl === 'full',
+      areas: chip(AREAS, 'areas'), cats: chip(CATS, 'cats'),
+      people: st.people.map((p, i) => ({
+        ...p, n: i + 1, idN: 'pn' + i, idR: 'pr' + i, idS: 'ps' + i,
+        canRemove: st.people.length > 1,
+        remove: () => this.setState({ people: st.people.filter((_, k) => k !== i) }),
+        onName: e => this.setPerson(i, { name: e.target.value }),
+        onRole: e => this.setPerson(i, { role: e.target.value }),
+        onStory: e => this.setPerson(i, { story: e.target.value }),
+        isSelf: p.who === 'self', isRep: p.who === 'rep',
+        whoSelf: () => this.setPerson(i, { who: 'self' }), whoRep: () => this.setPerson(i, { who: 'rep' }),
+        selfBg: p.who === 'self' ? '#2B2118' : '#fff', selfFg: p.who === 'self' ? '#fff' : '#2B2118', selfBorder: p.who === 'self' ? '#2B2118' : '#CDBFA9',
+        repBg: p.who === 'rep' ? '#2B2118' : '#fff', repFg: p.who === 'rep' ? '#fff' : '#2B2118', repBorder: p.who === 'rep' ? '#2B2118' : '#CDBFA9',
+        consentBg: p.consent ? '#2B2118' : '#fff', consentMark: p.consent ? '✓' : '', consentBorder: p.consent ? '#2B2118' : '#CDBFA9',
+        toggleConsent: () => this.setPerson(i, { consent: !p.consent })
+      })),
+      canAddPerson: st.people.length < 3,
+      addPerson: () => this.setState({ people: [...st.people, { name: '', role: '', story: '', who: 'self', consent: false }] }),
+      pvAreas: (lvl === 'med' || lvl === 'full') && st.areas.length > 0, areaText: st.areas.join(', '),
+      pvCats: (lvl === 'med' || lvl === 'full') && st.cats.length > 0, catText: st.cats.join(', '),
+      valid: lvl === 'full' ? valid : [],
+      ack: st.ack, ackBg: st.ack ? '#2B2118' : '#fff', ackMark: st.ack ? '✓' : '', ackBorder: st.ack ? '#2B2118' : '#CDBFA9',
+      toggleAck: () => this.setState({ ack: !st.ack, err: '' }),
+      hasErr: !!st.err, err: st.err,
+      canBack: st.step > 1,
+      back: () => this.setState({ step: st.step - 1, err: '' }),
+      nextLabel: st.step === 1 ? 'Empezar' : st.step === 4 ? 'Enviar a revisión' : 'Continuar',
+      next: () => {
+        const e = validate();
+        if (e) { this.setState({ err: e }); return; }
+        if (st.step === 4) { this.setState({ done: true }); return; }
+        this.setState({ step: st.step + 1, err: '' });
+      },
+      again: () => this.setState(this.fresh())
+    };
+  }
+}
+</script>
+</body>
+</html>

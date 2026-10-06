@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mapa principal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2118}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #1B4B8F;outline-offset:2px}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:844px;overflow:hidden;background:#FBF6EE;display:flex;flex-direction:column">
+
+  <!-- Cabecera -->
+  <div style="padding:14px 16px 10px;background:#FBF6EE;display:flex;flex-direction:column;gap:10px;z-index:10;box-shadow:0 1px 0 #E6DCCB">
+    <div style="display:flex;align-items:center;gap:4px">
+      <button onClick="{{openMenu}}" aria-label="Abrir menú" aria-expanded="{{menuOpen}}" style="flex:none;width:48px;height:48px;margin-left:-8px;border:0;background:transparent;border-radius:24px;display:flex;align-items:center;justify-content:center;padding:0">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+      <span style="font-size:20px;font-weight:700;letter-spacing:-0.2px;margin-left:4px">HeartEats</span>
+      <span style="flex-grow:1"></span>
+      <a href="Proponer.dc.html" style="font-size:14px;font-weight:600;color:#8F3320;padding:10px 4px;min-height:24px">Proponer un local</a>
+    </div>
+    <div style="position:relative">
+      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 4px 0 12px;height:48px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B5B4B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Buscar local, ciudad o código postal</span>
+        <input type="text" value="{{q}}" onChange="{{onQ}}" placeholder="Local, ciudad o código postal" style="flex-grow:1;border:0;outline:0;background:transparent;font-size:16px;color:#2B2118;font-family:inherit;min-width:0">
+        <sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}">
+          <button onClick="{{clearQ}}" aria-label="Borrar búsqueda" style="flex:none;width:44px;height:44px;border:0;background:transparent;border-radius:22px;font-size:20px;color:#5A4D40">×</button>
+        </sc-if>
+      </label>
+      <sc-if value="{{showSug}}" hint-placeholder-val="{{false}}">
+        <div style="position:absolute;left:0;right:0;top:54px;background:#fff;border:1.5px solid #CDBFA9;border-radius:12px;box-shadow:0 8px 20px rgba(43,33,24,.25);overflow:hidden;z-index:30">
+          <sc-for list="{{sugs}}" as="g" hint-placeholder-count="4">
+            <button onClick="{{g.pick}}" style="width:100%;min-height:48px;display:flex;align-items:center;gap:10px;padding:0 14px;border:0;border-bottom:1px solid #F1E7D4;background:#fff;text-align:left;font-size:16px;color:#2B2118">
+              <span style="flex-grow:1">{{g.label}}</span>
+              <span style="flex:none;font-size:12px;font-weight:700;color:#5A4D40;background:#F1E7D4;border-radius:10px;padding:2px 8px">{{g.kind}}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{noSug}}" hint-placeholder-val="{{false}}">
+            <div style="padding:14px;font-size:15px;color:#4a3d30;line-height:1.5">No encontramos ese sitio. ¿Quieres <a href="Proponer.dc.html" style="color:#8F3320;font-weight:700;text-decoration:underline">proponer un local</a>?</div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+    <div role="group" aria-label="Tipo de comida" style="display:flex;gap:6px;overflow-x:auto;margin:0 -16px;padding:0 16px 2px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+        <button onClick="{{c.toggle}}" aria-pressed="{{c.pressed}}" style="flex:none;width:72px;min-height:80px;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:5px;padding:2px 0 0">
+          <span style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{c.bg}};border:2px solid {{c.border}}">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="{{c.stroke}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.d}}"/></svg>
+          </span>
+          <span style="font-size:13px;font-weight:{{c.fw}};color:#2B2118;line-height:1.1;text-align:center">{{c.label}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Aviso prototipo -->
+  <div style="background:#2B2118;color:#FBF6EE;font-size:12px;padding:5px 16px;z-index:3">Prototipo con datos ficticios · No son negocios reales</div>
+
+  <!-- Contenido: mapa o lista -->
+  <div style="position:relative;flex-grow:1;min-height:0">
+
+    <sc-if value="{{showMap}}" hint-placeholder-val="{{true}}">
+      <div style="position:absolute;inset:0;background:#EFE6D4">
+        <svg width="390" height="600" viewBox="0 0 390 600" style="position:absolute;left:0;top:0" aria-hidden="true">
+          <rect width="390" height="600" fill="#EFE6D4"/>
+          <rect x="250" y="40" width="120" height="90" rx="10" fill="#CFE0C4"/>
+          <rect x="20" y="380" width="90" height="70" rx="10" fill="#CFE0C4"/>
+          <path d="M-10 210 L400 170" stroke="#fff" stroke-width="16"/>
+          <path d="M-10 420 L400 470" stroke="#fff" stroke-width="12"/>
+          <path d="M90 -10 L130 610" stroke="#fff" stroke-width="12"/>
+          <path d="M280 -10 L240 610" stroke="#fff" stroke-width="14"/>
+          <path d="M-10 90 L400 110" stroke="#F8F2E6" stroke-width="7"/>
+          <path d="M-10 320 L400 300" stroke="#F8F2E6" stroke-width="7"/>
+          <path d="M190 -10 L200 610" stroke="#F8F2E6" stroke-width="7"/>
+        </svg>
+        <sc-for list="{{markers}}" as="m" hint-placeholder-count="5">
+          <button onClick="{{m.pick}}" aria-label="{{m.aria}}" style="position:absolute;left:{{m.x}}px;top:{{m.y}}px;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid {{m.ring}};background:#B4432A;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(43,33,24,.35)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+          </button>
+        </sc-for>
+        <button onClick="{{nearMe}}" style="position:absolute;right:12px;top:12px;min-height:44px;padding:0 14px;border-radius:22px;background:#fff;border:1.5px solid #CDBFA9;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;color:#2B2118">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B4432A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          Cerca de mí
+        </button>
+        <div style="position:absolute;left:8px;bottom:6px;font-size:11px;color:#4a3d30;background:rgba(255,255,255,.8);padding:2px 6px;border-radius:4px">Mapa ilustrativo</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showList}}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute;inset:0;overflow-y:auto;padding:12px 16px 90px;display:flex;flex-direction:column;gap:12px;background:#FBF6EE">
+        <div style="font-size:14px;color:#6B5B4B">{{countText}}</div>
+        <sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+          <a href="Ficha.dc.html" style="display:flex;gap:12px;background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:10px">
+            <div style="flex:none;width:96px;height:96px;border-radius:10px;background:{{c.tint}};display:flex;align-items:flex-end;padding:4px;box-sizing:border-box"><span style="font-size:10px;background:rgba(255,255,255,.85);padding:1px 5px;border-radius:3px;color:#4a3d30">foto del plato</span></div>
+            <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+              <div style="font-size:17px;font-weight:700;line-height:1.25">{{c.dish}}</div>
+              <div style="font-size:15px">{{c.name}}</div>
+              <div style="font-size:14px;color:#5A4D40">{{c.meta}}</div>
+              <div style="font-size:13px;font-weight:600;color:{{c.badgeColor}}">{{c.badge}}</div>
+            </div>
+          </a>
+        </sc-for>
+        <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+          <div style="padding:24px 8px;text-align:center;color:#4a3d30;font-size:15px;line-height:1.5">No encontramos nada con esa comida por aquí.<br>Prueba con otra, o <a href="Proponer.dc.html" style="color:#8F3320;font-weight:700;text-decoration:underline">propón un local</a>.</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- Tarjeta de vista previa -->
+    <sc-if value="{{hasSel}}" hint-placeholder-val="{{true}}">
+      <div style="position:absolute;left:12px;right:12px;bottom:84px;z-index:4">
+        <a href="Ficha.dc.html" style="display:flex;gap:12px;background:#fff;border:1.5px solid #CDBFA9;border-radius:16px;padding:10px;box-shadow:0 6px 18px rgba(43,33,24,.22)">
+          <div style="flex:none;width:96px;height:96px;border-radius:10px;background:{{sel.tint}};display:flex;align-items:flex-end;padding:4px;box-sizing:border-box"><span style="font-size:10px;background:rgba(255,255,255,.85);padding:1px 5px;border-radius:3px;color:#4a3d30">foto del plato</span></div>
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0;flex-grow:1">
+            <div style="font-size:18px;font-weight:700;line-height:1.25;padding-right:20px">{{sel.dish}}</div>
+            <div style="font-size:15px">{{sel.name}}</div>
+            <div style="font-size:14px;color:#5A4D40">{{sel.meta}}</div>
+            <div style="font-size:13px;font-weight:600;color:{{sel.badgeColor}}">{{sel.badge}}</div>
+            <div style="font-size:14px;font-weight:700;color:#8F3320">Ver local →</div>
+          </div>
+        </a>
+        <button onClick="{{closeSel}}" aria-label="Cerrar vista previa" style="position:absolute;right:-4px;top:-14px;width:44px;height:44px;border-radius:50%;background:#2B2118;color:#fff;border:2px solid #FBF6EE;font-size:18px">×</button>
+      </div>
+    </sc-if>
+
+    <!-- Conmutador Mapa / Lista -->
+    <div role="group" aria-label="Vista" style="position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;background:#2B2118;border-radius:26px;padding:4px;z-index:5;box-shadow:0 4px 12px rgba(43,33,24,.3)">
+      <button onClick="{{goMap}}" aria-pressed="{{showMap}}" style="min-height:44px;min-width:96px;padding:0 18px;border-radius:22px;border:0;font-size:15px;font-weight:700;background:{{mapBg}};color:{{mapFg}}">Mapa</button>
+      <button onClick="{{goList}}" aria-pressed="{{showList}}" style="min-height:44px;min-width:96px;padding:0 18px;border-radius:22px;border:0;font-size:15px;font-weight:700;background:{{listBg}};color:{{listFg}}">Lista</button>
+    </div>
+  </div>
+
+  <!-- Menú lateral -->
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;inset:0;z-index:20">
+      <button onClick="{{closeMenu}}" aria-label="Cerrar menú" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(43,33,24,.55);padding:0"></button>
+      <nav aria-label="Menú principal" style="position:absolute;left:0;top:0;bottom:0;width:300px;background:#FBF6EE;display:flex;flex-direction:column;overflow-y:auto;box-shadow:4px 0 18px rgba(43,33,24,.3)">
+        <div style="display:flex;align-items:center;gap:4px;padding:14px 16px 10px;border-bottom:1px solid #E6DCCB">
+          <button onClick="{{closeMenu}}" aria-label="Cerrar menú" style="flex:none;width:48px;height:48px;margin-left:-8px;border:0;background:transparent;border-radius:24px;display:flex;align-items:center;justify-content:center;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+          </button>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+          <span style="font-size:20px;font-weight:700;margin-left:4px">HeartEats</span>
+        </div>
+
+        <div style="padding:8px 8px;display:flex;flex-direction:column">
+          <button onClick="{{menuMap}}" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border:0;border-radius:12px;background:#F1E7D4;font-size:16px;font-weight:700;color:#2B2118;text-align:left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Mapa
+          </button>
+          <button onClick="{{menuList}}" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border:0;border-radius:12px;background:transparent;font-size:16px;font-weight:600;color:#2B2118;text-align:left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            Lista de locales
+          </button>
+        </div>
+
+        <div style="height:1px;background:#E6DCCB;margin:4px 16px"></div>
+        <div style="padding:8px 20px 2px;font-size:12px;font-weight:700;letter-spacing:.6px;color:#5A4D40">COLABORAR</div>
+        <div style="padding:0 8px;display:flex;flex-direction:column">
+          <a href="Proponer.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            Proponer un local
+          </a>
+          <a href="Equipo.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/></svg>
+            Corregir un dato
+          </a>
+          <a href="#" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg>
+            Soy de un negocio
+          </a>
+        </div>
+
+        <div style="height:1px;background:#E6DCCB;margin:8px 16px 4px"></div>
+        <div style="padding:8px 20px 2px;font-size:12px;font-weight:700;letter-spacing:.6px;color:#5A4D40">SOBRE HEARTEATS</div>
+        <div style="padding:0 8px;display:flex;flex-direction:column">
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Qué es HeartEats</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Cómo verificamos</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Privacidad y datos</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Contacto</a>
+        </div>
+
+        <div style="flex-grow:1"></div>
+        <div style="border-top:1px solid #E6DCCB;padding:12px 16px 16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;font-weight:700;color:#5A4D40">Idioma</div>
+          <div role="group" aria-label="Idioma" style="display:flex;gap:6px">
+            <button aria-pressed="true" style="flex:1;min-height:44px;border-radius:10px;border:1.5px solid #2B2118;background:#2B2118;color:#fff;font-size:15px;font-weight:700">Español</button>
+            <button aria-pressed="false" style="flex:1;min-height:44px;border-radius:10px;border:1.5px solid #CDBFA9;background:#fff;color:#2B2118;font-size:15px;font-weight:700">English</button>
+          </div>
+          <div style="font-size:12px;color:#5A4D40;line-height:1.4">Proyecto abierto y sin ánimo de lucro.</div>
+        </div>
+      </nav>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'map', selId: null, active: [], menu: false, q: '', drop: false };
+  }
+  renderVals() {
+    const norm = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const ALL = [
+      { id: 1, dish: 'Tarta de zanahoria casera', name: 'Café La Mesa Compartida', tags: ['Postres', 'Café'], zone: 'Lavapiés', cp: '28012', dist: '350 m', lvl: 'admin', x: 120, y: 150, tint: '#E8C9A0' },
+      { id: 2, dish: 'Pan de masa madre recién hecho', name: 'Obrador Manos Nuevas', tags: ['Panadería', 'Postres'], zone: 'Chamberí', cp: '28010', dist: '600 m', lvl: 'community', x: 250, y: 230, tint: '#F0D9A8' },
+      { id: 3, dish: 'Arroz meloso de verduras', name: 'Bistró Sin Fronteras', tags: ['Menú del día'], zone: 'Malasaña', cp: '28004', dist: '800 m', lvl: 'admin', x: 190, y: 340, tint: '#D9C3A5' },
+      { id: 4, dish: 'Tortilla de patata jugosa', name: 'Tapas del Barrio', tags: ['Tapas', 'Menú del día'], zone: 'Lavapiés', cp: '28012', dist: '1,1 km', lvl: 'none', x: 70, y: 300, tint: '#E3CDB4' },
+      { id: 5, dish: 'Croquetas de cocido', name: 'Cocina Cálida', tags: ['Tapas', 'Menú del día'], zone: 'Retiro', cp: '28009', dist: '1,4 km', lvl: 'community', x: 310, y: 380, tint: '#EBD2B0' },
+      { id: 6, dish: 'Pizza margarita al horno de leña', name: 'Pizzería Masa Madre', tags: ['Pizza', 'Italiana'], zone: 'Chamberí', cp: '28010', dist: '1,6 km', lvl: 'admin', x: 150, y: 470, tint: '#F2DDBB' },
+      { id: 7, dish: 'Hamburguesa de lentejas y remolacha', name: 'La Brasa Verde', tags: ['Hamburguesas', 'Vegetariano'], zone: 'Malasaña', cp: '28004', dist: '1,8 km', lvl: 'community', x: 60, y: 110, tint: '#DDD0A8' },
+      { id: 8, dish: 'Nigiris variados del día', name: 'Sushi Ola Tranquila', tags: ['Sushi'], zone: 'Arganzuela', cp: '28045', dist: '2,1 km', lvl: 'admin', x: 330, y: 130, tint: '#EAD7C0' },
+      { id: 9, dish: 'Tagliatelle al pesto casero', name: 'Trattoria Primavera', tags: ['Italiana', 'Vegetariano'], zone: 'Retiro', cp: '28009', dist: '2,4 km', lvl: 'none', x: 260, y: 320, tint: '#E6D3B3' }
+    ];
+    const LBL = {
+      admin: { t: '● Verificado', c: '#1F6B45' },
+      community: { t: '◐ Confirmado por la comunidad', c: '#7A5A00' },
+      none: { t: '○ Sin verificar', c: '#5A4D40' }
+    };
+    const CATS = [
+      ['Pizza', 'M3 5c6-3 12-3 18 0L12 21 3 5z M9 9.5h.01 M14 8.5h.01 M12 14h.01'],
+      ['Hamburguesas', 'M4 11a8 6 0 0116 0H4z M3 14.5h18 M5 17.5h14v1a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 015 18.5v-1z'],
+      ['Sushi', 'M4 14h16v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3z M3 14c0-4 4-6 9-6s9 2 9 6 M12 8v6'],
+      ['Italiana', 'M3 12h18a9 9 0 01-18 0z M8 12c0-4 3-6 4-8 M12 12c0-3 2-4 3-6 M16 12c0-2 1-3 2-4'],
+      ['Café', 'M4 9h12v5a5 5 0 01-5 5H9a5 5 0 01-5-5V9z M16 10h2a2.5 2.5 0 010 5h-2 M8 3v3 M12 3v3'],
+      ['Postres', 'M6 12h12l-1.5 8h-9L6 12z M5 12a4 4 0 014-4h.5a3.5 3.5 0 016 0h.5a4 4 0 014 4H5z M12 3v2'],
+      ['Tapas', 'M2 16h20 M4 16c0 2.5 3.5 4 8 4s8-1.5 8-4 M10 7a2.2 2.2 0 104.4 0 2.2 2.2 0 00-4.4 0 M14 3l-3 10'],
+      ['Menú del día', 'M7 3v8 M5 3v5a2 2 0 004 0V3 M7 11v10 M17 3c-2 2-3 4-3 7h3v11 M17 3v7'],
+      ['Panadería', 'M4 11c0-3 3-5 8-5s8 2 8 5v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7z M9 10l1 2 M13 9.5l1 2 M16.5 11l.5 2'],
+      ['Vegetariano', 'M5 19C5 10 10 5 20 4c0 10-5 15-14 15 M5 19c2-5 5-8 9-10']
+    ];
+    const act = this.state.active;
+    const q = norm(this.state.q.trim());
+    const matchQ = r => !q || [r.name, r.zone, r.cp, 'madrid', r.dish, r.tags.join(' ')].some(f => norm(f).includes(q));
+    const list = ALL.filter(r => (act.length === 0 || r.tags.some(t => act.includes(t))) && matchQ(r));
+    const sugs = [];
+    if (q) {
+      ALL.filter(r => norm(r.name).includes(q)).slice(0, 3).forEach(r => sugs.push({ label: r.name, kind: 'Local', pick: () => this.setState({ q: r.name, drop: false, selId: r.id, view: 'map' }) }));
+      const seen = {};
+      ALL.forEach(r => {
+        [[r.zone + ' · ' + r.cp, r.zone], [r.cp, r.cp], ['Madrid', 'Madrid']].forEach(([lab, val]) => {
+          if (!seen[lab] && (norm(r.zone).includes(q) || norm(r.cp).includes(q) || norm('madrid').includes(q)) && norm(lab).includes(q) && sugs.filter(x => x.kind === 'Zona').length < 3) {
+            seen[lab] = 1;
+            sugs.push({ label: lab, kind: 'Zona', pick: () => this.setState({ q: val, drop: false, selId: null }) });
+          }
+        });
+      });
+      CATS.filter(c => norm(c[0]).includes(q)).slice(0, 2).forEach(c => sugs.push({ label: c[0], kind: 'Comida', pick: () => this.setState({ q: '', drop: false, active: act.includes(c[0]) ? act : [...act, c[0]] }) }));
+    }
+    const mk = r => ({
+      ...r,
+      meta: r.tags[0] + ' · ' + r.zone + ' · ' + r.dist + ' · ♥ Equipo inclusivo',
+      badge: LBL[r.lvl].t,
+      badgeColor: LBL[r.lvl].c
+    });
+    const selR = list.find(r => r.id === this.state.selId);
+    const view = this.state.view;
+    return {
+      q: this.state.q,
+      hasQ: this.state.q.length > 0,
+      onQ: (e) => this.setState({ q: e.target.value, drop: true }),
+      clearQ: () => this.setState({ q: '', drop: false }),
+      showSug: this.state.drop && q.length > 0,
+      sugs,
+      noSug: sugs.length === 0,
+      cats: CATS.map(([label, d]) => {
+        const on = act.includes(label);
+        return {
+          label, d, pressed: on, fw: on ? 700 : 500,
+          bg: on ? '#2B2118' : '#F1E7D4', stroke: on ? '#fff' : '#2B2118', border: on ? '#2B2118' : '#E6DCCB',
+          toggle: () => this.setState({ active: on ? act.filter(x => x !== label) : [...act, label], selId: null })
+        };
+      }),
+      markers: list.map(r => ({
+        x: r.x, y: r.y,
+        ring: r.id === this.state.selId ? '#2B2118' : '#fff',
+        aria: r.dish + ', ' + r.name,
+        pick: () => this.setState({ selId: r.id })
+      })),
+      cards: list.map(mk),
+      empty: list.length === 0,
+      countText: list.length + (list.length === 1 ? ' local' : ' locales') + ' cerca de ti',
+      menuOpen: this.state.menu,
+      openMenu: () => this.setState({ menu: true }),
+      closeMenu: () => this.setState({ menu: false }),
+      menuMap: () => this.setState({ view: 'map', menu: false }),
+      menuList: () => this.setState({ view: 'list', selId: null, menu: false }),
+      showMap: view === 'map',
+      showList: view === 'list',
+      hasSel: !!selR && view === 'map',
+      sel: selR ? mk(selR) : { tint: '#eee', dish: '', name: '', meta: '', badge: '', badgeColor: '#000' },
+      closeSel: () => this.setState({ selId: null }),
+      nearMe: () => this.setState({ selId: 1 }),
+      goMap: () => this.setState({ view: 'map' }),
+      goList: () => this.setState({ view: 'list', selId: null }),
+      mapBg: view === 'map' ? '#FBF6EE' : 'transparent', mapFg: view === 'map' ? '#2B2118' : '#FBF6EE',
+      listBg: view === 'list' ? '#FBF6EE' : 'transparent', listFg: view === 'list' ? '#2B2118' : '#FBF6EE'
+    };
+  }
+}
+</script>
+</body>
+</html>

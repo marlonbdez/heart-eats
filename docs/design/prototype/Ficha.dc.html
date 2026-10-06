@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ficha de restaurante</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2118}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{outline:3px solid #1B4B8F;outline-offset:2px}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:1704px;box-sizing:border-box;background:#FBF6EE;display:flex;flex-direction:column">
+
+
+  <!-- Cabecera -->
+  <div style="flex:none;height:64px;box-sizing:border-box;padding:8px 16px;display:flex;align-items:center;gap:4px;background:#FBF6EE;box-shadow:0 1px 0 #E6DCCB">
+    <button onClick="{{openMenu}}" aria-label="Abrir menú" aria-expanded="{{menuOpen}}" style="flex:none;width:48px;height:48px;margin-left:-8px;border:0;background:transparent;border-radius:24px;display:flex;align-items:center;justify-content:center;padding:0">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+    <span style="font-size:20px;font-weight:700;letter-spacing:-0.2px;margin-left:4px">HeartEats</span>
+    <span style="flex-grow:1"></span>
+    <a href="Proponer.dc.html" style="font-size:14px;font-weight:600;color:#8F3320;padding:10px 4px;min-height:24px">Proponer un local</a>
+  </div>
+
+  <!-- Foto -->
+  <div style="position:relative;height:200px;background:#E8C9A0;flex:none">
+    <a href="Main.dc.html" style="position:absolute;left:12px;top:12px;min-height:44px;padding:0 16px;border-radius:22px;background:#fff;display:flex;align-items:center;font-size:15px;font-weight:700;border:1.5px solid #CDBFA9">← Volver</a>
+    <div style="position:absolute;left:12px;bottom:8px;font-size:11px;background:rgba(255,255,255,.85);padding:2px 6px;border-radius:4px;color:#4a3d30">Foto de ejemplo (la aporta el negocio)</div>
+  </div>
+
+  <div style="padding:20px 16px 32px;display:flex;flex-direction:column;gap:22px">
+
+    <!-- Cabecera -->
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <h1 style="margin:0;font-size:26px;line-height:1.2;letter-spacing:-0.3px">Café La Mesa Compartida</h1>
+      <div style="font-size:15px;color:#4a3d30">Cafetería y pastelería · Calle de Ejemplo 12, Madrid · 350 m</div>
+      <div style="font-size:14px;font-weight:600;color:#8F3320">♥ Negocio con equipo inclusivo</div>
+    </div>
+
+    <!-- Platos -->
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <h2 style="margin:0;font-size:20px">Lo que tienes que probar</h2>
+      <div style="display:flex;gap:12px;background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:10px">
+        <div style="flex:none;width:84px;height:84px;border-radius:10px;background:#E8C9A0"></div>
+        <div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:17px;font-weight:700">Tarta de zanahoria casera</div><div style="font-size:14px;line-height:1.4;color:#4a3d30">Con crema de queso y nueces. La hacen cada mañana.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:10px">
+        <div style="flex:none;width:84px;height:84px;border-radius:10px;background:#F0D9A8"></div>
+        <div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:17px;font-weight:700">Tostada de aguacate y huevo</div><div style="font-size:14px;line-height:1.4;color:#4a3d30">Pan de masa madre, perfecto para el desayuno.</div></div>
+      </div>
+    </section>
+
+    <!-- Acciones -->
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+      <a href="#" style="min-height:56px;border-radius:12px;background:#B4432A;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6px">Cómo llegar</a>
+      <a href="#" style="min-height:56px;border-radius:12px;background:#fff;border:1.5px solid #B4432A;color:#8F3320;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center">Llamar</a>
+      <a href="#" style="min-height:56px;border-radius:12px;background:#fff;border:1.5px solid #B4432A;color:#8F3320;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center">Web</a>
+    </div>
+
+    <!-- El Equipo -->
+    <section style="display:flex;flex-direction:column;gap:12px;background:#fff;border:1.5px solid #E6DCCB;border-radius:16px;padding:16px">
+      <h2 style="margin:0;font-size:20px">El equipo detrás de cada plato</h2>
+
+      <sc-if value="{{isMin}}" hint-placeholder-val="{{true}}">
+        <p style="margin:0;font-size:17px;line-height:1.5"><strong>3 de 11 personas</strong> del equipo tienen discapacidad.</p>
+      </sc-if>
+
+      <sc-if value="{{isMed}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <p style="margin:0;font-size:17px;line-height:1.5"><strong>3 de 11 personas</strong> del equipo tienen discapacidad.</p>
+          <ul style="margin:0;padding-left:20px;font-size:16px;line-height:1.7">
+            <li>Cocina: 1 persona con discapacidad auditiva</li>
+            <li>Sala: 1 persona con discapacidad intelectual</li>
+            <li>Barra: 1 persona con discapacidad física</li>
+          </ul>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isFull}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <p style="margin:0;font-size:17px;line-height:1.5"><strong>3 de 11 personas</strong> del equipo tienen discapacidad.</p>
+          <div style="display:flex;gap:12px;background:#FBF6EE;border-radius:12px;padding:12px">
+            <div style="flex:none;width:56px;height:56px;border-radius:50%;background:#D9C3A5"></div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:16px;font-weight:700">Lucía <span style="font-weight:400;color:#4a3d30">· Sala (nombre ficticio)</span></div>
+              <p style="margin:0;font-size:15px;line-height:1.5">“Me gusta saber qué mesa me espera cada mañana y que el equipo cuente conmigo para organizarla.”</p>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#4a3d30;line-height:1.5">Historia compartida con el consentimiento de la persona, que puede retirarlo cuando quiera.</div>
+        </div>
+      </sc-if>
+
+      <!-- Solo prototipo -->
+      <div style="border-top:1.5px dashed #CDBFA9;padding-top:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:12px;color:#6B5B4B">Solo prototipo: el negocio elige qué nivel mostrar</div>
+        <div role="group" aria-label="Nivel de información del equipo" style="display:flex;gap:6px">
+          <sc-for list="{{levels}}" as="l" hint-placeholder-count="3">
+            <button onClick="{{l.pick}}" aria-pressed="{{l.on}}" style="flex:1;min-height:44px;border-radius:10px;font-size:14px;font-weight:700;border:1.5px solid {{l.border}};background:{{l.bg}};color:{{l.fg}}">{{l.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- Horarios -->
+    <section style="display:flex;flex-direction:column;gap:8px">
+      <h2 style="margin:0;font-size:20px">Horario</h2>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 20px;font-size:16px">
+        <span>Lunes a viernes</span><span>8:00 – 20:00</span>
+        <span>Sábado</span><span>9:00 – 21:00</span>
+        <span>Domingo</span><span>Cerrado</span>
+      </div>
+    </section>
+
+    <!-- Verificación (discreta, al final) -->
+    <section style="display:flex;flex-direction:column;gap:6px;background:#E4F1E8;border:1.5px solid #1F6B45;border-radius:12px;padding:12px">
+      <div style="font-size:15px;font-weight:700;color:#1F6B45">● Datos verificados</div>
+      <div style="font-size:14px;line-height:1.5;color:#2B2118">Visita presencial · 12 sep 2026. Negocio independiente.</div>
+      <a href="#" style="font-size:14px;font-weight:600;color:#1B4B8F;text-decoration:underline;padding:6px 0;min-height:24px">¿Cómo verificamos?</a>
+    </section>
+
+    <!-- Corrección -->
+    <a href="#" style="min-height:52px;border-radius:12px;border:1.5px solid #CDBFA9;background:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center">Sugerir una corrección</a>
+  </div>
+</div>
+
+  <!-- Menú lateral -->
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:0;top:0;right:0;height:844px;z-index:20">
+      <button onClick="{{closeMenu}}" aria-label="Cerrar menú" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(43,33,24,.55);padding:0"></button>
+      <nav aria-label="Menú principal" style="position:absolute;left:0;top:0;bottom:0;width:300px;background:#FBF6EE;display:flex;flex-direction:column;overflow-y:auto;box-shadow:4px 0 18px rgba(43,33,24,.3)">
+        <div style="display:flex;align-items:center;gap:4px;padding:14px 16px 10px;border-bottom:1px solid #E6DCCB">
+          <button onClick="{{closeMenu}}" aria-label="Cerrar menú" style="flex:none;width:48px;height:48px;margin-left:-8px;border:0;background:transparent;border-radius:24px;display:flex;align-items:center;justify-content:center;padding:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+          </button>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+          <span style="font-size:20px;font-weight:700;margin-left:4px">HeartEats</span>
+        </div>
+
+        <div style="padding:8px 8px;display:flex;flex-direction:column">
+          <a href="Main.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border:0;border-radius:12px;background:#F1E7D4;font-size:16px;font-weight:700;color:#2B2118;text-align:left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Mapa
+          </a>
+          <a href="Main.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border:0;border-radius:12px;background:transparent;font-size:16px;font-weight:600;color:#2B2118;text-align:left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            Lista de locales
+          </a>
+        </div>
+
+        <div style="height:1px;background:#E6DCCB;margin:4px 16px"></div>
+        <div style="padding:8px 20px 2px;font-size:12px;font-weight:700;letter-spacing:.6px;color:#5A4D40">COLABORAR</div>
+        <div style="padding:0 8px;display:flex;flex-direction:column">
+          <a href="Proponer.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            Proponer un local
+          </a>
+          <a href="Equipo.dc.html" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/></svg>
+            Corregir un dato
+          </a>
+          <a href="#" style="min-height:52px;display:flex;align-items:center;gap:14px;padding:0 12px;border-radius:12px;font-size:16px;font-weight:600">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg>
+            Soy de un negocio
+          </a>
+        </div>
+
+        <div style="height:1px;background:#E6DCCB;margin:8px 16px 4px"></div>
+        <div style="padding:8px 20px 2px;font-size:12px;font-weight:700;letter-spacing:.6px;color:#5A4D40">SOBRE HEARTEATS</div>
+        <div style="padding:0 8px;display:flex;flex-direction:column">
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Qué es HeartEats</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Cómo verificamos</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Privacidad y datos</a>
+          <a href="#" style="min-height:48px;display:flex;align-items:center;padding:0 12px 0 48px;border-radius:12px;font-size:16px">Contacto</a>
+        </div>
+
+        <div style="flex-grow:1"></div>
+        <div style="border-top:1px solid #E6DCCB;padding:12px 16px 16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;font-weight:700;color:#5A4D40">Idioma</div>
+          <div role="group" aria-label="Idioma" style="display:flex;gap:6px">
+            <button aria-pressed="true" style="flex:1;min-height:44px;border-radius:10px;border:1.5px solid #2B2118;background:#2B2118;color:#fff;font-size:15px;font-weight:700">Español</button>
+            <button aria-pressed="false" style="flex:1;min-height:44px;border-radius:10px;border:1.5px solid #CDBFA9;background:#fff;color:#2B2118;font-size:15px;font-weight:700">English</button>
+          </div>
+          <div style="font-size:12px;color:#5A4D40;line-height:1.4">Proyecto abierto y sin ánimo de lucro.</div>
+        </div>
+      </nav>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1704}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lvl: 'min', menu: false };
+  }
+  renderVals() {
+    const l = this.state.lvl;
+    const L = [['min', 'Mínimo'], ['med', 'Medio'], ['full', 'Máximo']];
+    return {
+      menuOpen: this.state.menu,
+      openMenu: () => this.setState({ menu: true }),
+      closeMenu: () => this.setState({ menu: false }),
+      isMin: l === 'min',
+      isMed: l === 'med',
+      isFull: l === 'full',
+      levels: L.map(([k, label]) => ({
+        label, on: l === k,
+        bg: l === k ? '#2B2118' : '#fff', fg: l === k ? '#fff' : '#2B2118', border: l === k ? '#2B2118' : '#CDBFA9',
+        pick: () => this.setState({ lvl: k })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Proponer un local</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#2B2118}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+input,textarea{font-family:inherit;box-sizing:border-box}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #1B4B8F;outline-offset:2px}
+</style>
+</helmet>
+<div style="width:390px;height:844px;background:#FBF6EE;display:flex;flex-direction:column;overflow:hidden">
+
+  <!-- Cabecera -->
+  <div style="flex:none;height:64px;box-sizing:border-box;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 #E6DCCB">
+    <a href="Main.dc.html" aria-label="Volver al mapa" style="flex:none;width:48px;height:48px;margin-left:-8px;border-radius:24px;display:flex;align-items:center;justify-content:center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </a>
+    <span style="font-size:18px;font-weight:700">Proponer un local</span>
+  </div>
+
+  <sc-if value="{{inForm}}" hint-placeholder-val="{{true}}">
+    <div style="flex:none;padding:12px 16px 4px">
+      <div style="font-size:14px;font-weight:700;color:#5A4D40">Paso {{stepNum}} de 4 · {{stepName}}</div>
+      <div style="margin-top:8px;height:8px;border-radius:4px;background:#E6DCCB"><div style="height:8px;border-radius:4px;background:#B4432A;width:{{pct}}"></div></div>
+    </div>
+
+    <div style="flex-grow:1;min-height:0;overflow-y:auto;padding:12px 16px 16px;display:flex;flex-direction:column;gap:16px">
+
+      <!-- Paso 1 -->
+      <sc-if value="{{s1}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">Cuéntanos qué sitio es. Con lo básico basta, el resto lo revisamos nosotros.</p>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="f-nombre" style="font-size:15px;font-weight:700">Nombre del local</label>
+            <input id="f-nombre" type="text" value="{{name}}" onChange="{{onName}}" aria-invalid="{{nameErr}}" style="height:52px;border:1.5px solid {{nameBorder}};border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+            <sc-if value="{{nameErr}}" hint-placeholder-val="{{false}}"><div style="font-size:14px;color:#A12B14;font-weight:600">Escribe el nombre del local para continuar.</div></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="f-dir" style="font-size:15px;font-weight:700">Dirección</label>
+            <input id="f-dir" type="text" placeholder="Calle y número" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+          </div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="f-ciudad" style="font-size:15px;font-weight:700">Ciudad</label>
+              <input id="f-ciudad" type="text" value="Madrid" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="f-cp" style="font-size:15px;font-weight:700">Código postal</label>
+              <input id="f-cp" type="text" inputmode="numeric" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:15px;font-weight:700">¿Qué tipo de comida? <span style="font-weight:400;color:#5A4D40">(elige las que apliquen)</span></div>
+            <div role="group" aria-label="Tipo de comida" style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{foods}}" as="c" hint-placeholder-count="6">
+                <button onClick="{{c.toggle}}" aria-pressed="{{c.on}}" style="min-height:44px;padding:0 14px;border-radius:22px;font-size:15px;font-weight:600;border:1.5px solid {{c.border}};background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Paso 2 -->
+      <sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">¿Qué hay que probar sí o sí? Añade de 1 a 3 platos. Es lo que más ayuda a que la gente se anime a ir.</p>
+          <sc-for list="{{dishes}}" as="d" hint-placeholder-count="1">
+            <div style="display:flex;flex-direction:column;gap:8px;background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:12px">
+              <div style="font-size:14px;font-weight:700;color:#5A4D40">Plato {{d.n}}</div>
+              <label style="font-size:15px;font-weight:700" for="{{d.idName}}">Nombre del plato</label>
+              <input id="{{d.idName}}" type="text" style="height:48px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px">
+              <label style="font-size:15px;font-weight:700" for="{{d.idDesc}}">Descripción corta <span style="font-weight:400;color:#5A4D40">(opcional)</span></label>
+              <input id="{{d.idDesc}}" type="text" maxlength="160" style="height:48px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px">
+            </div>
+          </sc-for>
+          <sc-if value="{{canAddDish}}" hint-placeholder-val="{{true}}">
+            <button onClick="{{addDish}}" style="min-height:48px;border-radius:12px;border:1.5px dashed #8F3320;background:transparent;color:#8F3320;font-size:16px;font-weight:700">+ Añadir otro plato</button>
+          </sc-if>
+          <div style="font-size:14px;line-height:1.5;color:#4a3d30;background:#F1E7D4;border-radius:12px;padding:12px">Las fotos las aporta el propio negocio, o se usan con su permiso. De momento no hace falta subir ninguna.</div>
+        </div>
+      </sc-if>
+
+      <!-- Paso 3 -->
+      <sc-if value="{{s3}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Ayúdanos a comprobarlo.</p>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="f-como" style="font-size:15px;font-weight:700">¿Cómo conoces el negocio?</label>
+            <textarea id="f-como" rows="3" placeholder="Ej.: voy habitualmente, lo vi en una noticia, trabajo allí…" style="border:1.5px solid #CDBFA9;border-radius:12px;padding:12px 14px;font-size:16px;line-height:1.4;resize:none;background:#fff"></textarea>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="f-enlace" style="font-size:15px;font-weight:700">Un enlace que lo confirme <span style="font-weight:400;color:#5A4D40">(web, noticia, redes…)</span></label>
+            <input id="f-enlace" type="url" placeholder="https://" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+          </div>
+          <button onClick="{{toggleIndep}}" role="checkbox" aria-checked="{{indep}}" style="min-height:56px;display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:12px;border:1.5px solid #CDBFA9;background:#fff;text-align:left;font-size:15px;line-height:1.4;color:#2B2118">
+            <span style="flex:none;width:28px;height:28px;border-radius:6px;border:2px solid #2B2118;background:{{indepBg}};color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700">{{indepMark}}</span>
+            <span>Es un negocio independiente (no una gran cadena)</span>
+          </button>
+          <div style="font-size:14px;line-height:1.5;color:#4a3d30;background:#F1E7D4;border-radius:12px;padding:12px"><strong>Importante:</strong> no escribas nombres ni datos de salud de ninguna persona. Si el negocio quiere contar la historia de su equipo, lo hará él mismo, con el consentimiento de cada persona.</div>
+        </div>
+      </sc-if>
+
+      <!-- Paso 4 -->
+      <sc-if value="{{s4}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a3d30">Por si necesitamos preguntarte algo. Es opcional y nunca se muestra en la web.</p>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="f-mail" style="font-size:15px;font-weight:700">Tu correo <span style="font-weight:400;color:#5A4D40">(opcional)</span></label>
+            <input id="f-mail" type="email" style="height:52px;border:1.5px solid #CDBFA9;border-radius:12px;padding:0 14px;font-size:16px;background:#fff">
+          </div>
+          <div style="background:#fff;border:1.5px solid #E6DCCB;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:15px;font-weight:700">Resumen</div>
+            <div style="font-size:15px;line-height:1.5">{{summaryName}}<br><span style="color:#5A4D40">{{summaryFood}}</span></div>
+          </div>
+          <div style="font-size:14px;line-height:1.5;color:#4a3d30">Al enviar, aceptas que revisemos la propuesta y la publiquemos si se cumple el criterio de negocio independiente con equipo inclusivo. <a href="#" style="color:#1B4B8F;text-decoration:underline">Política de privacidad</a></div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- Botonera -->
+    <div style="flex:none;padding:12px 16px 16px;display:flex;gap:10px;background:#FBF6EE;box-shadow:0 -1px 0 #E6DCCB">
+      <sc-if value="{{canBack}}" hint-placeholder-val="{{false}}">
+        <button onClick="{{back}}" style="flex:none;min-height:52px;padding:0 20px;border-radius:12px;border:1.5px solid #2B2118;background:#fff;font-size:16px;font-weight:700;color:#2B2118">Atrás</button>
+      </sc-if>
+      <button onClick="{{next}}" style="flex-grow:1;min-height:52px;border-radius:12px;border:0;background:#B4432A;color:#fff;font-size:17px;font-weight:700">{{nextLabel}}</button>
+    </div>
+  </sc-if>
+
+  <!-- Confirmación -->
+  <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+    <div style="flex-grow:1;padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="#B4432A" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 5 6 5c2 0 3.4 1 4.2 2.3h3.6C14.6 6 16 5 18 5c3.3 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>
+      <h1 style="margin:0;font-size:26px;line-height:1.2">¡Gracias por proponerlo!</h1>
+      <p style="margin:0;font-size:16px;line-height:1.55;color:#4a3d30">Revisaremos {{summaryName}} y, si todo encaja, lo verás en el mapa. Si necesitamos algo más, te escribiremos (solo si nos dejaste tu correo).</p>
+      <a href="Main.dc.html" style="margin-top:8px;min-height:52px;padding:0 28px;border-radius:12px;background:#B4432A;color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center">Volver al mapa</a>
+      <button onClick="{{again}}" style="min-height:48px;border:0;background:transparent;color:#8F3320;font-size:16px;font-weight:700;text-decoration:underline">Proponer otro local</button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 1, name: '', nameErr: false, foods: [], dishes: 1, indep: false, done: false };
+  }
+  renderVals() {
+    const st = this.state;
+    const NAMES = ['El local', 'Platos', 'Equipo', 'Enviar'];
+    const FOODS = ['Pizza', 'Hamburguesas', 'Sushi', 'Italiana', 'Café', 'Postres', 'Tapas', 'Menú del día', 'Panadería', 'Vegetariano', 'Otra'];
+    return {
+      inForm: !st.done,
+      done: st.done,
+      stepNum: st.step,
+      stepName: NAMES[st.step - 1],
+      pct: (st.step * 25) + '%',
+      s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4,
+      name: st.name,
+      nameErr: st.nameErr,
+      nameBorder: st.nameErr ? '#A12B14' : '#CDBFA9',
+      onName: (e) => this.setState({ name: e.target.value, nameErr: false }),
+      foods: FOODS.map(f => {
+        const on = st.foods.includes(f);
+        return { label: f, on, bg: on ? '#2B2118' : '#fff', fg: on ? '#fff' : '#2B2118', border: on ? '#2B2118' : '#CDBFA9',
+          toggle: () => this.setState({ foods: on ? st.foods.filter(x => x !== f) : [...st.foods, f] }) };
+      }),
+      dishes: Array.from({ length: st.dishes }, (_, i) => ({ n: i + 1, idName: 'd' + i + 'n', idDesc: 'd' + i + 'd' })),
+      canAddDish: st.dishes < 3,
+      addDish: () => this.setState({ dishes: st.dishes + 1 }),
+      indep: st.indep,
+      indepBg: st.indep ? '#2B2118' : '#fff',
+      indepMark: st.indep ? '✓' : '',
+      toggleIndep: () => this.setState({ indep: !st.indep }),
+      summaryName: st.name.trim() || 'Tu propuesta',
+      summaryFood: st.foods.length ? st.foods.join(' · ') : 'Sin tipo de comida indicado',
+      canBack: st.step > 1,
+      back: () => this.setState({ step: st.step - 1 }),
+      nextLabel: st.step === 4 ? 'Enviar propuesta' : 'Continuar',
+      next: () => {
+        if (st.step === 1 && !st.name.trim()) { this.setState({ nameErr: true }); return; }
+        if (st.step === 4) { this.setState({ done: true }); return; }
+        this.setState({ step: st.step + 1 });
+      },
+      again: () => this.setState({ step: 1, name: '', nameErr: false, foods: [], dishes: 1, indep: false, done: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
