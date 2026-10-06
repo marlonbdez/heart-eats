@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: 'HeartEats',
   description:
     'Descubre y apoya negocios gastronómicos con equipos inclusivos.',
+  // Provisional: la web muestra datos de ejemplo. Quitar al lanzar con datos reales.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
