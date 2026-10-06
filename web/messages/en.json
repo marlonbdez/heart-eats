@@ -39,8 +39,9 @@
   },
   "map": {
     "label": "Map of places",
-    "loadError": "The map could not be loaded on this device. Soon you will be able to browse places in a list.",
-    "markerLabel": "{name}, show preview"
+    "loadError": "The map could not be loaded on this device.",
+    "markerLabel": "{name}, show preview",
+    "loadErrorLink": "Browse places in a list"
   },
   "card": {
     "label": "Place preview",
@@ -90,6 +91,12 @@
     "emptyTitle": "No places match your search",
     "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
     "clearFilters": "Clear filters",
-    "propose": "Suggest a place"
+    "propose": "Suggest a place",
+    "listLabel": "List of places"
+  },
+  "view": {
+    "label": "View",
+    "map": "Map",
+    "list": "List"
   }
 }

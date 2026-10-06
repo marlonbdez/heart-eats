@@ -39,8 +39,9 @@
   },
   "map": {
     "label": "Mapa de locales",
-    "loadError": "No se ha podido cargar el mapa en este dispositivo. Pronto podrás ver los locales en una lista.",
-    "markerLabel": "{name}, ver vista previa"
+    "loadError": "No se ha podido cargar el mapa en este dispositivo.",
+    "markerLabel": "{name}, ver vista previa",
+    "loadErrorLink": "Ver los locales en una lista"
   },
   "card": {
     "label": "Vista previa del local",
@@ -90,6 +91,12 @@
     "emptyTitle": "No hay locales con esa búsqueda",
     "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
     "clearFilters": "Quitar filtros",
-    "propose": "Proponer un local"
+    "propose": "Proponer un local",
+    "listLabel": "Lista de locales"
+  },
+  "view": {
+    "label": "Vista",
+    "map": "Mapa",
+    "list": "Lista"
   }
 }

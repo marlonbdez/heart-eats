@@ -29,13 +29,20 @@
   border-radius: 999px;
   cursor: pointer;
 }
-.mapArea {
+.area {
   position: relative;
   flex: 1;
   min-height: 0;
 }
-/* El número de resultados se anuncia a lectores de pantalla; no se ve. */
+/* Recuento: en la lista se ve (arriba); en el mapa solo se anuncia. */
 .count {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 16px 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.srOnly {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -43,6 +50,25 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+.listScroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+}
+.list {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 12px 96px; /* hueco para el conmutador flotante */
+  list-style: none;
+}
+.item {
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 .empty {
   position: absolute;

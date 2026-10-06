@@ -1,0 +1,28 @@
+.switch {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  z-index: 6;
+  display: inline-flex;
+  padding: 4px;
+  background: var(--fg);
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+  transform: translateX(-50%);
+}
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  min-height: 44px;
+  padding: 0 18px;
+  font-weight: 700;
+  color: var(--bg);
+  text-decoration: none;
+  border-radius: 999px;
+}
+.item[aria-current='page'] {
+  color: var(--fg);
+  background: var(--bg);
+}
