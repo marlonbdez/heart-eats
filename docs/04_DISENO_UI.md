@@ -14,7 +14,7 @@
 
 ## 2. Principios
 
-1. **El restaurante se elige por ser bueno**; la inclusión es el plus. Foto y comida al mismo nivel que el mensaje social.
+1. **La comida y el negocio son los protagonistas.** Se elige por lo que apetece; la inclusión es un valor añadido, no una categoría de búsqueda. Todos los locales del mapa tienen equipo inclusivo, por eso el tipo de discapacidad **no es un filtro público**: vive solo en "El Equipo" de la ficha, si el negocio decide contarlo.
 2. **Lenguaje digno**: sin pena, sin "inspiración", sin paternalismo. Revisión con personas del sector.
 3. **Transparencia visible**: insignia y fecha de verificación siempre a la vista.
 4. **Mobile-first y WCAG 2.2 AA** desde el primer prototipo: contraste, objetivos táctiles ≥ 44 px, teclado, lectores de pantalla.
@@ -39,8 +39,8 @@ Moderación (acceso con magic link): Cola ──► Detalle de sugerencia ──
 
 ### F1 · Descubrir y ver una ficha (principal)
 1. Abre la app → mapa centrado en la zona del usuario (o Madrid si no da permiso de ubicación ❓ geolocalización: pedir solo tras gesto del usuario).
-2. Ve marcadores y clusters; usa buscador o filtros (inclusión, cocina, zona).
-3. Toca un marcador → **tarjeta de vista previa** (foto, nombre, cocina, distancia, insignia).
+2. Ve marcadores y clusters; usa el buscador (plato, local o zona) o filtros **de comida** (pizza, pasteles, café, tapas, menú del día…).
+3. Toca un marcador → **tarjeta de vista previa**: lidera el **plato estrella** (foto + nombre), después el local, distancia, sello "Equipo inclusivo" e insignia.
 4. Toca la tarjeta → **ficha completa**.
 5. Desde la ficha: cómo llegar (abre app de mapas del dispositivo), llamar, web, **Sugerir corrección**.
 - Alternativa: conmutador **Mapa / Lista** con los mismos filtros y orden por distancia.
@@ -116,6 +116,9 @@ Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no ven
 | 6 | **Tipografía del sistema** legible, sin fuentes externas | Carga rápida, accesible, sin dependencias |
 | 7 | **Sin cuenta para el público**: ver, buscar y proponer sin registrarse | Cero barreras |
 | 8 | **Sin gamificación, sin puntuaciones ni reseñas** en el MVP | No es el objetivo |
+| 9 | **Filtros por tipo de comida**, no por discapacidad. La inclusión se muestra como sello sobrio ("Equipo inclusivo") | Promocionar el negocio, no etiquetar a las personas |
+| 10 | **Cada ficha destaca 1–3 platos estrella** (nombre, descripción corta, foto opcional) | Es lo que mueve a ir |
+| 11 | En la ficha, el bloque de verificación va **después** del contenido gastronómico | Transparente pero sin protagonismo |
 
 ## 9. Gate de aprobación
 

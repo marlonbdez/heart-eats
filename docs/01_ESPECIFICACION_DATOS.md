@@ -32,7 +32,9 @@
 | `location` | GeoJSON Point | ✔ | `coordinates: [lng, lat]`, rangos válidos |
 | `contact.phone/email/website/instagram` | string | | `website` URL https; `email` formato válido |
 | `openingHours` | `{day 0-6, open, close}[]` | | `HH:mm`; permitir varios tramos por día ❓ cierre tras medianoche |
-| `inclusionTypes` | enum[] | ✔ | ≥1: `intellectual_disability`, `physical_disability`, `hearing_impairment`, `visual_impairment`, `mental_health`, `autism_spectrum`, `other` |
+| `signatureDishes` | `{name, description?, photoUrl?}[]` | ✔ | 1–3 platos estrella; `name` ≤ 80, `description` ≤ 160 |
+| `foodTags` | string[] | ✔ | ≥1, catálogo `foodTag` (pizza, pasteles, café, tapas, menú del día, panadería…) usado en los filtros públicos |
+| `inclusionTypes` | enum[] | | **Opcional y no filtrable públicamente.** Solo se muestra en "El Equipo" (nivel medio o máximo) si el negocio lo decide. ≥1: `intellectual_disability`, `physical_disability`, `hearing_impairment`, `visual_impairment`, `mental_health`, `autism_spectrum`, `other` |
 | `teamVisibilityLevel` | enum | ✔ | `minimal` (defecto), `medium`, `full` |
 | `isIndependent` | boolean | ✔ | regla de exclusión de cadenas |
 | `status` | enum | ✔ | `draft`, `pending`, `published`, `rejected`, `archived` |
@@ -87,7 +89,7 @@
 | Restaurant | `location` 2dsphere | bbox / near |
 | Restaurant | `slug` único | detalle |
 | Restaurant | `{status, address.country, address.city}` | listados |
-| Restaurant | `{status, cuisineTypes}`, `{status, inclusionTypes}` | filtros |
+| Restaurant | `{status, foodTags}`, `{status, cuisineTypes}` | filtros públicos de comida |
 | Restaurant | texto en `name`, `description.*` | búsqueda básica ❓ (índice de texto con i18n es limitado) |
 | Team | `restaurantId` único | |
 | Suggestion | `{status, createdAt}` | cola de moderación |
@@ -96,7 +98,7 @@
 
 ## 4. Catálogos controlados
 
-`cuisine`, `inclusionTypes`, `businessType` y barrios se sirven por `GET /meta/filters`. Se definen en `shared/constants` con clave estable en inglés y etiqueta por idioma.
+`cuisine`, `foodTag`, `inclusionTypes`, `businessType` y barrios se sirven por `GET /meta/filters`. Se definen en `shared/constants` con clave estable en inglés y etiqueta por idioma.
 
 ## 5. Ficha de seed
 
