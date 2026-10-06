@@ -80,10 +80,13 @@ Pantalla para el negocio (acceso desde el menú "Soy de un negocio" o desde el c
 Desde la ficha: elegir qué está mal (dirección, horario, ha cerrado, información del equipo, otro) → describir + evidencia opcional → enviar. Mismo patrón que F2, más corto.
 
 ### F5 · Moderación
-1. Acceso por magic link.
-2. **Cola** ordenada por antigüedad con filtros (tipo, ciudad).
-3. **Detalle**: datos propuestos, diff frente a lo publicado, evidencias, comprobaciones de regla de exclusión.
-4. Acción: **Aprobar** (y fijar nivel/método de verificación) · **Pedir más info** · **Rechazar** (con motivo). Todo queda en el registro de auditoría.
+Página de escritorio (acceso por magic link, no aparece en el menú público). Dos zonas:
+- **Cola (izquierda):** pestañas Pendientes / Resueltas; cada tarjeta indica tipo (Nuevo local / Corrección), zona, antigüedad y aviso ⚠ si hay posible duplicado o cadena.
+- **Detalle (derecha):** datos propuestos (o diff antes/después en correcciones), pruebas aportadas y alertas.
+  - **Comprobaciones obligatorias** para un local nuevo: existe · es independiente · hay pruebas del equipo inclusivo · **el negocio ha confirmado que quiere aparecer**.
+  - **Decisión:** *Aprobar y publicar* (solo se activa con las cuatro comprobaciones y con nivel 🟢/🟡 y método elegidos), *Pedir más información* (con nota) o *Rechazar* (motivo obligatorio: no independiente, sin pruebas, duplicado, fuera de zona, otro).
+  - **Registro de auditoría** de cada acción (quién, qué, cuándo).
+- Los datos de contacto de quien propone aparecen enmascarados.
 
 ## 5. Inventario de pantallas
 
