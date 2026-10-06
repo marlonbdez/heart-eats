@@ -77,7 +77,10 @@ test('el mapa se dibuja y muestra los locales', async ({ page }) => {
   // Una capa que depende del worker de MapLibre se dibuja de verdad.
   await expect
     .poll(async () => {
-      const p = await pixelAt(page, 8, 70);
+      const box = (await page
+        .getByRole('region', { name: 'Mapa de locales' })
+        .boundingBox())!;
+      const p = await pixelAt(page, box.x + 8, box.y + 8);
       return (
         Math.abs(p.r - BLUE.r) < 12 &&
         Math.abs(p.g - BLUE.g) < 12 &&
@@ -154,4 +157,94 @@ test('el botón de proponer es solo icono en móvil y conserva su nombre', async
   const box = await cta.boundingBox();
   expect(box!.width).toBeLessThan(80);
   expect(box!.height).toBeGreaterThanOrEqual(44);
+});
+
+test.describe('buscador y categorías', () => {
+  const markers = (page: Page) => page.locator('[data-marker]');
+
+  test('busca por barrio, ignorando tildes y mayúsculas', async ({ page }) => {
+    await page.goto('/es');
+    await page.getByRole('searchbox').fill('LAVAPIES');
+    await expect(markers(page)).toHaveCount(1);
+    await expect(page.getByRole('status')).toHaveText('1 local');
+  });
+
+  test('busca por código postal', async ({ page }) => {
+    await page.goto('/es');
+    await page.getByRole('searchbox').fill('28004');
+    await expect(markers(page)).toHaveCount(1);
+    await expect(
+      page.getByRole('button', { name: /Café Paso a Paso/ }),
+    ).toBeVisible();
+  });
+
+  test('una categoría filtra y se puede quitar', async ({ page }) => {
+    await page.goto('/es');
+    const cafe = page.getByRole('button', { name: 'Café', exact: true });
+    await cafe.click();
+    await expect(cafe).toHaveAttribute('aria-pressed', 'true');
+    await expect(markers(page)).toHaveCount(2);
+    await cafe.click();
+    await expect(cafe).toHaveAttribute('aria-pressed', 'false');
+    await expect(markers(page)).toHaveCount(6);
+  });
+
+  test('sin resultados se explica y se pueden quitar los filtros', async ({
+    page,
+  }) => {
+    await page.goto('/es');
+    await page.getByRole('searchbox').fill('zzzz');
+    await expect(markers(page)).toHaveCount(0);
+    await expect(
+      page.getByRole('heading', { name: 'No hay locales con esa búsqueda' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Proponer un local' }).last(),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Quitar filtros' }).click();
+    await expect(markers(page)).toHaveCount(6);
+    await expect(page.getByRole('searchbox')).toHaveValue('');
+  });
+
+  test('al escribir una comida se sugiere su categoría', async ({ page }) => {
+    await page.goto('/es');
+    await page.getByRole('searchbox').fill('piz');
+    await expect(
+      page.getByRole('heading', { name: 'No hay locales con esa búsqueda' }),
+    ).toHaveCount(0);
+    await page.getByRole('button', { name: 'Filtrar por Pizza' }).click();
+    await expect(
+      page.getByRole('button', { name: 'Pizza', exact: true }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('searchbox')).toHaveValue('');
+    await expect(markers(page)).toHaveCount(1);
+  });
+
+  test('la búsqueda se guarda en la URL y se recupera al recargar', async ({
+    page,
+  }) => {
+    await page.goto('/es');
+    await page.getByRole('button', { name: 'Café', exact: true }).click();
+    await page.getByRole('searchbox').fill('malasaña');
+    await expect(page).toHaveURL(/\?q=malasa%C3%B1a&food=coffee$/);
+
+    await page.reload();
+    await expect(page.getByRole('searchbox')).toHaveValue('malasaña');
+    await expect(
+      page.getByRole('button', { name: 'Café', exact: true }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    await expect(markers(page)).toHaveCount(1);
+  });
+
+  test('la interfaz del buscador está traducida al inglés', async ({
+    page,
+  }) => {
+    await page.goto('/en');
+    await expect(page.getByRole('searchbox')).toHaveAttribute(
+      'placeholder',
+      'Place, area or postcode',
+    );
+    await page.getByRole('button', { name: 'Coffee', exact: true }).click();
+    await expect(page.getByRole('status')).toHaveText('2 places');
+  });
 });

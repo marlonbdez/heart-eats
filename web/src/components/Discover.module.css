@@ -1,0 +1,94 @@
+/* Alto de la pantalla menos la cabecera (56 px): filtros arriba, mapa debajo. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 56px);
+}
+.filters {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 12px 4px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.suggestion {
+  min-height: 44px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--hover);
+  border: 1px dashed var(--accent-text);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.mapArea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+/* El número de resultados se anuncia a lectores de pantalla; no se ve. */
+.count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.empty {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  max-width: 420px;
+  padding: 16px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.25);
+}
+.emptyTitle {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+.empty p {
+  margin: 0 0 12px;
+}
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  font: inherit;
+  font-weight: 600;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.primary {
+  color: var(--on-accent);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+.secondary {
+  color: var(--fg);
+  background: none;
+  border: 1px solid var(--line);
+}

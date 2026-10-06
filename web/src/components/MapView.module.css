@@ -1,6 +1,6 @@
 .wrap {
-  position: relative;
-  height: calc(100dvh - 56px);
+  position: absolute;
+  inset: 0;
 }
 .map {
   position: absolute;
