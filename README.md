@@ -25,7 +25,13 @@ npm run typecheck  # comprueba tipos
 npm run lint       # ESLint
 npm run build      # genera la web estática en web/out
 npx serve out      # sirve lo generado, tal como se verá en producción
+npx playwright install chromium   # solo la primera vez
+npm run test:e2e   # prueba de humo en un navegador (requiere `npm run build` antes)
 ```
+
+## Integración continua
+
+Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador que comprueba que el mapa se dibuja, que la vista previa abre y que el menú navega.
 
 ## Despliegue
 
