@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "title": "HeartEats",
+    "description": "Discover and support food businesses with inclusive teams."
+  },
+  "app": {
+    "name": "HeartEats",
+    "tagline": "Great food, with teams that make a difference."
+  },
+  "header": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "propose": "Suggest a place",
+    "skipToContent": "Skip to content"
+  },
+  "menu": {
+    "title": "Menu",
+    "groups": {
+      "navigate": "Browse",
+      "collaborate": "Contribute",
+      "about": "About HeartEats"
+    },
+    "links": {
+      "map": "Map",
+      "list": "List of places",
+      "propose": "Suggest a place",
+      "correct": "Correct a detail",
+      "business": "I run a business",
+      "what": "What is HeartEats",
+      "verify": "How we verify",
+      "privacy": "Privacy and data",
+      "contact": "Contact"
+    },
+    "language": "Language"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "map": {
+    "label": "Map of places",
+    "loadError": "The map could not be loaded on this device.",
+    "markerLabel": "{name}, show preview",
+    "loadErrorLink": "Browse places in a list",
+    "you": "Your location"
+  },
+  "card": {
+    "label": "Place preview",
+    "close": "Close preview",
+    "inclusiveSeal": "Inclusive team",
+    "signatureDish": "Signature dish",
+    "noPhoto": "No photo",
+    "verifiedAdmin": "Verified",
+    "verifiedCommunity": "Confirmed",
+    "needsReview": "Due for review",
+    "updated": "updated",
+    "methods": {
+      "visit": "in-person visit",
+      "call": "phone call",
+      "documentation": "documentation",
+      "owner_confirmed": "confirmed by the business"
+    },
+    "viewLocal": "View place →"
+  },
+  "foodTags": {
+    "pizza": "Pizza",
+    "burgers": "Burgers",
+    "sushi": "Sushi",
+    "italian": "Italian",
+    "coffee": "Coffee",
+    "desserts": "Desserts",
+    "tapas": "Tapas",
+    "set_menu": "Set menu",
+    "bakery": "Bakery",
+    "vegetarian": "Vegetarian"
+  },
+  "placeholder": {
+    "title": "This screen is coming soon",
+    "body": "We are building HeartEats one screen at a time.",
+    "back": "Back to the map"
+  },
+  "search": {
+    "label": "Search for a place, neighbourhood, city or postcode",
+    "placeholder": "Place, area or postcode",
+    "clear": "Clear search",
+    "suggestFood": "Filter by {food}"
+  },
+  "filters": {
+    "label": "Type of food"
+  },
+  "results": {
+    "count": "{count, plural, =0 {No places} one {# place} other {# places}}",
+    "emptyTitle": "No places match your search",
+    "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
+    "clearFilters": "Clear filters",
+    "propose": "Suggest a place",
+    "listLabel": "List of places"
+  },
+  "view": {
+    "label": "View",
+    "map": "Map",
+    "list": "List"
+  },
+  "_view": "View place →",
+  "detail": {
+    "back": "Back",
+    "seal": "Business with an inclusive team",
+    "dishes": "What you have to try",
+    "actions": "Actions",
+    "directions": "Directions",
+    "call": "Call",
+    "website": "Website",
+    "hours": "Opening hours",
+    "dayRange": "{from} to {to}",
+    "closed": "Closed",
+    "verifiedAdmin": "Verified details",
+    "verifiedCommunity": "Details confirmed by the community",
+    "howWeVerify": "How do we verify?",
+    "suggest": "Suggest a correction",
+    "businessTypes": {
+      "restaurant": "Restaurant",
+      "cafe": "Café",
+      "bar": "Bar",
+      "bakery": "Bakery",
+      "catering": "Catering",
+      "social_project": "Social project"
+    }
+  },
+  "team": {
+    "title": "The team behind every dish",
+    "summary": "<b>{with} of {total} people</b> on the team have a disability.",
+    "role": "{role}: {count, plural, one {# person} other {# people}} with {category}",
+    "storyConsent": "Story shared with the person’s consent, which they can withdraw at any time.",
+    "categories": {
+      "intellectual_disability": "an intellectual disability",
+      "physical_disability": "a physical disability",
+      "hearing_impairment": "a hearing disability",
+      "visual_impairment": "a visual disability",
+      "mental_health": "a mental health condition",
+      "autism_spectrum": "autism spectrum disorder",
+      "other": "another disability"
+    }
+  },
+  "nearMe": {
+    "button": "Near me",
+    "asking": "Finding your location…",
+    "privacy": "It is only used in your browser to work out distances; it is not stored or sent.",
+    "active": "Sorted by distance from your location.",
+    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; meanwhile, we stay in Madrid.",
+    "unavailable": "We couldn’t get your location. We stay in Madrid.",
+    "outside": "There are no places near you yet. We stay in Madrid.",
+    "distanceLabel": "{distance} away"
+  },
+  "propose": {
+    "title": "Suggest a place",
+    "back": "Back to the map",
+    "stepOf": "Step {n} of 4",
+    "steps": {
+      "1": "The place",
+      "2": "Dishes",
+      "3": "Team",
+      "4": "Send"
+    },
+    "prev": "Back",
+    "next": "Continue",
+    "send": "Send suggestion",
+    "sending": "Sending…",
+    "sendError": "We couldn’t send your suggestion. Please try again.",
+    "s1": {
+      "intro": "Tell us about the place. The basics are enough; we’ll check the rest.",
+      "name": "Name of the place",
+      "nameError": "Enter the name of the place to continue.",
+      "street": "Address",
+      "streetHint": "Street and number",
+      "city": "City",
+      "postalCode": "Postal code",
+      "food": "What kind of food?",
+      "foodHint": "(choose all that apply)",
+      "foodGroup": "Kind of food",
+      "other": "Other"
+    },
+    "s2": {
+      "intro": "What is a must-try? Add 1 to 3 dishes. It’s what helps people most to decide to go.",
+      "dish": "Dish {n}",
+      "dishName": "Name of the dish",
+      "dishDesc": "Short description",
+      "optional": "(optional)",
+      "add": "+ Add another dish",
+      "photos": "Photos are provided by the business itself, or used with its permission. You don’t need to upload any for now."
+    },
+    "s3": {
+      "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Help us check it.",
+      "how": "How do you know the business?",
+      "howHint": "E.g.: I go often, I saw it in the news, I work there…",
+      "link": "A link that confirms it",
+      "linkHint": "(website, news, social media…)",
+      "linkError": "Enter a valid link starting with https:// or leave it empty.",
+      "indep": "It’s an independent business (not a large chain)",
+      "noteStrong": "Important:",
+      "note": " do not write names or health information about any person. If the business wants to tell its team’s story, it will do so itself, with each person’s consent."
+    },
+    "s4": {
+      "intro": "In case we need to ask you something. It’s optional and never shown on the website.",
+      "email": "Your email",
+      "emailError": "Enter a valid email or leave it empty.",
+      "summary": "Summary",
+      "summaryFallback": "Your suggestion",
+      "noFood": "No kind of food given",
+      "consent": "By sending, you agree that we review the suggestion and publish it if it meets the criteria of an independent business with an inclusive team.",
+      "privacy": "Privacy policy"
+    },
+    "done": {
+      "title": "Thanks for suggesting it!",
+      "body": "We’ll review {name} and, if everything fits, you’ll see it on the map. If we need anything else, we’ll write to you (only if you left your email).",
+      "back": "Back to the map",
+      "again": "Suggest another place"
+    }
+  }
+}

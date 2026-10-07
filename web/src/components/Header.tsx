@@ -1,13 +1,19 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
-import { es } from '@/lib/i18n/es';
+import { Link, usePathname } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { navGroups } from '@/lib/nav';
 import styles from './Header.module.css';
 
+// Icono "añadir lugar" (chincheta con un +), Material Icons, Apache-2.0.
+const ADD_PLACE_PATH =
+  'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm4 8h-3v3h-2v-3H8V8h3V5h2v3h3v2z';
+
 export function Header() {
+  const t = useTranslations();
+  const locale = useLocale();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
@@ -18,22 +24,22 @@ export function Header() {
   };
   const close = () => dialogRef.current?.close();
 
-  // Cerrar al navegar.
+  // Cerrar al navegar o al cambiar de idioma.
   useEffect(() => {
     dialogRef.current?.close();
-  }, [pathname]);
+  }, [pathname, locale]);
 
   return (
     <>
       <a className={styles.skip} href="#contenido">
-        {es.header.skipToContent}
+        {t('header.skipToContent')}
       </a>
       <header className={styles.header}>
         <button
           ref={triggerRef}
           type="button"
           className={styles.iconButton}
-          aria-label={es.header.openMenu}
+          aria-label={t('header.openMenu')}
           aria-haspopup="dialog"
           aria-expanded="false"
           onClick={open}
@@ -44,18 +50,28 @@ export function Header() {
           <span aria-hidden="true" className={styles.heart}>
             ♥
           </span>
-          {es.app.name}
+          {t('app.name')}
         </Link>
+        {/* En móvil solo se ve el icono; el nombre accesible es siempre el texto completo. */}
         <Link href="/proponer" className={styles.cta}>
-          {es.header.propose}
-          <span className={styles.longOnly}>{es.header.proposeSuffix}</span>
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            aria-hidden="true"
+            focusable="false"
+            className={styles.ctaIcon}
+          >
+            <path fillRule="evenodd" d={ADD_PLACE_PATH} />
+          </svg>
+          <span className={styles.ctaText}>{t('header.propose')}</span>
         </Link>
       </header>
 
       <dialog
         ref={dialogRef}
         className={styles.drawer}
-        aria-label={es.menu.title}
+        aria-label={t('menu.title')}
         onClose={() => {
           triggerRef.current?.setAttribute('aria-expanded', 'false');
           triggerRef.current?.focus();
@@ -66,21 +82,23 @@ export function Header() {
         }}
       >
         <div className={styles.drawerHead}>
-          <span className={styles.drawerTitle}>{es.menu.title}</span>
+          <span className={styles.drawerTitle}>{t('menu.title')}</span>
           <button
             type="button"
             className={styles.iconButton}
-            aria-label={es.header.closeMenu}
+            aria-label={t('header.closeMenu')}
             onClick={close}
           >
             <span aria-hidden="true">×</span>
           </button>
         </div>
 
-        <nav aria-label={es.menu.title}>
+        <nav aria-label={t('menu.title')}>
           {navGroups.map((group) => (
-            <section key={group.title} className={styles.group}>
-              <h2 className={styles.groupTitle}>{group.title}</h2>
+            <section key={group.key} className={styles.group}>
+              <h2 className={styles.groupTitle}>
+                {t(`menu.groups.${group.key}`)}
+              </h2>
               <ul className={styles.list}>
                 {group.links.map((link) => (
                   <li key={link.href}>
@@ -89,7 +107,7 @@ export function Header() {
                       className={styles.link}
                       aria-current={pathname === link.href ? 'page' : undefined}
                     >
-                      {link.label}
+                      {t(`menu.links.${link.key}`)}
                     </Link>
                   </li>
                 ))}
@@ -99,12 +117,29 @@ export function Header() {
         </nav>
 
         <footer className={styles.drawerFoot}>
-          <p className={styles.langLabel}>{es.menu.language}</p>
-          <p className={styles.lang}>
-            <span aria-current="true">Español</span> ·{' '}
-            <span className={styles.muted}>{es.menu.soonEnglish}</span>
-          </p>
-          <p className={styles.tagline}>{es.app.tagline}</p>
+          <p className={styles.langLabel}>{t('menu.language')}</p>
+          <ul className={styles.langList}>
+            {routing.locales.map((code) => (
+              <li key={code}>
+                {code === locale ? (
+                  <span className={styles.langCurrent} aria-current="true">
+                    {t(`languages.${code}`)}
+                  </span>
+                ) : (
+                  <Link
+                    href={pathname}
+                    locale={code}
+                    lang={code}
+                    hrefLang={code}
+                    className={styles.langLink}
+                  >
+                    {t(`languages.${code}`)}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+          <p className={styles.tagline}>{t('app.tagline')}</p>
         </footer>
       </dialog>
     </>

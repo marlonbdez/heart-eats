@@ -2,11 +2,40 @@
 
 Mapa colaborativo y de código abierto para descubrir y apoyar restaurantes y negocios gastronómicos locales que apuestan por la **inclusión laboral de personas con discapacidad**. Lanzamiento en Madrid, pensado para ser internacional.
 
-**Estado:** Fase 0 (definición y diseño). Aún no hay código de producto.
+**Estado:** Fase 0 (definición y diseño). El frontend se construye con datos de ejemplo (mocks); aún no hay backend.
 
 ## Documentación
 
 Empieza por [`docs/00_HANDOFF.md`](docs/00_HANDOFF.md) y el índice en [`docs/README.md`](docs/README.md).
+
+## Desarrollo local
+
+Requiere Node.js 20.9 o superior (se usa la 24, LTS).
+
+```bash
+cd web
+npm install
+npm run dev        # http://localhost:3000, con recarga al guardar
+```
+
+Otros comandos (desde `web/`):
+
+```bash
+npm run typecheck  # comprueba tipos
+npm run lint       # ESLint
+npm run build      # genera la web estática en web/out
+npx serve out      # sirve lo generado, tal como se verá en producción
+npx playwright install chromium   # solo la primera vez
+npm run test:e2e   # prueba de humo en un navegador (requiere `npm run build` antes)
+```
+
+## Integración continua
+
+Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador que comprueba que el mapa se dibuja, que la vista previa abre y que el menú navega.
+
+## Despliegue
+
+El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiza producción y cada pull request genera una vista previa propia.
 
 ## Estructura
 

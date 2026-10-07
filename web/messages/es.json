@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "title": "HeartEats",
+    "description": "Descubre y apoya negocios gastronómicos con equipos inclusivos."
+  },
+  "app": {
+    "name": "HeartEats",
+    "tagline": "Comer bien, con equipos que suman."
+  },
+  "header": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "propose": "Proponer un local",
+    "skipToContent": "Saltar al contenido"
+  },
+  "menu": {
+    "title": "Menú",
+    "groups": {
+      "navigate": "Navegar",
+      "collaborate": "Colaborar",
+      "about": "Sobre HeartEats"
+    },
+    "links": {
+      "map": "Mapa",
+      "list": "Lista de locales",
+      "propose": "Proponer un local",
+      "correct": "Corregir un dato",
+      "business": "Soy de un negocio",
+      "what": "Qué es HeartEats",
+      "verify": "Cómo verificamos",
+      "privacy": "Privacidad y datos",
+      "contact": "Contacto"
+    },
+    "language": "Idioma"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "map": {
+    "label": "Mapa de locales",
+    "loadError": "No se ha podido cargar el mapa en este dispositivo.",
+    "markerLabel": "{name}, ver vista previa",
+    "loadErrorLink": "Ver los locales en una lista",
+    "you": "Tu ubicación"
+  },
+  "card": {
+    "label": "Vista previa del local",
+    "close": "Cerrar vista previa",
+    "inclusiveSeal": "Equipo inclusivo",
+    "signatureDish": "Plato estrella",
+    "noPhoto": "Sin foto",
+    "verifiedAdmin": "Verificado",
+    "verifiedCommunity": "Confirmado",
+    "needsReview": "Pendiente de revisión",
+    "updated": "actualizado",
+    "methods": {
+      "visit": "visita presencial",
+      "call": "llamada",
+      "documentation": "documentación",
+      "owner_confirmed": "confirmado por el negocio"
+    },
+    "viewLocal": "Ver local →"
+  },
+  "foodTags": {
+    "pizza": "Pizza",
+    "burgers": "Hamburguesas",
+    "sushi": "Sushi",
+    "italian": "Italiana",
+    "coffee": "Café",
+    "desserts": "Postres",
+    "tapas": "Tapas",
+    "set_menu": "Menú del día",
+    "bakery": "Panadería",
+    "vegetarian": "Vegetariano"
+  },
+  "placeholder": {
+    "title": "Esta pantalla llega pronto",
+    "body": "Seguimos construyendo HeartEats pantalla a pantalla.",
+    "back": "Volver al mapa"
+  },
+  "search": {
+    "label": "Buscar un local, barrio, ciudad o código postal",
+    "placeholder": "Local, barrio o código postal",
+    "clear": "Borrar búsqueda",
+    "suggestFood": "Filtrar por {food}"
+  },
+  "filters": {
+    "label": "Tipo de comida"
+  },
+  "results": {
+    "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",
+    "emptyTitle": "No hay locales con esa búsqueda",
+    "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
+    "clearFilters": "Quitar filtros",
+    "propose": "Proponer un local",
+    "listLabel": "Lista de locales"
+  },
+  "view": {
+    "label": "Vista",
+    "map": "Mapa",
+    "list": "Lista"
+  },
+  "_view": "Ver local →",
+  "detail": {
+    "back": "Volver",
+    "seal": "Negocio con equipo inclusivo",
+    "dishes": "Lo que tienes que probar",
+    "actions": "Acciones",
+    "directions": "Cómo llegar",
+    "call": "Llamar",
+    "website": "Web",
+    "hours": "Horario",
+    "dayRange": "{from} a {to}",
+    "closed": "Cerrado",
+    "verifiedAdmin": "Datos verificados",
+    "verifiedCommunity": "Datos confirmados por la comunidad",
+    "howWeVerify": "¿Cómo verificamos?",
+    "suggest": "Sugerir una corrección",
+    "businessTypes": {
+      "restaurant": "Restaurante",
+      "cafe": "Cafetería",
+      "bar": "Bar",
+      "bakery": "Panadería",
+      "catering": "Catering",
+      "social_project": "Proyecto social"
+    }
+  },
+  "team": {
+    "title": "El equipo detrás de cada plato",
+    "summary": "<b>{with} de {total} personas</b> del equipo tienen discapacidad.",
+    "role": "{role}: {count, plural, one {# persona} other {# personas}} con {category}",
+    "storyConsent": "Historia compartida con el consentimiento de la persona, que puede retirarlo cuando quiera.",
+    "categories": {
+      "intellectual_disability": "discapacidad intelectual",
+      "physical_disability": "discapacidad física",
+      "hearing_impairment": "discapacidad auditiva",
+      "visual_impairment": "discapacidad visual",
+      "mental_health": "problemas de salud mental",
+      "autism_spectrum": "trastorno del espectro autista",
+      "other": "otra discapacidad"
+    }
+  },
+  "nearMe": {
+    "button": "Cerca de mí",
+    "asking": "Buscando tu ubicación…",
+    "privacy": "Solo se usa en tu navegador para calcular distancias; no se guarda ni se envía.",
+    "active": "Ordenado por distancia desde tu ubicación.",
+    "denied": "No tenemos permiso para usar tu ubicación. Puedes activarlo en los ajustes del navegador; mientras tanto, seguimos en Madrid.",
+    "unavailable": "No hemos podido obtener tu ubicación. Seguimos en Madrid.",
+    "outside": "Aún no hay locales cerca de ti. Seguimos en Madrid.",
+    "distanceLabel": "a {distance}"
+  },
+  "propose": {
+    "title": "Proponer un local",
+    "back": "Volver al mapa",
+    "stepOf": "Paso {n} de 4",
+    "steps": {
+      "1": "El local",
+      "2": "Platos",
+      "3": "Equipo",
+      "4": "Enviar"
+    },
+    "prev": "Atrás",
+    "next": "Continuar",
+    "send": "Enviar propuesta",
+    "sending": "Enviando…",
+    "sendError": "No hemos podido enviar la propuesta. Inténtalo de nuevo.",
+    "s1": {
+      "intro": "Cuéntanos qué sitio es. Con lo básico basta, el resto lo revisamos nosotros.",
+      "name": "Nombre del local",
+      "nameError": "Escribe el nombre del local para continuar.",
+      "street": "Dirección",
+      "streetHint": "Calle y número",
+      "city": "Ciudad",
+      "postalCode": "Código postal",
+      "food": "¿Qué tipo de comida?",
+      "foodHint": "(elige las que apliquen)",
+      "foodGroup": "Tipo de comida",
+      "other": "Otra"
+    },
+    "s2": {
+      "intro": "¿Qué hay que probar sí o sí? Añade de 1 a 3 platos. Es lo que más ayuda a que la gente se anime a ir.",
+      "dish": "Plato {n}",
+      "dishName": "Nombre del plato",
+      "dishDesc": "Descripción corta",
+      "optional": "(opcional)",
+      "add": "+ Añadir otro plato",
+      "photos": "Las fotos las aporta el propio negocio, o se usan con su permiso. De momento no hace falta subir ninguna."
+    },
+    "s3": {
+      "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Ayúdanos a comprobarlo.",
+      "how": "¿Cómo conoces el negocio?",
+      "howHint": "Ej.: voy habitualmente, lo vi en una noticia, trabajo allí…",
+      "link": "Un enlace que lo confirme",
+      "linkHint": "(web, noticia, redes…)",
+      "linkError": "Escribe un enlace válido que empiece por https:// o déjalo vacío.",
+      "indep": "Es un negocio independiente (no una gran cadena)",
+      "noteStrong": "Importante:",
+      "note": " no escribas nombres ni datos de salud de ninguna persona. Si el negocio quiere contar la historia de su equipo, lo hará él mismo, con el consentimiento de cada persona."
+    },
+    "s4": {
+      "intro": "Por si necesitamos preguntarte algo. Es opcional y nunca se muestra en la web.",
+      "email": "Tu correo",
+      "emailError": "Escribe un correo válido o déjalo vacío.",
+      "summary": "Resumen",
+      "summaryFallback": "Tu propuesta",
+      "noFood": "Sin tipo de comida indicado",
+      "consent": "Al enviar, aceptas que revisemos la propuesta y la publiquemos si se cumple el criterio de negocio independiente con equipo inclusivo.",
+      "privacy": "Política de privacidad"
+    },
+    "done": {
+      "title": "¡Gracias por proponerlo!",
+      "body": "Revisaremos {name} y, si todo encaja, lo verás en el mapa. Si necesitamos algo más, te escribiremos (solo si nos dejaste tu correo).",
+      "back": "Volver al mapa",
+      "again": "Proponer otro local"
+    }
+  }
+}

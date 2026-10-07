@@ -1,0 +1,99 @@
+.wrap {
+  position: absolute;
+  inset: 0;
+}
+/* Más específico que .maplibregl-map (position: relative), sin depender del
+   orden en que se cargan las hojas de estilo. */
+.wrap > .map {
+  position: absolute;
+  inset: 0;
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.marker svg {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4));
+  transition: transform 0.15s;
+}
+.marker:hover svg,
+.selected svg {
+  transform: scale(1.25);
+}
+.selected svg {
+  fill: var(--accent-text);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marker svg {
+    transition: none;
+  }
+}
+
+.preview {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 84px; /* encima del conmutador Mapa/Lista */
+  z-index: 5;
+  max-width: 420px;
+  padding: 14px 40px 14px 14px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.25);
+}
+.close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  color: var(--fg);
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.error {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 5;
+  max-width: 420px;
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* El botón "Cerca de mí" ocupa la esquina superior derecha: los controles de
+   zoom quedan justo debajo. */
+.wrap :global(.maplibregl-ctrl-top-right) {
+  margin-top: 56px;
+}
+
+.you {
+  width: 18px;
+  height: 18px;
+  background: #1b6ef3;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgb(27 110 243 / 0.35);
+}

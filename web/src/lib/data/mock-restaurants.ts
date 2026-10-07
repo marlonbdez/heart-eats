@@ -1,16 +1,16 @@
 import type { FoodTag, Restaurant } from '../types';
 
 export const foodTags: FoodTag[] = [
-  { key: 'pizza', label: 'Pizza', icon: '🍕' },
-  { key: 'burgers', label: 'Hamburguesas', icon: '🍔' },
-  { key: 'sushi', label: 'Sushi', icon: '🍣' },
-  { key: 'italian', label: 'Italiana', icon: '🍝' },
-  { key: 'coffee', label: 'Café', icon: '☕' },
-  { key: 'desserts', label: 'Postres', icon: '🍰' },
-  { key: 'tapas', label: 'Tapas', icon: '🫒' },
-  { key: 'set_menu', label: 'Menú del día', icon: '🍽️' },
-  { key: 'bakery', label: 'Panadería', icon: '🥖' },
-  { key: 'vegetarian', label: 'Vegetariano', icon: '🥗' },
+  { key: 'pizza', icon: '🍕' },
+  { key: 'burgers', icon: '🍔' },
+  { key: 'sushi', icon: '🍣' },
+  { key: 'italian', icon: '🍝' },
+  { key: 'coffee', icon: '☕' },
+  { key: 'desserts', icon: '🍰' },
+  { key: 'tapas', icon: '🫒' },
+  { key: 'set_menu', icon: '🍽️' },
+  { key: 'bakery', icon: '🥖' },
+  { key: 'vegetarian', icon: '🥗' },
 ];
 
 const week = (open: string, close: string, days: number[]) =>
@@ -25,7 +25,7 @@ export const restaurants: Restaurant[] = [
   {
     slug: 'demo-la-masa-madre',
     name: '[DEMO] La Masa Madre',
-    description: 'Pizzería de barrio con masa de 48 horas.',
+    description: { es: 'Pizzería de barrio con masa de 48 horas.' },
     businessType: 'restaurant',
     cuisineTypes: ['italian'],
     foodTags: ['pizza', 'italian'],
@@ -46,6 +46,7 @@ export const restaurants: Restaurant[] = [
       },
       { name: 'Focaccia de romero' },
     ],
+    ownerConfirmedAt: '2026-09-01T00:00:00Z',
     team: {
       level: 'medium',
       summary: { totalStaff: 11, staffWithDisability: 4 },
@@ -69,7 +70,7 @@ export const restaurants: Restaurant[] = [
   {
     slug: 'demo-cafe-paso-a-paso',
     name: '[DEMO] Café Paso a Paso',
-    description: 'Cafetería de especialidad y repostería casera.',
+    description: { es: 'Cafetería de especialidad y repostería casera.' },
     businessType: 'cafe',
     cuisineTypes: [],
     foodTags: ['coffee', 'desserts', 'bakery'],
@@ -101,7 +102,7 @@ export const restaurants: Restaurant[] = [
   {
     slug: 'demo-taberna-la-vereda',
     name: '[DEMO] Taberna La Vereda',
-    description: 'Tapas y menú del día con producto de temporada.',
+    description: { es: 'Tapas y menú del día con producto de temporada.' },
     businessType: 'bar',
     cuisineTypes: ['spanish'],
     foodTags: ['tapas', 'set_menu'],
@@ -119,6 +120,7 @@ export const restaurants: Restaurant[] = [
       { name: 'Croquetas de jamón' },
       { name: 'Menú del día', description: 'Primero, segundo y postre.' },
     ],
+    ownerConfirmedAt: '2026-09-01T00:00:00Z',
     team: {
       level: 'full',
       summary: { totalStaff: 9, staffWithDisability: 3 },
@@ -144,7 +146,7 @@ export const restaurants: Restaurant[] = [
   {
     slug: 'demo-verde-que-te-quiero',
     name: '[DEMO] Verde que te quiero',
-    description: 'Cocina vegetariana de temporada.',
+    description: { es: 'Cocina vegetariana de temporada.' },
     businessType: 'restaurant',
     cuisineTypes: ['vegetarian'],
     foodTags: ['vegetarian', 'set_menu'],

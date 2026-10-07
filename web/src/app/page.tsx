@@ -1,11 +1,8 @@
-import { getRestaurants } from '@/lib/data';
+import { redirect } from 'next/navigation';
+import { routing } from '@/i18n/routing';
 
-export default async function Home() {
-  const restaurants = await getRestaurants();
-  return (
-    <main id="contenido" tabIndex={-1} style={{ padding: 24 }}>
-      <h1 style={{ color: 'var(--accent)' }}>HeartEats</h1>
-      <p>{restaurants.length} locales de ejemplo cargados desde los mocks.</p>
-    </main>
-  );
+// La raíz lleva al idioma por defecto. En Netlify, netlify.toml redirige
+// antes según el idioma del navegador.
+export default function RootPage() {
+  redirect(`/${routing.defaultLocale}`);
 }

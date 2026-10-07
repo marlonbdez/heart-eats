@@ -1,13 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { submitProposal } from '@/lib/data';
-import { es } from '@/lib/i18n/es';
+import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
 import s from './ProposeForm.module.css';
 
-const t = es.propose;
 const MAX_DISHES = 3;
 const OTHER = 'other';
 
@@ -54,6 +53,8 @@ const isHttpUrl = (v: string) => {
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
+  const t = useTranslations('propose');
+  const tFood = useTranslations('foodTags');
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -156,14 +157,14 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             ♥
           </span>
           <h1 ref={headingRef} tabIndex={-1}>
-            {t.done.title}
+            {t('done.title')}
           </h1>
-          <p>{t.done.body(sentName || t.s4.summaryFallback)}</p>
+          <p>{t('done.body', { name: sentName || t('s4.summaryFallback') })}</p>
           <Link href="/" className={`${s.btn} ${s.primary} ${s.backLink}`}>
-            {t.done.back}
+            {t('done.back')}
           </Link>
           <button type="button" className={s.linkButton} onClick={reset}>
-            {t.done.again}
+            {t('done.again')}
           </button>
         </div>
       </main>
@@ -173,10 +174,10 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const foodOptions = [
     ...foodTags.map((f) => ({
       key: f.key,
-      label: `${f.icon} ${f.label}`,
-      plain: f.label,
+      label: `${f.icon} ${tFood(f.key)}`,
+      plain: tFood(f.key),
     })),
-    { key: OTHER, label: t.s1.other, plain: t.s1.other },
+    { key: OTHER, label: t('s1.other'), plain: t('s1.other') },
   ];
   const foodSummary = form.foods
     .map((k) => foodOptions.find((o) => o.key === k)?.plain)
@@ -192,15 +193,15 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
         tabIndex={-1}
         style={{ fontSize: '1.4rem', margin: '8px 0' }}
       >
-        {t.title}
+        {t('title')}
       </h1>
       <p className={s.progressText}>
-        {t.stepOf(step)} · {t.steps[step - 1]}
+        {t('stepOf', { n: step })} · {t(`steps.${step}`)}
       </p>
       <div
         className={s.bar}
         role="progressbar"
-        aria-label={t.stepOf(step)}
+        aria-label={t('stepOf', { n: step })}
         aria-valuemin={0}
         aria-valuemax={4}
         aria-valuenow={step}
@@ -217,10 +218,10 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       >
         {step === 1 && (
           <div className={s.step}>
-            <p className={s.intro}>{t.s1.intro}</p>
+            <p className={s.intro}>{t('s1.intro')}</p>
             <div className={s.field}>
               <label htmlFor="f-nombre" className={s.label}>
-                {t.s1.name}
+                {t('s1.name')}
               </label>
               <input
                 id="f-nombre"
@@ -233,18 +234,18 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               />
               {errors.name && (
                 <p id="e-nombre" role="alert" className={s.error}>
-                  {t.s1.nameError}
+                  {t('s1.nameError')}
                 </p>
               )}
             </div>
             <div className={s.field}>
               <label htmlFor="f-dir" className={s.label}>
-                {t.s1.street}
+                {t('s1.street')}
               </label>
               <input
                 id="f-dir"
                 className={s.input}
-                placeholder={t.s1.streetHint}
+                placeholder={t('s1.streetHint')}
                 value={form.street}
                 onChange={(e) => set('street', e.target.value)}
                 autoComplete="off"
@@ -253,7 +254,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             <div className={s.grid}>
               <div className={s.field}>
                 <label htmlFor="f-ciudad" className={s.label}>
-                  {t.s1.city}
+                  {t('s1.city')}
                 </label>
                 <input
                   id="f-ciudad"
@@ -264,7 +265,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               </div>
               <div className={s.field}>
                 <label htmlFor="f-cp" className={s.label}>
-                  {t.s1.postalCode}
+                  {t('s1.postalCode')}
                 </label>
                 <input
                   id="f-cp"
@@ -280,9 +281,14 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             </div>
             <div className={s.field}>
               <div className={s.label}>
-                {t.s1.food} <span className={s.optional}>{t.s1.foodHint}</span>
+                {t('s1.food')}{' '}
+                <span className={s.optional}>{t('s1.foodHint')}</span>
               </div>
-              <div role="group" aria-label={t.s1.foodGroup} className={s.chips}>
+              <div
+                role="group"
+                aria-label={t('s1.foodGroup')}
+                className={s.chips}
+              >
                 {foodOptions.map((o) => (
                   <button
                     key={o.key}
@@ -301,12 +307,12 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
 
         {step === 2 && (
           <div className={s.step}>
-            <p className={s.intro}>{t.s2.intro}</p>
+            <p className={s.intro}>{t('s2.intro')}</p>
             {form.dishes.map((d, i) => (
               <div key={i} className={s.card}>
-                <p className={s.cardTitle}>{t.s2.dish(i + 1)}</p>
+                <p className={s.cardTitle}>{t('s2.dish', { n: i + 1 })}</p>
                 <label htmlFor={`d${i}n`} className={s.label}>
-                  {t.s2.dishName}
+                  {t('s2.dishName')}
                 </label>
                 <input
                   id={`d${i}n`}
@@ -315,8 +321,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   onChange={(e) => setDish(i, { name: e.target.value })}
                 />
                 <label htmlFor={`d${i}d`} className={s.label}>
-                  {t.s2.dishDesc}{' '}
-                  <span className={s.optional}>{t.s2.optional}</span>
+                  {t('s2.dishDesc')}{' '}
+                  <span className={s.optional}>{t('s2.optional')}</span>
                 </label>
                 <input
                   id={`d${i}d`}
@@ -335,32 +341,33 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   set('dishes', [...form.dishes, { name: '', description: '' }])
                 }
               >
-                {t.s2.add}
+                {t('s2.add')}
               </button>
             )}
-            <p className={s.note}>{t.s2.photos}</p>
+            <p className={s.note}>{t('s2.photos')}</p>
           </div>
         )}
 
         {step === 3 && (
           <div className={s.step}>
-            <p className={s.intro}>{t.s3.intro}</p>
+            <p className={s.intro}>{t('s3.intro')}</p>
             <div className={s.field}>
               <label htmlFor="f-como" className={s.label}>
-                {t.s3.how}
+                {t('s3.how')}
               </label>
               <textarea
                 id="f-como"
                 rows={3}
                 className={s.textarea}
-                placeholder={t.s3.howHint}
+                placeholder={t('s3.howHint')}
                 value={form.howKnown}
                 onChange={(e) => set('howKnown', e.target.value)}
               />
             </div>
             <div className={s.field}>
               <label htmlFor="f-enlace" className={s.label}>
-                {t.s3.link} <span className={s.optional}>{t.s3.linkHint}</span>
+                {t('s3.link')}{' '}
+                <span className={s.optional}>{t('s3.linkHint')}</span>
               </label>
               <input
                 id="f-enlace"
@@ -374,7 +381,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               />
               {errors.evidenceUrl && (
                 <p id="e-enlace" role="alert" className={s.error}>
-                  {t.s3.linkError}
+                  {t('s3.linkError')}
                 </p>
               )}
             </div>
@@ -384,21 +391,22 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 checked={form.independent}
                 onChange={(e) => set('independent', e.target.checked)}
               />
-              <span>{t.s3.indep}</span>
+              <span>{t('s3.indep')}</span>
             </label>
             <p className={s.note}>
-              <strong>{t.s3.noteStrong}</strong>
-              {t.s3.note}
+              <strong>{t('s3.noteStrong')}</strong>
+              {t('s3.note')}
             </p>
           </div>
         )}
 
         {step === 4 && (
           <div className={s.step}>
-            <p className={s.intro}>{t.s4.intro}</p>
+            <p className={s.intro}>{t('s4.intro')}</p>
             <div className={s.field}>
               <label htmlFor="f-mail" className={s.label}>
-                {t.s4.email} <span className={s.optional}>{t.s2.optional}</span>
+                {t('s4.email')}{' '}
+                <span className={s.optional}>{t('s2.optional')}</span>
               </label>
               <input
                 id="f-mail"
@@ -412,21 +420,21 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               />
               {errors.email && (
                 <p id="e-mail" role="alert" className={s.error}>
-                  {t.s4.emailError}
+                  {t('s4.emailError')}
                 </p>
               )}
             </div>
             <div className={s.card}>
-              <p className={s.label}>{t.s4.summary}</p>
+              <p className={s.label}>{t('s4.summary')}</p>
               <p className={s.summary}>
-                {form.name.trim() || t.s4.summaryFallback}
+                {form.name.trim() || t('s4.summaryFallback')}
                 <br />
-                <span>{foodSummary || t.s4.noFood}</span>
+                <span>{foodSummary || t('s4.noFood')}</span>
               </p>
             </div>
             <p className={s.small}>
-              {t.s4.consent}
-              <Link href="/privacidad">{t.s4.privacy}</Link>
+              {t('s4.consent')}{' '}
+              <Link href="/privacidad">{t('s4.privacy')}</Link>
             </p>
             {/* Honeypot antispam: invisible para personas y lectores de pantalla */}
             <div className={s.honeypot} aria-hidden="true">
@@ -442,7 +450,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             </div>
             {status === 'error' && (
               <p role="alert" className={s.error}>
-                {t.sendError}
+                {t('sendError')}
               </p>
             )}
           </div>
@@ -456,7 +464,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               onClick={() => setStep(step - 1)}
               disabled={sending}
             >
-              {t.prev}
+              {t('prev')}
             </button>
           )}
           <button
@@ -464,7 +472,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             className={`${s.btn} ${s.primary}`}
             disabled={sending}
           >
-            {sending ? t.sending : lastStep ? t.send : t.next}
+            {sending ? t('sending') : lastStep ? t('send') : t('next')}
           </button>
         </div>
       </form>
