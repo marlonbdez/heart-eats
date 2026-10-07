@@ -132,7 +132,7 @@ export function RestaurantDetail({
           <Link href="/verification">{t('howWeVerify')}</Link>
         </section>
 
-        <Link href="/correct" className={styles.suggest}>
+        <Link href={`/correct/${r.slug}`} className={styles.suggest}>
           {t('suggest')}
         </Link>
       </div>
