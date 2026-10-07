@@ -150,5 +150,70 @@
     "unavailable": "We couldn’t get your location. We stay in Madrid.",
     "outside": "There are no places near you yet. We stay in Madrid.",
     "distanceLabel": "{distance} away"
+  },
+  "propose": {
+    "title": "Suggest a place",
+    "back": "Back to the map",
+    "stepOf": "Step {n} of 4",
+    "steps": {
+      "1": "The place",
+      "2": "Dishes",
+      "3": "Team",
+      "4": "Send"
+    },
+    "prev": "Back",
+    "next": "Continue",
+    "send": "Send suggestion",
+    "sending": "Sending…",
+    "sendError": "We couldn’t send your suggestion. Please try again.",
+    "s1": {
+      "intro": "Tell us about the place. The basics are enough; we’ll check the rest.",
+      "name": "Name of the place",
+      "nameError": "Enter the name of the place to continue.",
+      "street": "Address",
+      "streetHint": "Street and number",
+      "city": "City",
+      "postalCode": "Postal code",
+      "food": "What kind of food?",
+      "foodHint": "(choose all that apply)",
+      "foodGroup": "Kind of food",
+      "other": "Other"
+    },
+    "s2": {
+      "intro": "What is a must-try? Add 1 to 3 dishes. It’s what helps people most to decide to go.",
+      "dish": "Dish {n}",
+      "dishName": "Name of the dish",
+      "dishDesc": "Short description",
+      "optional": "(optional)",
+      "add": "+ Add another dish",
+      "photos": "Photos are provided by the business itself, or used with its permission. You don’t need to upload any for now."
+    },
+    "s3": {
+      "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Help us check it.",
+      "how": "How do you know the business?",
+      "howHint": "E.g.: I go often, I saw it in the news, I work there…",
+      "link": "A link that confirms it",
+      "linkHint": "(website, news, social media…)",
+      "linkError": "Enter a valid link starting with https:// or leave it empty.",
+      "indep": "It’s an independent business (not a large chain)",
+      "noteStrong": "Important:",
+      "note": " do not write names or health information about any person. If the business wants to tell its team’s story, it will do so itself, with each person’s consent."
+    },
+    "s4": {
+      "intro": "In case we need to ask you something. It’s optional and never shown on the website.",
+      "email": "Your email",
+      "emailError": "Enter a valid email or leave it empty.",
+      "summary": "Summary",
+      "summaryFallback": "Your suggestion",
+      "noFood": "No kind of food given",
+      "consent": "By sending, you agree that we review the suggestion and publish it if it meets the criteria of an independent business with an inclusive team.",
+      "privacy": "Privacy policy"
+    },
+    "done": {
+      "title": "Thanks for suggesting it!",
+      "body": "We’ll review {name} and, if everything fits, you’ll see it on the map. If we need anything else, we’ll write to you (only if you left your email).",
+      "back": "Back to the map",
+      "again": "Suggest another place"
+    }
   }
 }
