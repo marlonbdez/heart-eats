@@ -1,6 +1,11 @@
 // Capa de datos de la web. Hoy lee mocks; cuando exista el backend solo
 // cambia la implementación de estas funciones (fetch a /api/v1), no las pantallas.
-import type { FoodTag, Restaurant, RestaurantQuery } from '../types';
+import type {
+  FoodTag,
+  ProposalInput,
+  Restaurant,
+  RestaurantQuery,
+} from '../types';
 import { foodTags, restaurants } from './mock-restaurants';
 
 const normalize = (s: string) =>
@@ -33,4 +38,11 @@ export async function getRestaurant(slug: string): Promise<Restaurant | null> {
 
 export async function getFoodTags(): Promise<FoodTag[]> {
   return foodTags;
+}
+
+// Envío simulado: no hay backend todavía. Cuando exista, esto pasa a
+// POST /api/v1/proposals con la misma firma.
+export async function submitProposal(input: ProposalInput): Promise<void> {
+  if (input.website) return; // honeypot: se descarta en silencio
+  await new Promise((resolve) => setTimeout(resolve, 600));
 }

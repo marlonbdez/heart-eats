@@ -41,6 +41,8 @@ export const navGroups: NavGroup[] = [
 
 // Rutas del menú que aún no tienen pantalla propia: las sirve la página
 // "llega pronto" hasta que se construyan (una ruta real tiene prioridad).
+const builtRoutes = ['', 'proponer'];
+
 export const pendingRoutes = navGroups
   .flatMap((g) => g.links.map((link) => link.href.slice(1)))
-  .filter((slug) => slug !== '');
+  .filter((slug) => !builtRoutes.includes(slug));

@@ -85,3 +85,19 @@ export interface RestaurantQuery {
   q?: string; // buscador de sitios: nombre, barrio, ciudad, código postal
   food?: string[]; // foodTags (OR)
 }
+
+// Propuesta de un nuevo local (F2). Entra siempre en moderación; nunca se
+// publica sin verificación y sin el sí del negocio.
+export interface ProposalInput {
+  name: string;
+  street?: string;
+  city: string;
+  postalCode?: string;
+  foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
+  dishes: SignatureDish[]; // 0-3, solo con nombre
+  howKnown?: string;
+  evidenceUrl?: string;
+  independent: boolean;
+  contactEmail?: string; // privado, nunca se muestra
+  website?: string; // honeypot: debe llegar vacío
+}
