@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
-import s from './ProposeForm.module.css';
+import { isEmail, isHttpUrl } from '@/lib/validation';
+import s from './Form.module.css';
 
 const MAX_DISHES = 3;
 const OTHER = 'other';
@@ -41,16 +42,6 @@ const initial: FormState = {
   email: '',
   website: '',
 };
-
-const isHttpUrl = (v: string) => {
-  try {
-    const u = new URL(v);
-    return u.protocol === 'https:' || u.protocol === 'http:';
-  } catch {
-    return false;
-  }
-};
-const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const t = useTranslations('propose');

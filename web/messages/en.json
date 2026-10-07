@@ -215,5 +215,69 @@
       "back": "Back to the map",
       "again": "Suggest another place"
     }
+  },
+  "correct": {
+    "title": "Suggest a correction",
+    "backToPlace": "Back to the place",
+    "stepOf": "Step {n} of {total}",
+    "steps": {
+      "1": "What to fix",
+      "2": "Details",
+      "3": "Send"
+    },
+    "prev": "Back",
+    "next": "Continue",
+    "send": "Send correction",
+    "sending": "Sending…",
+    "sendError": "We couldn’t send your correction. Please try again.",
+    "kinds": {
+      "address": "The address",
+      "hours": "The opening hours",
+      "closed": "It has closed",
+      "team": "The team information",
+      "other": "Something else"
+    },
+    "s1": {
+      "intro": "Thanks for helping us keep the details up to date. First, tell us what isn’t right.",
+      "question": "What needs fixing?",
+      "error": "Choose what needs fixing to continue."
+    },
+    "s2": {
+      "intro": "Tell us in your own words. If you have something that confirms it, it helps us check it sooner.",
+      "details": "What has changed or what is wrong?",
+      "detailsError": "Tell us what needs fixing to continue.",
+      "hints": {
+        "address": "E.g.: the correct address is … street, number …",
+        "hours": "E.g.: it now opens Monday to Friday, 9:00 to 18:00.",
+        "closed": "E.g.: I saw it closed and the premises up for rent.",
+        "team": "E.g.: keep it general, without names or health information.",
+        "other": "Tell us what you have seen."
+      },
+      "link": "A link that confirms it",
+      "linkHint": "(optional)",
+      "linkError": "Enter a valid link starting with https:// or leave it empty.",
+      "noteStrong": "Important:",
+      "note": " do not write names or health information about any person, even if the correction is about the team."
+    },
+    "s3": {
+      "intro": "In case we need to ask you something. It’s optional and never shown on the website.",
+      "email": "Your email",
+      "optional": "(optional)",
+      "emailError": "Enter a valid email or leave it empty.",
+      "summary": "Summary",
+      "consent": "By sending, you agree that we review your report and update the listing if it is correct.",
+      "privacy": "Privacy policy"
+    },
+    "done": {
+      "title": "Thanks for letting us know!",
+      "body": "We’ll review your report about {name} and, if it is correct, we’ll update the listing. If we need anything else, we’ll write to you (only if you left your email).",
+      "back": "Back to the place",
+      "again": "Correct another detail"
+    },
+    "pick": {
+      "title": "Which place do you want to correct?",
+      "body": "Reports are sent from each place’s page: open it and press “Suggest a correction”.",
+      "list": "See the list of places"
+    }
   }
 }

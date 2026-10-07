@@ -1,6 +1,7 @@
 // Capa de datos de la web. Hoy lee mocks; cuando exista el backend solo
 // cambia la implementación de estas funciones (fetch a /api/v1), no las pantallas.
 import type {
+  CorrectionInput,
   FoodTag,
   ProposalInput,
   Restaurant,
@@ -26,6 +27,12 @@ export async function getFoodTags(): Promise<FoodTag[]> {
 // Envío simulado: no hay backend todavía. Cuando exista, esto pasa a
 // POST /api/v1/proposals con la misma firma.
 export async function submitProposal(input: ProposalInput): Promise<void> {
+  if (input.website) return; // honeypot: se descarta en silencio
+  await new Promise((resolve) => setTimeout(resolve, 600));
+}
+
+// Igual que la propuesta: simulado hasta que exista POST /api/v1/corrections.
+export async function submitCorrection(input: CorrectionInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
 }

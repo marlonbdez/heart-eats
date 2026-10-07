@@ -147,6 +147,23 @@
   height: 28px;
   accent-color: var(--accent-text);
 }
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.options legend {
+  margin-bottom: 8px;
+  padding: 0;
+}
+.options .check:has(input:checked) {
+  background: var(--hover);
+  border-color: var(--accent-text);
+}
 .summary {
   margin: 0;
   font-size: 0.95rem;

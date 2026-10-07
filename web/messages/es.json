@@ -215,5 +215,69 @@
       "back": "Volver al mapa",
       "again": "Proponer otro local"
     }
+  },
+  "correct": {
+    "title": "Sugerir una corrección",
+    "backToPlace": "Volver a la ficha",
+    "stepOf": "Paso {n} de {total}",
+    "steps": {
+      "1": "Qué corregir",
+      "2": "Detalles",
+      "3": "Enviar"
+    },
+    "prev": "Atrás",
+    "next": "Continuar",
+    "send": "Enviar corrección",
+    "sending": "Enviando…",
+    "sendError": "No hemos podido enviar la corrección. Inténtalo de nuevo.",
+    "kinds": {
+      "address": "La dirección",
+      "hours": "El horario",
+      "closed": "Ha cerrado",
+      "team": "La información del equipo",
+      "other": "Otra cosa"
+    },
+    "s1": {
+      "intro": "Gracias por ayudarnos a mantener los datos al día. Empieza por decirnos qué no es correcto.",
+      "question": "¿Qué hay que corregir?",
+      "error": "Elige qué hay que corregir para continuar."
+    },
+    "s2": {
+      "intro": "Cuéntanoslo con tus palabras. Si tienes algo que lo confirme, nos ayuda a revisarlo antes.",
+      "details": "¿Qué ha cambiado o qué está mal?",
+      "detailsError": "Cuéntanos qué hay que corregir para continuar.",
+      "hints": {
+        "address": "Ej.: la dirección correcta es calle… número…",
+        "hours": "Ej.: ahora abre de lunes a viernes, de 9:00 a 18:00.",
+        "closed": "Ej.: lo vi cerrado y con el local en alquiler.",
+        "team": "Ej.: cuéntalo en general, sin nombres ni datos de salud.",
+        "other": "Cuéntanos qué has visto."
+      },
+      "link": "Un enlace que lo confirme",
+      "linkHint": "(opcional)",
+      "linkError": "Escribe un enlace válido que empiece por https:// o déjalo vacío.",
+      "noteStrong": "Importante:",
+      "note": " no escribas nombres ni datos de salud de ninguna persona, tampoco si la corrección es sobre el equipo."
+    },
+    "s3": {
+      "intro": "Por si necesitamos preguntarte algo. Es opcional y nunca se muestra en la web.",
+      "email": "Tu correo",
+      "optional": "(opcional)",
+      "emailError": "Escribe un correo válido o déjalo vacío.",
+      "summary": "Resumen",
+      "consent": "Al enviar, aceptas que revisemos tu aviso y actualicemos la ficha si es correcto.",
+      "privacy": "Política de privacidad"
+    },
+    "done": {
+      "title": "¡Gracias por avisarnos!",
+      "body": "Revisaremos el aviso sobre {name} y, si es correcto, actualizaremos la ficha. Si necesitamos algo más, te escribiremos (solo si nos dejaste tu correo).",
+      "back": "Volver a la ficha",
+      "again": "Corregir otro dato"
+    },
+    "pick": {
+      "title": "¿Qué local quieres corregir?",
+      "body": "El aviso se envía desde la ficha de cada local: ábrela y pulsa «Sugerir una corrección».",
+      "list": "Ver la lista de locales"
+    }
   }
 }

@@ -108,3 +108,17 @@ export interface ProposalInput {
   contactEmail?: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }
+
+// Qué dato de la ficha se quiere corregir (F4).
+export type CorrectionKind = 'address' | 'hours' | 'closed' | 'team' | 'other';
+
+// Corrección sugerida sobre un local publicado (F4). Entra en moderación;
+// nada cambia en la ficha hasta que alguien lo revisa.
+export interface CorrectionInput {
+  restaurantSlug: string;
+  kind: CorrectionKind;
+  details: string;
+  evidenceUrl?: string;
+  contactEmail?: string; // privado, nunca se muestra
+  website?: string; // honeypot: debe llegar vacío
+}
