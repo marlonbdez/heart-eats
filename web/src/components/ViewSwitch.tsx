@@ -14,7 +14,7 @@ export function ViewSwitch({
   const t = useTranslations('view');
   const items = [
     { key: 'map', pathname: '/' },
-    { key: 'list', pathname: '/lista' },
+    { key: 'list', pathname: '/list' },
   ] as const;
   return (
     <nav aria-label={t('label')} className={styles.switch}>

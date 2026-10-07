@@ -37,7 +37,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>
         <VerificationBadge verification={restaurant.verification} />
-        <Link className={styles.more} href={`/local/${restaurant.slug}`}>
+        <Link className={styles.more} href={`/place/${restaurant.slug}`}>
           {t('viewLocal')}
         </Link>
       </div>

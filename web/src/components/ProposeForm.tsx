@@ -433,8 +433,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               </p>
             </div>
             <p className={s.small}>
-              {t('s4.consent')}{' '}
-              <Link href="/privacidad">{t('s4.privacy')}</Link>
+              {t('s4.consent')} <Link href="/privacy">{t('s4.privacy')}</Link>
             </p>
             {/* Honeypot antispam: invisible para personas y lectores de pantalla */}
             <div className={s.honeypot} aria-hidden="true">

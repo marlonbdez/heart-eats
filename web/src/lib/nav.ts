@@ -13,33 +13,33 @@ export const navGroups: NavGroup[] = [
     key: 'navigate',
     links: [
       { href: '/', key: 'map' },
-      { href: '/lista', key: 'list' },
+      { href: '/list', key: 'list' },
     ],
   },
   {
     key: 'collaborate',
     links: [
-      { href: '/proponer', key: 'propose' },
-      { href: '/corregir', key: 'correct' },
-      { href: '/negocios', key: 'business' },
+      { href: '/propose', key: 'propose' },
+      { href: '/correct', key: 'correct' },
+      { href: '/business', key: 'business' },
     ],
   },
   {
     key: 'about',
     links: [
-      { href: '/sobre', key: 'what' },
-      { href: '/verificacion', key: 'verify' },
-      { href: '/privacidad', key: 'privacy' },
-      { href: '/contacto', key: 'contact' },
+      { href: '/about', key: 'what' },
+      { href: '/verification', key: 'verify' },
+      { href: '/privacy', key: 'privacy' },
+      { href: '/contact', key: 'contact' },
     ],
   },
 ];
 
 // Rutas del menú que aún no tienen pantalla propia: las sirve la página
 // "llega pronto" hasta que se construyan (una ruta real tiene prioridad).
-// Las rutas son iguales en todos los idiomas.
+// Las URLs van en inglés en todos los idiomas (ADR 0003).
 // Rutas del menú que ya tienen pantalla propia.
-const builtRoutes = ['lista', 'proponer'];
+const builtRoutes = ['list', 'propose'];
 
 export const pendingRoutes = navGroups
   .flatMap((g) => g.links.map((link) => link.href.slice(1)))

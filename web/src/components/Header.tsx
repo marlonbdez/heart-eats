@@ -53,7 +53,7 @@ export function Header() {
           {t('app.name')}
         </Link>
         {/* En móvil solo se ve el icono; el nombre accesible es siempre el texto completo. */}
-        <Link href="/proponer" className={styles.cta}>
+        <Link href="/propose" className={styles.cta}>
           <svg
             viewBox="0 0 24 24"
             width="24"
