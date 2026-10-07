@@ -114,8 +114,8 @@ test('el menú lateral abre, navega y se cierra', async ({ page }) => {
   const menu = page.getByRole('dialog');
   await expect(menu).toBeVisible();
 
-  await menu.locator('a[href="/es/lista"]').click();
-  await expect(page).toHaveURL(/\/es\/lista$/);
+  await menu.locator('a[href="/es/list"]').click();
+  await expect(page).toHaveURL(/\/es\/list$/);
   await expect(menu).toBeHidden();
 });
 
@@ -160,9 +160,9 @@ test('la lista muestra los mismos locales y conserva la búsqueda', async ({
   await page
     .getByRole('navigation')
     .last()
-    .locator('a[href^="/es/lista"]')
+    .locator('a[href^="/es/list"]')
     .click();
-  await expect(page).toHaveURL(/\/es\/lista$/);
+  await expect(page).toHaveURL(/\/es\/list$/);
   const items = page.getByRole('list').last().getByRole('listitem');
   await expect(items).toHaveCount(total);
 
@@ -182,9 +182,9 @@ test('la lista muestra los mismos locales y conserva la búsqueda', async ({
 test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   page,
 }) => {
-  await page.goto('/es/lista');
+  await page.goto('/es/list');
   await page.getByRole('link', { name: 'Ver local →' }).first().click();
-  await expect(page).toHaveURL(/\/es\/local\/demo-/);
+  await expect(page).toHaveURL(/\/es\/place\/demo-/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('[DEMO]');
   await expect(
     page.getByRole('heading', { name: /equipo detrás/i }),
@@ -202,7 +202,7 @@ test.describe('Cerca de mí', () => {
     page,
   }) => {
     await context.setGeolocation({ latitude: 40.4085, longitude: -3.7012 });
-    await page.goto('/es/lista');
+    await page.goto('/es/list');
     await page.getByRole('button', { name: 'Cerca de mí' }).click();
     await expect(page.getByText(/Ordenado por distancia/)).toBeVisible();
     const first = page.getByRole('listitem').first();
@@ -212,7 +212,7 @@ test.describe('Cerca de mí', () => {
 
   test('fuera de la zona avisa y no ordena', async ({ context, page }) => {
     await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
-    await page.goto('/es/lista');
+    await page.goto('/es/list');
     await page.getByRole('button', { name: 'Cerca de mí' }).click();
     await expect(page.getByText(/Aún no hay locales cerca/)).toBeVisible();
   });

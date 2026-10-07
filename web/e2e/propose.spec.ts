@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
   page,
 }) => {
-  await page.goto('/es/proponer');
+  await page.goto('/es/propose');
 
   // Sin nombre no se avanza.
   await page.getByRole('button', { name: 'Continuar' }).click();
@@ -32,7 +32,7 @@ test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
 });
 
 test('proponer un local: existe en inglés', async ({ page }) => {
-  await page.goto('/en/proponer');
+  await page.goto('/en/propose');
   await expect(
     page.getByRole('heading', { name: 'Suggest a place' }),
   ).toBeVisible();

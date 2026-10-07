@@ -157,7 +157,7 @@ export function Discover({
               >
                 {t('results.clearFilters')}
               </button>
-              <Link href="/proponer" className={styles.primary}>
+              <Link href="/propose" className={styles.primary}>
                 {t('results.propose')}
               </Link>
             </div>

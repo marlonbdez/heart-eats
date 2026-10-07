@@ -129,10 +129,10 @@ export function RestaurantDetail({
             })}
             {verification.needsReview && ` · ${tc('needsReview')}`}
           </p>
-          <Link href="/verificacion">{t('howWeVerify')}</Link>
+          <Link href="/verification">{t('howWeVerify')}</Link>
         </section>
 
-        <Link href="/corregir" className={styles.suggest}>
+        <Link href="/correct" className={styles.suggest}>
           {t('suggest')}
         </Link>
       </div>

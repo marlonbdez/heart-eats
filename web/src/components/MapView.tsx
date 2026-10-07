@@ -244,7 +244,7 @@ export function MapView({
       {failed && (
         <p role="alert" className={styles.error}>
           {t('map.loadError')}{' '}
-          <Link href="/lista">{t('map.loadErrorLink')}</Link>
+          <Link href="/list">{t('map.loadErrorLink')}</Link>
         </p>
       )}
       {current && (
