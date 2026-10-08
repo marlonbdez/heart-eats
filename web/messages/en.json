@@ -282,106 +282,106 @@
   },
   "about": {
     "title": "What is HeartEats",
-    "intro": "HeartEats is a collaborative map of Madrid food businesses whose team includes people with disabilities. It helps you choose where to eat knowing who is behind it.",
+    "intro": "HeartEats is a map of places to eat in Madrid where people with disabilities work. It is meant to help you choose calmly where to go, knowing who is behind it.",
     "sections": [
       {
         "heading": "Why it exists",
         "paragraphs": [
-          "Going out to eat is an everyday decision. We want choosing a place where people with disabilities work to be easy, and to be chosen for what matters: good service, good food and quality jobs."
+          "Going out to eat is something we all do every day. We like the idea that choosing a place where people with disabilities work can be as simple as any other choice, and that it is chosen for what really matters: tasty food, kind service and a good job."
         ]
       },
       {
-        "heading": "What it is and what it isn’t",
+        "heading": "What you will find here",
         "items": [
-          "It is a guide to businesses with real inclusive employment: what matters is who works there.",
-          "It is not a guide to the accessibility of the premises (ramps, adapted toilets): other tools already cover that.",
-          "It is not a job board.",
-          "It does not include large chains: these are independent businesses and projects with social impact."
+          "Places with real inclusive employment: what counts is who works there.",
+          "Independent businesses and projects with social impact, which are the ones that need visibility most and the ones we can get to know closely.",
+          "If you are looking for information about ramps or adapted toilets, other tools exist for that. HeartEats is not a job board either."
         ]
       },
       {
         "heading": "How it works",
         "items": [
-          "Anyone can suggest a place or correct a detail.",
-          "A person reviews every suggestion before anything is published.",
-          "The business always has the final say: nobody appears on the map without knowing.",
-          "Every listing shows how and when it was verified."
+          "Anyone can suggest a place or a correction.",
+          "A person reviews each suggestion calmly before it is published.",
+          "The business always has the final word: nobody appears on the map without knowing.",
+          "Each listing tells you how and when its details were checked."
         ]
       },
       {
         "heading": "The people on the team",
         "paragraphs": [
-          "By default, each listing talks about the team as a whole. A person’s name, photo or story only appears if they decide so themselves and give their consent, and they can withdraw it whenever they like."
+          "Each listing talks about the team as a whole. A person’s name, photo or story only appears if they decide so themselves and give their permission, and they can change their mind whenever they like."
         ]
       },
       {
         "heading": "Open and non-profit",
         "paragraphs": [
-          "HeartEats is a non-profit project. Its code is open (AGPL-3.0 licence) and so is the business database, under the ODbL licence. People’s stories, names and photos are outside that licence. The map relies on open data and its attribution is always visible."
+          "HeartEats is a non-profit project. Its code is open (AGPL-3.0 licence) and so is the business database (ODbL licence). People’s stories, names and photos are outside that licence. The map relies on open data and always shows where it comes from."
         ]
       },
       {
         "heading": "Where we are",
         "paragraphs": [
-          "We are starting in Madrid, with the idea of reaching more cities. HeartEats is under construction: for now, the places you will see are fictional examples, marked as [DEMO]."
+          "We are starting in Madrid, hoping to reach more cities little by little. HeartEats is being built: for now you will see example places, which do not exist and are marked as [DEMO]."
         ]
       }
     ]
   },
   "verification": {
     "title": "How we verify",
-    "intro": "Every point on the map has to be trustworthy. That is why nothing is published until a person has reviewed it and the business itself has confirmed it.",
+    "intro": "We want every point on the map to be trustworthy. That is why nothing is published until a person has reviewed it and the business itself agrees.",
     "sections": [
       {
-        "heading": "What happens to a suggestion",
+        "heading": "What happens when someone suggests a place",
         "ordered": true,
         "items": [
-          "The suggestion arrives. It is not public yet.",
-          "An automatic filter discards spam and detects duplicates.",
-          "A person checks that the place exists, that it is independent (not a large chain or corporate franchise) and that its team is inclusive, using a link, news, its website, agreements or references from organisations in the sector.",
-          "We contact the business through an official channel to confirm that it wants to appear and to offer it the chance to tell its team’s story at the level of detail it chooses.",
-          "A decision is made: approve, ask for more information, or reject explaining why. Everything is recorded."
+          "We receive the suggestion. It is not public yet.",
+          "An automatic filter helps us avoid unwanted messages and recognise places that were already on the map.",
+          "A person calmly checks that the place exists, that it is independent and that its team is inclusive. They rely on a link, news, the business’s website, agreements or references from organisations in the sector.",
+          "We get in touch with the business through an official channel. We would like to know whether it is happy to appear, and to offer it the chance to tell its team’s story at the level of detail it prefers.",
+          "With all of this a decision is made: it is published, we ask for a little more information or, if it does not fit, we explain why. Everything is noted down."
         ]
       },
       {
         "heading": "What each level means",
-        "items": [
-          "Verified details: our team has checked them with a visit, a call or cross-checked documents.",
-          "Details confirmed by the community: confirmed by the business itself with some evidence, or by several independent people."
-        ],
         "paragraphs": [
-          "A place that has not been verified is not shown on the map."
+          "Places that have not been checked yet do not appear on the map."
+        ],
+        "items": [
+          "Verified details: our team has checked them with a visit, a call or documents.",
+          "Details confirmed by the community: confirmed by the business itself with some proof, or by several people who do not know each other."
         ]
       },
       {
         "heading": "How we check",
-        "paragraphs": ["These are the methods, from strongest to weakest:"],
+        "paragraphs": ["We use these methods, from strongest to weakest:"],
         "items": [
-          "An in-person visit.",
-          "Direct confirmation from the business, by phone or by email at its official domain.",
+          "A visit to the place.",
+          "Direct confirmation from the business, by phone or by email from its official domain.",
           "Documents: agreements, certifications or official statements.",
           "References from organisations in the sector."
         ]
       },
       {
-        "heading": "Who can be left out",
+        "heading": "Which businesses fit",
         "paragraphs": [
-          "We accept independent businesses and projects with social impact. We do not accept large chains or corporate franchises. Borderline cases, such as co-operatives or small groups, are looked at one by one."
+          "HeartEats focuses on independent businesses and projects with social impact, because they are the ones that need visibility most and the ones we can get to know closely. Large chains and corporate franchises are not part of this map. This is not a judgement of their work or of the people who work there: it is simply the focus we have chosen.",
+          "If you are unsure about a case, such as a co-operative, a small group or a social project with several places, tell us: we will look at it calmly, one by one."
         ]
       },
       {
         "heading": "Keeping details up to date",
         "items": [
-          "Each listing shows the level, the method and the date of the last verification.",
-          "After 12 months, the listing is flagged for review.",
-          "Anyone can suggest a correction or the removal of a listing.",
-          "The business can ask for changes or to be removed whenever it likes."
+          "Each listing shows the level, the method and the date of the last check.",
+          "After 12 months, the listing is marked to be reviewed again.",
+          "Anyone can suggest a correction or ask for a listing to be removed.",
+          "The business can ask for changes or to leave whenever it likes."
         ]
       },
       {
-        "heading": "Privacy during review",
+        "heading": "We look after your privacy when reviewing",
         "paragraphs": [
-          "Suggestions from third parties do not include data about people on the team. If someone writes it, it is discarded during review. The email of the person who suggests is private and only used to ask them something."
+          "Suggestions from other people do not include details about those on the team. If someone writes them, we leave them out when reviewing. The email of the person who suggests is private, and we only use it in case we need to ask them something."
         ]
       }
     ]
