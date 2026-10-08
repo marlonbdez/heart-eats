@@ -39,7 +39,7 @@
   },
   "map": {
     "label": "Map of places",
-    "loadError": "The map could not be loaded on this device.",
+    "loadError": "It looks like the map can’t be shown on this device.",
     "markerLabel": "{name}, show preview",
     "loadErrorLink": "Browse places in a list",
     "you": "Your location"
@@ -75,8 +75,8 @@
     "vegetarian": "Vegetarian"
   },
   "placeholder": {
-    "title": "This screen is coming soon",
-    "body": "We are building HeartEats one screen at a time.",
+    "title": "This screen will be ready soon",
+    "body": "HeartEats is being built little by little. Thank you for your patience.",
     "back": "Back to the map"
   },
   "search": {
@@ -90,7 +90,7 @@
   },
   "results": {
     "count": "{count, plural, =0 {No places} one {# place} other {# places}}",
-    "emptyTitle": "No places match your search",
+    "emptyTitle": "We couldn’t find places matching your search",
     "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
     "clearFilters": "Clear filters",
     "propose": "Suggest a place",
@@ -105,7 +105,7 @@
   "detail": {
     "back": "Back",
     "seal": "Business with an inclusive team",
-    "dishes": "What you have to try",
+    "dishes": "What we recommend trying",
     "actions": "Actions",
     "directions": "Directions",
     "call": "Call",
@@ -165,11 +165,11 @@
     "next": "Continue",
     "send": "Send suggestion",
     "sending": "Sending…",
-    "sendError": "We couldn’t send your suggestion. Please try again.",
+    "sendError": "We couldn’t send your suggestion. Whenever you like, you can try again.",
     "s1": {
-      "intro": "Tell us about the place. The basics are enough; we’ll check the rest.",
+      "intro": "Tell us about the place. The basics are enough: we’ll take care of the rest, calmly.",
       "name": "Name of the place",
-      "nameError": "Enter the name of the place to continue.",
+      "nameError": "Tell us the name of the place so we can continue.",
       "street": "Address",
       "streetHint": "Street and number",
       "city": "City",
@@ -180,7 +180,7 @@
       "other": "Other"
     },
     "s2": {
-      "intro": "What is a must-try? Add 1 to 3 dishes. It’s what helps people most to decide to go.",
+      "intro": "What dish would you recommend? You can add 1 to 3. It really helps people decide to go.",
       "dish": "Dish {n}",
       "dishName": "Name of the dish",
       "dishDesc": "Short description",
@@ -189,24 +189,24 @@
       "photos": "Photos are provided by the business itself, or used with its permission. You don’t need to upload any for now."
     },
     "s3": {
-      "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Help us check it.",
+      "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Tell us what you know so we can check it.",
       "how": "How do you know the business?",
       "howHint": "E.g.: I go often, I saw it in the news, I work there…",
       "link": "A link that confirms it",
       "linkHint": "(website, news, social media…)",
-      "linkError": "Enter a valid link starting with https:// or leave it empty.",
+      "linkError": "That link doesn’t look valid: it should start with https://. You can check it or leave it empty.",
       "indep": "It’s an independent business (not a large chain)",
-      "noteStrong": "Important:",
-      "note": " do not write names or health information about any person. If the business wants to tell its team’s story, it will do so itself, with each person’s consent."
+      "noteStrong": "One important thing:",
+      "note": " please don’t write names or health information about any person. If the business wants to tell its team’s story, it will do so itself, with each person’s consent."
     },
     "s4": {
       "intro": "In case we need to ask you something. It’s optional and never shown on the website.",
       "email": "Your email",
-      "emailError": "Enter a valid email or leave it empty.",
+      "emailError": "That email doesn’t look valid. You can check it or leave it empty.",
       "summary": "Summary",
       "summaryFallback": "Your suggestion",
       "noFood": "No kind of food given",
-      "consent": "By sending, you agree that we review the suggestion and publish it if it meets the criteria of an independent business with an inclusive team.",
+      "consent": "By sending, you give us permission to review the suggestion and, if it fits the criteria of an independent business with an inclusive team, publish it.",
       "privacy": "Privacy policy"
     },
     "done": {
@@ -229,7 +229,7 @@
     "next": "Continue",
     "send": "Send correction",
     "sending": "Sending…",
-    "sendError": "We couldn’t send your correction. Please try again.",
+    "sendError": "We couldn’t send your correction. Whenever you like, you can try again.",
     "kinds": {
       "address": "The address",
       "hours": "The opening hours",
@@ -240,12 +240,12 @@
     "s1": {
       "intro": "Thanks for helping us keep the details up to date. First, tell us what isn’t right.",
       "question": "What needs fixing?",
-      "error": "Choose what needs fixing to continue."
+      "error": "Choose what needs fixing so you can continue."
     },
     "s2": {
       "intro": "Tell us in your own words. If you have something that confirms it, it helps us check it sooner.",
       "details": "What has changed or what is wrong?",
-      "detailsError": "Tell us what needs fixing to continue.",
+      "detailsError": "Tell us what needs fixing so you can continue.",
       "hints": {
         "address": "E.g.: the correct address is … street, number …",
         "hours": "E.g.: it now opens Monday to Friday, 9:00 to 18:00.",
@@ -255,17 +255,17 @@
       },
       "link": "A link that confirms it",
       "linkHint": "(optional)",
-      "linkError": "Enter a valid link starting with https:// or leave it empty.",
-      "noteStrong": "Important:",
-      "note": " do not write names or health information about any person, even if the correction is about the team."
+      "linkError": "That link doesn’t look valid: it should start with https://. You can check it or leave it empty.",
+      "noteStrong": "One important thing:",
+      "note": " please don’t write names or health information about any person, even if the correction is about the team."
     },
     "s3": {
       "intro": "In case we need to ask you something. It’s optional and never shown on the website.",
       "email": "Your email",
       "optional": "(optional)",
-      "emailError": "Enter a valid email or leave it empty.",
+      "emailError": "That email doesn’t look valid. You can check it or leave it empty.",
       "summary": "Summary",
-      "consent": "By sending, you agree that we review your report and update the listing if it is correct.",
+      "consent": "By sending, you give us permission to review your report and, if it is correct, update the listing.",
       "privacy": "Privacy policy"
     },
     "done": {
