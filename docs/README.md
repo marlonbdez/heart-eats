@@ -13,8 +13,8 @@
 | [08_PRIVACIDAD_LEGAL](08_PRIVACIDAD_LEGAL.md) | RGPD, consentimientos, licencias |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
-| [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas) |
+| [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo) |
 
 ## Estado (2026-10-06)
 
-Fase 0 en curso. Hecho: estructura, licencias (ADR 0001), flujos y prototipos (mapa, ficha, propuesta, equipo y consentimientos, moderación), proceso de verificación. Pendiente: elegir logo, `02_API_SPEC`, ADR de hosting/mapas/geocodificación/auth, páginas de contenido, revisión legal y de lenguaje.
+Fase 0 en curso. Hecho: estructura, licencias (ADR 0001), flujos y prototipos (mapa, ficha, propuesta, equipo y consentimientos, moderación), proceso de verificación. Pendiente: `02_API_SPEC`, ADR de hosting/mapas/geocodificación/auth, páginas de contenido, revisión legal y de lenguaje.

@@ -113,7 +113,7 @@ Página de escritorio (acceso por magic link, no aparece en el menú público). 
 
 ## 7. Identidad visual (propuesta inicial)
 
-- Motivo: corazón + tenedor/cuchillo. Paleta cálida (terracota/ámbar sobre crema), alto contraste de texto.
+- Logo: galleta con forma de corazón y un mordisco ([ADR 0004](adr/0004-logo.md)). Paleta cálida (terracota/ámbar sobre crema), alto contraste de texto.
 - Tipografía de alta legibilidad (valorar una pensada para dislexia para el cuerpo de texto).
 - Modo claro y oscuro. Respeta `prefers-reduced-motion`.
 - Iconos siempre con etiqueta de texto; la información nunca depende solo del color.

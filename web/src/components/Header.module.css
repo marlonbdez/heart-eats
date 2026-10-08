@@ -50,8 +50,9 @@
   color: var(--fg);
   text-decoration: none;
 }
-.heart {
-  color: var(--accent);
+
+.eats {
+  color: var(--accent-text);
 }
 
 .cta {
