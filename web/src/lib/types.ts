@@ -19,11 +19,17 @@ export interface SignatureDish {
   photoUrl?: string;
 }
 
-export interface TeamRole {
-  role: string;
-  disabilityCategory: string;
-  count: number;
-}
+// Áreas de trabajo y tipos de discapacidad se cuentan por separado, sin
+// cruzarlos: así nadie puede reconocerse ("una persona sorda en cocina").
+export type TeamArea = 'kitchen' | 'dining' | 'bar' | 'workshop' | 'delivery';
+export type DisabilityType =
+  | 'intellectual_disability'
+  | 'physical_disability'
+  | 'hearing_impairment'
+  | 'visual_impairment'
+  | 'mental_health'
+  | 'autism_spectrum'
+  | 'other';
 
 export interface TeamStory {
   displayName: string;
@@ -35,7 +41,8 @@ export interface TeamStory {
 export interface Team {
   level: TeamLevel;
   summary: { totalStaff: number; staffWithDisability: number };
-  roles?: TeamRole[];
+  areas?: TeamArea[];
+  disabilityTypes?: DisabilityType[];
   stories?: TeamStory[];
 }
 
@@ -120,5 +127,26 @@ export interface CorrectionInput {
   details: string;
   evidenceUrl?: string;
   contactEmail?: string; // privado, nunca se muestra
+  website?: string; // honeypot: debe llegar vacío
+}
+
+// Quién da el permiso de una historia (F3): la propia persona o su
+// representante legal.
+export type ConsentBy = 'self' | 'legal_representative';
+
+export interface BusinessStoryInput extends TeamStory {
+  consentBy: ConsentBy; // una historia sin permiso no se envía
+}
+
+// El negocio cuenta su equipo (F3). Entra en moderación, que se pone en
+// contacto con el negocio para confirmar que es quien dice ser.
+export interface BusinessTeamInput {
+  restaurantSlug: string;
+  level: TeamLevel;
+  summary: Team['summary'];
+  areas?: TeamArea[];
+  disabilityTypes?: DisabilityType[];
+  stories?: BusinessStoryInput[]; // 0-3
+  contactEmail: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }

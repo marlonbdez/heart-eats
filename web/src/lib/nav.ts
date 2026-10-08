@@ -38,7 +38,14 @@ export const navGroups: NavGroup[] = [
 // Rutas del menú que ya tienen pantalla propia. El resto las sirve la página
 // "llega pronto" (una ruta real siempre tiene prioridad).
 // Las URLs van en inglés en todos los idiomas (ADR 0003).
-const builtRoutes = ['list', 'propose', 'correct', 'about', 'verification'];
+const builtRoutes = [
+  'list',
+  'propose',
+  'correct',
+  'business',
+  'about',
+  'verification',
+];
 
 export const pendingRoutes = navGroups
   .flatMap((g) => g.links.map((link) => link.href.slice(1)))

@@ -68,11 +68,12 @@ Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
 
 ### F3 · Negocio cuenta su equipo y da los consentimientos
 Pantalla para el negocio (acceso desde el menú "Soy de un negocio" o desde el contacto de moderación). **4 pasos**:
-1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 7 días ❓).
+1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 7 días ❓). Aquí se elige también **de qué local se trata** (lista de locales; si no está, enlace a «Proponer un local»).
 2. **Nivel:** tres tarjetas con ejemplo de cómo se verá: **Solo cifras** (recomendado para empezar), **Áreas y tipos**, **Historias con nombre** (solo con permiso de cada persona).
 3. **Datos:** personas en el equipo y cuántas tienen discapacidad (validaciones: ≥1, ≤ total); en nivel medio, áreas y tipos de discapacidad sin identificar; en nivel máximo, hasta 3 historias, cada una con **su propio consentimiento** (la persona o su representante legal).
-   - Equipos de menos de 5 personas ❓: aviso y generalización de los datos en niveles medio y máximo.
-4. **Revisión:** vista previa fiel de la ficha ("así se verá") y casilla de responsabilidad; envío a moderación.
+   - Áreas y tipos de discapacidad se eligen **por separado**, sin cruzarlos (ver `01_ESPECIFICACION_DATOS.md`).
+   - Equipos de menos de 5 personas ❓: aviso, y solo se pide y se muestra la cifra, aunque se haya elegido otro nivel.
+4. **Revisión:** vista previa fiel de la ficha ("así se verá", es el mismo componente que la ficha), **correo de contacto obligatorio** (privado: moderación lo usa para confirmar que quien envía es del negocio, sin cuentas) y casilla de responsabilidad; envío a moderación.
 - El texto de consentimiento es **provisional** y debe revisarlo un profesional antes del lanzamiento.
 - Una historia sin consentimiento marcado no se puede enviar.
 

@@ -128,16 +128,24 @@
   "team": {
     "title": "The team behind every dish",
     "summary": "<b>{with} of {total} people</b> on the team have a disability.",
-    "role": "{role}: {count, plural, one {# person} other {# people}} with {category}",
     "storyConsent": "Story shared with the person’s consent, which they can withdraw at any time.",
     "categories": {
-      "intellectual_disability": "an intellectual disability",
-      "physical_disability": "a physical disability",
-      "hearing_impairment": "a hearing disability",
-      "visual_impairment": "a visual disability",
-      "mental_health": "a mental health condition",
-      "autism_spectrum": "autism spectrum disorder",
-      "other": "another disability"
+      "intellectual_disability": "intellectual",
+      "physical_disability": "physical",
+      "hearing_impairment": "hearing",
+      "visual_impairment": "visual",
+      "mental_health": "mental health",
+      "autism_spectrum": "autism",
+      "other": "other"
+    },
+    "areas": "Areas: {list}",
+    "types": "Disability: {list}",
+    "areaNames": {
+      "kitchen": "kitchen",
+      "dining": "dining room",
+      "bar": "bar",
+      "workshop": "bakery workshop",
+      "delivery": "delivery"
     }
   },
   "nearMe": {
@@ -384,5 +392,103 @@
         ]
       }
     ]
+  },
+  "business": {
+    "title": "Tell us about your team",
+    "stepOf": "Step {n} of {total}",
+    "steps": {
+      "1": "Before you start",
+      "2": "What to show",
+      "3": "The details",
+      "4": "Review"
+    },
+    "s1": {
+      "intro": "Your place is on HeartEats for its food. This part is optional: it is there so that, if you wish, you can tell us about your team.",
+      "guarantees": [
+        "You choose how much to share. You can share just a number or, with permission, personal stories.",
+        "No one appears without their permission. Each person decides for themselves.",
+        "You can change or withdraw it whenever you like. We delete it within 7 days at most."
+      ],
+      "place": "Which place is it?",
+      "placeholder": "Choose your place",
+      "placeError": "Choose your place to continue.",
+      "notListed": "Can't find your place?",
+      "notListedLink": "Suggest it first"
+    },
+    "s2": {
+      "intro": "Choose what you would like to show on your place's page. You can start with the simplest option and share more later.",
+      "question": "What would you like to show?",
+      "error": "Choose an option to continue.",
+      "preview": "It will look like this: {example}"
+    },
+    "levels": {
+      "minimal": {
+        "tag": "Most private · Recommended to start",
+        "title": "Numbers only",
+        "example": "“3 of 11 team members have a disability.”"
+      },
+      "medium": {
+        "tag": "In between",
+        "title": "Areas and types",
+        "example": "the numbers and, in addition, which areas they work in and which types of disability there are, without identifying anyone."
+      },
+      "full": {
+        "tag": "Only with each person's permission",
+        "title": "Stories with a name",
+        "example": "in addition, anyone who wishes can tell their story with their name (or a pseudonym) and their role."
+      }
+    },
+    "s3": {
+      "intro": "Tell us how many people make up the team.",
+      "total": "People in the team",
+      "totalError": "Enter how many people are in the team (at least 1).",
+      "withDisability": "Of them, with a disability",
+      "withDisabilityError": "Enter how many have a disability: at least 1 and no more than the total.",
+      "smallTeam": "In small teams, giving details could make someone recognisable. So we will show only the number, even if you chose another level.",
+      "areas": "Which areas do they work in?",
+      "areasGroup": "Work areas",
+      "types": "Types of disability in the team",
+      "typesHint": "(without identifying anyone)",
+      "typesGroup": "Types of disability",
+      "optional": "(optional)",
+      "stories": "Personal stories",
+      "storiesIntro": "Only for those who want to tell theirs. Each person gives their own permission and decides what to share: there is no need to mention diagnoses. Up to 3.",
+      "person": "Person {n}",
+      "remove": "Remove",
+      "name": "Name or pseudonym",
+      "role": "Role",
+      "story": "Their story, in their own words",
+      "who": "Who gives permission?",
+      "self": "The person themselves",
+      "representative": "Their legal representative",
+      "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my role and what is written above. It is voluntary, I can change my mind whenever I like and, if I ask, it will be deleted within 7 days at most.",
+      "consentRepresentative": "As legal representative, I give permission for HeartEats to publish this person's name (or pseudonym), role and what is written above. It is voluntary, they can change their mind whenever they like and, if they ask, it will be deleted within 7 days at most.",
+      "consentNote": "Provisional consent text: it must be reviewed by a professional before it is published.",
+      "storyError": "Complete the name, role and story, and tick the permission, to continue.",
+      "add": "+ Add another person"
+    },
+    "s4": {
+      "intro": "Take your time to review it. This is how it will look on your place's page.",
+      "previewLabel": "It will look like this:",
+      "email": "Contact email",
+      "emailHint": "It is not published. We use it to confirm with you that you belong to the business and to let you know when it is published.",
+      "emailError": "Enter a valid email to send it.",
+      "ack": "I am responsible for the business, the information is correct and I understand I can change or withdraw it whenever I like.",
+      "ackError": "Tick the box to send it.",
+      "consent": "By sending it, you agree that we use your data as explained in",
+      "privacy": "Privacy and data"
+    },
+    "prev": "Back",
+    "next": "Continue",
+    "start": "Start",
+    "send": "Send for review",
+    "sending": "Sending…",
+    "sendError": "We couldn't send it. Please try again in a moment.",
+    "done": {
+      "title": "Thank you!",
+      "body": "We will review the information about {name} and get in touch to confirm it. Once it is verified, it will appear on your place's page.",
+      "back": "Back to the map",
+      "again": "Tell us about another place's team"
+    }
   }
 }

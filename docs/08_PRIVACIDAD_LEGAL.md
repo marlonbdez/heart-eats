@@ -90,7 +90,7 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 - ✅ La ubicación solo se pide tras pulsar «Cerca de mí» y se queda en el dispositivo.
 - ✅ Los formularios avisan de no escribir nombres ni datos de salud, y enlazan a esta política.
 - ⏳ El envío de propuestas y correcciones está **simulado**: hasta que exista el backend no se guarda nada, y el plazo de borrado del correo y el límite por IP no se pueden implementar.
-- ⏳ F3 (consentimientos del equipo): su texto está en revisión y no debe publicarse sin esta política.
+- ✅ F3 (consentimientos del equipo) existe como prototipo con envío simulado. Sus textos de consentimiento son **provisionales**: no deben publicarse sin revisión profesional y sin esta política.
 - ⏳ Si se añade analítica, hay que actualizar este texto antes (la opción prevista es Plausible o Umami autoalojado, o ninguna).
 - ⏳ Una página de **aviso legal** y la política de **cookies** (hoy basta con decir que no se usan) deben acompañar a esta antes del lanzamiento.
 

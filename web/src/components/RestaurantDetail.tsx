@@ -1,6 +1,7 @@
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
+import { effectiveTeamLevel } from '@/lib/team';
 import type { Restaurant } from '@/lib/types';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
@@ -24,6 +25,7 @@ export function RestaurantDetail({
   const directions = `https://www.openstreetmap.org/directions?to=${lat}%2C${lng}`;
   const verification = r.verification;
   const isAdmin = verification.level === 'admin';
+  const teamLevel = effectiveTeamLevel(r);
 
   const actions = [
     { href: directions, label: t('directions'), primary: true, external: true },
@@ -111,7 +113,7 @@ export function RestaurantDetail({
           ))}
         </nav>
 
-        <TeamBlock restaurant={r} />
+        {teamLevel && r.team && <TeamBlock team={r.team} level={teamLevel} />}
 
         {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
 

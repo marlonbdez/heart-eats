@@ -1,16 +1,16 @@
-import { useTranslations } from 'next-intl';
-import { effectiveTeamLevel } from '@/lib/team';
-import type { Restaurant } from '@/lib/types';
+import { useFormatter, useTranslations } from 'next-intl';
+import type { Team, TeamLevel } from '@/lib/types';
 import styles from './RestaurantDetail.module.css';
 
 // "El Equipo" en tres niveles: cifras · áreas y tipos · historias con nombre.
-// Solo se pinta lo que el negocio ha confirmado (ver lib/team.ts).
-export function TeamBlock({ restaurant }: { restaurant: Restaurant }) {
+// Quien lo usa decide el nivel (ver effectiveTeamLevel en lib/team.ts); aquí
+// solo se pinta. También sirve para la vista previa de F3.
+export function TeamBlock({ team, level }: { team: Team; level: TeamLevel }) {
   const t = useTranslations('team');
-  const level = effectiveTeamLevel(restaurant);
-  const team = restaurant.team;
-  if (!level || !team) return null;
+  const format = useFormatter();
   const { totalStaff, staffWithDisability } = team.summary;
+  const areas = team.areas ?? [];
+  const types = team.disabilityTypes ?? [];
 
   return (
     <section className={styles.team} aria-labelledby="equipo">
@@ -23,17 +23,22 @@ export function TeamBlock({ restaurant }: { restaurant: Restaurant }) {
         })}
       </p>
 
-      {level !== 'minimal' && team.roles && team.roles.length > 0 && (
-        <ul className={styles.roles}>
-          {team.roles.map((r) => (
-            <li key={`${r.role}-${r.disabilityCategory}`}>
-              {t('role', {
-                role: r.role,
-                count: r.count,
-                category: t(`categories.${r.disabilityCategory}`),
+      {level !== 'minimal' && (areas.length > 0 || types.length > 0) && (
+        <ul className={styles.teamDetails}>
+          {areas.length > 0 && (
+            <li>
+              {t('areas', {
+                list: format.list(areas.map((a) => t(`areaNames.${a}`))),
               })}
             </li>
-          ))}
+          )}
+          {types.length > 0 && (
+            <li>
+              {t('types', {
+                list: format.list(types.map((c) => t(`categories.${c}`))),
+              })}
+            </li>
+          )}
         </ul>
       )}
 
