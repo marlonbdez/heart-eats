@@ -279,5 +279,111 @@
       "body": "Reports are sent from each place’s page: open it and press “Suggest a correction”.",
       "list": "See the list of places"
     }
+  },
+  "about": {
+    "title": "What is HeartEats",
+    "intro": "HeartEats is a collaborative map of Madrid food businesses whose team includes people with disabilities. It helps you choose where to eat knowing who is behind it.",
+    "sections": [
+      {
+        "heading": "Why it exists",
+        "paragraphs": [
+          "Going out to eat is an everyday decision. We want choosing a place where people with disabilities work to be easy, and to be chosen for what matters: good service, good food and quality jobs."
+        ]
+      },
+      {
+        "heading": "What it is and what it isn’t",
+        "items": [
+          "It is a guide to businesses with real inclusive employment: what matters is who works there.",
+          "It is not a guide to the accessibility of the premises (ramps, adapted toilets): other tools already cover that.",
+          "It is not a job board.",
+          "It does not include large chains: these are independent businesses and projects with social impact."
+        ]
+      },
+      {
+        "heading": "How it works",
+        "items": [
+          "Anyone can suggest a place or correct a detail.",
+          "A person reviews every suggestion before anything is published.",
+          "The business always has the final say: nobody appears on the map without knowing.",
+          "Every listing shows how and when it was verified."
+        ]
+      },
+      {
+        "heading": "The people on the team",
+        "paragraphs": [
+          "By default, each listing talks about the team as a whole. A person’s name, photo or story only appears if they decide so themselves and give their consent, and they can withdraw it whenever they like."
+        ]
+      },
+      {
+        "heading": "Open and non-profit",
+        "paragraphs": [
+          "HeartEats is a non-profit project. Its code is open (AGPL-3.0 licence) and so is the business database, under the ODbL licence. People’s stories, names and photos are outside that licence. The map relies on open data and its attribution is always visible."
+        ]
+      },
+      {
+        "heading": "Where we are",
+        "paragraphs": [
+          "We are starting in Madrid, with the idea of reaching more cities. HeartEats is under construction: for now, the places you will see are fictional examples, marked as [DEMO]."
+        ]
+      }
+    ]
+  },
+  "verification": {
+    "title": "How we verify",
+    "intro": "Every point on the map has to be trustworthy. That is why nothing is published until a person has reviewed it and the business itself has confirmed it.",
+    "sections": [
+      {
+        "heading": "What happens to a suggestion",
+        "ordered": true,
+        "items": [
+          "The suggestion arrives. It is not public yet.",
+          "An automatic filter discards spam and detects duplicates.",
+          "A person checks that the place exists, that it is independent (not a large chain or corporate franchise) and that its team is inclusive, using a link, news, its website, agreements or references from organisations in the sector.",
+          "We contact the business through an official channel to confirm that it wants to appear and to offer it the chance to tell its team’s story at the level of detail it chooses.",
+          "A decision is made: approve, ask for more information, or reject explaining why. Everything is recorded."
+        ]
+      },
+      {
+        "heading": "What each level means",
+        "items": [
+          "Verified details: our team has checked them with a visit, a call or cross-checked documents.",
+          "Details confirmed by the community: confirmed by the business itself with some evidence, or by several independent people."
+        ],
+        "paragraphs": [
+          "A place that has not been verified is not shown on the map."
+        ]
+      },
+      {
+        "heading": "How we check",
+        "paragraphs": ["These are the methods, from strongest to weakest:"],
+        "items": [
+          "An in-person visit.",
+          "Direct confirmation from the business, by phone or by email at its official domain.",
+          "Documents: agreements, certifications or official statements.",
+          "References from organisations in the sector."
+        ]
+      },
+      {
+        "heading": "Who can be left out",
+        "paragraphs": [
+          "We accept independent businesses and projects with social impact. We do not accept large chains or corporate franchises. Borderline cases, such as co-operatives or small groups, are looked at one by one."
+        ]
+      },
+      {
+        "heading": "Keeping details up to date",
+        "items": [
+          "Each listing shows the level, the method and the date of the last verification.",
+          "After 12 months, the listing is flagged for review.",
+          "Anyone can suggest a correction or the removal of a listing.",
+          "The business can ask for changes or to be removed whenever it likes."
+        ]
+      },
+      {
+        "heading": "Privacy during review",
+        "paragraphs": [
+          "Suggestions from third parties do not include data about people on the team. If someone writes it, it is discarded during review. The email of the person who suggests is private and only used to ask them something."
+        ]
+      }
+    ]
   }
 }
