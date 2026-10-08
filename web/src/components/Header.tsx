@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { navGroups } from '@/lib/nav';
+import { LogoMark } from './LogoMark';
 import styles from './Header.module.css';
 
 // Icono "añadir lugar" (chincheta con un +), Material Icons, Apache-2.0.
@@ -47,10 +48,11 @@ export function Header() {
           <span aria-hidden="true">☰</span>
         </button>
         <Link href="/" className={styles.logo}>
-          <span aria-hidden="true" className={styles.heart}>
-            ♥
+          <LogoMark />
+          {/* El nombre es una marca: no se traduce. Se lee "Heart" + "Eats", pero es una sola palabra. */}
+          <span>
+            Heart<span className={styles.eats}>Eats</span>
           </span>
-          {t('app.name')}
         </Link>
         {/* En móvil solo se ve el icono; el nombre accesible es siempre el texto completo. */}
         <Link href="/propose" className={styles.cta}>
