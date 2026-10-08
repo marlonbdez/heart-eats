@@ -51,6 +51,11 @@
   text-decoration: none;
 }
 
+.mark {
+  display: inline-flex;
+  color: var(--accent-text);
+}
+
 .eats {
   color: var(--accent-text);
 }

@@ -48,7 +48,9 @@ export function Header() {
           <span aria-hidden="true">☰</span>
         </button>
         <Link href="/" className={styles.logo}>
-          <LogoMark />
+          <span className={styles.mark}>
+            <LogoMark />
+          </span>
           {/* El nombre es una marca: no se traduce. Se lee "Heart" + "Eats", pero es una sola palabra. */}
           <span>
             Heart<span className={styles.eats}>Eats</span>
