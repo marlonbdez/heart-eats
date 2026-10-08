@@ -59,7 +59,8 @@
 | `visibilityLevel` | enum | ✔ | debe coincidir con `Restaurant.teamVisibilityLevel` (fuente de verdad: `Team`; ❓ evitar duplicar y dejarlo solo aquí) |
 | `summary.totalStaff` | int ≥1 | ✔ | |
 | `summary.staffWithDisability` | int ≥0 | ✔ | ≤ `totalStaff` |
-| `roles[]` | `{role, disabilityCategory, count}` | nivel `medium`+ | |
+| `areas[]` | enum[] (`kitchen`, `dining`, `bar`, `workshop`, `delivery`) | nivel `medium`+ | Opcional. Áreas de trabajo del equipo, **sin cruzarlas** con los tipos de discapacidad |
+| `disabilityTypes[]` | enum[] (los de `inclusionTypes`) | nivel `medium`+ | Opcional. Sin identificar a nadie |
 | `stories[]` | ver abajo | nivel `full` | |
 | `updatedAt` | Date | ✔ | |
 
@@ -68,7 +69,8 @@
 **Reglas**
 - Una historia sin `consentRecordedAt` no se guarda.
 - Si `revokedAt` existe, la historia se oculta y los datos se eliminan en un plazo máximo definido en la política de privacidad ❓ (propuesta: 7 días).
-- **Umbral de privacidad:** si `totalStaff` < 5 ❓, el nivel `medium` no puede publicar `roles` con `count` que identifique a una persona; la API los generaliza.
+- **Umbral de privacidad:** si `totalStaff` < 5 ❓, solo se publica la cifra: no se muestran `areas`, `disabilityTypes` ni `stories` (la API los ignora y el formulario no los pide).
+- **Áreas y tipos van por separado**, nunca cruzados («una persona sorda en cocina» podría identificar a alguien). Por eso no hay `count` por área ni por tipo.
 
 ### 2.3 `Suggestion`
 

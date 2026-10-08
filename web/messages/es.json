@@ -128,16 +128,24 @@
   "team": {
     "title": "El equipo detrás de cada plato",
     "summary": "<b>{with} de {total} personas</b> del equipo tienen discapacidad.",
-    "role": "{role}: {count, plural, one {# persona} other {# personas}} con {category}",
     "storyConsent": "Historia compartida con el consentimiento de la persona, que puede retirarlo cuando quiera.",
     "categories": {
-      "intellectual_disability": "discapacidad intelectual",
-      "physical_disability": "discapacidad física",
-      "hearing_impairment": "discapacidad auditiva",
-      "visual_impairment": "discapacidad visual",
-      "mental_health": "problemas de salud mental",
-      "autism_spectrum": "trastorno del espectro autista",
-      "other": "otra discapacidad"
+      "intellectual_disability": "intelectual",
+      "physical_disability": "física",
+      "hearing_impairment": "auditiva",
+      "visual_impairment": "visual",
+      "mental_health": "salud mental",
+      "autism_spectrum": "autismo",
+      "other": "otra"
+    },
+    "areas": "Áreas: {list}",
+    "types": "Discapacidad: {list}",
+    "areaNames": {
+      "kitchen": "cocina",
+      "dining": "sala",
+      "bar": "barra",
+      "workshop": "obrador",
+      "delivery": "reparto"
     }
   },
   "nearMe": {
@@ -384,5 +392,103 @@
         ]
       }
     ]
+  },
+  "business": {
+    "title": "Cuenta tu equipo",
+    "stepOf": "Paso {n} de {total}",
+    "steps": {
+      "1": "Antes de empezar",
+      "2": "Qué mostrar",
+      "3": "Los datos",
+      "4": "Revisión"
+    },
+    "s1": {
+      "intro": "Tu local aparece en HeartEats por su comida. Esta parte es opcional: es para que, si quieres, cuentes cómo es tu equipo.",
+      "guarantees": [
+        "Tú eliges cuánto contar. Puedes compartir solo una cifra o, con permiso, historias personales.",
+        "Nadie aparece sin su permiso. Cada persona decide por sí misma.",
+        "Puedes cambiarlo o retirarlo cuando quieras. Lo borramos en un máximo de 7 días."
+      ],
+      "place": "¿De qué local se trata?",
+      "placeholder": "Elige tu local",
+      "placeError": "Elige tu local para poder continuar.",
+      "notListed": "¿No encuentras tu local?",
+      "notListedLink": "Propónlo primero"
+    },
+    "s2": {
+      "intro": "Elige qué quieres mostrar en la ficha de tu local. Puedes empezar por lo más sencillo y ampliar después.",
+      "question": "¿Qué quieres mostrar?",
+      "error": "Elige una opción para poder continuar.",
+      "preview": "Se verá así: {example}"
+    },
+    "levels": {
+      "minimal": {
+        "tag": "Más privado · Recomendado para empezar",
+        "title": "Solo cifras",
+        "example": "«3 de 11 personas del equipo tienen discapacidad.»"
+      },
+      "medium": {
+        "tag": "Intermedio",
+        "title": "Áreas y tipos",
+        "example": "las cifras y, además, en qué áreas trabajan y qué tipos de discapacidad hay, sin identificar a nadie."
+      },
+      "full": {
+        "tag": "Solo con el permiso de cada persona",
+        "title": "Historias con nombre",
+        "example": "además, quien quiera cuenta su historia con su nombre (o un seudónimo) y su puesto."
+      }
+    },
+    "s3": {
+      "intro": "Cuéntanos cuántas personas forman el equipo.",
+      "total": "Personas en el equipo",
+      "totalError": "Escribe cuántas personas hay en el equipo (al menos 1).",
+      "withDisability": "De ellas, con discapacidad",
+      "withDisabilityError": "Escribe cuántas tienen discapacidad: al menos 1 y no más que el total.",
+      "smallTeam": "En equipos pequeños, dar detalles puede hacer reconocible a una persona. Por eso mostraremos solo la cifra, aunque hayas elegido otro nivel.",
+      "areas": "¿En qué áreas trabajan?",
+      "areasGroup": "Áreas de trabajo",
+      "types": "Tipos de discapacidad en el equipo",
+      "typesHint": "(sin identificar a nadie)",
+      "typesGroup": "Tipos de discapacidad",
+      "optional": "(opcional)",
+      "stories": "Historias personales",
+      "storiesIntro": "Solo para quien quiera contarla. Cada persona da su propio permiso y decide qué quiere compartir: no hace falta mencionar diagnósticos. Máximo 3.",
+      "person": "Persona {n}",
+      "remove": "Quitar",
+      "name": "Nombre o seudónimo",
+      "role": "Puesto",
+      "story": "Su historia, con sus palabras",
+      "who": "¿Quién da el permiso?",
+      "self": "La propia persona",
+      "representative": "Su representante legal",
+      "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto y lo escrito arriba. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.",
+      "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto y lo escrito arriba de esta persona. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 7 días.",
+      "consentNote": "Texto de consentimiento provisional: debe revisarlo un profesional antes de publicarse.",
+      "storyError": "Completa el nombre, el puesto y la historia, y marca el permiso, para continuar.",
+      "add": "+ Añadir otra persona"
+    },
+    "s4": {
+      "intro": "Revísalo con calma. Así se verá en la ficha de tu local.",
+      "previewLabel": "Así se verá:",
+      "email": "Correo de contacto",
+      "emailHint": "No se publica. Lo usamos para confirmar contigo que eres del negocio y para avisarte cuando esté publicado.",
+      "emailError": "Escribe un correo válido para poder enviarlo.",
+      "ack": "Soy responsable del negocio, la información es correcta y entiendo que puedo cambiarla o retirarla cuando quiera.",
+      "ackError": "Marca la casilla para poder enviarlo.",
+      "consent": "Al enviarlo, aceptas que usemos tus datos como explicamos en",
+      "privacy": "Privacidad y datos"
+    },
+    "prev": "Atrás",
+    "next": "Continuar",
+    "start": "Empezar",
+    "send": "Enviar a revisión",
+    "sending": "Enviando…",
+    "sendError": "No hemos podido enviarlo. Inténtalo de nuevo en un momento.",
+    "done": {
+      "title": "¡Gracias!",
+      "body": "Revisaremos la información de {name} y nos pondremos en contacto contigo para confirmarla. Cuando esté verificada, aparecerá en la ficha de tu local.",
+      "back": "Volver al mapa",
+      "again": "Contar el equipo de otro local"
+    }
   }
 }

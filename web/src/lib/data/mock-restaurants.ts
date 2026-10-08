@@ -50,14 +50,8 @@ export const restaurants: Restaurant[] = [
     team: {
       level: 'medium',
       summary: { totalStaff: 11, staffWithDisability: 4 },
-      roles: [
-        { role: 'Cocina', disabilityCategory: 'hearing_impairment', count: 2 },
-        {
-          role: 'Sala',
-          disabilityCategory: 'intellectual_disability',
-          count: 2,
-        },
-      ],
+      areas: ['kitchen', 'dining'],
+      disabilityTypes: ['hearing_impairment', 'intellectual_disability'],
     },
     verification: {
       level: 'admin',
@@ -124,9 +118,8 @@ export const restaurants: Restaurant[] = [
     team: {
       level: 'full',
       summary: { totalStaff: 9, staffWithDisability: 3 },
-      roles: [
-        { role: 'Barra', disabilityCategory: 'physical_disability', count: 1 },
-      ],
+      areas: ['bar'],
+      disabilityTypes: ['physical_disability'],
       stories: [
         {
           displayName: 'Persona de ejemplo',

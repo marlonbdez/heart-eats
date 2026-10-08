@@ -1,6 +1,7 @@
 // Capa de datos de la web. Hoy lee mocks; cuando exista el backend solo
 // cambia la implementación de estas funciones (fetch a /api/v1), no las pantallas.
 import type {
+  BusinessTeamInput,
   CorrectionInput,
   FoodTag,
   ProposalInput,
@@ -33,6 +34,14 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
 
 // Igual que la propuesta: simulado hasta que exista POST /api/v1/corrections.
 export async function submitCorrection(input: CorrectionInput): Promise<void> {
+  if (input.website) return; // honeypot: se descarta en silencio
+  await new Promise((resolve) => setTimeout(resolve, 600));
+}
+
+// Igual que las anteriores: simulado hasta que exista POST /api/v1/teams.
+export async function submitBusinessTeam(
+  input: BusinessTeamInput,
+): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
 }
