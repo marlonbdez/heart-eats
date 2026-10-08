@@ -39,7 +39,7 @@
   },
   "map": {
     "label": "Mapa de locales",
-    "loadError": "No se ha podido cargar el mapa en este dispositivo.",
+    "loadError": "Parece que el mapa no se puede mostrar en este dispositivo.",
     "markerLabel": "{name}, ver vista previa",
     "loadErrorLink": "Ver los locales en una lista",
     "you": "Tu ubicación"
@@ -75,8 +75,8 @@
     "vegetarian": "Vegetariano"
   },
   "placeholder": {
-    "title": "Esta pantalla llega pronto",
-    "body": "Seguimos construyendo HeartEats pantalla a pantalla.",
+    "title": "Esta pantalla estará lista pronto",
+    "body": "HeartEats se va construyendo poco a poco. Gracias por tu paciencia.",
     "back": "Volver al mapa"
   },
   "search": {
@@ -90,7 +90,7 @@
   },
   "results": {
     "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",
-    "emptyTitle": "No hay locales con esa búsqueda",
+    "emptyTitle": "No hemos encontrado locales con esa búsqueda",
     "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
     "clearFilters": "Quitar filtros",
     "propose": "Proponer un local",
@@ -105,7 +105,7 @@
   "detail": {
     "back": "Volver",
     "seal": "Negocio con equipo inclusivo",
-    "dishes": "Lo que tienes que probar",
+    "dishes": "Lo que te recomendamos probar",
     "actions": "Acciones",
     "directions": "Cómo llegar",
     "call": "Llamar",
@@ -165,11 +165,11 @@
     "next": "Continuar",
     "send": "Enviar propuesta",
     "sending": "Enviando…",
-    "sendError": "No hemos podido enviar la propuesta. Inténtalo de nuevo.",
+    "sendError": "No hemos podido enviar la propuesta. Cuando quieras, puedes intentarlo de nuevo.",
     "s1": {
-      "intro": "Cuéntanos qué sitio es. Con lo básico basta, el resto lo revisamos nosotros.",
+      "intro": "Cuéntanos qué sitio es. Con lo básico es suficiente: del resto nos ocupamos nosotros con calma.",
       "name": "Nombre del local",
-      "nameError": "Escribe el nombre del local para continuar.",
+      "nameError": "Cuéntanos el nombre del local para poder continuar.",
       "street": "Dirección",
       "streetHint": "Calle y número",
       "city": "Ciudad",
@@ -180,7 +180,7 @@
       "other": "Otra"
     },
     "s2": {
-      "intro": "¿Qué hay que probar sí o sí? Añade de 1 a 3 platos. Es lo que más ayuda a que la gente se anime a ir.",
+      "intro": "¿Qué plato recomendarías? Puedes añadir de 1 a 3. Ayuda mucho a que la gente se anime a ir.",
       "dish": "Plato {n}",
       "dishName": "Nombre del plato",
       "dishDesc": "Descripción corta",
@@ -189,24 +189,24 @@
       "photos": "Las fotos las aporta el propio negocio, o se usan con su permiso. De momento no hace falta subir ninguna."
     },
     "s3": {
-      "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Ayúdanos a comprobarlo.",
+      "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Cuéntanos lo que sepas para que podamos comprobarlo.",
       "how": "¿Cómo conoces el negocio?",
       "howHint": "Ej.: voy habitualmente, lo vi en una noticia, trabajo allí…",
       "link": "Un enlace que lo confirme",
       "linkHint": "(web, noticia, redes…)",
-      "linkError": "Escribe un enlace válido que empiece por https:// o déjalo vacío.",
+      "linkError": "Ese enlace no parece válido: debería empezar por https://. Puedes revisarlo o dejarlo vacío.",
       "indep": "Es un negocio independiente (no una gran cadena)",
-      "noteStrong": "Importante:",
-      "note": " no escribas nombres ni datos de salud de ninguna persona. Si el negocio quiere contar la historia de su equipo, lo hará él mismo, con el consentimiento de cada persona."
+      "noteStrong": "Un detalle importante:",
+      "note": " por favor, no escribas nombres ni datos de salud de ninguna persona. Si el negocio quiere contar la historia de su equipo, lo hará él mismo, con el consentimiento de cada persona."
     },
     "s4": {
       "intro": "Por si necesitamos preguntarte algo. Es opcional y nunca se muestra en la web.",
       "email": "Tu correo",
-      "emailError": "Escribe un correo válido o déjalo vacío.",
+      "emailError": "Ese correo no parece válido. Puedes revisarlo o dejarlo vacío.",
       "summary": "Resumen",
       "summaryFallback": "Tu propuesta",
       "noFood": "Sin tipo de comida indicado",
-      "consent": "Al enviar, aceptas que revisemos la propuesta y la publiquemos si se cumple el criterio de negocio independiente con equipo inclusivo.",
+      "consent": "Al enviar, nos das permiso para revisar la propuesta y, si encaja con el criterio de negocio independiente con equipo inclusivo, publicarla.",
       "privacy": "Política de privacidad"
     },
     "done": {
@@ -229,7 +229,7 @@
     "next": "Continuar",
     "send": "Enviar corrección",
     "sending": "Enviando…",
-    "sendError": "No hemos podido enviar la corrección. Inténtalo de nuevo.",
+    "sendError": "No hemos podido enviar la corrección. Cuando quieras, puedes intentarlo de nuevo.",
     "kinds": {
       "address": "La dirección",
       "hours": "El horario",
@@ -240,12 +240,12 @@
     "s1": {
       "intro": "Gracias por ayudarnos a mantener los datos al día. Empieza por decirnos qué no es correcto.",
       "question": "¿Qué hay que corregir?",
-      "error": "Elige qué hay que corregir para continuar."
+      "error": "Elige qué hay que corregir para poder continuar."
     },
     "s2": {
       "intro": "Cuéntanoslo con tus palabras. Si tienes algo que lo confirme, nos ayuda a revisarlo antes.",
       "details": "¿Qué ha cambiado o qué está mal?",
-      "detailsError": "Cuéntanos qué hay que corregir para continuar.",
+      "detailsError": "Cuéntanos qué hay que corregir para poder continuar.",
       "hints": {
         "address": "Ej.: la dirección correcta es calle… número…",
         "hours": "Ej.: ahora abre de lunes a viernes, de 9:00 a 18:00.",
@@ -255,17 +255,17 @@
       },
       "link": "Un enlace que lo confirme",
       "linkHint": "(opcional)",
-      "linkError": "Escribe un enlace válido que empiece por https:// o déjalo vacío.",
-      "noteStrong": "Importante:",
-      "note": " no escribas nombres ni datos de salud de ninguna persona, tampoco si la corrección es sobre el equipo."
+      "linkError": "Ese enlace no parece válido: debería empezar por https://. Puedes revisarlo o dejarlo vacío.",
+      "noteStrong": "Un detalle importante:",
+      "note": " por favor, no escribas nombres ni datos de salud de ninguna persona, tampoco si la corrección es sobre el equipo."
     },
     "s3": {
       "intro": "Por si necesitamos preguntarte algo. Es opcional y nunca se muestra en la web.",
       "email": "Tu correo",
       "optional": "(opcional)",
-      "emailError": "Escribe un correo válido o déjalo vacío.",
+      "emailError": "Ese correo no parece válido. Puedes revisarlo o dejarlo vacío.",
       "summary": "Resumen",
-      "consent": "Al enviar, aceptas que revisemos tu aviso y actualicemos la ficha si es correcto.",
+      "consent": "Al enviar, nos das permiso para revisar tu aviso y, si es correcto, actualizar la ficha.",
       "privacy": "Política de privacidad"
     },
     "done": {

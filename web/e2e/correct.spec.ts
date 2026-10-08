@@ -24,7 +24,7 @@ test('corregir un dato: se entra desde la ficha y recorre los 3 pasos', async ({
   await page.getByLabel('¿Qué ha cambiado').fill('Ahora cierra a las 18:00.');
   await page.getByLabel(/Un enlace que lo confirme/).fill('basura');
   await page.getByRole('button', { name: 'Continuar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('enlace válido');
+  await expect(page.locator('p[role=alert]')).toContainText('https://');
   await page
     .getByLabel(/Un enlace que lo confirme/)
     .fill('https://ejemplo.org');

@@ -18,7 +18,7 @@ test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
 
   await page.getByLabel(/Un enlace que lo confirme/).fill('basura');
   await page.getByRole('button', { name: 'Continuar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('enlace válido');
+  await expect(page.locator('p[role=alert]')).toContainText('https://');
   await page
     .getByLabel(/Un enlace que lo confirme/)
     .fill('https://ejemplo.org');

@@ -18,14 +18,14 @@ Ver [ADR 0001](adr/0001-licencias.md). Punto clave: las historias, nombres y fot
 
 ## Texto público: «Privacidad y datos» (borrador)
 
-> Este es el texto que irá en la pantalla «Privacidad y datos» (`/privacy`). Está escrito en español llano, para quien no es jurista. Cuando se apruebe se traduce al inglés (ADR 0003).
+> Este es el texto que irá en la pantalla «Privacidad y datos» (`/privacy`). Está escrito en español llano y con tono sosegado, para quien no es jurista; el rigor jurídico no se toca al suavizar el estilo. Cuando se apruebe se traduce al inglés (ADR 0003).
 
 ### En pocas palabras
 
 - Puedes usar HeartEats sin darnos ningún dato: no hay cuentas, no usamos cookies propias y no medimos tu actividad.
-- Si propones un local o sugieres una corrección, nos cuentas lo que quieras sobre el **local**. Tu correo es opcional, privado y solo sirve para preguntarte algo.
-- **No publicamos ni guardamos nombres o datos de salud de personas** sin su permiso expreso. Si alguien los escribe en una propuesta, los descartamos.
-- Si el negocio decide contar la historia de su equipo, lo hace él, y cada persona da su consentimiento. Se puede retirar cuando quiera.
+- Si propones un local o sugieres una corrección, nos cuentas lo que quieras sobre el **local**. Tu correo es opcional, es privado y solo lo usamos por si necesitamos preguntarte algo.
+- **No publicamos ni guardamos nombres o datos de salud de personas** sin su permiso expreso. Si alguien los escribe en una propuesta, los dejamos fuera al revisarla.
+- Si el negocio decide contar la historia de su equipo, lo hace él, y cada persona da su consentimiento. Puede retirarlo cuando quiera, sin dar explicaciones.
 
 ### Quién es responsable de los datos
 
@@ -40,21 +40,21 @@ Ver [ADR 0001](adr/0001-licencias.md). Punto clave: las historias, nombres y fot
 | Propones un local                      | Los datos del local, cómo lo conoces, un enlace (opcional) y tu correo (opcional)                  | Revisar la propuesta y, si cumple el criterio, publicarla                 | La propuesta, hasta resolverla. El correo se borra al resolverla o a los ❓ meses                                      |
 | Sugieres una corrección                | Qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional)                  | Revisar el aviso y, si es correcto, actualizar la ficha                   | Igual que la propuesta                                                                                                 |
 | Eres moderador/a ❓ (cuando exista F5) | Tu correo y el ámbito que moderas                                                                  | Que puedas entrar y revisar propuestas                                    | Mientras seas moderador/a                                                                                              |
-| Evitar el spam                         | ❓ Un contador temporal por dirección IP (límite de envíos)                                        | Evitar envíos masivos. El campo oculto del formulario no guarda nada tuyo | ❓ Horas, no se guarda                                                                                                 |
+| Evitar mensajes no deseados            | ❓ Un contador temporal por dirección IP (límite de envíos)                                        | Evitar envíos masivos. El campo oculto del formulario no guarda nada tuyo | ❓ Horas, no se guarda                                                                                                 |
 | El negocio cuenta su equipo (F3)       | Cifras del equipo; en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona | Mostrar la ficha con el nivel de detalle que el negocio elija             | Mientras el negocio y la persona lo mantengan. Si se retira, se oculta al momento y se borra en un máximo de ❓ 7 días |
 
 **Base para tratar tus datos.** Tu correo y lo que escribes en los formularios los tratamos porque tú nos los das al enviar (tu consentimiento). Los datos de una persona del equipo, solo con el consentimiento explícito de esa persona. ❓ Un profesional debe confirmar las bases legales de cada fila.
 
 ### Las personas del equipo
 
-Este apartado es el más importante, y por eso va en lenguaje claro:
+Este apartado es el que más nos importa, así que lo contamos con palabras sencillas:
 
-- **Una propuesta de un tercero no incluye datos de las personas del equipo.** Si alguien escribe nombres o datos de salud, se descartan al revisarla.
-- **Solo el negocio puede contar la historia de su equipo**, y nunca con detalle sin que lo sepa. Mientras el negocio no confirme, solo mostramos información pública y verificable.
-- **Cada persona decide por sí misma** si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si procede, lo decide su representante legal.
+- **Una propuesta de otra persona no incluye datos de las personas del equipo.** Si alguien escribe nombres o datos de salud, los dejamos fuera al revisarla.
+- **Solo el negocio puede contar la historia de su equipo**, y nunca con detalle sin que lo sepa. Hasta que el negocio lo confirme, solo mostramos información pública y verificable.
+- **Cada persona decide por sí misma** si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si corresponde, lo decide su representante legal.
 - **Una historia sin consentimiento registrado no se guarda.**
-- **Se puede retirar en cualquier momento**, sin dar explicaciones, escribiendo a ❓ [correo]. La historia deja de mostrarse al instante y los datos se borran en un máximo de ❓ 7 días.
-- **En equipos pequeños** (❓ menos de 5 personas) no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien. En ese caso damos solo cifras generales.
+- **Se puede retirar en cualquier momento y sin dar explicaciones**, escribiendo a ❓ [correo]. La historia deja de mostrarse al instante y los datos se borran en un máximo de ❓ 7 días.
+- **En equipos pequeños** (❓ menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.
 - Las historias, nombres y fotos **no están bajo licencia abierta** y nunca se incluyen en las exportaciones de datos abiertos.
 
 ### Terceros que intervienen
@@ -70,9 +70,9 @@ La base de datos de negocios se publica bajo licencia ODbL (nombre, dirección, 
 
 ### Tus derechos
 
-Puedes pedirnos **acceder** a tus datos, **rectificarlos**, **suprimirlos**, **limitar** su uso, **oponerte** a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes **retirarlo** cuando quieras, y eso no afecta a lo ya tratado. Escribe a ❓ [correo]; respondemos en un plazo máximo de un mes.
+Puedes pedirnos **acceder** a tus datos, **rectificarlos**, **suprimirlos**, **limitar** su uso, **oponerte** a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes **retirarlo** cuando quieras, y eso no afecta a lo ya tratado. Escríbenos a ❓ [correo] y te responderemos en un plazo máximo de un mes.
 
-Si crees que no hemos tratado bien tus datos, puedes reclamar ante la **Agencia Española de Protección de Datos** (aepd.es).
+Si alguna vez sientes que no hemos cuidado bien tus datos, puedes reclamar ante la **Agencia Española de Protección de Datos** (aepd.es). Antes de eso, nos encantará poder aclararlo contigo.
 
 ### Seguridad
 
@@ -80,7 +80,7 @@ Los datos se guardan en servidores con acceso restringido y conexión cifrada. E
 
 ### Cambios en este texto
 
-Si cambia algo importante, lo actualizamos aquí y cambiamos la fecha. ❓ Fecha de la versión: [al publicar].
+Si cambia algo importante, lo actualizaremos aquí y cambiaremos la fecha. ❓ Fecha de la versión: [al publicar].
 
 ## Qué cambia en la web con este texto
 
