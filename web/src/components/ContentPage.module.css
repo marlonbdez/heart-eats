@@ -1,0 +1,28 @@
+.main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+.main h1 {
+  margin: 8px 0;
+  font-size: 1.6rem;
+}
+.main h2 {
+  margin: 32px 0 8px;
+  font-size: 1.2rem;
+}
+.main p,
+.main li {
+  line-height: 1.6;
+}
+.main ul,
+.main ol {
+  padding-left: 24px;
+}
+.main li + li {
+  margin-top: 6px;
+}
+.intro {
+  font-size: 1.1rem;
+  color: var(--muted);
+}

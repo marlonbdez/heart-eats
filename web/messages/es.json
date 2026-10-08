@@ -279,5 +279,109 @@
       "body": "El aviso se envía desde la ficha de cada local: ábrela y pulsa «Sugerir una corrección».",
       "list": "Ver la lista de locales"
     }
+  },
+  "about": {
+    "title": "Qué es HeartEats",
+    "intro": "HeartEats es un mapa colaborativo de negocios de hostelería de Madrid cuyo equipo incluye a personas con discapacidad. Sirve para elegir dónde comer sabiendo quién hay detrás.",
+    "sections": [
+      {
+        "heading": "Por qué existe",
+        "paragraphs": [
+          "Salir a comer es una decisión de todos los días. Queremos que elegir un sitio donde trabajan personas con discapacidad sea fácil, y que se elija por lo que cuenta: buen servicio, buena comida y empleo de calidad."
+        ]
+      },
+      {
+        "heading": "Qué es y qué no es",
+        "items": [
+          "Es una guía de negocios con inclusión laboral real: lo que importa es quién trabaja allí.",
+          "No es una guía de accesibilidad del local (rampas, baños adaptados): para eso ya hay otras herramientas.",
+          "No es una bolsa de empleo.",
+          "No incluye grandes cadenas: son negocios independientes y proyectos con impacto social."
+        ]
+      },
+      {
+        "heading": "Cómo funciona",
+        "items": [
+          "Cualquier persona puede proponer un local o corregir un dato.",
+          "Una persona revisa cada propuesta antes de publicar nada.",
+          "El negocio siempre da el último sí: nadie aparece en el mapa sin saberlo.",
+          "Cada ficha muestra cómo y cuándo se verificó."
+        ]
+      },
+      {
+        "heading": "Las personas del equipo",
+        "paragraphs": [
+          "Por defecto, cada ficha habla del equipo en conjunto. El nombre, la foto o la historia de una persona solo aparecen si ella misma lo decide y da su consentimiento, y puede retirarlo cuando quiera."
+        ]
+      },
+      {
+        "heading": "Abierto y sin ánimo de lucro",
+        "paragraphs": [
+          "HeartEats es un proyecto sin ánimo de lucro. Su código es abierto (licencia AGPL-3.0) y la base de datos de negocios también, con licencia ODbL. Las historias, nombres y fotos de personas quedan fuera de esa licencia. El mapa se apoya en datos abiertos y su atribución está siempre visible."
+        ]
+      },
+      {
+        "heading": "Dónde estamos",
+        "paragraphs": [
+          "Empezamos en Madrid, con la idea de llegar a más ciudades. HeartEats está en construcción: de momento los locales que verás son ejemplos ficticios, marcados como [DEMO]."
+        ]
+      }
+    ]
+  },
+  "verification": {
+    "title": "Cómo verificamos",
+    "intro": "Cada punto del mapa tiene que ser de fiar. Por eso no se publica nada sin que una persona lo haya revisado y sin que el propio negocio lo confirme.",
+    "sections": [
+      {
+        "heading": "Qué pasa con una propuesta",
+        "ordered": true,
+        "items": [
+          "Llega la propuesta. Todavía no es pública.",
+          "Un filtro automático descarta el spam y detecta duplicados.",
+          "Una persona comprueba que el local existe, que es independiente (no una gran cadena ni una franquicia corporativa) y que su equipo es inclusivo, con un enlace, noticias, su web, convenios o referencias de entidades del sector.",
+          "Contactamos con el negocio por un canal oficial para confirmar que quiere aparecer y para ofrecerle contar su equipo con el nivel de detalle que elija.",
+          "Se decide: aprobar, pedir más información o rechazar explicando el motivo. Todo queda registrado."
+        ]
+      },
+      {
+        "heading": "Qué significa cada nivel",
+        "items": [
+          "Datos verificados: los ha comprobado nuestro equipo con una visita, una llamada o documentación contrastada.",
+          "Datos confirmados por la comunidad: los confirma el propio negocio con alguna evidencia, o varias personas independientes."
+        ],
+        "paragraphs": ["Un local sin verificar no se muestra en el mapa."]
+      },
+      {
+        "heading": "Cómo lo comprobamos",
+        "paragraphs": ["Estos son los métodos, de más a menos sólido:"],
+        "items": [
+          "Visita presencial.",
+          "Confirmación directa del negocio, por llamada o por correo al dominio oficial.",
+          "Documentación: convenios, certificaciones o comunicados oficiales.",
+          "Referencias de entidades del sector."
+        ]
+      },
+      {
+        "heading": "Quién puede quedarse fuera",
+        "paragraphs": [
+          "Aceptamos negocios independientes y proyectos con impacto social. No aceptamos grandes cadenas ni franquicias corporativas. Los casos dudosos, como cooperativas o grupos pequeños, se estudian uno a uno."
+        ]
+      },
+      {
+        "heading": "Mantener los datos al día",
+        "items": [
+          "Cada ficha indica el nivel, el método y la fecha de la última verificación.",
+          "Pasados 12 meses, la ficha se marca para revisarla.",
+          "Cualquiera puede sugerir una corrección o la retirada de una ficha.",
+          "El negocio puede pedir cambios o su baja cuando quiera."
+        ]
+      },
+      {
+        "heading": "Privacidad al revisar",
+        "paragraphs": [
+          "Las propuestas de terceros no incluyen datos de las personas del equipo. Si alguien los escribe, se descartan al revisar. El correo de quien propone es privado y solo sirve para preguntarle algo."
+        ]
+      }
+    ]
   }
 }
