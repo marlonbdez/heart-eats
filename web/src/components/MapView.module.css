@@ -97,3 +97,11 @@
   border-radius: 50%;
   box-shadow: 0 0 0 2px rgb(27 110 243 / 0.35);
 }
+
+/* Hasta 960 px la atribución chocaría con el selector Mapa/Lista (centrado
+   abajo): se sube por encima. En pantallas más anchas hay sitio para las dos. */
+@media (max-width: 960px) {
+  .wrap :global(.maplibregl-ctrl-bottom-right) {
+    bottom: 72px;
+  }
+}
