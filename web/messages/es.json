@@ -491,5 +491,110 @@
       "back": "Volver al mapa",
       "again": "Contar el equipo de otro local"
     }
+  },
+  "moderation": {
+    "title": "Moderación",
+    "demo": "Prototipo con datos de ejemplo: nada de lo que hagas aquí se guarda. Con el servidor, se entrará con un enlace enviado al correo de quien modera, y esta pantalla no aparecerá en el menú.",
+    "queueLabel": "Solicitudes",
+    "tabs": {
+      "pending": "Pendientes ({n})",
+      "resolved": "Resueltas ({n})"
+    },
+    "emptyPending": "No queda nada por revisar. Buen trabajo.",
+    "emptyResolved": "Todavía no has resuelto ninguna solicitud.",
+    "choose": "Elige una solicitud de la lista para revisarla.",
+    "back": "Volver a la lista",
+    "kinds": {
+      "new": "Nuevo local",
+      "correction": "Corrección"
+    },
+    "age": "{days, plural, =0 {hoy} one {hace # día} other {hace # días}}",
+    "review": "Revisar",
+    "status": {
+      "approved": "Aprobada",
+      "rejected": "Rechazada",
+      "info": "Info pedida"
+    },
+    "received": "Recibida {age}",
+    "contact": "Contacto de quien propone: {contact}",
+    "noContact": "sin correo",
+    "warningsTitle": "Atención",
+    "warnings": {
+      "duplicate": "Posible duplicado de «{other}» (a {meters} m). Compruébalo antes de aprobar.",
+      "chain": "Parece una cadena con muchos locales (criterio de exclusión). Se recomienda rechazar.",
+      "noEvidence": "No se aportó ninguna prueba del equipo inclusivo."
+    },
+    "proposed": "Datos propuestos",
+    "change": "Cambio propuesto",
+    "food": "Comida",
+    "dishes": "Platos estrella",
+    "howKnown": "Cómo lo conoce quien propone",
+    "evidence": "Enlace aportado",
+    "none": "Sin indicar",
+    "noLink": "Sin enlace",
+    "before": "Antes",
+    "after": "Después",
+    "seePlace": "Ver la ficha",
+    "checksTitle": "Comprobaciones",
+    "checks": {
+      "exists": "El local existe (web, redes o mapa)",
+      "independent": "Es un negocio independiente, no una gran cadena",
+      "inclusive": "Hay pruebas de que su equipo es inclusivo",
+      "owner": "El negocio ha confirmado que quiere aparecer (contacto por canal oficial)",
+      "correct": "He comprobado que el cambio es correcto"
+    },
+    "decisionTitle": "Decisión",
+    "levelLegend": "Nivel de verificación",
+    "levels": {
+      "admin": "🟢 Verificado · lo he comprobado yo",
+      "community": "🟡 Confirmado · lo confirma el negocio"
+    },
+    "methodLegend": "Método",
+    "methods": {
+      "visit": "Visita presencial",
+      "call": "Llamada al negocio",
+      "documentation": "Documentación",
+      "owner_confirmed": "Confirmado por el negocio"
+    },
+    "approveNew": "Aprobar y publicar",
+    "approveEdit": "Aprobar cambio",
+    "askInfo": "Pedir más información",
+    "reject": "Rechazar",
+    "reasonLegend": "Motivo del rechazo",
+    "reasons": {
+      "not_independent": "No es independiente",
+      "no_evidence": "Sin pruebas suficientes",
+      "duplicate": "Duplicado",
+      "out_of_zone": "Fuera de zona",
+      "other": "Otro"
+    },
+    "rejectNote": "Nota para el archivo (opcional)",
+    "infoNote": "Qué necesitas saber (se enviará a quien propuso, si dejó correo)",
+    "confirmReject": "Confirmar rechazo",
+    "confirmInfo": "Enviar petición",
+    "cancel": "Cancelar",
+    "saving": "Guardando…",
+    "errors": {
+      "notReadyNew": "Faltan comprobaciones. Sin ellas, y sin el sí del negocio, no se puede publicar.",
+      "notReadyEdit": "Marca la comprobación antes de aprobar.",
+      "needLevelMethod": "Elige el nivel de verificación y el método.",
+      "needReason": "Elige un motivo para rechazar.",
+      "needNote": "Escribe qué información necesitas.",
+      "save": "No hemos podido guardar la decisión. Puedes intentarlo de nuevo."
+    },
+    "result": {
+      "approvedNew": "Aprobada y publicada",
+      "approvedEdit": "Cambio aplicado",
+      "rejected": "Rechazada",
+      "info": "A la espera de más información"
+    },
+    "auditTitle": "Registro de auditoría",
+    "log": {
+      "received": "Hoy · Sistema · propuesta recibida y filtro automático superado",
+      "approvedNew": "Hoy · Moderación · aprobó y publicó «{name}» como {level} ({method})",
+      "approvedEdit": "Hoy · Moderación · aprobó el cambio en «{name}»",
+      "rejected": "Hoy · Moderación · rechazó «{name}» · motivo: {reason}",
+      "info": "Hoy · Moderación · pidió más información sobre «{name}»"
+    }
   }
 }

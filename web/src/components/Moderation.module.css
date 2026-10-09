@@ -1,0 +1,260 @@
+/* Móvil primero: la lista y el detalle son dos vistas, una a la vez. A partir
+   de 900 px se ven juntas, lista a la izquierda. */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px 32px;
+}
+.main h1 {
+  margin: 8px 0;
+  font-size: 1.6rem;
+}
+.demo {
+  margin: 0 0 16px;
+  padding: 12px;
+  font-size: 0.9rem;
+  background: var(--hover);
+  border-radius: 12px;
+}
+.layout {
+  display: block;
+}
+.layout[data-detail='true'] .queue,
+.layout[data-detail='false'] .detail {
+  display: none;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.tab {
+  min-height: 48px;
+  padding: 0 8px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1.5px solid var(--muted);
+  border-radius: 24px;
+  cursor: pointer;
+}
+.tab[aria-pressed='true'] {
+  color: var(--bg);
+  background: var(--fg);
+  border-color: var(--fg);
+}
+.items {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+}
+.item[aria-current='true'] {
+  background: var(--hover);
+  border-color: var(--fg);
+}
+.itemHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.itemName {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.itemMeta {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.flag {
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-text);
+  border: 1.5px solid var(--accent-text);
+  border-radius: 12px;
+}
+.status {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.empty,
+.choose {
+  margin: 24px 0;
+  color: var(--muted);
+  text-align: center;
+}
+.choose {
+  display: none;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.back {
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 0 4px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.detail h2 {
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+}
+.detail h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.detail h2:focus,
+.detail h2:focus-visible {
+  outline: none;
+}
+.meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.warn {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--accent-text);
+  border-radius: 12px;
+}
+.warn p {
+  margin: 0;
+}
+.warn ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.facts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+.facts dt {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.facts dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+.facts a {
+  color: var(--accent-text);
+}
+.diff {
+  display: grid;
+  gap: 10px;
+}
+.diffBox {
+  padding: 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+}
+.diffBox dt,
+.diffBox p {
+  margin: 0;
+}
+.diffBox strong {
+  font-size: 1.05rem;
+}
+.checks,
+.levels {
+  display: grid;
+  gap: 8px;
+}
+.actions {
+  display: grid;
+  gap: 10px;
+}
+.actions .full {
+  width: 100%;
+}
+.notReady {
+  opacity: 0.6;
+}
+.result {
+  margin: 0;
+  padding: 12px 14px;
+  font-weight: 700;
+  background: var(--hover);
+  border-radius: 12px;
+}
+.log {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+}
+.confirmRow {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 520px) {
+  .diff {
+    grid-template-columns: 1fr 1fr;
+  }
+  .confirmRow,
+  .actions.row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 900px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+  .layout[data-detail] .queue {
+    display: block;
+  }
+  .layout[data-detail] .detail {
+    display: flex;
+  }
+  .choose {
+    display: block;
+    margin-top: 80px;
+  }
+  .back {
+    display: none;
+  }
+}
