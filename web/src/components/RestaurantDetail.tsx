@@ -137,6 +137,9 @@ export function RestaurantDetail({
         <Link href={`/correct/${r.slug}`} className={styles.suggest}>
           {t('suggest')}
         </Link>
+        <Link href={`/business/${r.slug}`} className={styles.suggest}>
+          {t('isYours')}
+        </Link>
       </div>
     </article>
   );

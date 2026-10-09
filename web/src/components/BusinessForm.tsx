@@ -81,11 +81,21 @@ const capitalize = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
 const toggle = <T,>(list: T[], item: T) =>
   list.includes(item) ? list.filter((x) => x !== item) : [...list, item];
 
-export function BusinessForm({ places }: { places: PlaceOption[] }) {
+// `initialSlug`: el local ya elegido, cuando se llega desde su ficha.
+export function BusinessForm({
+  places,
+  initialSlug,
+}: {
+  places: PlaceOption[];
+  initialSlug?: string;
+}) {
   const t = useTranslations('business');
   const tTeam = useTranslations('team');
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormState>(initial);
+  const [form, setForm] = useState<FormState>({
+    ...initial,
+    slug: initialSlug ?? '',
+  });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
     'idle',

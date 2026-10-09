@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BusinessForm } from '@/components/BusinessForm';
-import { getRestaurants } from '@/lib/data';
+import { getPlaceOptions } from './places';
 
 export async function generateMetadata({
   params,
@@ -20,13 +20,6 @@ export default async function BusinessPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const all = await getRestaurants();
-  const places = all
-    .map((r) => ({
-      slug: r.slug,
-      name: r.name,
-      neighborhood: r.address.neighborhood,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name, locale));
+  const places = await getPlaceOptions(locale);
   return <BusinessForm places={places} />;
 }

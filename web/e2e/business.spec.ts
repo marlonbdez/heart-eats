@@ -97,3 +97,19 @@ test('soy de un negocio: existe en inglés y ya no es «próximamente»', async 
     page.getByRole('heading', { name: 'Tell us about your team' }),
   ).toBeVisible();
 });
+
+test('soy de un negocio: desde la ficha, el local ya viene elegido', async ({
+  page,
+}) => {
+  await page.goto('/es/place/demo-la-masa-madre');
+  await page.getByRole('link', { name: /¿Es tu local\?/ }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Cuenta tu equipo' }),
+  ).toBeVisible();
+  await expect(page.getByLabel('¿De qué local se trata?')).toHaveValue(
+    'demo-la-masa-madre',
+  );
+  // Sin tocar nada más, se puede seguir al paso 2.
+  await page.getByRole('button', { name: 'Empezar' }).click();
+  await expect(page.getByText('Paso 2 de 4')).toBeVisible();
+});
