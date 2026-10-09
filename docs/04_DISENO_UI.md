@@ -67,7 +67,7 @@ Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
 - Antispam: honeypot y rate limit. ❓ Guardar borrador si se sale.
 
 ### F3 · Negocio cuenta su equipo y da los consentimientos
-Pantalla para el negocio (acceso desde el menú "Soy de un negocio" o desde el contacto de moderación). **4 pasos**:
+Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el enlace «¿Es tu local?» de cada ficha —que deja el local ya elegido, `/business/[slug]`— o desde el contacto de moderación). **4 pasos**:
 1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 7 días ❓). Aquí se elige también **de qué local se trata** (lista de locales; si no está, enlace a «Proponer un local»).
 2. **Nivel:** tres tarjetas con ejemplo de cómo se verá: **Solo cifras** (recomendado para empezar), **Áreas y tipos**, **Historias con nombre** (solo con permiso de cada persona).
 3. **Datos:** personas en el equipo y cuántas tienen discapacidad (validaciones: ≥1, ≤ total); en nivel medio, áreas y tipos de discapacidad sin identificar; en nivel máximo, hasta 3 historias, cada una con **su propio consentimiento** (la persona o su representante legal).
