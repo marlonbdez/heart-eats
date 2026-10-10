@@ -22,13 +22,9 @@ const CARD_CLEARANCE = 290;
 export function MapView({
   restaurants,
   focus = false,
-  onCardOpenChange,
 }: {
   restaurants: Restaurant[];
   focus?: boolean;
-  // La ficha emergente ocupa el sitio del conmutador Mapa/Lista: quien lo
-  // pinta lo oculta mientras esté abierta.
-  onCardOpenChange?: (open: boolean) => void;
 }) {
   const t = useTranslations();
   const { position } = useLocation();
@@ -234,11 +230,6 @@ export function MapView({
   };
 
   const current = restaurants.find((r) => r.slug === selected);
-  const cardOpen = current !== undefined;
-  useEffect(() => {
-    onCardOpenChange?.(cardOpen);
-    return () => onCardOpenChange?.(false);
-  }, [cardOpen, onCardOpenChange]);
 
   return (
     <div className={styles.wrap}>
