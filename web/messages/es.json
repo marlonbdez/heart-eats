@@ -359,7 +359,9 @@
       },
       {
         "heading": "Cómo lo comprobamos",
-        "paragraphs": ["Usamos estos métodos, del más al menos sólido:"],
+        "paragraphs": [
+          "Usamos estos métodos, del más al menos sólido:"
+        ],
         "items": [
           "Una visita al local.",
           "La confirmación directa del negocio, por teléfono o por correo desde su dominio oficial.",
@@ -641,7 +643,7 @@
   },
   "moderation": {
     "title": "Moderación",
-    "demo": "Prototipo con datos de ejemplo: nada de lo que hagas aquí se guarda. Con el servidor, se entrará con un enlace enviado al correo de quien modera, y esta pantalla no aparecerá en el menú.",
+    "demo": "Prototipo con datos de ejemplo. Lo que envíes tú desde este navegador aparece aquí arriba y se guarda solo en tu dispositivo. Las decisiones no se guardan. Con el servidor, se entrará con un enlace enviado al correo de quien modera, y esta pantalla no aparecerá en el menú.",
     "queueLabel": "Solicitudes",
     "tabs": {
       "pending": "Pendientes ({n})",
@@ -653,7 +655,8 @@
     "back": "Volver a la lista",
     "kinds": {
       "new": "Nuevo local",
-      "correction": "Corrección"
+      "correction": "Corrección",
+      "team": "Equipo"
     },
     "age": "{days, plural, =0 {hoy} one {hace # día} other {hace # días}}",
     "review": "Revisar",
@@ -688,7 +691,10 @@
       "independent": "Es un negocio independiente, no una gran cadena",
       "inclusive": "Hay pruebas de que su equipo es inclusivo",
       "owner": "El negocio ha confirmado que quiere aparecer (contacto por canal oficial)",
-      "correct": "He comprobado que el cambio es correcto"
+      "correct": "He comprobado que el cambio es correcto",
+      "teamOwner": "He confirmado con el negocio, por un canal oficial, que quien envía lo representa",
+      "teamFigures": "Las cifras son coherentes (al menos una persona; no más con discapacidad que en total)",
+      "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal"
     },
     "decisionTitle": "Decisión",
     "levelLegend": "Nivel de verificación",
@@ -727,13 +733,15 @@
       "needLevelMethod": "Elige el nivel de verificación y el método.",
       "needReason": "Elige un motivo para rechazar.",
       "needNote": "Escribe qué información necesitas.",
-      "save": "No hemos podido guardar la decisión. Puedes intentarlo de nuevo."
+      "save": "No hemos podido guardar la decisión. Puedes intentarlo de nuevo.",
+      "notReadyTeam": "Faltan comprobaciones. Sin la confirmación del negocio y los consentimientos, el equipo no se publica."
     },
     "result": {
       "approvedNew": "Aprobada y publicada",
       "approvedEdit": "Cambio aplicado",
       "rejected": "Rechazada",
-      "info": "A la espera de más información"
+      "info": "A la espera de más información",
+      "approvedTeam": "Equipo publicado"
     },
     "auditTitle": "Registro de auditoría",
     "log": {
@@ -741,7 +749,20 @@
       "approvedNew": "Hoy · Moderación · aprobó y publicó «{name}» como {level} ({method})",
       "approvedEdit": "Hoy · Moderación · aprobó el cambio en «{name}»",
       "rejected": "Hoy · Moderación · rechazó «{name}» · motivo: {reason}",
-      "info": "Hoy · Moderación · pidió más información sobre «{name}»"
-    }
+      "info": "Hoy · Moderación · pidió más información sobre «{name}»",
+      "approvedTeam": "Hoy · Moderación · aprobó y publicó el equipo de «{name}»"
+    },
+    "mine": "Tienes {n, plural, one {# envío de prueba hecho} other {# envíos de prueba hechos}} desde este navegador.",
+    "clearMine": "Borrar mis envíos de prueba",
+    "proposal": "Propuesta",
+    "teamTitle": "Equipo que cuenta el negocio",
+    "teamLevel": "Nivel elegido",
+    "teamPeople": "Personas",
+    "teamPeopleValue": "{with} de {total} con discapacidad",
+    "teamAreas": "Áreas",
+    "teamTypes": "Tipos de discapacidad",
+    "teamStories": "Historias",
+    "teamStoriesValue": "{n, plural, =0 {Ninguna} one {# historia, con su consentimiento} other {# historias, cada una con su consentimiento}}. Aquí no se muestran nombres ni textos.",
+    "approveTeam": "Aprobar y publicar el equipo"
   }
 }

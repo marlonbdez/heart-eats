@@ -15,6 +15,8 @@ import styles from './Moderation.module.css';
 
 const CHECKS_NEW = ['exists', 'independent', 'inclusive', 'owner'] as const;
 const CHECKS_EDIT = ['correct'] as const;
+const CHECKS_TEAM = ['teamOwner', 'teamFigures'] as const;
+const CHECK_TEAM_STORIES = 'teamConsents';
 const LEVELS: VerificationLevel[] = ['admin', 'community'];
 const METHODS: VerificationMethod[] = [
   'visit',
@@ -42,8 +44,19 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
   const tCard = useTranslations('card');
   const tFood = useTranslations('foodTags');
   const tKinds = useTranslations('correct.kinds');
+  const tTeam = useTranslations('team');
+  const tBusiness = useTranslations('business.levels');
   const isNew = item.kind === 'new';
-  const checkKeys = isNew ? CHECKS_NEW : CHECKS_EDIT;
+  const isTeam = item.kind === 'team';
+  // Claves de los textos que cambian según el tipo de solicitud.
+  const k = item.kind === 'new' ? 'New' : isTeam ? 'Team' : 'Edit';
+  const checkKeys: readonly string[] = isNew
+    ? CHECKS_NEW
+    : isTeam
+      ? item.team && item.team.stories > 0
+        ? [...CHECKS_TEAM, CHECK_TEAM_STORIES]
+        : CHECKS_TEAM
+      : CHECKS_EDIT;
 
   const [checks, setChecks] = useState<Record<string, boolean>>({});
   const [level, setLevel] = useState<VerificationLevel | null>(null);
@@ -80,7 +93,7 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
 
   function approve() {
     if (!allChecked) {
-      setError(t(isNew ? 'errors.notReadyNew' : 'errors.notReadyEdit'));
+      setError(t('errors.notReady' + k));
     } else if (isNew && (!level || !method)) {
       setError(t('errors.needLevelMethod'));
     } else {
@@ -116,6 +129,7 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
       return t('log.rejected', { name, reason: t(`reasons.${d.reason}`) });
     }
     if (d.action === 'ask_info') return t('log.info', { name });
+    if (isTeam) return t('log.approvedTeam', { name });
     if (!isNew || !d.level || !d.method) return t('log.approvedEdit', { name });
     return t('log.approvedNew', {
       name,
@@ -127,7 +141,7 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
   function resultText(d: ModerationDecision): string {
     if (d.action === 'reject') return t('result.rejected');
     if (d.action === 'ask_info') return t('result.info');
-    return t(isNew ? 'result.approvedNew' : 'result.approvedEdit');
+    return t('result.approved' + k);
   }
 
   return (
@@ -172,21 +186,75 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
         </div>
       )}
 
-      {item.correction ? (
+      {item.team ? (
+        <section aria-labelledby="mod-team" className={form.step}>
+          <h3 id="mod-team">{t('teamTitle')}</h3>
+          <dl className={styles.facts}>
+            <div>
+              <dt>{t('teamLevel')}</dt>
+              <dd>{tBusiness(`${item.team.level}.title`)}</dd>
+            </div>
+            <div>
+              <dt>{t('teamPeople')}</dt>
+              <dd>
+                {t('teamPeopleValue', {
+                  with: item.team.staffWithDisability,
+                  total: item.team.totalStaff,
+                })}
+              </dd>
+            </div>
+            {item.team.areas && item.team.areas.length > 0 && (
+              <div>
+                <dt>{t('teamAreas')}</dt>
+                <dd>
+                  {item.team.areas.map((a) => tTeam(`areaNames.${a}`)).join(' · ')}
+                </dd>
+              </div>
+            )}
+            {item.team.disabilityTypes &&
+              item.team.disabilityTypes.length > 0 && (
+                <div>
+                  <dt>{t('teamTypes')}</dt>
+                  <dd>
+                    {item.team.disabilityTypes
+                      .map((d) => tTeam(`categories.${d}`))
+                      .join(' · ')}
+                  </dd>
+                </div>
+              )}
+            <div>
+              <dt>{t('teamStories')}</dt>
+              <dd>{t('teamStoriesValue', { n: item.team.stories })}</dd>
+            </div>
+          </dl>
+          {item.restaurantSlug && (
+            <Link
+              href={`/place/${item.restaurantSlug}`}
+              className={form.linkButton}
+            >
+              {t('seePlace')}
+            </Link>
+          )}
+        </section>
+      ) : item.correction ? (
         <section aria-labelledby="mod-change" className={form.step}>
           <h3 id="mod-change">{t('change')}</h3>
           <p className={form.summary}>
             <strong>{tKinds(item.correction.kind)}</strong>
           </p>
           <dl className={styles.diff}>
+            {item.correction.before && (
+              <div className={styles.diffBox}>
+                <dt className={styles.tag}>{t('before')}</dt>
+                <dd style={{ margin: 0 }}>
+                  <strong>{item.correction.before}</strong>
+                </dd>
+              </div>
+            )}
             <div className={styles.diffBox}>
-              <dt className={styles.tag}>{t('before')}</dt>
-              <dd style={{ margin: 0 }}>
-                <strong>{item.correction.before}</strong>
-              </dd>
-            </div>
-            <div className={styles.diffBox}>
-              <dt className={styles.tag}>{t('after')}</dt>
+              <dt className={styles.tag}>
+                {t(item.correction.before ? 'after' : 'proposal')}
+              </dt>
               <dd style={{ margin: 0 }}>
                 <strong>{item.correction.after}</strong>
               </dd>
@@ -364,7 +432,7 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
                 disabled={saving}
                 onClick={approve}
               >
-                {saving ? t('saving') : t(isNew ? 'approveNew' : 'approveEdit')}
+                {saving ? t('saving') : t('approve' + k)}
               </button>
               <button
                 type="button"

@@ -2,9 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { decideModeration } from '@/lib/data';
+import {
+  clearDemoSubmissions,
+  decideModeration,
+  getDemoSubmissions,
+} from '@/lib/data';
 import type { ModerationDecision, ModerationItem } from '@/lib/types';
 import { ModerationDetail } from './ModerationDetail';
+import form from './Form.module.css';
 import styles from './Moderation.module.css';
 
 type Tab = 'pending' | 'resolved';
@@ -13,13 +18,20 @@ const STATUS = { approve: 'approved', reject: 'rejected', ask_info: 'info' };
 
 // Pantalla de moderación (F5). En el móvil la lista y el detalle son dos
 // vistas, una a la vez; en pantallas anchas se ven juntas.
-export function ModerationPanel({ items }: { items: ModerationItem[] }) {
+export function ModerationPanel({ items: examples }: { items: ModerationItem[] }) {
   const t = useTranslations('moderation');
+  // Envíos hechos desde este navegador (solo se leen en el cliente).
+  const [mine, setMine] = useState<ModerationItem[]>([]);
+  const items = [...mine, ...examples];
   const [tab, setTab] = useState<Tab>('pending');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<
     Record<string, ModerationDecision>
   >({});
+  useEffect(() => {
+    void getDemoSubmissions().then(setMine);
+  }, []);
+
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabRef = useRef<HTMLButtonElement>(null);
   const lastId = useRef<string | null>(null);
@@ -42,6 +54,12 @@ export function ModerationPanel({ items }: { items: ModerationItem[] }) {
     setSelectedId(id);
   }
 
+  async function clearMine() {
+    await clearDemoSubmissions();
+    if (selected && mine.some((m) => m.id === selected.id)) setSelectedId(null);
+    setMine([]);
+  }
+
   async function decide(item: ModerationItem, decision: ModerationDecision) {
     await decideModeration(item.id, decision);
     setDecisions((d) => ({ ...d, [item.id]: decision }));
@@ -51,6 +69,14 @@ export function ModerationPanel({ items }: { items: ModerationItem[] }) {
     <main id="contenido" tabIndex={-1} className={styles.main}>
       <h1>{t('title')}</h1>
       <p className={styles.demo}>{t('demo')}</p>
+      {mine.length > 0 && (
+        <p className={styles.demo}>
+          {t('mine', { n: mine.length })}{' '}
+          <button type="button" className={form.linkButton} onClick={clearMine}>
+            {t('clearMine')}
+          </button>
+        </p>
+      )}
       <div className={styles.layout} data-detail={selected ? 'true' : 'false'}>
         <section className={styles.queue} aria-label={t('queueLabel')}>
           <div
