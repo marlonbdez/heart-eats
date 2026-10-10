@@ -87,6 +87,7 @@ Si cambia algo importante, lo actualizaremos aquí y cambiaremos la fecha. ❓ F
 Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple todo salvo lo que depende del backend:
 
 - ✅ Sin cookies ni analítica en la web.
+- ✅ `/removal` («Pedir una retirada»): formulario sin cuenta para retirar una historia, una foto o una ficha, o ejercer otro derecho. Pide un correo para confirmar la identidad antes de ocultar nada. ❓ Plazo de ocultación tras la confirmación: hoy el texto dice «en cuanto lo confirmemos»; debe encajar con el «al instante» de los consentimientos y con el plazo de borrado (7 días ❓). Revisar con asesoría legal.
 - ⚠️ Excepción temporal del prototipo: tras enviar un formulario, `web/src/lib/data/outbox.ts` guarda en el `localStorage` del propio navegador un resumen (sin correo entero, sin nombres ni textos de historias) para mostrarlo en `/moderation`. No sale del dispositivo, se puede borrar desde esa pantalla y desaparece cuando exista el servidor. Revisar si hay que avisarlo antes de abrir al público (junto a la política de cookies).
 - ✅ La ubicación solo se pide tras pulsar «Cerca de mí» y se queda en el dispositivo.
 - ✅ Los formularios avisan de no escribir nombres ni datos de salud, y enlazan a esta política.

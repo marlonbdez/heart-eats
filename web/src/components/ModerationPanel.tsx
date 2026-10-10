@@ -18,7 +18,11 @@ const STATUS = { approve: 'approved', reject: 'rejected', ask_info: 'info' };
 
 // Pantalla de moderación (F5). En el móvil la lista y el detalle son dos
 // vistas, una a la vez; en pantallas anchas se ven juntas.
-export function ModerationPanel({ items: examples }: { items: ModerationItem[] }) {
+export function ModerationPanel({
+  items: examples,
+}: {
+  items: ModerationItem[];
+}) {
   const t = useTranslations('moderation');
   // Envíos hechos desde este navegador (solo se leen en el cliente).
   const [mine, setMine] = useState<ModerationItem[]>([]);

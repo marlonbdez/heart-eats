@@ -30,7 +30,8 @@
       "verify": "Cómo verificamos",
       "privacy": "Privacidad y datos",
       "contact": "Contacto",
-      "moderation": "Moderar propuestas (demo)"
+      "moderation": "Moderar propuestas (demo)",
+      "removal": "Pedir una retirada"
     },
     "language": "Idioma"
   },
@@ -572,6 +573,12 @@
         "paragraphs": [
           "Puedes pedirnos acceder a tus datos, rectificarlos, suprimirlos, limitar su uso, oponerte a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes retirarlo cuando quieras, y eso no afecta a lo ya tratado. Te responderemos en un plazo máximo de un mes.",
           "Si alguna vez sientes que no hemos cuidado bien tus datos, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es). Antes de eso, nos encantará poder aclararlo contigo."
+        ],
+        "links": [
+          {
+            "label": "Pedir una retirada",
+            "href": "/removal"
+          }
         ]
       },
       {
@@ -623,8 +630,14 @@
       {
         "heading": "Retirar una historia o ejercer tus derechos",
         "paragraphs": [
-          "Para retirar una historia, una foto o una ficha, o para ejercer tus derechos sobre tus datos, tendrás una dirección de correo. Todavía la estamos preparando y estará lista antes de abrir el proyecto al público.",
-          "Hasta entonces, no escribas datos personales en un canal público."
+          "Para retirar una historia, una foto o una ficha, tienes un formulario en la web: no hace falta cuenta ni dar explicaciones. Te escribimos al correo que dejes para confirmar que eres tú.",
+          "Para otros derechos sobre tus datos, tendrás además una dirección de correo. Todavía la estamos preparando y estará lista antes de abrir el proyecto al público. Hasta entonces, no escribas datos personales en un canal público."
+        ],
+        "links": [
+          {
+            "label": "Pedir una retirada",
+            "href": "/removal"
+          }
         ]
       },
       {
@@ -656,7 +669,8 @@
     "kinds": {
       "new": "Nuevo local",
       "correction": "Corrección",
-      "team": "Equipo"
+      "team": "Equipo",
+      "removal": "Retirada"
     },
     "age": "{days, plural, =0 {hoy} one {hace # día} other {hace # días}}",
     "review": "Revisar",
@@ -694,7 +708,8 @@
       "correct": "He comprobado que el cambio es correcto",
       "teamOwner": "He confirmado con el negocio, por un canal oficial, que quien envía lo representa",
       "teamFigures": "Las cifras son coherentes (al menos una persona; no más con discapacidad que en total)",
-      "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal"
+      "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal",
+      "removalIdentity": "He confirmado, por el correo, que quien lo pide es la persona o su representante"
     },
     "decisionTitle": "Decisión",
     "levelLegend": "Nivel de verificación",
@@ -734,14 +749,16 @@
       "needReason": "Elige un motivo para rechazar.",
       "needNote": "Escribe qué información necesitas.",
       "save": "No hemos podido guardar la decisión. Puedes intentarlo de nuevo.",
-      "notReadyTeam": "Faltan comprobaciones. Sin la confirmación del negocio y los consentimientos, el equipo no se publica."
+      "notReadyTeam": "Faltan comprobaciones. Sin la confirmación del negocio y los consentimientos, el equipo no se publica.",
+      "notReadyRemoval": "Falta confirmar la identidad. Sin eso no se retira nada."
     },
     "result": {
       "approvedNew": "Aprobada y publicada",
       "approvedEdit": "Cambio aplicado",
       "rejected": "Rechazada",
       "info": "A la espera de más información",
-      "approvedTeam": "Equipo publicado"
+      "approvedTeam": "Equipo publicado",
+      "approvedRemoval": "Retirado"
     },
     "auditTitle": "Registro de auditoría",
     "log": {
@@ -750,7 +767,8 @@
       "approvedEdit": "Hoy · Moderación · aprobó el cambio en «{name}»",
       "rejected": "Hoy · Moderación · rechazó «{name}» · motivo: {reason}",
       "info": "Hoy · Moderación · pidió más información sobre «{name}»",
-      "approvedTeam": "Hoy · Moderación · aprobó y publicó el equipo de «{name}»"
+      "approvedTeam": "Hoy · Moderación · aprobó y publicó el equipo de «{name}»",
+      "approvedRemoval": "Hoy · Moderación · retiró lo pedido en «{name}»"
     },
     "mine": "Tienes {n, plural, one {# envío de prueba hecho} other {# envíos de prueba hechos}} desde este navegador.",
     "clearMine": "Borrar mis envíos de prueba",
@@ -763,6 +781,59 @@
     "teamTypes": "Tipos de discapacidad",
     "teamStories": "Historias",
     "teamStoriesValue": "{n, plural, =0 {Ninguna} one {# historia, con su consentimiento} other {# historias, cada una con su consentimiento}}. Aquí no se muestran nombres ni textos.",
-    "approveTeam": "Aprobar y publicar el equipo"
+    "approveTeam": "Aprobar y publicar el equipo",
+    "removalTitle": "Qué se pide retirar",
+    "removalWhat": "Qué",
+    "removalDetails": "Detalles",
+    "approveRemoval": "Retirar ahora"
+  },
+  "removal": {
+    "title": "Pedir una retirada",
+    "stepOf": "Paso {n} de {total}",
+    "steps": {
+      "1": "Qué retirar",
+      "2": "Dónde",
+      "3": "Enviar"
+    },
+    "prev": "Atrás",
+    "next": "Continuar",
+    "send": "Enviar petición",
+    "sending": "Enviando…",
+    "optional": "(opcional)",
+    "sendError": "No hemos podido enviar la petición. Cuando quieras, puedes intentarlo de nuevo.",
+    "whats": {
+      "story": "Una historia (la mía o la de alguien a quien represento)",
+      "photo": "Una foto",
+      "listing": "La ficha entera de un local",
+      "data": "Otra cosa sobre mis datos personales"
+    },
+    "s1": {
+      "intro": "Puedes pedirlo sin cuenta y sin dar explicaciones. Quien da su historia o su foto puede retirarla cuando quiera.",
+      "question": "¿Qué quieres que retiremos?",
+      "error": "Elige qué quieres retirar para poder continuar."
+    },
+    "s2": {
+      "intro": "Dinos en qué local aparece, para que podamos encontrarlo.",
+      "place": "¿En qué local aparece?",
+      "placeholder": "Elige el local",
+      "placeError": "Elige el local para poder continuar.",
+      "details": "¿Algo más que nos ayude a encontrarlo?",
+      "detailsHint": "Por ejemplo, el nombre o el seudónimo que aparece. Por favor, no escribas datos de salud ni nombres de otras personas."
+    },
+    "s3": {
+      "intro": "Necesitamos un correo para confirmar que eres tú o su representante. Así nadie puede retirar nada en nombre de otra persona.",
+      "email": "Tu correo",
+      "emailHint": "Solo lo ve el equipo de moderación y se borra cuando termine la gestión.",
+      "emailError": "Escribe un correo válido para poder continuar.",
+      "summary": "Resumen",
+      "consent": "Al enviarla aceptas que usemos tu correo solo para gestionar esta petición. Más en",
+      "privacy": "Privacidad y datos"
+    },
+    "done": {
+      "title": "Petición recibida",
+      "body": "Te escribiremos al correo que nos has dado para confirmar que eres tú. En cuanto lo confirmemos, retiraremos lo que has pedido.",
+      "back": "Volver al mapa",
+      "again": "Hacer otra petición"
+    }
   }
 }

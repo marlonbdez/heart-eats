@@ -151,9 +151,23 @@ export interface BusinessTeamInput {
   website?: string; // honeypot: debe llegar vacío
 }
 
+// Qué se pide retirar. «data» es cualquier otro derecho sobre los propios datos.
+export type RemovalWhat = 'story' | 'photo' | 'listing' | 'data';
+
+// Petición de retirada. Entra en moderación, que escribe al correo para
+// confirmar que quien la hace es quien dice ser antes de ocultar nada.
+export interface RemovalInput {
+  restaurantSlug: string;
+  what: RemovalWhat;
+  details?: string; // sin datos de salud ni nombres de terceros
+  contactEmail: string; // privado, obligatorio para poder confirmar
+  website?: string; // honeypot: debe llegar vacío
+}
+
 // Moderación (F5). Una solicitud en cola es una propuesta de local nuevo (F2),
-// una corrección (F4) o el equipo que cuenta un negocio (F3).
-export type ModerationKind = 'new' | 'correction' | 'team';
+// una corrección (F4), el equipo que cuenta un negocio (F3) o una petición de
+// retirada.
+export type ModerationKind = 'new' | 'correction' | 'team' | 'removal';
 
 // Avisos que el filtro automático deja a la persona que modera.
 export type ModerationWarning =
@@ -179,6 +193,8 @@ export interface ModerationItem {
   restaurantSlug?: string;
   // `before` falta cuando la corrección es un texto libre sin valor previo.
   correction?: { kind: CorrectionKind; before?: string; after: string };
+  // Solo en una petición de retirada.
+  removal?: { what: RemovalWhat; details?: string };
   // Solo en el equipo de un negocio (F3). Nunca lleva nombres ni textos de
   // historias: solo cuántas hay (una historia sin consentimiento no se envía).
   team?: {

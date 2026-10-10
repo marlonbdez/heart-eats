@@ -7,6 +7,7 @@ import type {
   ModerationDecision,
   ModerationItem,
   ProposalInput,
+  RemovalInput,
   Restaurant,
   RestaurantQuery,
 } from '../types';
@@ -100,6 +101,25 @@ export async function submitBusinessTeam(
       disabilityTypes: input.disabilityTypes,
       stories: input.stories?.length ?? 0,
     },
+  });
+}
+
+// Petición de retirada: simulada hasta que exista POST /api/v1/removals.
+export async function submitRemoval(input: RemovalInput): Promise<void> {
+  if (input.website) return; // honeypot: se descarta en silencio
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const place = restaurants.find((r) => r.slug === input.restaurantSlug);
+  addToOutbox({
+    kind: 'removal',
+    name: place?.name ?? input.restaurantSlug,
+    neighborhood: place?.address.neighborhood ?? place?.address.city ?? '',
+    address: place
+      ? `${place.address.street}, ${place.address.city}`
+      : input.restaurantSlug,
+    contactMasked: maskEmail(input.contactEmail),
+    warnings: [],
+    restaurantSlug: input.restaurantSlug,
+    removal: { what: input.what, details: input.details },
   });
 }
 
