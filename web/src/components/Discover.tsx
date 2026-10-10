@@ -121,7 +121,6 @@ export function Discover({
             <MapLoader restaurants={visible} focus={hasFilters} />
             <div className={styles.barMap}>
               <ViewSwitch view={view} query={query} />
-              <NearMeButton />
             </div>
             {status !== 'idle' && <NearMeNotice className={styles.mapNotice} />}
           </>
@@ -129,7 +128,6 @@ export function Discover({
           <div className={styles.listScroll}>
             <div className={styles.barList}>
               <ViewSwitch view={view} query={query} />
-              <NearMeButton />
             </div>
             <div className={styles.listHeader}>
               <p role="status" className={styles.count}>
@@ -146,6 +144,11 @@ export function Discover({
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+        {view === 'list' && visible.length > 0 && (
+          <div className={styles.nearMeFloat}>
+            <NearMeButton />
           </div>
         )}
         {visible.length === 0 && suggestions.length === 0 && (

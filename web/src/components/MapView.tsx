@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation';
 import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
+import { NearMeButton } from './NearMe';
 import { RestaurantCard } from './RestaurantCard';
 import styles from './MapView.module.css';
 
@@ -267,6 +268,11 @@ export function MapView({
           </button>
           <RestaurantCard restaurant={current} />
         </aside>
+      )}
+      {!current && restaurants.length > 0 && (
+        <div className={styles.nearMe}>
+          <NearMeButton />
+        </div>
       )}
     </div>
   );

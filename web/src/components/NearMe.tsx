@@ -29,7 +29,7 @@ export function NearMeButton() {
         <circle cx="12" cy="12" r="7" />
         <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
       </svg>
-      <span className={styles.label}>{t('button')}</span>
+      {t('button')}
     </button>
   );
 }

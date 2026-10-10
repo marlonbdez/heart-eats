@@ -23,22 +23,3 @@
   cursor: progress;
   opacity: 0.7;
 }
-
-/* En el móvil solo se ve el icono (redondo, de 44 px): el texto sigue ahí para
-   los lectores de pantalla. Desde 520 px cabe con texto. */
-@media (max-width: 519px) {
-  .button {
-    justify-content: center;
-    width: 44px;
-    padding: 0;
-    border-radius: 50%;
-  }
-  .label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-}

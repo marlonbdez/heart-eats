@@ -69,6 +69,15 @@
   cursor: pointer;
 }
 
+/* «Cerca de mí»: abajo a la derecha, encima de la atribución del mapa. Con la
+   ficha abierta no se muestra: ocupa ese sitio. */
+.nearMe {
+  position: absolute;
+  right: 12px;
+  bottom: 68px;
+  z-index: 6;
+}
+
 .error {
   position: absolute;
   top: 12px;
