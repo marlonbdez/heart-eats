@@ -1,7 +1,7 @@
 .switch {
   position: absolute;
   left: 50%;
-  bottom: 20px;
+  bottom: 68px; /* por encima de la atribución del mapa */
   z-index: 6;
   display: inline-flex;
   padding: 4px;

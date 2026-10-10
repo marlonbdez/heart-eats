@@ -14,7 +14,7 @@ import styles from './MapView.module.css';
 
 type MapLibre = typeof import('maplibre-gl');
 
-// Alto que tapan la tarjeta de vista previa y el conmutador, desde abajo.
+// Alto que tapa la tarjeta de vista previa, desde abajo.
 const CARD_CLEARANCE = 290;
 
 // `focus`: hay búsqueda o filtros activos, así que el mapa se encuadra sobre
@@ -22,9 +22,13 @@ const CARD_CLEARANCE = 290;
 export function MapView({
   restaurants,
   focus = false,
+  onCardOpenChange,
 }: {
   restaurants: Restaurant[];
   focus?: boolean;
+  // La ficha emergente ocupa el sitio del conmutador Mapa/Lista: quien lo
+  // pinta lo oculta mientras esté abierta.
+  onCardOpenChange?: (open: boolean) => void;
 }) {
   const t = useTranslations();
   const { position } = useLocation();
@@ -230,6 +234,11 @@ export function MapView({
   };
 
   const current = restaurants.find((r) => r.slug === selected);
+  const cardOpen = current !== undefined;
+  useEffect(() => {
+    onCardOpenChange?.(cardOpen);
+    return () => onCardOpenChange?.(false);
+  }, [cardOpen, onCardOpenChange]);
 
   return (
     <div className={styles.wrap}>
