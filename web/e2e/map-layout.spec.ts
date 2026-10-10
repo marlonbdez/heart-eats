@@ -39,3 +39,24 @@ test('con la ficha de un local abierta, el conmutador se oculta', async ({
   await page.getByRole('button', { name: 'Cerrar' }).click();
   await expect(view).toBeVisible();
 });
+
+test('en la lista el conmutador queda abajo, centrado y sin tapar nada', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.goto('/es/list');
+  const view = page.getByRole('navigation', { name: 'Vista' });
+  const v = (await view.boundingBox())!;
+  // Pegado al borde inferior (no flotando como sobre el mapa) y centrado.
+  expect(700 - (v.y + v.height)).toBeLessThanOrEqual(24);
+  expect(Math.abs(v.x + v.width / 2 - 390 / 2)).toBeLessThan(2);
+  // Al final de la lista el último local no queda tapado.
+  const last = page.getByRole('link', { name: /Ver local/ }).last();
+  await last.evaluate((el) => {
+    let p = el.parentElement;
+    while (p && p.scrollHeight <= p.clientHeight) p = p.parentElement;
+    p?.scrollTo(0, p.scrollHeight);
+  });
+  const l = (await last.boundingBox())!;
+  expect(l.y + l.height).toBeLessThanOrEqual(v.y);
+});
