@@ -51,13 +51,22 @@
 }
 /* Barra superior: conmutador Mapa/Lista y «Cerca de mí». Arriba y no abajo,
    para no tapar la atribución del mapa (obligatoria) ni el pulgar. */
+/* El conmutador va centrado y «Cerca de mí» a la derecha. */
 .barMap,
 .barList {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
+}
+.barMap > :first-child,
+.barList > :first-child {
+  grid-column: 2;
+}
+.barMap > :last-child,
+.barList > :last-child {
+  grid-column: 3;
+  justify-self: end;
 }
 .barMap {
   position: absolute;
