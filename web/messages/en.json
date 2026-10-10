@@ -359,7 +359,9 @@
       },
       {
         "heading": "How we check",
-        "paragraphs": ["We use these methods, from strongest to weakest:"],
+        "paragraphs": [
+          "We use these methods, from strongest to weakest:"
+        ],
         "items": [
           "A visit to the place.",
           "Direct confirmation from the business, by phone or by email from its official domain.",
@@ -641,7 +643,7 @@
   },
   "moderation": {
     "title": "Moderation",
-    "demo": "Prototype with sample data: nothing you do here is saved. Once there is a server, moderators will sign in with a link sent to their email, and this screen will not appear in the menu.",
+    "demo": "Prototype with sample data. What you send from this browser shows up at the top and is stored only on your device. Decisions are not saved. With the server, moderators will sign in with a link sent to their email, and this screen will not appear in the menu.",
     "queueLabel": "Requests",
     "tabs": {
       "pending": "Pending ({n})",
@@ -653,7 +655,8 @@
     "back": "Back to the list",
     "kinds": {
       "new": "New place",
-      "correction": "Correction"
+      "correction": "Correction",
+      "team": "Team"
     },
     "age": "{days, plural, =0 {today} one {# day ago} other {# days ago}}",
     "review": "Check",
@@ -688,7 +691,10 @@
       "independent": "It is an independent business, not a large chain",
       "inclusive": "There is evidence that its team is inclusive",
       "owner": "The business has confirmed it wants to appear (contacted through an official channel)",
-      "correct": "I have checked that the change is correct"
+      "correct": "I have checked that the change is correct",
+      "teamOwner": "I have confirmed through an official channel that the sender represents the business",
+      "teamFigures": "The figures make sense (at least one person; not more with a disability than in total)",
+      "teamConsents": "Each story comes with consent from the person or their legal representative"
     },
     "decisionTitle": "Decision",
     "levelLegend": "Verification level",
@@ -727,13 +733,15 @@
       "needLevelMethod": "Choose the verification level and the method.",
       "needReason": "Choose a reason for rejecting.",
       "needNote": "Write what information you need.",
-      "save": "We could not save the decision. You can try again."
+      "save": "We could not save the decision. You can try again.",
+      "notReadyTeam": "Some checks are missing. Without the business's confirmation and the consents, the team is not published."
     },
     "result": {
       "approvedNew": "Approved and published",
       "approvedEdit": "Change applied",
       "rejected": "Rejected",
-      "info": "Waiting for more information"
+      "info": "Waiting for more information",
+      "approvedTeam": "Team published"
     },
     "auditTitle": "Audit log",
     "log": {
@@ -741,7 +749,20 @@
       "approvedNew": "Today · Moderation · approved and published «{name}» as {level} ({method})",
       "approvedEdit": "Today · Moderation · approved the change to «{name}»",
       "rejected": "Today · Moderation · rejected «{name}» · reason: {reason}",
-      "info": "Today · Moderation · asked for more information about «{name}»"
-    }
+      "info": "Today · Moderation · asked for more information about «{name}»",
+      "approvedTeam": "Today · Moderation · approved and published the team of “{name}”"
+    },
+    "mine": "You have {n, plural, one {# test submission} other {# test submissions}} made from this browser.",
+    "clearMine": "Delete my test submissions",
+    "proposal": "Proposal",
+    "teamTitle": "Team shared by the business",
+    "teamLevel": "Level chosen",
+    "teamPeople": "People",
+    "teamPeopleValue": "{with} of {total} with a disability",
+    "teamAreas": "Areas",
+    "teamTypes": "Types of disability",
+    "teamStories": "Stories",
+    "teamStoriesValue": "{n, plural, =0 {None} one {# story, with consent} other {# stories, each with consent}}. Names and texts are not shown here.",
+    "approveTeam": "Approve and publish the team"
   }
 }

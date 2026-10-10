@@ -151,9 +151,9 @@ export interface BusinessTeamInput {
   website?: string; // honeypot: debe llegar vacío
 }
 
-// Moderación (F5). Una solicitud en cola es una propuesta de local nuevo (F2)
-// o una corrección (F4).
-export type ModerationKind = 'new' | 'correction';
+// Moderación (F5). Una solicitud en cola es una propuesta de local nuevo (F2),
+// una corrección (F4) o el equipo que cuenta un negocio (F3).
+export type ModerationKind = 'new' | 'correction' | 'team';
 
 // Avisos que el filtro automático deja a la persona que modera.
 export type ModerationWarning =
@@ -177,7 +177,18 @@ export interface ModerationItem {
   evidenceUrl?: string;
   // Solo en una corrección:
   restaurantSlug?: string;
-  correction?: { kind: CorrectionKind; before: string; after: string };
+  // `before` falta cuando la corrección es un texto libre sin valor previo.
+  correction?: { kind: CorrectionKind; before?: string; after: string };
+  // Solo en el equipo de un negocio (F3). Nunca lleva nombres ni textos de
+  // historias: solo cuántas hay (una historia sin consentimiento no se envía).
+  team?: {
+    level: TeamLevel;
+    totalStaff: number;
+    staffWithDisability: number;
+    areas?: TeamArea[];
+    disabilityTypes?: DisabilityType[];
+    stories: number;
+  };
 }
 
 export type RejectReason =

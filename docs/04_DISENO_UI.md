@@ -88,6 +88,7 @@ Pantalla de uso interno (acceso por magic link, no aparece en el menú público)
   - **Decisión:** *Aprobar y publicar* (solo se activa con las cuatro comprobaciones y con nivel 🟢/🟡 y método elegidos), *Pedir más información* (con nota) o *Rechazar* (motivo obligatorio: no independiente, sin pruebas, duplicado, fuera de zona, otro).
   - **Registro de auditoría** de cada acción (quién, qué, cuándo).
 - Los datos de contacto de quien propone aparecen enmascarados.
+- En el prototipo, lo que se envía desde F2, F3 y F4 en ese navegador aparece arriba de la cola (tipos: Nuevo local, Corrección y Equipo). Para un equipo (F3) se comprueba que el negocio confirma que quien envía lo representa, que las cifras son coherentes y, si hay historias, que cada una trae su consentimiento. Nunca se guardan ni se muestran nombres ni textos de historias.
 
 ## 5. Inventario de pantallas
 

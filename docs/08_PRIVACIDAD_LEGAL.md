@@ -86,7 +86,8 @@ Si cambia algo importante, lo actualizaremos aquí y cambiaremos la fecha. ❓ F
 
 Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple todo salvo lo que depende del backend:
 
-- ✅ Sin cookies, `localStorage` ni analítica en la web.
+- ✅ Sin cookies ni analítica en la web.
+- ⚠️ Excepción temporal del prototipo: tras enviar un formulario, `web/src/lib/data/outbox.ts` guarda en el `localStorage` del propio navegador un resumen (sin correo entero, sin nombres ni textos de historias) para mostrarlo en `/moderation`. No sale del dispositivo, se puede borrar desde esa pantalla y desaparece cuando exista el servidor. Revisar si hay que avisarlo antes de abrir al público (junto a la política de cookies).
 - ✅ La ubicación solo se pide tras pulsar «Cerca de mí» y se queda en el dispositivo.
 - ✅ Los formularios avisan de no escribir nombres ni datos de salud, y enlazan a esta política.
 - ⏳ El envío de propuestas y correcciones está **simulado**: hasta que exista el backend no se guarda nada, y el plazo de borrado del correo y el límite por IP no se pueden implementar.
