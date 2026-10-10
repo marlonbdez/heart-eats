@@ -33,6 +33,12 @@ export const navGroups: NavGroup[] = [
       { href: '/contact', key: 'contact' },
     ],
   },
+  // Provisional: mientras no haya cuentas (P5) el panel de moderación se abre
+  // desde el menú para poder probarlo en el móvil. Después se oculta.
+  {
+    key: 'team',
+    links: [{ href: '/moderation', key: 'moderation' }],
+  },
 ];
 
 // Rutas del menú que ya tienen pantalla propia. El resto las sirve la página
@@ -45,6 +51,7 @@ const builtRoutes = [
   'business',
   'about',
   'verification',
+  'moderation',
 ];
 
 export const pendingRoutes = navGroups

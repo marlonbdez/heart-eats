@@ -108,3 +108,15 @@ test('moderación: existe en inglés', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Moderation' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Pending (4)' })).toBeVisible();
 });
+
+test('se llega a moderación desde el menú, en el móvil', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/es');
+  await page.locator('button[aria-haspopup="dialog"]').click();
+  await page
+    .getByRole('dialog')
+    .getByRole('link', { name: 'Moderar propuestas (demo)' })
+    .click();
+  await expect(page).toHaveURL(/\/es\/moderation$/);
+  await expect(page.getByRole('heading', { name: 'Moderación' })).toBeVisible();
+});

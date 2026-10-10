@@ -17,7 +17,8 @@
     "groups": {
       "navigate": "Navegar",
       "collaborate": "Colaborar",
-      "about": "Sobre HeartEats"
+      "about": "Sobre HeartEats",
+      "team": "Equipo de moderación (demo)"
     },
     "links": {
       "map": "Mapa",
@@ -28,7 +29,8 @@
       "what": "Qué es HeartEats",
       "verify": "Cómo verificamos",
       "privacy": "Privacidad y datos",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "moderation": "Moderar propuestas (demo)"
     },
     "language": "Idioma"
   },
