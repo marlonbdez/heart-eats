@@ -43,7 +43,7 @@
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: 84px; /* encima del conmutador Mapa/Lista */
+  bottom: 64px; /* encima de la atribución del mapa */
   z-index: 5;
   max-width: 420px;
   padding: 14px 40px 14px 14px;
@@ -83,10 +83,10 @@
   border-radius: 12px;
 }
 
-/* El botón "Cerca de mí" ocupa la esquina superior derecha: los controles de
-   zoom quedan justo debajo. */
+/* La barra superior (Mapa/Lista y "Cerca de mí") ocupa la parte de arriba: los
+   controles de zoom quedan justo debajo. */
 .wrap :global(.maplibregl-ctrl-top-right) {
-  margin-top: 56px;
+  margin-top: 64px;
 }
 
 .you {
