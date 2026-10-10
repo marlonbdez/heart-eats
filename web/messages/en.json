@@ -30,7 +30,8 @@
       "verify": "How we verify",
       "privacy": "Privacy and data",
       "contact": "Contact",
-      "moderation": "Moderate suggestions (demo)"
+      "moderation": "Moderate suggestions (demo)",
+      "removal": "Ask for a removal"
     },
     "language": "Language"
   },
@@ -572,6 +573,12 @@
         "paragraphs": [
           "You can ask us to access your data, correct it, delete it, limit its use, object to it or receive it in a portable format. If you gave us your consent, you can withdraw it at any time, and that does not affect what has already been handled. We will answer within one month at the most.",
           "If you ever feel we have not looked after your data well, you can complain to the Spanish Data Protection Agency (aepd.es). Before that, we would love the chance to sort it out with you."
+        ],
+        "links": [
+          {
+            "label": "Ask for a removal",
+            "href": "/removal"
+          }
         ]
       },
       {
@@ -623,8 +630,14 @@
       {
         "heading": "Withdraw a story or use your rights",
         "paragraphs": [
-          "To withdraw a story, a photo or a listing, or to use your rights over your data, there will be an email address. We are still setting it up and it will be ready before the project opens to the public.",
-          "Until then, please do not write personal data in a public channel."
+          "To withdraw a story, a photo or a listing there is a form on the website: no account and no explanations needed. We write to the email you leave to confirm it is you.",
+          "For other rights over your data you will also have an email address. We are still setting it up and it will be ready before the project opens to the public. Until then, do not write personal data in a public channel."
+        ],
+        "links": [
+          {
+            "label": "Ask for a removal",
+            "href": "/removal"
+          }
         ]
       },
       {
@@ -656,7 +669,8 @@
     "kinds": {
       "new": "New place",
       "correction": "Correction",
-      "team": "Team"
+      "team": "Team",
+      "removal": "Removal"
     },
     "age": "{days, plural, =0 {today} one {# day ago} other {# days ago}}",
     "review": "Check",
@@ -694,7 +708,8 @@
       "correct": "I have checked that the change is correct",
       "teamOwner": "I have confirmed through an official channel that the sender represents the business",
       "teamFigures": "The figures make sense (at least one person; not more with a disability than in total)",
-      "teamConsents": "Each story comes with consent from the person or their legal representative"
+      "teamConsents": "Each story comes with consent from the person or their legal representative",
+      "removalIdentity": "I have confirmed by email that the requester is the person or their representative"
     },
     "decisionTitle": "Decision",
     "levelLegend": "Verification level",
@@ -734,14 +749,16 @@
       "needReason": "Choose a reason for rejecting.",
       "needNote": "Write what information you need.",
       "save": "We could not save the decision. You can try again.",
-      "notReadyTeam": "Some checks are missing. Without the business's confirmation and the consents, the team is not published."
+      "notReadyTeam": "Some checks are missing. Without the business's confirmation and the consents, the team is not published.",
+      "notReadyRemoval": "Identity not confirmed yet. Nothing is removed without it."
     },
     "result": {
       "approvedNew": "Approved and published",
       "approvedEdit": "Change applied",
       "rejected": "Rejected",
       "info": "Waiting for more information",
-      "approvedTeam": "Team published"
+      "approvedTeam": "Team published",
+      "approvedRemoval": "Removed"
     },
     "auditTitle": "Audit log",
     "log": {
@@ -750,7 +767,8 @@
       "approvedEdit": "Today · Moderation · approved the change to «{name}»",
       "rejected": "Today · Moderation · rejected «{name}» · reason: {reason}",
       "info": "Today · Moderation · asked for more information about «{name}»",
-      "approvedTeam": "Today · Moderation · approved and published the team of “{name}”"
+      "approvedTeam": "Today · Moderation · approved and published the team of “{name}”",
+      "approvedRemoval": "Today · Moderation · removed what was requested on “{name}”"
     },
     "mine": "You have {n, plural, one {# test submission} other {# test submissions}} made from this browser.",
     "clearMine": "Delete my test submissions",
@@ -763,6 +781,59 @@
     "teamTypes": "Types of disability",
     "teamStories": "Stories",
     "teamStoriesValue": "{n, plural, =0 {None} one {# story, with consent} other {# stories, each with consent}}. Names and texts are not shown here.",
-    "approveTeam": "Approve and publish the team"
+    "approveTeam": "Approve and publish the team",
+    "removalTitle": "What is asked to be removed",
+    "removalWhat": "What",
+    "removalDetails": "Details",
+    "approveRemoval": "Remove now"
+  },
+  "removal": {
+    "title": "Ask for something to be removed",
+    "stepOf": "Step {n} of {total}",
+    "steps": {
+      "1": "What to remove",
+      "2": "Where",
+      "3": "Send"
+    },
+    "prev": "Back",
+    "next": "Continue",
+    "send": "Send request",
+    "sending": "Sending…",
+    "optional": "(optional)",
+    "sendError": "We could not send the request. You can try again whenever you like.",
+    "whats": {
+      "story": "A story (mine, or one of someone I represent)",
+      "photo": "A photo",
+      "listing": "A whole listing",
+      "data": "Something else about my personal data"
+    },
+    "s1": {
+      "intro": "You can ask without an account and without giving reasons. Anyone who shared their story or photo can withdraw it whenever they want.",
+      "question": "What would you like us to remove?",
+      "error": "Choose what you want removed to continue."
+    },
+    "s2": {
+      "intro": "Tell us which place it appears on, so we can find it.",
+      "place": "Which place does it appear on?",
+      "placeholder": "Choose the place",
+      "placeError": "Choose the place to continue.",
+      "details": "Anything else that helps us find it?",
+      "detailsHint": "For example, the name or pseudonym shown. Please do not write health information or other people's names."
+    },
+    "s3": {
+      "intro": "We need an email address to confirm that it is you or your representative. That way nobody can remove anything on someone else's behalf.",
+      "email": "Your email",
+      "emailHint": "Only the moderation team sees it, and it is deleted once the request is handled.",
+      "emailError": "Enter a valid email address to continue.",
+      "summary": "Summary",
+      "consent": "By sending it you agree that we use your email only to handle this request. More in",
+      "privacy": "Privacy and data"
+    },
+    "done": {
+      "title": "Request received",
+      "body": "We will write to the email you gave us to confirm it is you. As soon as we do, we will remove what you asked for.",
+      "back": "Back to the map",
+      "again": "Make another request"
+    }
   }
 }

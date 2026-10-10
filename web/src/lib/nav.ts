@@ -30,6 +30,7 @@ export const navGroups: NavGroup[] = [
       { href: '/about', key: 'what' },
       { href: '/verification', key: 'verify' },
       { href: '/privacy', key: 'privacy' },
+      { href: '/removal', key: 'removal' },
       { href: '/contact', key: 'contact' },
     ],
   },

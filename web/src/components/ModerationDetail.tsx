@@ -17,6 +17,7 @@ const CHECKS_NEW = ['exists', 'independent', 'inclusive', 'owner'] as const;
 const CHECKS_EDIT = ['correct'] as const;
 const CHECKS_TEAM = ['teamOwner', 'teamFigures'] as const;
 const CHECK_TEAM_STORIES = 'teamConsents';
+const CHECKS_REMOVAL = ['removalIdentity'] as const;
 const LEVELS: VerificationLevel[] = ['admin', 'community'];
 const METHODS: VerificationMethod[] = [
   'visit',
@@ -45,18 +46,22 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
   const tFood = useTranslations('foodTags');
   const tKinds = useTranslations('correct.kinds');
   const tTeam = useTranslations('team');
+  const tRemoval = useTranslations('removal');
   const tBusiness = useTranslations('business.levels');
   const isNew = item.kind === 'new';
   const isTeam = item.kind === 'team';
   // Claves de los textos que cambian según el tipo de solicitud.
-  const k = item.kind === 'new' ? 'New' : isTeam ? 'Team' : 'Edit';
+  const isRemoval = item.kind === 'removal';
+  const k = isNew ? 'New' : isTeam ? 'Team' : isRemoval ? 'Removal' : 'Edit';
   const checkKeys: readonly string[] = isNew
     ? CHECKS_NEW
     : isTeam
       ? item.team && item.team.stories > 0
         ? [...CHECKS_TEAM, CHECK_TEAM_STORIES]
         : CHECKS_TEAM
-      : CHECKS_EDIT;
+      : isRemoval
+        ? CHECKS_REMOVAL
+        : CHECKS_EDIT;
 
   const [checks, setChecks] = useState<Record<string, boolean>>({});
   const [level, setLevel] = useState<VerificationLevel | null>(null);
@@ -130,6 +135,7 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
     }
     if (d.action === 'ask_info') return t('log.info', { name });
     if (isTeam) return t('log.approvedTeam', { name });
+    if (isRemoval) return t('log.approvedRemoval', { name });
     if (!isNew || !d.level || !d.method) return t('log.approvedEdit', { name });
     return t('log.approvedNew', {
       name,
@@ -186,7 +192,29 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
         </div>
       )}
 
-      {item.team ? (
+      {item.removal ? (
+        <section aria-labelledby="mod-removal" className={form.step}>
+          <h3 id="mod-removal">{t('removalTitle')}</h3>
+          <dl className={styles.facts}>
+            <div>
+              <dt>{t('removalWhat')}</dt>
+              <dd>{tRemoval(`whats.${item.removal.what}`)}</dd>
+            </div>
+            <div>
+              <dt>{t('removalDetails')}</dt>
+              <dd>{item.removal.details || t('none')}</dd>
+            </div>
+          </dl>
+          {item.restaurantSlug && (
+            <Link
+              href={`/place/${item.restaurantSlug}`}
+              className={form.linkButton}
+            >
+              {t('seePlace')}
+            </Link>
+          )}
+        </section>
+      ) : item.team ? (
         <section aria-labelledby="mod-team" className={form.step}>
           <h3 id="mod-team">{t('teamTitle')}</h3>
           <dl className={styles.facts}>
@@ -207,7 +235,9 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
               <div>
                 <dt>{t('teamAreas')}</dt>
                 <dd>
-                  {item.team.areas.map((a) => tTeam(`areaNames.${a}`)).join(' · ')}
+                  {item.team.areas
+                    .map((a) => tTeam(`areaNames.${a}`))
+                    .join(' · ')}
                 </dd>
               </div>
             )}

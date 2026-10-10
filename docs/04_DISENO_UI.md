@@ -80,6 +80,9 @@ Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el en
 ### F4 · Sugerir corrección
 Desde la ficha: elegir qué está mal (dirección, horario, ha cerrado, información del equipo, otro) → describir + evidencia opcional → enviar. Mismo patrón que F2, más corto.
 
+### F6 · Pedir una retirada
+Desde el menú («Pedir una retirada»), `/contact` y `/privacy`: **3 pasos** sin cuenta. 1) qué retirar (historia, foto, ficha entera u otro derecho sobre los datos); 2) en qué local y, opcionalmente, algo que ayude a encontrarlo (sin datos de salud ni nombres de terceros); 3) correo **obligatorio** (privado, para confirmar que quien lo pide es quien dice ser) y envío. Entra en moderación como solicitud «Retirada», que solo se resuelve tras confirmar la identidad.
+
 ### F5 · Moderación
 Pantalla de uso interno (acceso por magic link, no aparece en el menú público), **pensada primero para el móvil**: la cola y el detalle son dos vistas, una a la vez, con botón «Volver a la lista»; a partir de 900 px se ven juntas. Prototipo en `/moderation`, con datos de ejemplo. Dos zonas:
 - **Cola (izquierda en escritorio):** pestañas Pendientes / Resueltas; cada tarjeta indica tipo (Nuevo local / Corrección), zona, antigüedad y aviso ⚠ si hay posible duplicado o cadena.
