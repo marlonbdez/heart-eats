@@ -9,7 +9,7 @@ import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
 import { RestaurantCard } from './RestaurantCard';
-import { markerSvg } from '@/lib/marker';
+import { MARKER_SVG } from '@/lib/marker';
 import styles from './MapView.module.css';
 
 type MapLibre = typeof import('maplibre-gl');
@@ -127,7 +127,7 @@ export function MapView({
       el.className = styles.marker;
       el.dataset.marker = r.slug;
       el.setAttribute('aria-label', label);
-      el.innerHTML = markerSvg(r.slug);
+      el.innerHTML = MARKER_SVG;
       el.addEventListener('click', () => setSelected(r.slug));
       const marker = new lib.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([r.location.lng, r.location.lat])
