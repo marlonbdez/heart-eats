@@ -30,7 +30,6 @@ export function Discover({
   const [q, setQ] = useState('');
   const [food, setFood] = useState<string[]>([]);
   const hydrated = useRef(false);
-  const [cardOpen, setCardOpen] = useState(false);
   const { position, status } = useLocation();
 
   // Leer la búsqueda de la URL una vez, ya en el navegador.
@@ -114,19 +113,13 @@ export function Discover({
       </div>
 
       <div className={styles.area}>
-        {!cardOpen && visible.length > 0 && (
-          <ViewSwitch view={view} query={query} />
-        )}
         {view === 'map' ? (
           <>
+            <ViewSwitch view={view} query={query} />
             <p role="status" className={styles.srOnly}>
               {t('results.count', { count: visible.length })}
             </p>
-            <MapLoader
-              restaurants={visible}
-              focus={hasFilters}
-              onCardOpenChange={setCardOpen}
-            />
+            <MapLoader restaurants={visible} focus={hasFilters} />
             <div className={styles.nearMe}>
               <NearMeButton />
             </div>
@@ -135,11 +128,12 @@ export function Discover({
         ) : (
           <div className={styles.listScroll}>
             <div className={styles.listHeader}>
-              <p role="status" className={styles.count}>
-                {t('results.count', { count: visible.length })}
-              </p>
+              <ViewSwitch view={view} query={query} />
               <NearMeButton />
             </div>
+            <p role="status" className={styles.count}>
+              {t('results.count', { count: visible.length })}
+            </p>
             {status !== 'idle' && (
               <NearMeNotice className={styles.listNotice} />
             )}
