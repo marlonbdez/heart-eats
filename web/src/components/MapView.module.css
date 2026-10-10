@@ -69,15 +69,6 @@
   cursor: pointer;
 }
 
-/* «Cerca de mí»: abajo a la derecha, encima de la atribución del mapa. Con la
-   ficha abierta no se muestra: ocupa ese sitio. */
-.nearMe {
-  position: absolute;
-  right: 12px;
-  bottom: 68px;
-  z-index: 6;
-}
-
 .error {
   position: absolute;
   top: 12px;
@@ -92,10 +83,10 @@
   border-radius: 12px;
 }
 
-/* La barra superior (Mapa/Lista y "Cerca de mí") ocupa la parte de arriba: los
-   controles de zoom quedan justo debajo. */
+/* El botón "Cerca de mí" ocupa la esquina superior derecha: los controles de
+   zoom quedan justo debajo. */
 .wrap :global(.maplibregl-ctrl-top-right) {
-  margin-top: 64px;
+  margin-top: 56px;
 }
 
 .you {

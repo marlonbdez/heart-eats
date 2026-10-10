@@ -30,6 +30,7 @@ export function Discover({
   const [q, setQ] = useState('');
   const [food, setFood] = useState<string[]>([]);
   const hydrated = useRef(false);
+  const [cardOpen, setCardOpen] = useState(false);
   const { position, status } = useLocation();
 
   // Leer la búsqueda de la URL una vez, ya en el navegador.
@@ -113,26 +114,31 @@ export function Discover({
       </div>
 
       <div className={styles.area}>
+        {!cardOpen && visible.length > 0 && (
+          <ViewSwitch view={view} query={query} />
+        )}
         {view === 'map' ? (
           <>
             <p role="status" className={styles.srOnly}>
               {t('results.count', { count: visible.length })}
             </p>
-            <MapLoader restaurants={visible} focus={hasFilters} />
-            <div className={styles.barMap}>
-              <ViewSwitch view={view} query={query} />
+            <MapLoader
+              restaurants={visible}
+              focus={hasFilters}
+              onCardOpenChange={setCardOpen}
+            />
+            <div className={styles.nearMe}>
+              <NearMeButton />
             </div>
             {status !== 'idle' && <NearMeNotice className={styles.mapNotice} />}
           </>
         ) : (
           <div className={styles.listScroll}>
-            <div className={styles.barList}>
-              <ViewSwitch view={view} query={query} />
-            </div>
             <div className={styles.listHeader}>
               <p role="status" className={styles.count}>
                 {t('results.count', { count: visible.length })}
               </p>
+              <NearMeButton />
             </div>
             {status !== 'idle' && (
               <NearMeNotice className={styles.listNotice} />
@@ -144,11 +150,6 @@ export function Discover({
                 </li>
               ))}
             </ul>
-          </div>
-        )}
-        {view === 'list' && visible.length > 0 && (
-          <div className={styles.nearMeFloat}>
-            <NearMeButton />
           </div>
         )}
         {visible.length === 0 && suggestions.length === 0 && (

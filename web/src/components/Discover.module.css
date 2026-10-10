@@ -47,40 +47,13 @@
   gap: 12px;
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 12px 12px 0 16px;
 }
-/* Barra superior: conmutador Mapa/Lista y «Cerca de mí». Arriba y no abajo,
-   para no tapar la atribución del mapa (obligatoria) ni el pulgar. */
-/* Barra superior: el conmutador Mapa/Lista, centrado. «Cerca de mí» va abajo a
-   la derecha, con texto, y no tapa la atribución del mapa (obligatoria). */
-.barMap,
-.barList {
-  display: flex;
-  justify-content: center;
-}
-.barMap {
+.nearMe {
   position: absolute;
   top: 12px;
-  left: 12px;
   right: 12px;
   z-index: 6;
-  pointer-events: none; /* el mapa se puede arrastrar a los lados */
-}
-.barMap > * {
-  pointer-events: auto;
-}
-.nearMeFloat {
-  position: absolute;
-  right: 12px;
-  bottom: 16px;
-  z-index: 6;
-}
-.barList {
-  position: sticky;
-  top: 0;
-  z-index: 6;
-  padding: 12px;
-  background: var(--bg);
 }
 .mapNotice,
 .listNotice {
@@ -93,11 +66,11 @@
 }
 .mapNotice {
   position: absolute;
-  top: 76px;
+  top: 12px;
   left: 12px;
-  right: 56px; /* deja libres los controles de zoom */
+  right: 170px;
   z-index: 6;
-  max-width: 360px;
+  max-width: 320px;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
 }
 .listNotice {
@@ -128,7 +101,7 @@
   gap: 12px;
   max-width: 720px;
   margin: 0 auto;
-  padding: 12px 12px 80px; /* hueco para «Cerca de mí» */
+  padding: 12px 12px 140px; /* hueco para el conmutador flotante */
   list-style: none;
 }
 .item {

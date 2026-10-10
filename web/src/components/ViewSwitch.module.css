@@ -1,17 +1,22 @@
 .switch {
+  position: absolute;
+  left: 50%;
+  bottom: 68px; /* por encima de la atribución del mapa */
+  z-index: 6;
   display: inline-flex;
   padding: 4px;
   background: var(--fg);
   border-radius: 999px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.3);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+  transform: translateX(-50%);
 }
 .item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 72px;
+  min-width: 96px;
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 18px;
   font-weight: 700;
   color: var(--bg);
   text-decoration: none;

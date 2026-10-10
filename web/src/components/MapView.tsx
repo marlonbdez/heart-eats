@@ -8,7 +8,6 @@ import { Link } from '@/i18n/navigation';
 import { defaultView, mapStyles } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
-import { NearMeButton } from './NearMe';
 import { RestaurantCard } from './RestaurantCard';
 import styles from './MapView.module.css';
 
@@ -17,7 +16,7 @@ type MapLibre = typeof import('maplibre-gl');
 const HEART_PATH =
   'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
 
-// Alto que tapan la tarjeta de vista previa y el conmutador, desde abajo.
+// Alto que tapa la tarjeta de vista previa, desde abajo.
 const CARD_CLEARANCE = 290;
 
 // `focus`: hay búsqueda o filtros activos, así que el mapa se encuadra sobre
@@ -25,9 +24,13 @@ const CARD_CLEARANCE = 290;
 export function MapView({
   restaurants,
   focus = false,
+  onCardOpenChange,
 }: {
   restaurants: Restaurant[];
   focus?: boolean;
+  // La ficha emergente ocupa el sitio del conmutador Mapa/Lista: quien lo
+  // pinta lo oculta mientras esté abierta.
+  onCardOpenChange?: (open: boolean) => void;
 }) {
   const t = useTranslations();
   const { position } = useLocation();
@@ -233,6 +236,11 @@ export function MapView({
   };
 
   const current = restaurants.find((r) => r.slug === selected);
+  const cardOpen = current !== undefined;
+  useEffect(() => {
+    onCardOpenChange?.(cardOpen);
+    return () => onCardOpenChange?.(false);
+  }, [cardOpen, onCardOpenChange]);
 
   return (
     <div className={styles.wrap}>
@@ -268,11 +276,6 @@ export function MapView({
           </button>
           <RestaurantCard restaurant={current} />
         </aside>
-      )}
-      {!current && restaurants.length > 0 && (
-        <div className={styles.nearMe}>
-          <NearMeButton />
-        </div>
       )}
     </div>
   );
