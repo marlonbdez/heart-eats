@@ -91,6 +91,7 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 - ✅ Los formularios avisan de no escribir nombres ni datos de salud, y enlazan a esta política.
 - ⏳ El envío de propuestas y correcciones está **simulado**: hasta que exista el backend no se guarda nada, y el plazo de borrado del correo y el límite por IP no se pueden implementar.
 - ✅ F3 (consentimientos del equipo) existe como prototipo con envío simulado. Sus textos de consentimiento son **provisionales**: no deben publicarse sin revisión profesional y sin esta política.
+- ✅ `/privacy` y `/contact` existen en la web (ES y EN) como **borrador**: llevan el texto de arriba adaptado a lista (sin tabla, para el móvil), un aviso de borrador y, en Contacto, sin correo todavía (los datos pendientes de P6 y del correo se completan después). La revisión legal y la revisión del inglés siguen pendientes.
 - ⏳ Si se añade analítica, hay que actualizar este texto antes (la opción prevista es Plausible o Umami autoalojado, o ninguna).
 - ⏳ Una página de **aviso legal** y la política de **cookies** (hoy basta con decir que no se usan) deben acompañar a esta antes del lanzamiento.
 
