@@ -10,6 +10,10 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
   transform: translateX(-50%);
 }
+/* En la lista no hay atribución del mapa: el conmutador baja al borde. */
+.list {
+  bottom: 16px;
+}
 .item {
   display: inline-flex;
   align-items: center;

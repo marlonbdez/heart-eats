@@ -17,7 +17,10 @@ export function ViewSwitch({
     { key: 'list', pathname: '/list' },
   ] as const;
   return (
-    <nav aria-label={t('label')} className={styles.switch}>
+    <nav
+      aria-label={t('label')}
+      className={`${styles.switch} ${view === 'list' ? styles.list : ''}`}
+    >
       {items.map((item) => (
         <Link
           key={item.key}
