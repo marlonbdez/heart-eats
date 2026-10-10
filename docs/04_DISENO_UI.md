@@ -81,9 +81,9 @@ Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el en
 Desde la ficha: elegir qué está mal (dirección, horario, ha cerrado, información del equipo, otro) → describir + evidencia opcional → enviar. Mismo patrón que F2, más corto.
 
 ### F5 · Moderación
-Página de escritorio (acceso por magic link, no aparece en el menú público). Dos zonas:
-- **Cola (izquierda):** pestañas Pendientes / Resueltas; cada tarjeta indica tipo (Nuevo local / Corrección), zona, antigüedad y aviso ⚠ si hay posible duplicado o cadena.
-- **Detalle (derecha):** datos propuestos (o diff antes/después en correcciones), pruebas aportadas y alertas.
+Pantalla de uso interno (acceso por magic link, no aparece en el menú público), **pensada primero para el móvil**: la cola y el detalle son dos vistas, una a la vez, con botón «Volver a la lista»; a partir de 900 px se ven juntas. Prototipo en `/moderation`, con datos de ejemplo. Dos zonas:
+- **Cola (izquierda en escritorio):** pestañas Pendientes / Resueltas; cada tarjeta indica tipo (Nuevo local / Corrección), zona, antigüedad y aviso ⚠ si hay posible duplicado o cadena.
+- **Detalle (derecha en escritorio):** datos propuestos (o diff antes/después en correcciones), pruebas aportadas y alertas.
   - **Comprobaciones obligatorias** para un local nuevo: existe · es independiente · hay pruebas del equipo inclusivo · **el negocio ha confirmado que quiere aparecer**.
   - **Decisión:** *Aprobar y publicar* (solo se activa con las cuatro comprobaciones y con nivel 🟢/🟡 y método elegidos), *Pedir más información* (con nota) o *Rechazar* (motivo obligatorio: no independiente, sin pruebas, duplicado, fuera de zona, otro).
   - **Registro de auditoría** de cada acción (quién, qué, cuándo).

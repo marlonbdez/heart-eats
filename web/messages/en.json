@@ -17,7 +17,8 @@
     "groups": {
       "navigate": "Browse",
       "collaborate": "Contribute",
-      "about": "About HeartEats"
+      "about": "About HeartEats",
+      "team": "Moderation team (demo)"
     },
     "links": {
       "map": "Map",
@@ -28,7 +29,8 @@
       "what": "What is HeartEats",
       "verify": "How we verify",
       "privacy": "Privacy and data",
-      "contact": "Contact"
+      "contact": "Contact",
+      "moderation": "Moderate suggestions (demo)"
     },
     "language": "Language"
   },
@@ -636,5 +638,110 @@
         ]
       }
     ]
+  },
+  "moderation": {
+    "title": "Moderation",
+    "demo": "Prototype with sample data: nothing you do here is saved. Once there is a server, moderators will sign in with a link sent to their email, and this screen will not appear in the menu.",
+    "queueLabel": "Requests",
+    "tabs": {
+      "pending": "Pending ({n})",
+      "resolved": "Resolved ({n})"
+    },
+    "emptyPending": "Nothing left to review. Nice work.",
+    "emptyResolved": "You have not resolved any request yet.",
+    "choose": "Pick a request from the list to review it.",
+    "back": "Back to the list",
+    "kinds": {
+      "new": "New place",
+      "correction": "Correction"
+    },
+    "age": "{days, plural, =0 {today} one {# day ago} other {# days ago}}",
+    "review": "Check",
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "info": "Info requested"
+    },
+    "received": "Received {age}",
+    "contact": "Contact of the sender: {contact}",
+    "noContact": "no email",
+    "warningsTitle": "Heads up",
+    "warnings": {
+      "duplicate": "Possible duplicate of «{other}» ({meters} m away). Check before approving.",
+      "chain": "This looks like a chain with many locations (exclusion criterion). Rejecting is recommended.",
+      "noEvidence": "No evidence of an inclusive team was provided."
+    },
+    "proposed": "Proposed details",
+    "change": "Proposed change",
+    "food": "Food",
+    "dishes": "Signature dishes",
+    "howKnown": "How the sender knows the place",
+    "evidence": "Link provided",
+    "none": "Not given",
+    "noLink": "No link",
+    "before": "Before",
+    "after": "After",
+    "seePlace": "See the place page",
+    "checksTitle": "Checks",
+    "checks": {
+      "exists": "The place exists (website, social media or map)",
+      "independent": "It is an independent business, not a large chain",
+      "inclusive": "There is evidence that its team is inclusive",
+      "owner": "The business has confirmed it wants to appear (contacted through an official channel)",
+      "correct": "I have checked that the change is correct"
+    },
+    "decisionTitle": "Decision",
+    "levelLegend": "Verification level",
+    "levels": {
+      "admin": "🟢 Verified · I checked it myself",
+      "community": "🟡 Confirmed · the business confirms it"
+    },
+    "methodLegend": "Method",
+    "methods": {
+      "visit": "In-person visit",
+      "call": "Phone call to the business",
+      "documentation": "Documentation",
+      "owner_confirmed": "Confirmed by the business"
+    },
+    "approveNew": "Approve and publish",
+    "approveEdit": "Approve change",
+    "askInfo": "Ask for more information",
+    "reject": "Reject",
+    "reasonLegend": "Reason for rejecting",
+    "reasons": {
+      "not_independent": "Not independent",
+      "no_evidence": "Not enough evidence",
+      "duplicate": "Duplicate",
+      "out_of_zone": "Out of area",
+      "other": "Other"
+    },
+    "rejectNote": "Note for the record (optional)",
+    "infoNote": "What you need to know (sent to the sender, if they left an email)",
+    "confirmReject": "Confirm rejection",
+    "confirmInfo": "Send request",
+    "cancel": "Cancel",
+    "saving": "Saving…",
+    "errors": {
+      "notReadyNew": "Some checks are missing. Without them, and without the business saying yes, it cannot be published.",
+      "notReadyEdit": "Tick the check before approving.",
+      "needLevelMethod": "Choose the verification level and the method.",
+      "needReason": "Choose a reason for rejecting.",
+      "needNote": "Write what information you need.",
+      "save": "We could not save the decision. You can try again."
+    },
+    "result": {
+      "approvedNew": "Approved and published",
+      "approvedEdit": "Change applied",
+      "rejected": "Rejected",
+      "info": "Waiting for more information"
+    },
+    "auditTitle": "Audit log",
+    "log": {
+      "received": "Today · System · request received and automatic filter passed",
+      "approvedNew": "Today · Moderation · approved and published «{name}» as {level} ({method})",
+      "approvedEdit": "Today · Moderation · approved the change to «{name}»",
+      "rejected": "Today · Moderation · rejected «{name}» · reason: {reason}",
+      "info": "Today · Moderation · asked for more information about «{name}»"
+    }
   }
 }

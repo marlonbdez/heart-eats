@@ -33,4 +33,10 @@ export const navGroups: NavGroup[] = [
       { href: '/contact', key: 'contact' },
     ],
   },
+  // Provisional: mientras no haya cuentas (P5) el panel de moderación se abre
+  // desde el menú para poder probarlo en el móvil. Después se oculta.
+  {
+    key: 'team',
+    links: [{ href: '/moderation', key: 'moderation' }],
+  },
 ];

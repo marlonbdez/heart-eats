@@ -4,11 +4,14 @@ import type {
   BusinessTeamInput,
   CorrectionInput,
   FoodTag,
+  ModerationDecision,
+  ModerationItem,
   ProposalInput,
   Restaurant,
   RestaurantQuery,
 } from '../types';
 import { matchesQuery } from '../search';
+import { moderationQueue } from './mock-moderation';
 import { foodTags, restaurants } from './mock-restaurants';
 
 export async function getRestaurants(
@@ -44,4 +47,22 @@ export async function submitBusinessTeam(
 ): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
+}
+
+// Cola de moderación. Cuando exista el backend: GET /api/v1/suggestions
+// (solo moderación).
+export async function getModerationQueue(): Promise<ModerationItem[]> {
+  return moderationQueue;
+}
+
+// Decisión simulada: no guarda nada. Cuando exista el backend pasa a
+// POST /api/v1/suggestions/:id/decision y deja una entrada en el registro de
+// auditoría.
+export async function decideModeration(
+  id: string,
+  decision: ModerationDecision,
+): Promise<void> {
+  void id;
+  void decision;
+  await new Promise((resolve) => setTimeout(resolve, 400));
 }

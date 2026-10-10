@@ -150,3 +150,44 @@ export interface BusinessTeamInput {
   contactEmail: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }
+
+// Moderación (F5). Una solicitud en cola es una propuesta de local nuevo (F2)
+// o una corrección (F4).
+export type ModerationKind = 'new' | 'correction';
+
+// Avisos que el filtro automático deja a la persona que modera.
+export type ModerationWarning =
+  | { kind: 'duplicate'; other: string; meters: number }
+  | { kind: 'chain' }
+  | { kind: 'noEvidence' };
+
+export interface ModerationItem {
+  id: string;
+  kind: ModerationKind;
+  name: string;
+  neighborhood: string;
+  address: string;
+  daysAgo: number;
+  contactMasked?: string; // el correo de quien propone nunca se ve entero
+  warnings: ModerationWarning[];
+  // Solo en un local nuevo:
+  foodTags?: string[];
+  dishes?: string[];
+  howKnown?: string;
+  evidenceUrl?: string;
+  // Solo en una corrección:
+  restaurantSlug?: string;
+  correction?: { kind: CorrectionKind; before: string; after: string };
+}
+
+export type RejectReason =
+  'not_independent' | 'no_evidence' | 'duplicate' | 'out_of_zone' | 'other';
+
+export type ModerationDecision =
+  | {
+      action: 'approve';
+      level?: VerificationLevel; // solo en un local nuevo
+      method?: VerificationMethod;
+    }
+  | { action: 'reject'; reason: RejectReason; note?: string }
+  | { action: 'ask_info'; note: string };
