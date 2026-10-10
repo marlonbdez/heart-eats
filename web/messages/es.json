@@ -75,11 +75,6 @@
     "bakery": "Panadería",
     "vegetarian": "Vegetariano"
   },
-  "placeholder": {
-    "title": "Esta pantalla estará lista pronto",
-    "body": "HeartEats se va construyendo poco a poco. Gracias por tu paciencia.",
-    "back": "Volver al mapa"
-  },
   "search": {
     "label": "Buscar un local, barrio, ciudad o código postal",
     "placeholder": "Local, barrio o código postal",
@@ -493,6 +488,156 @@
       "back": "Volver al mapa",
       "again": "Contar el equipo de otro local"
     }
+  },
+  "privacy": {
+    "title": "Privacidad y datos",
+    "intro": "Este texto es un borrador: todavía lo tiene que revisar un profesional y puede cambiar antes del lanzamiento. Está escrito en lenguaje llano, para quien no es jurista.",
+    "sections": [
+      {
+        "heading": "En pocas palabras",
+        "items": [
+          "Puedes usar HeartEats sin darnos ningún dato: no hay cuentas, no usamos cookies propias y no medimos tu actividad.",
+          "Si propones un local o sugieres una corrección, nos cuentas lo que quieras sobre el local. Tu correo es opcional, es privado y solo lo usamos por si necesitamos preguntarte algo.",
+          "No publicamos ni guardamos nombres o datos de salud de personas sin su permiso expreso. Si alguien los escribe en una propuesta, los dejamos fuera al revisarla.",
+          "Si el negocio decide contar la historia de su equipo, lo hace él, y cada persona da su consentimiento. Puede retirarlo cuando quiera, sin dar explicaciones."
+        ]
+      },
+      {
+        "heading": "Esta versión es una prueba",
+        "paragraphs": [
+          "Ahora mismo el envío de propuestas, correcciones y formularios de negocio es una simulación: no se guarda nada. Lo que sigue describe cómo tratamos los datos cuando el envío sea real."
+        ]
+      },
+      {
+        "heading": "Quién es responsable de los datos",
+        "paragraphs": [
+          "Mientras no exista una asociación, la responsable es la persona que impulsa el proyecto: Marlon Bermúdez, a título personal. Cuando se constituya la asociación, este apartado cambiará. Cómo escribirnos está en la página de Contacto."
+        ],
+        "links": [
+          {
+            "label": "Contacto",
+            "href": "/contact"
+          }
+        ]
+      },
+      {
+        "heading": "Qué datos tratamos y para qué",
+        "items": [
+          "Si usas la web: ninguno nuestro. El servidor de la web y el del mapa ven tu dirección IP al servirte la página, como cualquier servidor.",
+          "Si pulsas «Cerca de mí»: tu ubicación se usa solo en tu dispositivo, para ordenar los locales por distancia. No se envía ni se guarda, y solo se pide cuando pulsas el botón.",
+          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 6 meses.",
+          "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
+          "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
+          "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
+          "Si eres un negocio y cuentas tu equipo: cifras del equipo y, en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona, para mostrar la ficha con el detalle que el negocio elija. Se conservan mientras el negocio y la persona lo mantengan."
+        ],
+        "paragraphs": [
+          "Tu correo y lo que escribes en los formularios los tratamos porque tú nos los das al enviar (tu consentimiento). Los datos de una persona del equipo, solo con el consentimiento explícito de esa persona."
+        ]
+      },
+      {
+        "heading": "Las personas del equipo",
+        "paragraphs": [
+          "Este apartado es el que más nos importa, así que lo contamos con palabras sencillas."
+        ],
+        "items": [
+          "Una propuesta de otra persona no incluye datos de las personas del equipo. Si alguien escribe nombres o datos de salud, los dejamos fuera al revisarla.",
+          "Solo el negocio puede contar la historia de su equipo, y nunca con detalle sin que lo sepa. Hasta que el negocio lo confirme, solo mostramos información pública y verificable.",
+          "Cada persona decide por sí misma si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si corresponde, lo decide su representante legal.",
+          "Una historia sin consentimiento registrado no se guarda.",
+          "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 7 días.",
+          "En equipos pequeños (menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.",
+          "Las historias, nombres y fotos no están bajo licencia abierta y nunca se incluyen en las exportaciones de datos abiertos."
+        ]
+      },
+      {
+        "heading": "Terceros que intervienen",
+        "items": [
+          "Alojamiento de la web: Netlify. Registra la dirección IP de quien visita la web, como cualquier servidor.",
+          "Mapa: las teselas y estilos las sirve OpenFreeMap. Al abrir el mapa, tu navegador se las pide directamente y ellos ven tu dirección IP. No les enviamos nada más.",
+          "Servidor y base de datos: cuando exista, indicaremos aquí el proveedor y el país donde se guardan los datos.",
+          "No vendemos ni cedemos datos a nadie."
+        ]
+      },
+      {
+        "heading": "Datos abiertos",
+        "paragraphs": [
+          "La base de datos de negocios se publica bajo licencia ODbL: nombre, dirección, tipo de cocina, nivel de verificación y cifras agregadas. No incluye historias, nombres, fotos, correos ni datos de quien propone o corrige."
+        ]
+      },
+      {
+        "heading": "Tus derechos",
+        "paragraphs": [
+          "Puedes pedirnos acceder a tus datos, rectificarlos, suprimirlos, limitar su uso, oponerte a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes retirarlo cuando quieras, y eso no afecta a lo ya tratado. Te responderemos en un plazo máximo de un mes.",
+          "Si alguna vez sientes que no hemos cuidado bien tus datos, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es). Antes de eso, nos encantará poder aclararlo contigo."
+        ]
+      },
+      {
+        "heading": "Seguridad",
+        "paragraphs": [
+          "Los datos se guardan en servidores con acceso restringido y conexión cifrada. El correo de quien propone o corrige solo lo ve el equipo de moderación."
+        ]
+      },
+      {
+        "heading": "Cambios en este texto",
+        "paragraphs": [
+          "Si cambia algo importante, lo actualizaremos aquí y cambiaremos la fecha. Versión: borrador, octubre de 2026."
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contacto",
+    "intro": "Hay una vía para cada cosa. Casi todo se puede hacer desde la propia web.",
+    "sections": [
+      {
+        "heading": "Proponer un local o corregir un dato",
+        "paragraphs": [
+          "Cualquiera puede hacerlo, sin cuenta. Una persona lo revisa con calma antes de publicarlo."
+        ],
+        "links": [
+          {
+            "label": "Proponer un local",
+            "href": "/propose"
+          },
+          {
+            "label": "Corregir un dato",
+            "href": "/correct"
+          }
+        ]
+      },
+      {
+        "heading": "Si eres de un negocio",
+        "paragraphs": [
+          "Cuéntanos tu equipo con el nivel de detalle que prefieras. Tú decides cuánto se cuenta."
+        ],
+        "links": [
+          {
+            "label": "Soy de un negocio",
+            "href": "/business"
+          }
+        ]
+      },
+      {
+        "heading": "Retirar una historia o ejercer tus derechos",
+        "paragraphs": [
+          "Para retirar una historia, una foto o una ficha, o para ejercer tus derechos sobre tus datos, tendrás una dirección de correo. Todavía la estamos preparando y estará lista antes de abrir el proyecto al público.",
+          "Hasta entonces, no escribas datos personales en un canal público."
+        ]
+      },
+      {
+        "heading": "Errores de la web y código",
+        "paragraphs": [
+          "El código de HeartEats es abierto. Si has encontrado un fallo en la web, puedes contárnoslo en GitHub. Es un sitio público: no incluyas datos personales."
+        ],
+        "links": [
+          {
+            "label": "Avisar de un fallo en GitHub",
+            "href": "https://github.com/marlonbdez/heart-eats/issues"
+          }
+        ]
+      }
+    ]
   },
   "moderation": {
     "title": "Moderación",
