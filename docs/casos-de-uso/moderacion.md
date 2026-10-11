@@ -16,7 +16,7 @@
 
 ## CU-20 · Revisar la propuesta de un local
 - **Quién:** Moderador/a. Especializa CU-19.
-- **Comprobaciones:** el local existe; es independiente, no una gran cadena; hay pruebas de que su equipo es inclusivo; el negocio ha confirmado que quiere aparecer.
+- **Comprobaciones:** el local existe; es independiente, no una gran cadena; hay pruebas de que su equipo es inclusivo; el negocio ha confirmado que quiere aparecer; y, si hay fotos, que son del plato o del local, sin caras reconocibles, y con permiso.
 - **Reglas:** el contacto con el negocio ocurre **fuera de la web**, por correo o teléfono del dominio oficial. Si falta algo, no aprueba: pide información o rechaza.
 
 ## CU-21 · Revisar una corrección
@@ -26,7 +26,7 @@
 ## CU-22 · Revisar el equipo de un negocio
 - **Quién:** Moderador/a. Especializa CU-19.
 - **Comprobaciones:** quien envía representa al negocio (confirmado por canal oficial); las cifras son coherentes; cada historia trae su consentimiento.
-- **Reglas:** nunca se ven nombres ni textos de historias, solo cuántas hay.
+- **Reglas:** nunca se ven nombres ni textos de historias, solo cuántas hay. Si hay fotos, se añade la comprobación «sin caras reconocibles ni datos personales, y hay permiso» (también en CU-20); el prototipo no las muestra.
 - **Observación:** por eso no se puede juzgar el contenido de las historias. Con servidor habrá que decidir cómo se revisa antes de publicar.
 
 ## CU-23 · Revisar una petición de retirada

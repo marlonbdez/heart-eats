@@ -28,3 +28,23 @@ export async function resizePhoto(file: File): Promise<Blob> {
   if (!jpeg) throw new Error('encode');
   return jpeg;
 }
+
+export interface PreparedPhoto {
+  blob: Blob;
+  url: string; // vista previa; hay que soltarla con URL.revokeObjectURL
+}
+export type PhotoError = 'photoType' | 'photoSize' | 'photoFailed';
+
+// Valida y reduce la foto que elige la persona. El error es la clave del aviso.
+export async function preparePhoto(
+  file: File,
+): Promise<{ photo: PreparedPhoto } | { error: PhotoError }> {
+  if (!PHOTO_TYPES.includes(file.type)) return { error: 'photoType' };
+  if (file.size > MAX_PHOTO_BYTES) return { error: 'photoSize' };
+  try {
+    const blob = await resizePhoto(file);
+    return { photo: { blob, url: URL.createObjectURL(blob) } };
+  } catch {
+    return { error: 'photoFailed' };
+  }
+}

@@ -152,6 +152,7 @@ export interface BusinessTeamInput {
   areas?: TeamArea[];
   disabilityTypes?: DisabilityType[];
   stories?: BusinessStoryInput[]; // 0-3
+  photos?: Blob[]; // 0-3, ya reducidas; sin subir
   contactEmail: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }

@@ -6,8 +6,10 @@ import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
 import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
-import { MAX_PHOTO_BYTES, PHOTO_TYPES, resizePhoto } from '@/lib/image';
+import type { PreparedPhoto } from '@/lib/image';
 import { isEmail, isHttpUrl } from '@/lib/validation';
+import { PhotoConsent } from './PhotoConsent';
+import { PhotoPicker } from './PhotoPicker';
 import s from './Form.module.css';
 
 const MAX_DISHES = 3;
@@ -18,7 +20,7 @@ interface Dish {
   name: string;
   description: string;
   // Foto ya reducida y su vista previa. No se guarda en el borrador.
-  photo?: { blob: Blob; url: string };
+  photo?: PreparedPhoto;
 }
 interface FormState {
   name: string;
@@ -174,32 +176,6 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       form.dishes.map((d, j) => (j === i ? { ...d, ...patch } : d)),
     );
   const hasPhotos = form.dishes.some((d) => d.photo);
-  const clearPhoto = (i: number) => {
-    const url = form.dishes[i]?.photo?.url;
-    if (url) URL.revokeObjectURL(url);
-    setDish(i, { photo: undefined });
-  };
-  const choosePhoto = async (i: number, file?: File) => {
-    if (!file) return;
-    const fail = (key: string) => setPhotoErrors((e) => ({ ...e, [i]: key }));
-    setPhotoErrors((e) => ({ ...e, [i]: '' }));
-    if (!PHOTO_TYPES.includes(file.type)) return fail('photoType');
-    if (file.size > MAX_PHOTO_BYTES) return fail('photoSize');
-    try {
-      const blob = await resizePhoto(file);
-      clearPhoto(i);
-      setForm((f) => ({
-        ...f,
-        dishes: f.dishes.map((d, j) =>
-          j === i
-            ? { ...d, photo: { blob, url: URL.createObjectURL(blob) } }
-            : d,
-        ),
-      }));
-    } catch {
-      fail('photoFailed');
-    }
-  };
   const toggleFood = (key: string) =>
     set(
       'foods',
@@ -473,47 +449,16 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   value={d.description}
                   onChange={(e) => setDish(i, { description: e.target.value })}
                 />
-                <p className={s.label} id={`d${i}pl`}>
-                  {t('s2.photo')}{' '}
-                  <span className={s.optional}>{t('s2.optional')}</span>
-                </p>
-                {d.photo ? (
-                  <div className={s.photoRow}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={d.photo.url}
-                      alt={t('s2.photoAlt', { n: i + 1 })}
-                      className={s.photoPreview}
-                    />
-                    <button
-                      type="button"
-                      className={s.linkButton}
-                      onClick={() => clearPhoto(i)}
-                    >
-                      {t('s2.photoRemove')}
-                    </button>
-                  </div>
-                ) : (
-                  <input
-                    id={`d${i}p`}
-                    type="file"
-                    accept={PHOTO_TYPES.join(',')}
-                    className={s.fileInput}
-                    aria-labelledby={`d${i}pl`}
-                    aria-describedby={
-                      photoErrors[i] ? `d${i}pe` : 's2-photo-hint'
-                    }
-                    onChange={(e) => {
-                      void choosePhoto(i, e.target.files?.[0]);
-                      e.target.value = '';
-                    }}
-                  />
-                )}
-                {photoErrors[i] && (
-                  <p id={`d${i}pe`} role="alert" className={s.error}>
-                    {t(`s2.${photoErrors[i]}`)}
-                  </p>
-                )}
+                <PhotoPicker
+                  id={`d${i}p`}
+                  label={t('s2.photo')}
+                  alt={t('s2.photoAlt', { n: i + 1 })}
+                  photo={d.photo}
+                  error={photoErrors[i]}
+                  describedBy="s2-photo-hint"
+                  onChange={(photo) => setDish(i, { photo })}
+                  onError={(e) => setPhotoErrors((all) => ({ ...all, [i]: e }))}
+                />
               </div>
             ))}
             {form.dishes.length < MAX_DISHES && (
@@ -531,25 +476,12 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               {t('s2.photoHint')}
             </p>
             {hasPhotos && (
-              <div className={s.field}>
-                <label className={s.check}>
-                  <input
-                    type="checkbox"
-                    checked={form.photoConsent}
-                    onChange={(e) => set('photoConsent', e.target.checked)}
-                    aria-invalid={errors.photoConsent || undefined}
-                    aria-describedby={
-                      errors.photoConsent ? 'e-photo-consent' : undefined
-                    }
-                  />
-                  <span>{t('s2.photoConsent')}</span>
-                </label>
-                {errors.photoConsent && (
-                  <p id="e-photo-consent" role="alert" className={s.error}>
-                    {t('s2.photoConsentError')}
-                  </p>
-                )}
-              </div>
+              <PhotoConsent
+                id="s2-photo-consent"
+                checked={form.photoConsent}
+                error={errors.photoConsent}
+                onChange={(v) => set('photoConsent', v)}
+              />
             )}
           </div>
         )}

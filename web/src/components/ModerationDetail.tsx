@@ -59,9 +59,11 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
       ? [...CHECKS_NEW, CHECK_PHOTOS]
       : CHECKS_NEW
     : isTeam
-      ? item.team && item.team.stories > 0
-        ? [...CHECKS_TEAM, CHECK_TEAM_STORIES]
-        : CHECKS_TEAM
+      ? [
+          ...CHECKS_TEAM,
+          ...(item.team && item.team.stories > 0 ? [CHECK_TEAM_STORIES] : []),
+          ...(item.photoCount ? [CHECK_PHOTOS] : []),
+        ]
       : isRemoval
         ? CHECKS_REMOVAL
         : CHECKS_EDIT;
@@ -259,6 +261,12 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
               <dt>{t('teamStories')}</dt>
               <dd>{t('teamStoriesValue', { n: item.team.stories })}</dd>
             </div>
+            {item.photoCount ? (
+              <div>
+                <dt>{t('photosCount')}</dt>
+                <dd>{t('photosNote', { count: item.photoCount })}</dd>
+              </div>
+            ) : null}
           </dl>
           {item.restaurantSlug && (
             <Link

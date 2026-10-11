@@ -73,6 +73,7 @@ Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el en
 3. **Datos:** personas en el equipo y cuántas tienen discapacidad (validaciones: ≥1, ≤ total); en nivel medio, áreas y tipos de discapacidad sin identificar; en nivel máximo, hasta 3 historias, cada una con **su propio consentimiento** (la persona o su representante legal).
    - Áreas y tipos de discapacidad se eligen **por separado**, sin cruzarlos (ver `01_ESPECIFICACION_DATOS.md`).
    - Equipos de menos de 5 personas ❓: aviso, y solo se pide y se muestra la cifra, aunque se haya elegido otro nivel.
+   - **Fotos de su local (opcional, hasta 3):** se reducen en el navegador, y si hay alguna se pide marcar «son mías o tengo permiso del negocio». Quedan en cuarentena hasta que Moderación las aprueba. De momento la petición sigue siendo de tipo «Equipo»: enviar solo fotos exige también dar la cifra.
 4. **Revisión:** vista previa fiel de la ficha ("así se verá", es el mismo componente que la ficha), **correo de contacto obligatorio** (privado: moderación lo usa para confirmar que quien envía es del negocio, sin cuentas) y casilla de responsabilidad; envío a moderación.
 - El texto de consentimiento es **provisional** y debe revisarlo un profesional antes del lanzamiento.
 - Una historia sin consentimiento marcado no se puede enviar.

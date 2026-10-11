@@ -6,6 +6,7 @@
 - **Quién:** Representante del negocio.
 - **Pasos:** `/business` en 4 pasos: **antes de empezar** (las tres garantías y elegir el local) → **qué mostrar** (solo cifras, áreas y tipos, o historias con nombre) → **los datos** (personas en el equipo y con discapacidad, áreas, tipos) → **revisión** (vista previa, correo obligatorio y casilla de responsabilidad). Termina en «¡Gracias!».
 - **Si no:** con menos de 5 personas se avisa y solo se envía y muestra la cifra.
+- **Fotos:** al final de los datos puede añadir hasta 3 fotos de su local o de sus platos (opcional), con la casilla «son mías o tengo permiso». Quedan en cuarentena hasta que Moderación las aprueba. Hoy la petición sigue siendo de tipo «Equipo», así que enviar solo fotos exige dar también la cifra.
 - **Reglas:** el negocio siempre da el último sí; áreas y tipos se eligen por separado, sin cruzarlos; no guarda borrador; en el buzón de prueba solo se guarda cuántas historias hay.
 - **Observaciones:** con servidor será la primera vez que se reciban nombres e historias de terceros (hace falta revisión legal, plazos reales y seguridad). Cualquiera puede decir que es del negocio; la defensa es la confirmación por canal oficial (P9).
 

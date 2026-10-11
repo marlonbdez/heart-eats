@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { submitBusinessTeam } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
+import type { PreparedPhoto } from '@/lib/image';
 import { isSmallTeam } from '@/lib/team';
 import type {
   ConsentBy,
@@ -13,11 +14,14 @@ import type {
   TeamLevel,
 } from '@/lib/types';
 import { isEmail } from '@/lib/validation';
+import { PhotoConsent } from './PhotoConsent';
+import { PhotoPicker } from './PhotoPicker';
 import { TeamBlock } from './TeamBlock';
 import s from './Form.module.css';
 
 const STEPS = 4;
 const MAX_STORIES = 3;
+const MAX_PHOTOS = 3;
 const LEVELS: TeamLevel[] = ['minimal', 'medium', 'full'];
 const AREAS: TeamArea[] = ['kitchen', 'dining', 'bar', 'workshop', 'delivery'];
 const TYPES: DisabilityType[] = [
@@ -51,6 +55,8 @@ interface FormState {
   areas: TeamArea[];
   types: DisabilityType[];
   stories: StoryState[];
+  photos: PreparedPhoto[]; // reducidas; no salen del navegador hasta enviar
+  photoConsent: boolean;
   email: string;
   ack: boolean;
   website: string; // honeypot
@@ -71,6 +77,8 @@ const initial: FormState = {
   areas: [],
   types: [],
   stories: [emptyStory],
+  photos: [],
+  photoConsent: false,
   email: '',
   ack: false,
   website: '',
@@ -100,6 +108,7 @@ export function BusinessForm({
   const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
     'idle',
   );
+  const [photoError, setPhotoError] = useState('');
   const isDone = status === 'done';
   const headingRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -164,6 +173,8 @@ export function BusinessForm({
         form.stories.forEach((st, i) => {
           if (!storyIsComplete(st)) next[`story${i}`] = true;
         });
+      if (form.photos.length > 0 && !form.photoConsent)
+        next.photoConsent = true;
     }
     if (step === 4) {
       if (!isEmail(form.email.trim())) next.email = true;
@@ -187,6 +198,7 @@ export function BusinessForm({
           ...st,
           consentBy: form.stories[i].consentBy,
         })),
+        photos: form.photos.map((p) => p.blob),
         contactEmail: form.email.trim(),
         website: form.website,
       });
@@ -203,6 +215,8 @@ export function BusinessForm({
   };
 
   const reset = () => {
+    form.photos.forEach((p) => URL.revokeObjectURL(p.url));
+    setPhotoError('');
     setForm(initial);
     setErrors({});
     setStep(1);
@@ -557,6 +571,49 @@ export function BusinessForm({
                 <p className={s.small}>{t('s3.consentNote')}</p>
               </>
             )}
+            <div className={s.card}>
+              <h2 className={s.cardTitle}>{t('s3.photosTitle')}</h2>
+              <p id="b-photo-hint" className={s.small}>
+                {t('s3.photosHint')}
+              </p>
+              {form.photos.map((photo, i) => (
+                <PhotoPicker
+                  key={photo.url}
+                  id={`b-photo-${i}`}
+                  label={t('s3.photoLabel', { n: i + 1 })}
+                  alt={t('s3.photoAlt', { n: i + 1 })}
+                  photo={photo}
+                  onChange={() =>
+                    set(
+                      'photos',
+                      form.photos.filter((_, j) => j !== i),
+                    )
+                  }
+                  onError={setPhotoError}
+                />
+              ))}
+              {form.photos.length < MAX_PHOTOS && (
+                <PhotoPicker
+                  id="b-photo-new"
+                  label={t('s3.photoLabel', { n: form.photos.length + 1 })}
+                  alt=""
+                  error={photoError}
+                  describedBy="b-photo-hint"
+                  onChange={(photo) =>
+                    photo && set('photos', [...form.photos, photo])
+                  }
+                  onError={setPhotoError}
+                />
+              )}
+              {form.photos.length > 0 && (
+                <PhotoConsent
+                  id="b-photo-consent"
+                  checked={form.photoConsent}
+                  error={errors.photoConsent}
+                  onChange={(v) => set('photoConsent', v)}
+                />
+              )}
+            </div>
           </div>
         )}
 
@@ -566,6 +623,11 @@ export function BusinessForm({
             <div className={s.field}>
               <p className={s.label}>{place?.name}</p>
               <TeamBlock team={buildTeam()} level={level} />
+              {form.photos.length > 0 && (
+                <p className={s.small}>
+                  {t('s4.photos', { count: form.photos.length })}
+                </p>
+              )}
             </div>
             <div className={s.field}>
               <label htmlFor="b-mail" className={s.label}>
