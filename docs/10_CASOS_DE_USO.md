@@ -182,8 +182,8 @@ Entregas previstas, cada una en su PR:
 2. ✅ Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales), en dos PR:
    - 2a ✅ Descubrir e Información (CU-01 a CU-09 y CU-28 a CU-32).
    - 2b ✅ Colaborar, Negocio y Moderación (el resto).
-3. Diagrama de actividad con carriles del ciclo «proponer → verificar → publicar», diagrama de estados de una solicitud y modelo de dominio.
-4. Matriz de trazabilidad: CU ↔ ruta ↔ componente ↔ prueba e2e ↔ documento.
+3. ✅ Diagrama de actividad con carriles del ciclo «proponer → verificar → publicar», diagrama de estados de una solicitud y modelo de dominio, en [`11_FLUJO_Y_DOMINIO.md`](11_FLUJO_Y_DOMINIO.md).
+4. *(Opcional; se propone no hacerla.)* Matriz de trazabilidad CU ↔ prueba e2e. Las fichas ya indican la ruta y los componentes de cada CU, así que solo aportaría la columna de pruebas.
 
 Preguntas abiertas que el modelo ha hecho aflorar:
 

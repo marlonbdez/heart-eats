@@ -38,3 +38,32 @@ skinparam package {
   BorderColor #B5472B
   FontColor #1F1F1F
 }
+skinparam activity {
+  BackgroundColor #FFF4E6
+  BorderColor #B5472B
+  FontColor #1F1F1F
+  DiamondBackgroundColor #FFFFFF
+  DiamondBorderColor #B5472B
+  StartColor #5A4A42
+  EndColor #5A4A42
+  BarColor #5A4A42
+}
+skinparam swimlane {
+  BorderColor #8A7B72
+  TitleFontColor #1F1F1F
+}
+skinparam state {
+  BackgroundColor #FFF4E6
+  BorderColor #B5472B
+  FontColor #1F1F1F
+  StartColor #5A4A42
+  EndColor #5A4A42
+}
+skinparam class {
+  BackgroundColor #FFF4E6
+  BorderColor #B5472B
+  FontColor #1F1F1F
+  AttributeFontColor #1F1F1F
+  BackgroundColor<<servidor>> #F2F2F2
+  BorderColor<<servidor>> #6B6B6B
+}

@@ -1,0 +1,73 @@
+@startuml 08-dominio
+!include estilo.puml
+title Modelo de dominio
+hide empty methods
+hide circle
+
+class Restaurante {
+  nombre
+  tipo de negocio
+  dirección y ubicación
+  contacto
+  comidas
+  confirmado por el negocio
+}
+class "Plato estrella" as Plato {
+  nombre
+  descripción
+  foto
+}
+class Horario {
+  día
+  abre y cierra
+}
+class Verificacion as "Verificación" {
+  nivel: verificado o confirmado
+  método
+  fecha
+  necesita revisión
+}
+class Equipo {
+  nivel: cifras, áreas y tipos, o historias
+  personas, y cuántas con discapacidad
+  áreas
+  tipos de discapacidad
+}
+class Historia {
+  nombre o seudónimo
+  puesto
+  texto
+  quién da el permiso
+}
+class Solicitud {
+  tipo: nuevo, corrección, equipo o retirada
+  estado
+  recibida el
+  correo de contacto: privado
+  avisos
+}
+class Decision as "Decisión" {
+  acción: aprobar, rechazar o pedir información
+  motivo o nota
+  nivel y método: solo en un local nuevo
+}
+class Auditoria as "Registro de auditoría" <<servidor>> {
+  quién
+  qué
+  cuándo
+}
+
+Restaurante "1" *-- "1..3" Plato
+Restaurante "1" *-- "0..*" Horario
+Restaurante "1" *-- "1" Verificacion
+Restaurante "1" o-- "0..1" Equipo
+Equipo "1" *-- "0..3" Historia
+Solicitud "0..*" --> "0..1" Restaurante : sobre
+Solicitud "1" -- "0..1" Decision : se resuelve con
+Decision "1" -- "1" Auditoria : deja
+
+note bottom of Auditoria
+  Gris: solo existirá con el servidor.
+  Hoy es una línea de texto en pantalla.
+end note
+@enduml
