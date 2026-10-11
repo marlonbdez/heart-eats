@@ -12,8 +12,10 @@
 | [07_VERIFICACION](07_VERIFICACION.md) | Verificación y moderación |
 | [08_PRIVACIDAD_LEGAL](08_PRIVACIDAD_LEGAL.md) | RGPD, consentimientos, licencias |
 | [09_CORREO](09_CORREO.md) | Correo del dominio |
+| [10_CASOS_DE_USO](10_CASOS_DE_USO.md) | Actores, paquetes y casos de uso (UML) |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
+| [modelado/](modelado/) | Fuentes PlantUML y SVG de los diagramas |
 | [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo) |
 
 ## Estado (2026-10-11)

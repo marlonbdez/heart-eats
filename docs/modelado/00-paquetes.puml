@@ -1,0 +1,27 @@
+@startuml 00-paquetes
+!include estilo.puml
+title Paquetes y dependencias
+
+rectangle "Descubrir" as DES #FFF4E6
+rectangle "Colaborar" as COL #FFF4E6
+rectangle "Negocio" as NEG #FFF4E6
+rectangle "Moderación" as MOD #FFF4E6
+rectangle "Información" as INF #FFF4E6
+
+COL ..> DES : elige el local\nde una ficha
+NEG ..> DES : elige el local\nde una ficha
+NEG ..> COL : envía la solicitud\n(CU-14)
+MOD ..> COL : revisa propuestas,\ncorrecciones y retiradas
+MOD ..> NEG : revisa el equipo\nque cuenta un negocio
+MOD ..> DES : lo aprobado\nse publica en las fichas
+
+note bottom of INF
+  Páginas de contenido e idioma.
+  No depende de ningún otro paquete.
+end note
+
+note as N
+  Todos los paquetes leen y escriben a través de la capa
+  de datos (web/src/lib/data/), hoy con datos de ejemplo.
+end note
+@enduml

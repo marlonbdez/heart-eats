@@ -1,0 +1,41 @@
+@startuml 02-colaborar
+!include estilo.puml
+title Paquete Colaborar · casos de uso
+left to right direction
+
+actor "Visitante" as V
+actor "Colaborador/a" as C
+V <|-- C
+
+rectangle "HeartEats · Colaborar" {
+  usecase "CU-10\nProponer un local" as CU10
+  usecase "CU-11\nGestionar el borrador\nde la propuesta" as CU11
+  usecase "CU-12\nSugerir una corrección" as CU12
+  usecase "CU-13\nPedir una retirada" as CU13
+  usecase "CU-14\nEnviar una solicitud\na moderación" as CU14
+}
+
+C --> CU10
+C --> CU12
+V --> CU13
+
+CU11 ..> CU10 : <<extend>>
+CU10 ..> CU14 : <<include>>
+CU12 ..> CU14 : <<include>>
+CU13 ..> CU14 : <<include>>
+
+note right of CU14
+  Caso de uso interno y compartido:
+  comprueba los datos, descarta el
+  envío si el campo trampa viene
+  relleno y deja la solicitud
+  en la cola de moderación.
+end note
+
+note bottom of CU13
+  La pide el negocio o la persona
+  cuyos datos aparecen. Moderación
+  confirma su identidad por correo
+  antes de ocultar nada.
+end note
+@enduml

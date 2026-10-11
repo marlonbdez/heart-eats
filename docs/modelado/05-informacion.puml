@@ -1,0 +1,21 @@
+@startuml 05-informacion
+!include estilo.puml
+title Paquete Información · casos de uso
+left to right direction
+
+actor "Visitante" as V
+
+rectangle "HeartEats · Información" {
+  usecase "CU-28\nConsultar qué es HeartEats" as CU28
+  usecase "CU-29\nConsultar cómo se verifica" as CU29
+  usecase "CU-30\nConsultar privacidad y datos" as CU30
+  usecase "CU-31\nContactar con el proyecto" as CU31
+  usecase "CU-32\nCambiar el idioma" as CU32
+}
+
+V --> CU28
+V --> CU29
+V --> CU30
+V --> CU31
+V --> CU32
+@enduml

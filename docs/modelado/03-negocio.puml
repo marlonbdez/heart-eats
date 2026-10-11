@@ -1,0 +1,30 @@
+@startuml 03-negocio
+!include estilo.puml
+title Paquete Negocio · casos de uso
+left to right direction
+
+actor "Visitante" as V
+actor "Representante\ndel negocio" as R
+V <|-- R
+
+rectangle "HeartEats · Negocio" {
+  usecase "CU-15\nContar el equipo del negocio" as CU15
+  usecase "CU-16\nPrevisualizar la ficha" as CU16
+  usecase "CU-17\nDar el consentimiento\nde una historia" as CU17
+  usecase "CU-14\nEnviar una solicitud\na moderación\n(paquete Colaborar)" as CU14
+}
+
+R --> CU15
+
+CU15 ..> CU16 : <<include>>
+CU15 ..> CU14 : <<include>>
+CU17 ..> CU15 : <<extend>>\n[nivel «Historias con nombre»]
+
+note as N1
+  El negocio elige cuánto contar: solo cifras,
+  áreas y tipos, o historias con nombre.
+  En equipos de menos de 5 personas solo
+  se muestra la cifra.
+end note
+CU15 .. N1
+@enduml
