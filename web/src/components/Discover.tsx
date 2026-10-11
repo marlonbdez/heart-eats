@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
+import { rememberDiscovery } from '@/lib/back';
 import { sortByDistance } from '@/lib/geo';
 import { matchFoodTags, matchesQuery } from '@/lib/search';
 import type { FoodTag, Restaurant } from '@/lib/types';
@@ -81,6 +82,12 @@ export function Discover({
   const query: Record<string, string> = {};
   if (q.trim()) query.q = q.trim();
   if (food.length) query.food = food.join(',');
+
+  // Para que "Volver" en la ficha regrese aquí, con la misma búsqueda.
+  const queryKey = JSON.stringify(query);
+  useEffect(() => {
+    rememberDiscovery({ view, query: JSON.parse(queryKey) });
+  }, [view, queryKey]);
 
   const clearAll = () => {
     setQ('');

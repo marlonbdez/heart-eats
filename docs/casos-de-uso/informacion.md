@@ -25,6 +25,6 @@
 
 ## CU-32 · Cambiar el idioma
 - **Quién:** Visitante.
-- **Pasos:** menú ☰ → pie «Idioma» → elige Español o English → se abre la misma ruta con el otro prefijo (`/es/propose` ↔ `/en/propose`).
+- **Pasos:** menú ☰ → pie «Idioma» → elige Español o English → se abre la misma ruta, con su búsqueda, con el otro prefijo (`/es/propose` ↔ `/en/propose`).
 - **Reglas:** las URLs son solo en inglés (ADR 0003); el inglés necesita revisión nativa antes de abrir al público.
-- **Observaciones:** al cambiar de idioma se pierde la búsqueda del mapa (`?q`, `?food`); la primera visita siempre entra en español.
+- **Observación:** la primera visita siempre entra en español.

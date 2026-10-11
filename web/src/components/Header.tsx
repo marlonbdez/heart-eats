@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
-import { Link, usePathname } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { navGroups } from '@/lib/nav';
 import { LogoMark } from './LogoMark';
@@ -18,6 +18,7 @@ export function Header() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   const open = () => {
     dialogRef.current?.showModal();
@@ -134,6 +135,15 @@ export function Header() {
                     lang={code}
                     hrefLang={code}
                     className={styles.langLink}
+                    // Cambia de idioma sin perder la búsqueda (?q, ?food), que
+                    // solo se conoce en el navegador.
+                    onClick={(e) => {
+                      e.preventDefault();
+                      router.replace(
+                        `${pathname}${window.location.search}`,
+                        { locale: code },
+                      );
+                    }}
                   >
                     {t(`languages.${code}`)}
                   </Link>
