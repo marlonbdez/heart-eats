@@ -13,6 +13,7 @@
 | [08_PRIVACIDAD_LEGAL](08_PRIVACIDAD_LEGAL.md) | RGPD, consentimientos, licencias |
 | [09_CORREO](09_CORREO.md) | Correo del dominio |
 | [10_CASOS_DE_USO](10_CASOS_DE_USO.md) | Actores, paquetes y casos de uso (UML) |
+| [11_FLUJO_Y_DOMINIO](11_FLUJO_Y_DOMINIO.md) | Ciclo de una propuesta, estados de una solicitud y modelo de dominio |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
