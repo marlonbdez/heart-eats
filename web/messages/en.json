@@ -576,13 +576,17 @@
       {
         "heading": "Your rights",
         "paragraphs": [
-          "You can ask us to access your data, correct it, delete it, limit its use, object to it or receive it in a portable format. If you gave us your consent, you can withdraw it at any time, and that does not affect what has already been handled. We will answer within one month at the most.",
+          "You can ask us to access your data, correct it, delete it, limit its use, object to it or receive it in a portable format. If you gave us your consent, you can withdraw it at any time, and that does not affect what has already been handled. We will answer within one month at the most. You can also write to us at contact@hearteats.org.",
           "If you ever feel we have not looked after your data well, you can complain to the Spanish Data Protection Agency (aepd.es). Before that, we would love the chance to sort it out with you."
         ],
         "links": [
           {
             "label": "Ask for a removal",
             "href": "/removal"
+          },
+          {
+            "label": "Write to contact@hearteats.org",
+            "href": "mailto:contact@hearteats.org"
           }
         ]
       },
@@ -636,12 +640,16 @@
         "heading": "Withdraw a story or use your rights",
         "paragraphs": [
           "To withdraw a story, a photo or a listing there is a form on the website: no account and no explanations needed. We write to the email you leave to confirm it is you.",
-          "For other rights over your data you will also have an email address. We are still setting it up and it will be ready before the project opens to the public. Until then, do not write personal data in a public channel."
+          "For any other right over your data, or if you prefer to write to us, use this address. We reply within one month at the most. Please do not include health information or other people's names in your message."
         ],
         "links": [
           {
             "label": "Ask for a removal",
             "href": "/removal"
+          },
+          {
+            "label": "Write to contact@hearteats.org",
+            "href": "mailto:contact@hearteats.org"
           }
         ]
       },

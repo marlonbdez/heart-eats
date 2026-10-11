@@ -29,7 +29,7 @@ Ver [ADR 0001](adr/0001-licencias.md). Punto clave: las historias, nombres y fot
 
 ### Quién es responsable de los datos
 
-❓ **[Pendiente: P6.]** Mientras no exista una asociación, el responsable sería la persona que impulsa el proyecto: _Marlon Bermúdez, con correo [❓ correo de contacto]_. Cuando se constituya la asociación, este apartado cambia. Hay que decidir qué datos de contacto se hacen públicos (la normativa exige identificar al responsable).
+❓ **[Pendiente: P6.]** Mientras no exista una asociación, el responsable sería la persona que impulsa el proyecto: _Marlon Bermúdez, con correo `contact@hearteats.org`_. Cuando se constituya la asociación, este apartado cambia. Hay que decidir qué datos de contacto se hacen públicos (la normativa exige identificar al responsable).
 
 ### Qué datos tratamos y para qué
 
@@ -53,7 +53,7 @@ Este apartado es el que más nos importa, así que lo contamos con palabras senc
 - **Solo el negocio puede contar la historia de su equipo**, y nunca con detalle sin que lo sepa. Hasta que el negocio lo confirme, solo mostramos información pública y verificable.
 - **Cada persona decide por sí misma** si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si corresponde, lo decide su representante legal.
 - **Una historia sin consentimiento registrado no se guarda.**
-- **Se puede retirar en cualquier momento y sin dar explicaciones**, escribiendo a ❓ [correo]. La historia deja de mostrarse al instante y los datos se borran en un máximo de ❓ 7 días.
+- **Se puede retirar en cualquier momento y sin dar explicaciones**, escribiendo a `contact@hearteats.org` o desde el formulario «Pedir una retirada». La historia deja de mostrarse al instante y los datos se borran en un máximo de ❓ 7 días.
 - **En equipos pequeños** (❓ menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.
 - Las historias, nombres y fotos **no están bajo licencia abierta** y nunca se incluyen en las exportaciones de datos abiertos.
 
@@ -70,7 +70,7 @@ La base de datos de negocios se publica bajo licencia ODbL (nombre, dirección, 
 
 ### Tus derechos
 
-Puedes pedirnos **acceder** a tus datos, **rectificarlos**, **suprimirlos**, **limitar** su uso, **oponerte** a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes **retirarlo** cuando quieras, y eso no afecta a lo ya tratado. Escríbenos a ❓ [correo] y te responderemos en un plazo máximo de un mes.
+Puedes pedirnos **acceder** a tus datos, **rectificarlos**, **suprimirlos**, **limitar** su uso, **oponerte** a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes **retirarlo** cuando quieras, y eso no afecta a lo ya tratado. Escríbenos a `contact@hearteats.org` y te responderemos en un plazo máximo de un mes.
 
 Si alguna vez sientes que no hemos cuidado bien tus datos, puedes reclamar ante la **Agencia Española de Protección de Datos** (aepd.es). Antes de eso, nos encantará poder aclararlo contigo.
 
@@ -94,7 +94,7 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 - ✅ Los formularios avisan de no escribir nombres ni datos de salud, y enlazan a esta política.
 - ⏳ El envío de propuestas y correcciones está **simulado**: hasta que exista el backend no se guarda nada, y el plazo de borrado del correo y el límite por IP no se pueden implementar.
 - ✅ F3 (consentimientos del equipo) existe como prototipo con envío simulado. Sus textos de consentimiento son **provisionales**: no deben publicarse sin revisión profesional y sin esta política.
-- ✅ `/privacy` y `/contact` existen en la web (ES y EN) como **borrador**: llevan el texto de arriba adaptado a lista (sin tabla, para el móvil), un aviso de borrador y, en Contacto, sin correo todavía (los datos pendientes de P6 y del correo se completan después). La revisión legal y la revisión del inglés siguen pendientes.
+- ✅ `/privacy` y `/contact` existen en la web (ES y EN) como **borrador**: llevan el texto de arriba adaptado a lista (sin tabla, para el móvil), un aviso de borrador y, y en Contacto y en «Tus derechos» el correo `contact@hearteats.org` (los datos pendientes de P6 se completan después). La revisión legal y la revisión del inglés siguen pendientes.
 - ⏳ Si se añade analítica, hay que actualizar este texto antes (la opción prevista es Plausible o Umami autoalojado, o ninguna).
 - ⏳ Una página de **aviso legal** y la política de **cookies** (hoy basta con decir que no se usan) deben acompañar a esta antes del lanzamiento.
 
@@ -102,7 +102,7 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 
 | #   | Decisión                                                                           | Propuesta                                               |
 | --- | ---------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 1   | ❓ Quién figura como responsable y qué correo de contacto se publica (P6)          | Marlon a título personal hasta que exista la asociación |
+| 1   | ❓ Quién figura como responsable y qué correo de contacto se publica (P6)          | Marlon a título personal hasta que exista la asociación; correo público: `contact@hearteats.org` (reenvío a un correo personal, ver `09_CORREO.md`) |
 | 2   | ❓ Plazo de borrado tras retirar una historia                                      | 7 días                                                  |
 | 3   | ❓ Umbral de equipo pequeño                                                        | Menos de 5 personas                                     |
 | 4   | ❓ Cuánto se guarda el correo de quien propone o corrige                           | Hasta resolver la propuesta, y como máximo 6 meses      |
