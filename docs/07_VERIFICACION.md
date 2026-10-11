@@ -21,7 +21,14 @@ Propuesta (F2) → Filtro automático → Revisión humana → Contacto con el n
    - **Equipo inclusivo:** enlace aportado, noticias, web propia, convenios con centros especiales de empleo, referencias de entidades del sector.
 4. **Contacto con el negocio** por canal oficial (teléfono o correo del dominio oficial). Se confirma que quiere aparecer y se le ofrece F3 (nivel de información del equipo y consentimientos).
 5. **Decisión:** aprobar (fija nivel y método de verificación), pedir más información, o rechazar con motivo.
+   - **Pedir información** (decidido): la solicitud pasa a `info_requested` y se envía la nota a quien propuso, **si dejó correo** (sin correo, solo se puede rechazar o dejar pendiente). Quien propuso responde desde un enlace del correo; la **misma solicitud vuelve a `pending`** con la respuesta. Si no responde en **14 días**, se cierra sola como rechazada («sin respuesta»).
 6. **Registro.** Toda acción queda en `AuditLog`.
+
+## Fotos y platos
+
+- Los **platos estrella son opcionales**: un café, una panadería o un obrador pueden no tener ninguno. Sin platos, la ficha no muestra ese bloque.
+- Las **fotos** se aportan desde la propia web (al proponer o desde el formulario del negocio), con una casilla de «es mía o tengo permiso del negocio». Se reducen en el navegador antes de subirse y quedan **en cuarentena**: no se ven hasta que Moderación las aprueba.
+- Moderación comprueba que la foto es del plato o del local, que no muestra caras reconocibles ni datos personales y que hay permiso. El negocio sigue dando el último sí antes de publicar.
 
 ## Niveles de insignia
 
@@ -64,5 +71,5 @@ Se aceptan negocios independientes y proyectos con impacto social. Se rechazan g
 
 ## Preguntas abiertas
 
-1. ❓ Plazo objetivo de respuesta a una propuesta (propuesta: 14 días).
+1. ❓ Plazo objetivo de respuesta a una propuesta (propuesta: 14 días; es también el plazo para responder a una petición de información).
 2. ❓ Criterio para ascender a moderador/a local.

@@ -11,8 +11,8 @@ state "Rechazada" as R
 P --> A : aprobar (CU-24)\n[comprobaciones hechas]
 P --> R : rechazar (CU-25)\n[motivo]
 P --> I : pedir información (CU-26)\n[nota]
-I -[dashed]-> P : responde quien propuso\n(decisión abierta)
-I -[dashed]-> R : no responde\n(decisión abierta)
+I --> P : responde quien propuso
+I --> R : no responde en 14 días
 A --> [*]
 R --> [*]
 
@@ -28,7 +28,6 @@ end note
 note bottom of I
   Hoy "Info pedida" cierra la
   solicitud (pasa a «Resueltas»).
-  Las flechas discontinuas son
-  una propuesta, no algo construido.
+  El resto llega con el servidor.
 end note
 @enduml

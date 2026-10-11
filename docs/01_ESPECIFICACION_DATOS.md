@@ -32,7 +32,7 @@
 | `location` | GeoJSON Point | ✔ | `coordinates: [lng, lat]`, rangos válidos |
 | `contact.phone/email/website/instagram` | string | | `website` URL https; `email` formato válido |
 | `openingHours` | `{day 0-6, open, close}[]` | | `HH:mm`; permitir varios tramos por día ❓ cierre tras medianoche |
-| `signatureDishes` | `{name, description?, photoUrl?}[]` | ✔ | 1–3 platos estrella; `name` ≤ 80, `description` ≤ 160 |
+| `signatureDishes` | `{name, description?, photoUrl?}[]` | | 0–3 platos estrella (opcional: un café o una panadería puede no tener ninguno; sin platos, la ficha no muestra el bloque); `name` ≤ 80, `description` ≤ 160. `photoUrl` apunta a una imagen en almacenamiento de objetos (R2 ❓ P1), ya reducida y aprobada por Moderación |
 | `foodTags` | string[] | ✔ | ≥1, catálogo `foodTag` (pizza, pasteles, café, tapas, menú del día, panadería…) usado en los filtros públicos |
 | `inclusionTypes` | enum[] | | **Opcional y no filtrable públicamente.** Solo se muestra en "El Equipo" (nivel medio o máximo) si el negocio lo decide. ≥1: `intellectual_disability`, `physical_disability`, `hearing_impairment`, `visual_impairment`, `mental_health`, `autism_spectrum`, `other` |
 | `teamVisibilityLevel` | enum | ✔ | `minimal` (defecto), `medium`, `full` |
@@ -74,7 +74,7 @@
 
 ### 2.3 `Suggestion`
 
-`type` (`new` | `edit`), `targetRestaurantId?` (obligatorio si `edit`), `payload` (subconjunto validado de `Restaurant`), `submittedBy?` (User o anónimo), `contactEmail?` (solo para seguimiento; no público), `evidence[]`, `status` (`pending` | `approved` | `rejected`), `moderatorNotes`, `reviewedBy`, `createdAt`, `reviewedAt`.
+`type` (`new` | `edit` | `team` | `removal`), `targetRestaurantId?` (obligatorio si no es `new`), `payload` (subconjunto validado de `Restaurant`), `submittedBy?` (User o anónimo), `contactEmail?` (solo para seguimiento; no público), `evidence[]`, `status` (`pending` | `info_requested` | `approved` | `rejected`; ver «Info pedida» en `07_VERIFICACION.md`), `infoRequest?` (nota de Moderación), `infoDeadline?`, `moderatorNotes`, `reviewedBy`, `createdAt`, `reviewedAt`.
 
 ### 2.4 `User`
 

@@ -57,7 +57,7 @@ class Auditoria as "Registro de auditoría" <<servidor>> {
   cuándo
 }
 
-Restaurante "1" *-- "1..3" Plato
+Restaurante "1" *-- "0..3" Plato
 Restaurante "1" *-- "0..*" Horario
 Restaurante "1" *-- "1" Verificacion
 Restaurante "1" o-- "0..1" Equipo
