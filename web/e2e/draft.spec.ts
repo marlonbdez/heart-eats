@@ -19,10 +19,11 @@ test('proponer un local: el borrador se recupera tras recargar, sin el correo', 
   await page.getByRole('button', { name: 'Continuar' }).click();
   await page.getByLabel(/Tu correo|Correo/).fill('yo@ejemplo.org');
 
-  // Espera a que se guarde (con un pequeño retardo) y comprueba el contenido.
+  // Espera a que se guarde el paso 4 (el guardado llega 400 ms después de cada
+  // cambio, y el nombre ya estaba guardado desde el paso 1).
   await expect
     .poll(() => page.evaluate((k) => window.localStorage.getItem(k), KEY))
-    .toContain('Local a medias');
+    .toContain('"step":4');
   const stored = await page.evaluate(
     (k) => window.localStorage.getItem(k),
     KEY,
