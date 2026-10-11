@@ -1,0 +1,40 @@
+' Estilo común de los diagramas de HeartEats: sobrio, fondo blanco (se lee
+' igual en tema claro y oscuro) y texto oscuro sobre crema (contraste AA).
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 13
+skinparam defaultFontColor #1F1F1F
+skinparam shadowing false
+skinparam roundCorner 14
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam ArrowColor #5A4A42
+skinparam ArrowFontColor #3B2F2A
+skinparam ArrowFontSize 11
+skinparam NoteBackgroundColor #FFFDF7
+skinparam NoteBorderColor #8A7B72
+skinparam NoteFontColor #1F1F1F
+skinparam TitleFontSize 16
+skinparam actor {
+  BackgroundColor #FFFFFF
+  BorderColor #5A4A42
+  FontColor #1F1F1F
+}
+skinparam usecase {
+  BackgroundColor #FFF4E6
+  BorderColor #B5472B
+  FontColor #1F1F1F
+  BackgroundColor<<pendiente>> #F2F2F2
+  BorderColor<<pendiente>> #6B6B6B
+  FontColor<<pendiente>> #1F1F1F
+}
+skinparam rectangle {
+  BackgroundColor #FFFFFF
+  BorderColor #B5472B
+  FontColor #1F1F1F
+}
+skinparam package {
+  BackgroundColor #FFF4E6
+  BorderColor #B5472B
+  FontColor #1F1F1F
+}
