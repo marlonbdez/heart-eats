@@ -39,3 +39,24 @@ test('en inglés', async ({ page }) => {
     page.getByRole('link', { name: 'Report a bug on GitHub' }),
   ).toHaveAttribute('href', 'https://github.com/marlonbdez/heart-eats/issues');
 });
+
+test('el correo de contacto aparece en Contacto y en Privacidad, en ES y EN', async ({
+  page,
+}) => {
+  for (const path of [
+    '/es/contact',
+    '/es/privacy',
+    '/en/contact',
+    '/en/privacy',
+  ]) {
+    await page.goto(path);
+    await expect(
+      page
+        .locator('#contenido')
+        .locator('a[href="mailto:contact@hearteats.org"]'),
+    ).toBeVisible();
+  }
+  // Ya no se promete una dirección «en preparación».
+  await page.goto('/es/contact');
+  await expect(page.getByText('Todavía la estamos preparando')).toHaveCount(0);
+});

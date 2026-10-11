@@ -35,7 +35,7 @@ Siguiente (por orden):
 - [x] Pruebas automáticas de accesibilidad (axe, WCAG 2.2 AA) en todas las páginas y estados, en móvil, ES/EN y modo claro/oscuro (no sustituyen las pruebas con personas)
 - [x] «Guardar borrador» en proponer un local (en el propio dispositivo, sin el correo, 7 días)
 - [ ] PWA: icono en la pantalla de inicio y apertura a pantalla completa
-- [ ] Correo del dominio (`contact@hearteats.org`, reenvío gratuito) y ponerlo en `/contact` y `/privacy`
+- [x] Correo del dominio (`contact@hearteats.org`, reenvío gratuito con ImprovMX; ver `09_CORREO.md`), puesto en `/contact` y `/privacy`
 
 ## Fase 2 · Decisiones de backend
 

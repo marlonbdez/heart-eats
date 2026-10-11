@@ -576,13 +576,17 @@
       {
         "heading": "Tus derechos",
         "paragraphs": [
-          "Puedes pedirnos acceder a tus datos, rectificarlos, suprimirlos, limitar su uso, oponerte a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes retirarlo cuando quieras, y eso no afecta a lo ya tratado. Te responderemos en un plazo máximo de un mes.",
+          "Puedes pedirnos acceder a tus datos, rectificarlos, suprimirlos, limitar su uso, oponerte a él o recibirlos en un formato portable. Si nos diste tu consentimiento, puedes retirarlo cuando quieras, y eso no afecta a lo ya tratado. Te responderemos en un plazo máximo de un mes. También puedes escribirnos a contact@hearteats.org.",
           "Si alguna vez sientes que no hemos cuidado bien tus datos, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es). Antes de eso, nos encantará poder aclararlo contigo."
         ],
         "links": [
           {
             "label": "Pedir una retirada",
             "href": "/removal"
+          },
+          {
+            "label": "Escribir a contact@hearteats.org",
+            "href": "mailto:contact@hearteats.org"
           }
         ]
       },
@@ -636,12 +640,16 @@
         "heading": "Retirar una historia o ejercer tus derechos",
         "paragraphs": [
           "Para retirar una historia, una foto o una ficha, tienes un formulario en la web: no hace falta cuenta ni dar explicaciones. Te escribimos al correo que dejes para confirmar que eres tú.",
-          "Para otros derechos sobre tus datos, tendrás además una dirección de correo. Todavía la estamos preparando y estará lista antes de abrir el proyecto al público. Hasta entonces, no escribas datos personales en un canal público."
+          "Para cualquier otro derecho sobre tus datos, o si prefieres escribirnos, usa esta dirección. Te respondemos en un plazo máximo de un mes. Por favor, no incluyas datos de salud ni nombres de otras personas en el mensaje."
         ],
         "links": [
           {
             "label": "Pedir una retirada",
             "href": "/removal"
+          },
+          {
+            "label": "Escribir a contact@hearteats.org",
+            "href": "mailto:contact@hearteats.org"
           }
         ]
       },
