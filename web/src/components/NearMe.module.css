@@ -23,3 +23,11 @@
   cursor: progress;
   opacity: 0.7;
 }
+/* Móviles muy estrechos (320 px): comparte fila con el conmutador Mapa/Lista. */
+@media (max-width: 359px) {
+  .button {
+    gap: 6px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+  }
+}

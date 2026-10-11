@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: center;
   min-width: 64px;
-  min-height: 44px;
+  min-height: 36px; /* con el relleno, 44 px: igual que «Cerca de mí» */
   padding: 0 12px;
   font-weight: 700;
   color: var(--bg);
@@ -37,4 +37,12 @@
 .item[aria-current='page'] {
   color: var(--fg);
   background: var(--bg);
+}
+/* Móviles muy estrechos (320 px): hay que dejar sitio a «Cerca de mí» en la
+   misma fila, también con tipografías más anchas. */
+@media (max-width: 359px) {
+  .item {
+    min-width: 52px;
+    padding: 0 8px;
+  }
 }

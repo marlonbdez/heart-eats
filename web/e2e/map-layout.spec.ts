@@ -20,6 +20,8 @@ for (const width of [320, 390]) {
       .getByRole('button', { name: 'Cerca de mí' })
       .boundingBox())!;
 
+    // Del mismo alto que «Cerca de mí».
+    expect(Math.abs(v.height - n.height)).toBeLessThanOrEqual(1);
     // Arriba a la izquierda y en la misma fila que «Cerca de mí», sin pisarse.
     expect(v.x).toBeLessThanOrEqual(16);
     expect(v.y).toBeLessThan(attr.y / 2);

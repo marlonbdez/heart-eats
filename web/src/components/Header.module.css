@@ -60,9 +60,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 10px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 8px;
   font-weight: 600;
   color: var(--on-accent);
   background: var(--accent);
@@ -84,7 +84,7 @@
 }
 @media (min-width: 480px) {
   .cta {
-    padding: 0 16px 0 12px;
+    padding: 0 14px 0 10px;
   }
   .ctaText {
     position: static;
