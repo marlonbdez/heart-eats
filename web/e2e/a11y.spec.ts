@@ -1,0 +1,108 @@
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
+
+// Revisión automática de accesibilidad (WCAG 2.2 AA) en todas las pantallas,
+// en español e inglés, con tema claro y oscuro, en móvil. Una revisión
+// automática no sustituye a las pruebas con personas usuarias, pero evita las
+// regresiones fáciles: contraste, nombres de botones, etiquetas, encabezados…
+const PAGES = [
+  '',
+  '/list',
+  '/place/demo-la-masa-madre',
+  '/propose',
+  '/correct/demo-la-masa-madre',
+  '/business',
+  '/removal',
+  '/moderation',
+  '/about',
+  '/verification',
+  '/privacy',
+  '/contact',
+];
+
+test.use({ viewport: { width: 360, height: 780 } });
+
+const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
+
+async function expectNoViolations(page: import('@playwright/test').Page) {
+  const results = await new AxeBuilder({ page })
+    .withTags(TAGS)
+    // La atribución del mapa es de terceros y obligatoria: no se puede
+    // cambiar su estilo.
+    .exclude('.maplibregl-ctrl-attrib')
+    .analyze();
+  const report = results.violations.map(
+    (v) =>
+      `${v.id} (${v.impact}): ${v.help}\n` +
+      v.nodes
+        .slice(0, 3)
+        .map((n) => `   ${n.target.join(' ')}\n   ${n.failureSummary}`)
+        .join('\n'),
+  );
+  expect(report, report.join('\n\n')).toEqual([]);
+}
+
+for (const locale of ['es', 'en']) {
+  for (const scheme of ['light', 'dark'] as const) {
+    for (const path of PAGES) {
+      test(`a11y ${locale} ${scheme} ${path || '/'}`, async ({ page }) => {
+        await page.emulateMedia({ colorScheme: scheme });
+        await page.goto(`/${locale}${path}`);
+        await page.locator('#contenido, main').first().waitFor();
+        await expectNoViolations(page);
+      });
+    }
+  }
+}
+
+// Estados que solo existen tras interactuar.
+for (const scheme of ['light', 'dark'] as const) {
+  test.describe(`estados interactivos (${scheme})`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme });
+    });
+
+    test('menú lateral abierto', async ({ page }) => {
+      await page.goto('/es');
+      await page.getByRole('button', { name: /menú/i }).first().click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('ficha emergente de un local en el mapa', async ({ page }) => {
+      await page.goto('/es');
+      await page.locator('[data-marker]').first().click();
+      await expect(page.getByRole('complementary')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('formulario con errores de validación', async ({ page }) => {
+      await page.goto('/es/propose');
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('petición de retirada con errores', async ({ page }) => {
+      await page.goto('/es/removal');
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: detalle abierto y rechazo', async ({ page }) => {
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Rechazar' }).click();
+      await expectNoViolations(page);
+    });
+
+    test('«Cerca de mí» sin permiso de ubicación', async ({ page }) => {
+      await page.goto('/es/list');
+      await page.getByRole('button', { name: 'Cerca de mí' }).click();
+      await expect(page.getByRole('status').first()).toBeVisible();
+      await expectNoViolations(page);
+    });
+  });
+}
