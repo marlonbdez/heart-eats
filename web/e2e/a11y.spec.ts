@@ -18,6 +18,8 @@ const PAGES = [
   '/about',
   '/verification',
   '/privacy',
+  '/cookies',
+  '/legal',
   '/contact',
 ];
 

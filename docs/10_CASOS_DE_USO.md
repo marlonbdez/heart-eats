@@ -140,7 +140,7 @@ Candidatas a hoja de ruta, **no son decisiones**. El detalle está en las observ
 - Las fotos se suben desde la web, en cuarentena hasta que Moderación las aprueba.
 
 **Antes de abrir al público**
-- Faltan el aviso legal y la política de cookies y almacenamiento.
+- El aviso legal y la política de cookies están en borrador: faltan domicilio y número fiscal (P6) y la revisión legal.
 - Con servidor se recibirán por primera vez datos personales de terceros (nombres, historias): revisión legal, plazos reales y seguridad.
 - El consentimiento de una historia no deja constancia verificable, y Moderación no ve el texto.
 - El registro de auditoría no tiene persona ni hora.

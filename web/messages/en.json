@@ -29,6 +29,8 @@
       "what": "What is HeartEats",
       "verify": "How we verify",
       "privacy": "Privacy and data",
+      "cookies": "Cookies and storage",
+      "legal": "Legal notice",
       "contact": "Contact",
       "moderation": "Moderate suggestions (demo)",
       "removal": "Ask for a removal"
@@ -617,6 +619,146 @@
         "heading": "Changes to this text",
         "paragraphs": [
           "If something important changes, we will update it here and change the date. Version: draft, October 2026."
+        ]
+      }
+    ]
+  },
+  "legal": {
+    "title": "Legal notice",
+    "intro": "This text is a draft: a professional still has to review it and it may change before launch. It says who is behind HeartEats and the terms for using it.",
+    "sections": [
+      {
+        "heading": "Who is behind it",
+        "paragraphs": [
+          "HeartEats is an open, non-profit project. Until an association exists, it is run by Marlon Bermúdez, in a personal capacity.",
+          "The identification details the law requires (address and tax number) will be added here before launch."
+        ],
+        "links": [
+          {
+            "label": "Contact",
+            "href": "/contact"
+          }
+        ]
+      },
+      {
+        "heading": "What this site is",
+        "paragraphs": [
+          "A free map of Madrid hospitality businesses that employ people with disabilities. It is for information only: we do not handle bookings, orders or payments."
+        ]
+      },
+      {
+        "heading": "About the information",
+        "items": [
+          "It is provided by people and businesses, and a person reviews it before it is published. Even so, there may be mistakes or changes we do not know about.",
+          "While the website is in testing, the data you see is sample data.",
+          "If something is wrong, you can suggest a correction. If something affects you, you can ask for a removal."
+        ],
+        "links": [
+          {
+            "label": "Correct a detail",
+            "href": "/correct"
+          },
+          {
+            "label": "Ask for a removal",
+            "href": "/removal"
+          }
+        ]
+      },
+      {
+        "heading": "Licences",
+        "items": [
+          "The code is free software, under the AGPL-3.0 licence.",
+          "The business database is under ODbL, and the documentation under CC BY-SA 4.0.",
+          "People's stories, names and photos have no open licence: they are shown only with their permission and can be withdrawn.",
+          "The map uses OpenStreetMap data, © OpenStreetMap contributors."
+        ],
+        "links": [
+          {
+            "label": "See the code on GitHub",
+            "href": "https://github.com/marlonbdez/heart-eats"
+          }
+        ]
+      },
+      {
+        "heading": "Fair use",
+        "paragraphs": [
+          "We ask you to use it respectfully: please do not knowingly send false data, or other people's names or health details without their permission, or flood the forms with automated submissions. We may discard anything that does not follow this."
+        ]
+      },
+      {
+        "heading": "Responsibility and links",
+        "paragraphs": [
+          "We cannot guarantee that the website will always be available or free of errors. The external pages we link to, such as a place's own website or the map directions, have their own terms and are not our responsibility."
+        ]
+      },
+      {
+        "heading": "Applicable law",
+        "paragraphs": [
+          "Spanish law applies."
+        ]
+      },
+      {
+        "heading": "Changes to this text",
+        "paragraphs": [
+          "If something important changes, we will update it here. Version: draft, October 2026."
+        ]
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Cookies and storage",
+    "intro": "This text is a draft: a professional still has to review it and it may change before launch. It lists everything HeartEats keeps in your browser.",
+    "sections": [
+      {
+        "heading": "In short",
+        "items": [
+          "HeartEats does not use cookies.",
+          "There is no analytics, advertising or tracking.",
+          "That is why you will not see a cookie notice.",
+          "It only keeps a couple of things in your browser, and only when you use a feature that needs them."
+        ]
+      },
+      {
+        "heading": "What is kept in your browser",
+        "items": [
+          "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over.",
+          "Test submissions: in this test version, a summary of what you send, without the full email, names or stories, so it can be seen on the test moderation screen. It can be deleted from that screen and will disappear once sending is real."
+        ],
+        "paragraphs": [
+          "Everything stays on your device and is not sent to anyone. Your browser keeps it for a feature you asked for, so we do not ask for permission."
+        ]
+      },
+      {
+        "heading": "What is not kept",
+        "items": [
+          "Your location: it is only used in memory if you press Near me, and is forgotten when you close the page.",
+          "Your search and filters: they live in the page address.",
+          "The language: it is in the address (/es or /en).",
+          "The photos you choose: they are only held while you fill in the form."
+        ]
+      },
+      {
+        "heading": "How to delete it",
+        "paragraphs": [
+          "In your browser settings, under site data or local storage. If you delete the draft, you only lose what you had written."
+        ]
+      },
+      {
+        "heading": "Third parties",
+        "paragraphs": [
+          "When you open the map, your browser asks for it directly from the service that provides it, which sees your IP address. Today it does not set cookies. We also explain this in Privacy and data."
+        ],
+        "links": [
+          {
+            "label": "Privacy and data",
+            "href": "/privacy"
+          }
+        ]
+      },
+      {
+        "heading": "If this changes",
+        "paragraphs": [
+          "If we ever used cookies or analytics, we would say so here first and ask for your permission for anything that is not essential. Version: draft, October 2026."
         ]
       }
     ]

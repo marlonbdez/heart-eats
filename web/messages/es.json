@@ -29,6 +29,8 @@
       "what": "Qué es HeartEats",
       "verify": "Cómo verificamos",
       "privacy": "Privacidad y datos",
+      "cookies": "Cookies y almacenamiento",
+      "legal": "Aviso legal",
       "contact": "Contacto",
       "moderation": "Moderar propuestas (demo)",
       "removal": "Pedir una retirada"
@@ -617,6 +619,146 @@
         "heading": "Cambios en este texto",
         "paragraphs": [
           "Si cambia algo importante, lo actualizaremos aquí y cambiaremos la fecha. Versión: borrador, octubre de 2026."
+        ]
+      }
+    ]
+  },
+  "legal": {
+    "title": "Aviso legal",
+    "intro": "Este texto es un borrador: todavía lo tiene que revisar un profesional y puede cambiar antes del lanzamiento. Dice quién está detrás de HeartEats y con qué condiciones se usa.",
+    "sections": [
+      {
+        "heading": "Quién está detrás",
+        "paragraphs": [
+          "HeartEats es un proyecto abierto y sin ánimo de lucro. Mientras no exista una asociación, lo impulsa Marlon Bermúdez, a título personal.",
+          "Los datos de identificación que pide la ley (domicilio y número fiscal) se añadirán aquí antes del lanzamiento."
+        ],
+        "links": [
+          {
+            "label": "Contacto",
+            "href": "/contact"
+          }
+        ]
+      },
+      {
+        "heading": "Qué es este sitio",
+        "paragraphs": [
+          "Un mapa gratuito de negocios de hostelería de Madrid que emplean a personas con discapacidad. Es solo informativo: no gestionamos reservas, pedidos ni pagos."
+        ]
+      },
+      {
+        "heading": "Sobre la información",
+        "items": [
+          "La aportan personas y negocios, y una persona la revisa antes de publicarla. Aun así, puede haber errores o cambios que no conozcamos.",
+          "Mientras la web esté en prueba, los datos que ves son de ejemplo.",
+          "Si algo es incorrecto, puedes sugerir una corrección. Si algo te afecta, puedes pedir una retirada."
+        ],
+        "links": [
+          {
+            "label": "Corregir un dato",
+            "href": "/correct"
+          },
+          {
+            "label": "Pedir una retirada",
+            "href": "/removal"
+          }
+        ]
+      },
+      {
+        "heading": "Licencias",
+        "items": [
+          "El código es libre, con licencia AGPL-3.0.",
+          "La base de datos de negocios, con licencia ODbL, y la documentación, con CC BY-SA 4.0.",
+          "Las historias, los nombres y las fotos de personas no tienen licencia abierta: se muestran solo con su permiso y se pueden retirar.",
+          "El mapa usa datos de OpenStreetMap, © colaboradores de OpenStreetMap."
+        ],
+        "links": [
+          {
+            "label": "Ver el código en GitHub",
+            "href": "https://github.com/marlonbdez/heart-eats"
+          }
+        ]
+      },
+      {
+        "heading": "Uso adecuado",
+        "paragraphs": [
+          "Te pedimos un uso respetuoso: no enviar datos falsos a propósito, ni nombres o datos de salud de otras personas sin su permiso, ni saturar los formularios con envíos automáticos. Podemos descartar lo que no cumpla."
+        ]
+      },
+      {
+        "heading": "Responsabilidad y enlaces",
+        "paragraphs": [
+          "No podemos garantizar que la web esté siempre disponible ni libre de errores. Las páginas externas que enlazamos, como la web de un local o las indicaciones del mapa, tienen sus propias condiciones y no responden ante nosotros."
+        ]
+      },
+      {
+        "heading": "Ley aplicable",
+        "paragraphs": [
+          "Se aplica la legislación española."
+        ]
+      },
+      {
+        "heading": "Cambios en este texto",
+        "paragraphs": [
+          "Si cambia algo importante, lo actualizaremos aquí. Versión: borrador, octubre de 2026."
+        ]
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Cookies y almacenamiento",
+    "intro": "Este texto es un borrador: todavía lo tiene que revisar un profesional y puede cambiar antes del lanzamiento. Cuenta todo lo que HeartEats guarda en tu navegador.",
+    "sections": [
+      {
+        "heading": "En pocas palabras",
+        "items": [
+          "HeartEats no usa cookies.",
+          "No hay analítica, publicidad ni seguimiento.",
+          "Por eso no verás ningún aviso de cookies.",
+          "Solo guarda un par de cosas en tu navegador, y únicamente cuando usas una función que las necesita."
+        ]
+      },
+      {
+        "heading": "Lo que se guarda en tu navegador",
+        "items": [
+          "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 7 días como máximo y se borra al enviar o al pulsar «Empezar de cero».",
+          "Los envíos de prueba: en esta versión de prueba, un resumen de lo que envías, sin el correo entero ni nombres ni historias, para verlo en la pantalla de moderación de prueba. Se puede borrar desde esa pantalla y desaparecerá cuando el envío sea real."
+        ],
+        "paragraphs": [
+          "Todo se queda en tu dispositivo y no se envía a nadie. Lo guarda tu navegador para una función que has pedido tú, por eso no te pedimos permiso."
+        ]
+      },
+      {
+        "heading": "Lo que no se guarda",
+        "items": [
+          "Tu ubicación: solo se usa en memoria si pulsas «Cerca de mí», y se olvida al cerrar la página.",
+          "Tu búsqueda y los filtros: viven en la dirección de la página.",
+          "El idioma: va en la dirección (/es o /en).",
+          "Las fotos que eliges: solo se mantienen mientras rellenas el formulario."
+        ]
+      },
+      {
+        "heading": "Cómo borrarlo",
+        "paragraphs": [
+          "En los ajustes de tu navegador, en «datos del sitio» o «almacenamiento local». Si borras el borrador, solo pierdes lo que habías escrito."
+        ]
+      },
+      {
+        "heading": "Terceros",
+        "paragraphs": [
+          "Al abrir el mapa, tu navegador pide el mapa directamente al servicio que lo sirve, que ve tu dirección IP. Hoy no coloca cookies. Lo explicamos también en Privacidad y datos."
+        ],
+        "links": [
+          {
+            "label": "Privacidad y datos",
+            "href": "/privacy"
+          }
+        ]
+      },
+      {
+        "heading": "Si esto cambia",
+        "paragraphs": [
+          "Si algún día usáramos cookies o analítica, lo diríamos aquí antes y te pediríamos permiso para todo lo que no sea imprescindible. Versión: borrador, octubre de 2026."
         ]
       }
     ]
