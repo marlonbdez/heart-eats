@@ -89,7 +89,7 @@
   },
   "results": {
     "count": "{count, plural, =0 {No places} one {# place} other {# places}}",
-    "emptyTitle": "We couldn’t find places matching your search",
+    "emptyTitle": "We couldn’t find any places matching your search",
     "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
     "clearFilters": "Clear filters",
     "propose": "Suggest a place",
@@ -104,7 +104,7 @@
   "detail": {
     "back": "Back",
     "seal": "Business with an inclusive team",
-    "dishes": "What we recommend trying",
+    "dishes": "Dishes we recommend",
     "actions": "Actions",
     "directions": "Directions",
     "call": "Call",
@@ -154,9 +154,9 @@
     "asking": "Finding your location…",
     "privacy": "It is only used in your browser to work out distances; it is not stored or sent.",
     "active": "Sorted by distance from your location.",
-    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; meanwhile, we stay in Madrid.",
-    "unavailable": "We couldn’t get your location. We stay in Madrid.",
-    "outside": "There are no places near you yet. We stay in Madrid.",
+    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; for now, we’ll keep showing Madrid.",
+    "unavailable": "We couldn’t get your location. We’ll keep showing Madrid.",
+    "outside": "There are no places near you yet. We’ll keep showing Madrid.",
     "distanceLabel": "{distance} away"
   },
   "photo": {
@@ -182,7 +182,7 @@
     "next": "Continue",
     "send": "Send suggestion",
     "sending": "Sending…",
-    "sendError": "We couldn’t send your suggestion. Whenever you like, you can try again.",
+    "sendError": "We couldn’t send your suggestion. You can try again whenever you like.",
     "s1": {
       "intro": "Tell us about the place. The basics are enough: we’ll take care of the rest, calmly.",
       "name": "Name of the place",
@@ -197,7 +197,7 @@
       "other": "Other"
     },
     "s2": {
-      "intro": "What dish would you recommend? You can add up to 3, or none if it does not fit (a café, for example). It really helps people decide to go.",
+      "intro": "Which dish would you recommend? You can add up to 3, or none if that doesn’t fit (a café, for example). It really helps people decide where to go.",
       "dish": "Dish {n}",
       "dishName": "Name of the dish",
       "dishDesc": "Short description",
@@ -205,7 +205,7 @@
       "add": "+ Add another dish",
       "photo": "Photo",
       "photoAlt": "Photo of dish {n}",
-      "photoHint": "The photo is optional. It is shrunk on your device and stays hidden until we review it. Choose the dish over people: avoid photos where someone can be recognised. It is not saved in the draft."
+      "photoHint": "The photo is optional. It is resized on your device and stays hidden until we review it. Please show the dish rather than people: avoid photos in which someone can be recognised. It is not saved in the draft."
     },
     "s3": {
       "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Tell us what you know so we can check it.",
@@ -226,7 +226,7 @@
       "summaryFallback": "Your suggestion",
       "noFood": "No kind of food given",
       "photos": "{count, plural, one {1 photo} other {# photos}}",
-      "consent": "By sending, you give us permission to review the suggestion and, if it fits the criteria of an independent business with an inclusive team, publish it.",
+      "consent": "By sending it, you give us permission to review the suggestion and, if it meets our criteria (an independent business with an inclusive team), publish it.",
       "privacy": "Privacy policy"
     },
     "done": {
@@ -254,11 +254,11 @@
     "next": "Continue",
     "send": "Send correction",
     "sending": "Sending…",
-    "sendError": "We couldn’t send your correction. Whenever you like, you can try again.",
+    "sendError": "We couldn’t send your correction. You can try again whenever you like.",
     "kinds": {
       "address": "The address",
       "hours": "The opening hours",
-      "closed": "It has closed",
+      "closed": "It has closed down",
       "team": "The team information",
       "other": "Something else"
     },
@@ -274,7 +274,7 @@
       "hints": {
         "address": "E.g.: the correct address is … street, number …",
         "hours": "E.g.: it now opens Monday to Friday, 9:00 to 18:00.",
-        "closed": "E.g.: I saw it closed and the premises up for rent.",
+        "closed": "E.g.: I saw that it is closed and the premises are to let.",
         "team": "E.g.: keep it general, without names or health information.",
         "other": "Tell us what you have seen."
       },
@@ -290,7 +290,7 @@
       "optional": "(optional)",
       "emailError": "That email doesn’t look valid. You can check it or leave it empty.",
       "summary": "Summary",
-      "consent": "By sending, you give us permission to review your report and, if it is correct, update the listing.",
+      "consent": "By sending it, you give us permission to review your report and, if it is correct, update the listing.",
       "privacy": "Privacy policy"
     },
     "done": {
@@ -312,7 +312,7 @@
       {
         "heading": "Why it exists",
         "paragraphs": [
-          "Going out to eat is something we all do every day. We like the idea that choosing a place where people with disabilities work can be as simple as any other choice, and that it is chosen for what really matters: tasty food, kind service and a good job."
+          "Going out to eat is something we all do every day. We like the idea that choosing a place where people with disabilities work can be as simple as any other choice, made for what really matters: tasty food, kind service and a good job."
         ]
       },
       {
@@ -320,7 +320,7 @@
         "items": [
           "Places with real inclusive employment: what counts is who works there.",
           "Independent businesses and projects with social impact, which are the ones that need visibility most and the ones we can get to know closely.",
-          "If you are looking for information about ramps or adapted toilets, other tools exist for that. HeartEats is not a job board either."
+          "If you are looking for information about ramps or accessible toilets, there are other tools for that. HeartEats is not a job board either."
         ]
       },
       {
@@ -347,7 +347,7 @@
       {
         "heading": "Where we are",
         "paragraphs": [
-          "We are starting in Madrid, hoping to reach more cities little by little. HeartEats is being built: for now you will see example places, which do not exist and are marked as [DEMO]."
+          "We are starting in Madrid and hope to reach more cities little by little. HeartEats is still being built: for now you will see sample places, which do not exist and are marked [DEMO]."
         ]
       }
     ]
@@ -361,10 +361,10 @@
         "ordered": true,
         "items": [
           "We receive the suggestion. It is not public yet.",
-          "An automatic filter helps us avoid unwanted messages and recognise places that were already on the map.",
-          "A person calmly checks that the place exists, that it is independent and that its team is inclusive. They rely on a link, news, the business’s website, agreements or references from organisations in the sector.",
+          "An automatic filter helps us avoid unwanted messages and spot places that are already on the map.",
+          "A person calmly checks that the place exists, that it is independent and that its team is inclusive. They use a link, news coverage, the business’s website, agreements or references from organisations in the sector.",
           "We get in touch with the business through an official channel. We would like to know whether it is happy to appear, and to offer it the chance to tell its team’s story at the level of detail it prefers.",
-          "With all of this a decision is made: it is published, we ask for a little more information or, if it does not fit, we explain why. Everything is noted down."
+          "With all this, a decision is made: we publish it, ask for a little more information or, if it does not fit, explain why. Everything is recorded."
         ]
       },
       {
@@ -400,7 +400,7 @@
         "heading": "Keeping details up to date",
         "items": [
           "Each listing shows the level, the method and the date of the last check.",
-          "After 12 months, the listing is marked to be reviewed again.",
+          "After 12 months, the listing is marked as due for review.",
           "Anyone can suggest a correction or ask for a listing to be removed.",
           "The business can ask for changes or to leave whenever it likes."
         ]
@@ -408,7 +408,7 @@
       {
         "heading": "We look after your privacy when reviewing",
         "paragraphs": [
-          "Suggestions from other people do not include details about those on the team. If someone writes them, we leave them out when reviewing. The email of the person who suggests is private, and we only use it in case we need to ask them something."
+          "Suggestions from other people do not include details about people on the team. If someone writes them, we leave them out when reviewing. The email of the person making the suggestion is private, and we only use it in case we need to ask them something."
         ]
       }
     ]
@@ -432,11 +432,11 @@
       "place": "Which place is it?",
       "placeholder": "Choose your place",
       "placeError": "Choose your place to continue.",
-      "notListed": "Can't find your place?",
+      "notListed": "Can’t find your place?",
       "notListedLink": "Suggest it first"
     },
     "s2": {
-      "intro": "Choose what you would like to show on your place's page. You can start with the simplest option and share more later.",
+      "intro": "Choose what you would like to show on your place’s page. You can start with the simplest option and share more later.",
       "question": "What would you like to show?",
       "error": "Choose an option to continue.",
       "preview": "It will look like this: {example}"
@@ -453,7 +453,7 @@
         "example": "the numbers and, in addition, which areas they work in and which types of disability there are, without identifying anyone."
       },
       "full": {
-        "tag": "Only with each person's permission",
+        "tag": "Only with each person’s permission",
         "title": "Stories with a name",
         "example": "in addition, anyone who wishes can tell their story with their name (or a pseudonym) and their role."
       }
@@ -462,7 +462,7 @@
       "intro": "Tell us how many people make up the team.",
       "total": "People in the team",
       "totalError": "Enter how many people are in the team (at least 1).",
-      "withDisability": "Of them, with a disability",
+      "withDisability": "Of those, with a disability",
       "withDisabilityError": "Enter how many have a disability: at least 1 and no more than the total.",
       "smallTeam": "In small teams, giving details could make someone recognisable. So we will show only the number, even if you chose another level.",
       "areas": "Which areas do they work in?",
@@ -482,17 +482,17 @@
       "self": "The person themselves",
       "representative": "Their legal representative",
       "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my role and what is written above. It is voluntary, I can change my mind whenever I like and, if I ask, it will be deleted within 7 days at most.",
-      "consentRepresentative": "As legal representative, I give permission for HeartEats to publish this person's name (or pseudonym), role and what is written above. It is voluntary, they can change their mind whenever they like and, if they ask, it will be deleted within 7 days at most.",
+      "consentRepresentative": "As legal representative, I give permission for HeartEats to publish this person’s name (or pseudonym), role and what is written above. It is voluntary, they can change their mind whenever they like and, if they ask, it will be deleted within 7 days at most.",
       "consentNote": "Provisional consent text: it must be reviewed by a professional before it is published.",
       "photosTitle": "Photos of your place",
-      "photosHint": "Optional, up to 3: of your dishes or the place. They are shrunk on your device and stay hidden until we review them. Choose the dish over people: avoid photos where someone can be recognised.",
+      "photosHint": "Optional, up to 3: of your dishes or the place. They are resized on your device and stay hidden until we review them. Please show the dish rather than people: avoid photos in which someone can be recognised.",
       "photoLabel": "Photo {n}",
       "photoAlt": "Photo {n} of your place",
       "storyError": "Complete the name, role and story, and tick the permission, to continue.",
       "add": "+ Add another person"
     },
     "s4": {
-      "intro": "Take your time to review it. This is how it will look on your place's page.",
+      "intro": "Take your time to review it. This is how it will look on your place’s page.",
       "previewLabel": "It will look like this:",
       "photos": "{count, plural, one {1 photo} other {# photos}} (reviewed before they show)",
       "email": "Contact email",
@@ -508,12 +508,12 @@
     "start": "Start",
     "send": "Send for review",
     "sending": "Sending…",
-    "sendError": "We couldn't send it. Please try again in a moment.",
+    "sendError": "We couldn’t send it. Please try again in a moment.",
     "done": {
       "title": "Thank you!",
-      "body": "We will review the information about {name} and get in touch to confirm it. Once it is verified, it will appear on your place's page.",
+      "body": "We will review the information about {name} and get in touch to confirm it. Once it is verified, it will appear on your place’s page.",
       "back": "Back to the map",
-      "again": "Tell us about another place's team"
+      "again": "Tell us about another place’s team"
     }
   },
   "privacy": {
@@ -552,14 +552,14 @@
         "items": [
           "If you use the website: none of our own. The web server and the map server see your IP address when they serve you the page, like any server.",
           "If you tap Near me: your location is used only on your device, to sort places by distance. It is not sent or saved, and it is only requested when you tap the button.",
-          "If you suggest a place: the place details, how you know it, a link (optional), photos of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 6 months at the most.",
+          "If you suggest a place: the place details, how you know it, a link (optional), photos of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 6 months at the latest.",
           "If you suggest a correction: what needs correcting, your explanation, a link (optional) and your email (optional). We use them to review the notice and, if it is right, update the listing. They are kept like a suggestion.",
           "If you are a moderator: your email and the area you moderate, so you can sign in and review suggestions, for as long as you are one.",
           "To prevent unwanted messages: a temporary counter per IP address, kept for a few hours. The hidden field in the form does not store anything about you.",
           "If you are a business and tell your team story: team figures and, at the highest level, name or pseudonym, role, story and photo of each person; and, if you want, photos of your place or dishes (with your confirmation of permission), to show the listing with the detail the business chooses. They are kept for as long as the business and the person keep them."
         ],
         "paragraphs": [
-          "We handle your email and what you write in the forms because you give them to us when you send them (your consent). The data of a team member is handled only with that person's explicit consent."
+          "We process your email and what you write in the forms because you give them to us when you send them (your consent). The data of a team member is processed only with that person’s explicit consent."
         ]
       },
       {
@@ -572,7 +572,7 @@
           "Only the business can tell the story of its team, and never in detail without its knowledge. Until the business confirms, we only show public, verifiable information.",
           "Each person decides for themselves whether to appear, under what name (it can be a pseudonym) and with what photo. Where it applies, their legal representative decides.",
           "A story without recorded consent is not saved.",
-          "It can be withdrawn at any time, without giving reasons. The story stops being shown immediately and the data is deleted within 7 days at the most.",
+          "It can be withdrawn at any time, without giving reasons. The story stops being shown immediately and the data is deleted within 7 days at most.",
           "In small teams (fewer than 5 people) we make sure nobody can be recognised: we do not publish figures by type of disability or by role when they could identify someone, and we only give general figures.",
           "Stories, names and photos are not under an open licence and are never included in open data exports."
         ]
@@ -583,7 +583,7 @@
           "Website hosting: Netlify. It records the IP address of whoever visits the site, like any server.",
           "Map: tiles and styles are served by OpenFreeMap. When you open the map, your browser requests them directly and they see your IP address. We send them nothing else.",
           "Server and database: once it exists, we will state here the provider and the country where the data is stored.",
-          "We do not sell or share data with anyone."
+          "We do not sell or pass on data to anyone."
         ]
       },
       {
@@ -669,7 +669,7 @@
         "items": [
           "The code is free software, under the AGPL-3.0 licence.",
           "The business database is under ODbL, and the documentation under CC BY-SA 4.0.",
-          "People's stories, names and photos have no open licence: they are shown only with their permission and can be withdrawn.",
+          "People’s stories, names and photos have no open licence: they are shown only with their permission and can be withdrawn.",
           "The map uses OpenStreetMap data, © OpenStreetMap contributors."
         ],
         "links": [
@@ -680,15 +680,15 @@
         ]
       },
       {
-        "heading": "Fair use",
+        "heading": "Acceptable use",
         "paragraphs": [
-          "We ask you to use it respectfully: please do not knowingly send false data, or other people's names or health details without their permission, or flood the forms with automated submissions. We may discard anything that does not follow this."
+          "Please use it respectfully: do not knowingly send false information, other people’s names or health details without their permission, or flood the forms with automated submissions. We may discard anything that does not follow this."
         ]
       },
       {
         "heading": "Responsibility and links",
         "paragraphs": [
-          "We cannot guarantee that the website will always be available or free of errors. The external pages we link to, such as a place's own website or the map directions, have their own terms and are not our responsibility."
+          "We cannot guarantee that the website will always be available or free of errors. The external pages we link to, such as a place’s own website or the map directions, have their own terms and are not our responsibility."
         ]
       },
       {
@@ -765,7 +765,7 @@
   },
   "contact": {
     "title": "Contact",
-    "intro": "There is a way for each thing. Almost everything can be done from the website itself.",
+    "intro": "There is a route for each need. Almost everything can be done from the website itself.",
     "sections": [
       {
         "heading": "Suggest a place or correct a detail",
@@ -796,10 +796,10 @@
         ]
       },
       {
-        "heading": "Withdraw a story or use your rights",
+        "heading": "Withdraw a story or exercise your rights",
         "paragraphs": [
-          "To withdraw a story, a photo or a listing there is a form on the website: no account and no explanations needed. We write to the email you leave to confirm it is you.",
-          "For any other right over your data, or if you prefer to write to us, use this address. We reply within one month at the most. Please do not include health information or other people's names in your message."
+          "To withdraw a story, a photo or a listing, use the form on the website: no account and no explanations needed. We write to the email you leave to confirm it is you.",
+          "For any other right over your data, or if you prefer to write to us, use this address. We reply within one month at the most. Please do not include health information or other people’s names in your message."
         ],
         "links": [
           {
@@ -815,7 +815,7 @@
       {
         "heading": "Website bugs and code",
         "paragraphs": [
-          "HeartEats code is open. If you found a bug on the website, you can tell us on GitHub. It is a public site: please do not include personal data."
+          "The HeartEats code is open. If you found a bug on the website, you can tell us on GitHub. It is a public site: please do not include personal data."
         ],
         "links": [
           {
@@ -845,14 +845,14 @@
       "removal": "Removal"
     },
     "age": "{days, plural, =0 {today} one {# day ago} other {# days ago}}",
-    "review": "Check",
+    "review": "Review",
     "status": {
       "approved": "Approved",
       "rejected": "Rejected",
       "info": "Info requested"
     },
     "received": "Received {age}",
-    "contact": "Contact of the sender: {contact}",
+    "contact": "Sender’s contact: {contact}",
     "noContact": "no email",
     "warningsTitle": "Heads up",
     "warnings": {
@@ -924,7 +924,7 @@
       "needReason": "Choose a reason for rejecting.",
       "needNote": "Write what information you need.",
       "save": "We could not save the decision. You can try again.",
-      "notReadyTeam": "Some checks are missing. Without the business's confirmation and the consents, the team is not published.",
+      "notReadyTeam": "Some checks are missing. Without the business’s confirmation and the consents, the team is not published.",
       "notReadyRemoval": "Identity not confirmed yet. Nothing is removed without it."
     },
     "result": {
@@ -993,10 +993,10 @@
       "placeholder": "Choose the place",
       "placeError": "Choose the place to continue.",
       "details": "Anything else that helps us find it?",
-      "detailsHint": "For example, the name or pseudonym shown. Please do not write health information or other people's names."
+      "detailsHint": "For example, the name or pseudonym shown. Please do not write health information or other people’s names."
     },
     "s3": {
-      "intro": "We need an email address to confirm that it is you or your representative. That way nobody can remove anything on someone else's behalf.",
+      "intro": "We need an email address to confirm that it is you or your representative. That way nobody can remove anything on someone else’s behalf.",
       "email": "Your email",
       "emailHint": "Only the moderation team sees it, and it is deleted once the request is handled.",
       "emailError": "Enter a valid email address to continue.",
@@ -1006,7 +1006,7 @@
     },
     "done": {
       "title": "Request received",
-      "body": "We will write to the email you gave us to confirm it is you. As soon as we do, we will remove what you asked for.",
+      "body": "We will write to the email you gave us to confirm it is you. As soon as we have confirmed it, we will remove what you asked for.",
       "back": "Back to the map",
       "again": "Make another request"
     }
