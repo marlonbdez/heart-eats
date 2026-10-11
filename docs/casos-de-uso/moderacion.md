@@ -50,7 +50,7 @@
 - **Quién:** Moderador/a. Extiende CU-19; incluye CU-27.
 - **Pasos:** «Pedir más información» → escribe qué necesita saber → «Enviar petición». La solicitud pasa a «Info pedida».
 - **Reglas:** la nota es obligatoria; hoy no se envía ningún correo.
-- **Observación:** «Info pedida» cierra la solicitud, sin estado de espera (ver [`../11_FLUJO_Y_DOMINIO.md`](../11_FLUJO_Y_DOMINIO.md)).
+- **Decidido:** con servidor, la solicitud espera la respuesta 14 días y vuelve a Pendiente si responde; sin correo de quien propuso no se puede pedir (ver [`../11_FLUJO_Y_DOMINIO.md`](../11_FLUJO_Y_DOMINIO.md)). Hoy cierra la solicitud.
 
 ## CU-27 · Registrar la acción en la auditoría
 - **Quién:** interno. Incluido en CU-24, CU-25 y CU-26.

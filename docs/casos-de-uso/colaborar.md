@@ -7,7 +7,7 @@
 - **Pasos:** `/propose` en 4 pasos: **local** (nombre obligatorio; dirección, ciudad, código postal y comida opcionales) → **platos** (hasta 3) → **equipo** (cómo lo conoce, un enlace, si es independiente) → **enviar** (correo opcional y privado). Termina en «¡Gracias por proponerlo!».
 - **Si no:** falta el nombre, o un enlace o correo no válido, y se avisa; si falla el envío, lo escrito se conserva.
 - **Reglas:** solo el nombre es obligatorio, a propósito; nunca se publica sin verificación y sin el sí del negocio; se rechazan grandes cadenas.
-- **Observación:** la ficha da por supuesto el plato estrella, pero no es obligatorio proponerlo.
+- **Decidido:** los platos son opcionales; sin ellos, la ficha no muestra el bloque.
 
 ## CU-11 · Gestionar el borrador de la propuesta
 - **Quién:** Colaborador/a. Extiende CU-10.

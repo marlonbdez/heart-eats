@@ -130,11 +130,13 @@ Fichas: [informacion](casos-de-uso/informacion.md).
 Candidatas a hoja de ruta, **no son decisiones**. El detalle está en las observaciones de cada ficha.
 
 **De producto**
-- ¿Cómo aporta un negocio la foto y los platos de su local? Hoy no hay ningún flujo.
-- «Info pedida» cierra la solicitud: qué pasa al responder (ver `11_FLUJO_Y_DOMINIO.md`).
-- El plato estrella no es obligatorio al proponer, pero la ficha lo da por supuesto.
-- La lista de motivos de rechazo es la misma para todos los tipos.
 - Las fichas de más de 12 meses solo se marcan; nada las trata (CU-34).
+- La lista de motivos de rechazo es la misma para todos los tipos.
+
+**Decididas** (ver `07_VERIFICACION.md` y `11_FLUJO_Y_DOMINIO.md`)
+- «Info pedida» vuelve a Pendiente cuando quien propuso responde, y se cierra sola a los 14 días.
+- Los platos estrella son opcionales; sin ellos, la ficha no muestra el bloque.
+- Las fotos se suben desde la web, en cuarentena hasta que Moderación las aprueba.
 
 **Antes de abrir al público**
 - Faltan el aviso legal y la política de cookies y almacenamiento.

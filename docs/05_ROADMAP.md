@@ -34,6 +34,7 @@ Siguiente (por orden):
 - [x] «Pedir retirada» de una ficha o historia (`/removal`), con su flujo, sin depender del correo
 - [x] Pruebas automáticas de accesibilidad (axe, WCAG 2.2 AA) en todas las páginas y estados, en móvil, ES/EN y modo claro/oscuro (no sustituyen las pruebas con personas)
 - [x] «Guardar borrador» en proponer un local (en el propio dispositivo, sin el correo, 7 días)
+- [ ] Fotos de los platos desde la web (al proponer y desde el formulario del negocio), con la subida simulada; el almacenamiento real (R2) llega con el servidor
 - [x] Correo del dominio (`contact@hearteats.org`, reenvío gratuito con ImprovMX; ver `09_CORREO.md`), puesto en `/contact` y `/privacy`
 
 ## Fase 2 · Decisiones de backend
@@ -70,6 +71,6 @@ Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3):
 
 ## Ideas para más adelante
 
-Sin fecha ni compromiso: PWA (icono en la pantalla de inicio y apertura a pantalla completa; descartada por ahora, aporta poco frente a una web que ya funciona bien en el móvil), más ciudades, más idiomas, fotos de platos aportadas por los negocios, avisos para fichas sin revisar desde hace tiempo.
+Sin fecha ni compromiso: PWA (icono en la pantalla de inicio y apertura a pantalla completa; descartada por ahora, aporta poco frente a una web que ya funciona bien en el móvil), más ciudades, más idiomas, avisos para fichas sin revisar desde hace tiempo.
 
 > Las duraciones dependen del tiempo disponible, por eso no se ponen fechas.
