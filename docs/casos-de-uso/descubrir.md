@@ -25,7 +25,7 @@ Todos los CU de este paquete son de **lectura**: no piden cuenta, no envían nad
 **Flujos alternativos y excepciones**
 
 - **2a.** El mapa no se puede crear en este dispositivo: se muestra un aviso («Parece que el mapa no se puede mostrar…») con un enlace a la lista ([CU-02](#cu-02--ver-la-lista-de-locales)).
-- **3a.** No hay locales que cumplan la búsqueda: se muestra «No hemos encontrado locales con esa búsqueda», con «Quitar filtros» y «Proponer un local» ([CU-10](../10_CASOS_DE_USO.md)).
+- **3a.** No hay locales que cumplan la búsqueda: se muestra «No hemos encontrado locales con esa búsqueda», con «Quitar filtros» y «Proponer un local» ([CU-10](colaborar.md#cu-10--proponer-un-local)).
 - **5a.** Hay búsqueda o filtros activos: el mapa se encuadra sobre los resultados; sin ellos, vuelve a la vista inicial.
 - **6a.** El Visitante cierra la tarjeta con «×», con Esc o tocando el fondo del mapa. Con «×» o Esc, el foco vuelve al marcador.
 - **6b.** El local seleccionado deja de estar entre los resultados (cambió la búsqueda): la tarjeta se cierra sola.
@@ -223,7 +223,7 @@ Todos los CU de este paquete son de **lectura**: no piden cuenta, no envían nad
 **Observaciones**
 
 - «Volver» lleva siempre al mapa inicial (`/`): no recuerda si se venía de la lista ni la búsqueda. Mejora pequeña y candidata a PR propia.
-- La ficha no enlaza a «Pedir una retirada» ([CU-13](../10_CASOS_DE_USO.md)); solo se llega desde el menú, Contacto y Privacidad. `04_DISENO_UI.md` (F6) ya lo describe así.
+- La ficha no enlaza a «Pedir una retirada» ([CU-13](colaborar.md#cu-13--pedir-una-retirada)); solo se llega desde el menú, Contacto y Privacidad. `04_DISENO_UI.md` (F6) ya lo describe así.
 - El modelo de datos tiene correo e Instagram del local, pero la ficha solo muestra teléfono y web.
 
 ---

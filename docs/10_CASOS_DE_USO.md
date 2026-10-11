@@ -1,6 +1,6 @@
 # 10 · Casos de uso
 
-> **Estado:** borrador v0.2 · entregas 1 y 2a (actores, paquetes, casos de uso y fichas de Descubrir e Información). Pendiente: fichas de Colaborar, Negocio y Moderación, diagramas de actividad y de estados, modelo de dominio y matriz de trazabilidad (ver §7).
+> **Estado:** borrador v0.3 · entregas 1 y 2 (actores, paquetes, casos de uso y fichas de los 34). Pendiente: diagramas de actividad y de estados, modelo de dominio y matriz de trazabilidad (ver §7).
 > Complementa a `04_DISENO_UI.md` (flujos y pantallas) y a `07_VERIFICACION.md` (proceso de moderación).
 
 ## 1. Para qué sirve este documento
@@ -74,6 +74,8 @@ Fichas: [casos-de-uso/descubrir.md](casos-de-uso/descubrir.md).
 
 ### 5.2 Colaborar
 
+Fichas: [casos-de-uso/colaborar.md](casos-de-uso/colaborar.md).
+
 ![Casos de uso de Colaborar: el Colaborador/a propone un local y sugiere correcciones; el Visitante pide una retirada. Los tres incluyen el envío a moderación; gestionar el borrador extiende a proponer.](modelado/02-colaborar.svg)
 
 | ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
@@ -85,6 +87,8 @@ Fichas: [casos-de-uso/descubrir.md](casos-de-uso/descubrir.md).
 | CU-14 | Enviar una solicitud a moderación | *(interno)* | Paso común de CU-10, CU-12, CU-13 y CU-15: valida, descarta el envío si el campo trampa viene relleno, enmascara el correo y deja la solicitud en la cola. | `lib/data` | — | Hecho (envío simulado) |
 
 ### 5.3 Negocio
+
+Fichas: [casos-de-uso/negocio.md](casos-de-uso/negocio.md).
 
 ![Casos de uso de Negocio: el Representante del negocio cuenta el equipo, lo que incluye previsualizar la ficha y enviar la solicitud; dar el consentimiento de una historia extiende a contar el equipo cuando el nivel es historias con nombre.](modelado/03-negocio.svg)
 
@@ -98,6 +102,8 @@ El texto de consentimiento es **provisional** hasta la revisión legal (`08_PRIV
 
 ### 5.4 Moderación
 
+Fichas: [casos-de-uso/moderacion.md](casos-de-uso/moderacion.md).
+
 ![Casos de uso de Moderación: el Moderador/a consulta la cola y revisa solicitudes (cuatro variantes según el tipo); aprobar, rechazar o pedir más información extienden a la revisión y registran la acción en la auditoría. La autenticación y la revisión de fichas sin actualizar aparecen en gris como pendientes.](modelado/04-moderacion.svg)
 
 | ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
@@ -108,7 +114,7 @@ El texto de consentimiento es **provisional** hasta la revisión legal (`08_PRIV
 | CU-21 | Revisar una corrección | Moderador/a | Ve el dato antes y después y comprueba que es correcto. | `/moderation` | F5 | Hecho |
 | CU-22 | Revisar el equipo de un negocio | Moderador/a | Comprueba que quien envía representa al negocio, que las cifras son coherentes y, si hay historias, que cada una trae su consentimiento. Nunca ve nombres ni textos de historias. | `/moderation` | F5 | Hecho |
 | CU-23 | Revisar una petición de retirada | Moderador/a | Comprueba la identidad de quien la pide antes de ocultar nada. | `/moderation` | F5, F6 | Hecho |
-| CU-24 | Aprobar y publicar | Moderador/a | Solo se activa con todas las comprobaciones hechas; en un local nuevo, también con nivel de insignia y método elegidos. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
+| CU-24 | Aprobar y publicar | Moderador/a | Se aprueba solo con todas las comprobaciones hechas; en un local nuevo, también con nivel de insignia y método elegidos. Si falta algo, se avisa y no se aprueba. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
 | CU-25 | Rechazar con motivo | Moderador/a | Motivo obligatorio: no independiente, sin pruebas, duplicado, fuera de zona u otro. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
 | CU-26 | Pedir más información | Moderador/a | Devuelve la solicitud con una nota obligatoria. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
 | CU-27 | Registrar la acción en la auditoría | *(interno)* | Cada decisión deja quién, qué y cuándo. Incluido en CU-24, CU-25 y CU-26. | `/moderation` | F5 | Hecho (se muestra en el detalle; el registro real llega con el servidor) |
@@ -138,14 +144,44 @@ Fichas: [casos-de-uso/informacion.md](casos-de-uso/informacion.md).
 - **Hay un único punto de entrada de datos** (CU-14) para cuatro flujos. Es el lugar natural para el límite de envíos (rate limit) y la validación en servidor.
 - **Hueco sin CU**: aportar la foto y los platos de un local. Hoy no existe ningún flujo; la decisión n.º 4 dice que los aporta el negocio, pero no cómo. Queda como pregunta abierta (§7).
 
+### Observaciones recogidas en las fichas
+
+Cada ficha puede terminar con unas «Observaciones». Reunidas aquí, son los candidatos a hoja de ruta que ha hecho aflorar el análisis. **No son decisiones.**
+
+**Decisiones de producto**
+
+| Observación | Ficha |
+|---|---|
+| El plato estrella no es obligatorio al proponer, pero la ficha lo da por supuesto. | CU-10 |
+| No hay forma de aportar la foto y los platos de un local. | §6 |
+| La vista previa del negocio muestra solo el bloque del equipo, no la ficha entera como describe el diseño. | CU-16 |
+| La lista de motivos de rechazo es la misma para todos los tipos y algunos no encajan. | CU-25 |
+| «Info pedida» cierra la solicitud: no hay estado de espera ni se sabe qué pasa al responder. | CU-26 |
+| Las fichas con más de 12 meses solo se marcan; nada las trata. | CU-09, CU-34 |
+| No se puede pedir la retirada de algo que no esté publicado, y la ficha no enlaza a «Pedir una retirada». | CU-06, CU-13 |
+| «Volver» en la ficha lleva siempre al mapa inicial; al cambiar de idioma se pierde la búsqueda. | CU-06, CU-32 |
+| El marcado en grupo (clustering) previsto en el MVP no se hizo. | CU-01 |
+
+**Antes de abrir al público**
+
+| Observación | Ficha |
+|---|---|
+| Con el servidor será la primera vez que se reciban datos personales de terceros (nombres, historias). Hacen falta revisión legal, plazos reales y seguridad. | CU-15 |
+| No hay constancia verificable de quién dio el consentimiento de una historia. | CU-17 |
+| Moderación no ve los textos de las historias, así que no puede juzgarlos. | CU-22 |
+| El registro de auditoría no tiene persona ni hora y se pierde al recargar. | CU-27 |
+| Los plazos prometidos (borrado en 7 días) necesitan un proceso real. | CU-13, CU-17 |
+| Faltan el aviso legal y la política de cookies y almacenamiento. | CU-30 |
+| Cualquiera puede decir que es del negocio: la defensa es la confirmación por canal oficial. Hay que definir cómo (P9). | CU-15 |
+
 ## 7. Siguientes entregas y preguntas abiertas
 
 Entregas previstas, cada una en su PR:
 
 1. ✅ Actores, paquetes y diagramas de casos de uso (este documento).
-2. Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales), en dos PR:
+2. ✅ Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales), en dos PR:
    - 2a ✅ Descubrir e Información (CU-01 a CU-09 y CU-28 a CU-32).
-   - 2b Colaborar, Negocio y Moderación (el resto).
+   - 2b ✅ Colaborar, Negocio y Moderación (el resto).
 3. Diagrama de actividad con carriles del ciclo «proponer → verificar → publicar», diagrama de estados de una solicitud y modelo de dominio.
 4. Matriz de trazabilidad: CU ↔ ruta ↔ componente ↔ prueba e2e ↔ documento.
 
