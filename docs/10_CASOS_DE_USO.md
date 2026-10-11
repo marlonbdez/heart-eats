@@ -1,206 +1,70 @@
 # 10 · Casos de uso
 
-> **Estado:** borrador v0.3 · entregas 1 y 2 (actores, paquetes, casos de uso y fichas de los 34). Pendiente: diagramas de actividad y de estados, modelo de dominio y matriz de trazabilidad (ver §7).
-> Complementa a `04_DISENO_UI.md` (flujos y pantallas) y a `07_VERIFICACION.md` (proceso de moderación).
+> **Estado:** v1.0 · versión corta, pensada para leerse en cinco minutos.
+> Complementa a `04_DISENO_UI.md` (pantallas) y a `07_VERIFICACION.md` (proceso de moderación).
 
-## 1. Para qué sirve este documento
+## Qué hace HeartEats, en una frase
 
-Es el mapa de **qué hace HeartEats y para quién**, en lenguaje UML. Sirve para entender la aplicación de un vistazo, ver qué está hecho y qué falta, y decidir con criterio el orden de lo que viene.
+Cualquiera encuentra locales de hostelería de Madrid con equipos inclusivos; cualquiera puede proponer uno; una persona moderadora lo comprueba, y el propio negocio da el último sí antes de publicar.
 
-Cada diagrama tiene debajo una tabla con lo mismo en texto, de modo que nada depende solo de la imagen. El detalle de cada CU (flujo, alternativas, reglas) está en las **fichas**, en [`casos-de-uso/`](casos-de-uso/README.md).
+## Diagrama
 
-## 2. Convenciones
+![Actores y casos de uso de HeartEats. Visitante: explorar mapa y lista, ver la ficha, entender el proyecto. Colaborador/a y Representante del negocio son Visitantes: el primero propone un local, sugiere una corrección o pide una retirada; el segundo cuenta su equipo y da el consentimiento. Moderador/a: revisa la cola y decide, consulta la auditoría y se autentica (pendiente). Servicio de mapas y geolocalización son actores externos de explorar.](modelado/casos-de-uso.svg)
 
-- **UML 2**: un diagrama de casos de uso por paquete. Un óvalo es un caso de uso (CU); un muñeco, un actor.
-- `«include»`: el CU de origen **siempre** ejecuta al de destino.
-- `«extend»`: el CU de origen **a veces** amplía al de destino, si se cumple la condición escrita junto a la flecha.
-- Flecha con triángulo vacío: especialización (el hijo es una variante del padre).
-- **Gris con «pendiente»**: CU identificado que aún no existe en la web.
-- Identificadores `CU-nn`, estables: no se reutilizan aunque un CU desaparezca.
-- **Estado** de cada CU:
-  - **Hecho**: pantalla terminada; funciona con datos de ejemplo. Qué prueba e2e cubre cada CU se anotará en la matriz de trazabilidad (entrega 4).
-  - **Hecho (envío simulado)**: la pantalla está terminada, pero lo que se envía solo llega al buzón de prueba del navegador (`outbox.ts`); con el servidor llegará de verdad.
-  - **Pendiente**: no existe todavía.
-- Los diagramas están en `modelado/*.puml` y se regeneran con `modelado/render.sh` (ver §8).
+## Actores
 
-## 3. Actores
-
-![Actores del sistema: Visitante, con dos especializaciones (Colaborador/a y Representante del negocio); Moderador/a; y dos actores externos, el servicio de mapas y la geolocalización del dispositivo.](modelado/00-actores.svg)
-
-| Actor | Descripción |
+| Actor | Quién es |
 |---|---|
-| **Visitante** | Cualquier persona. Ve, busca y consulta sin registrarse (decisión de diseño n.º 7). |
-| **Colaborador/a** | Visitante que propone un local o sugiere una corrección. No es un usuario registrado: es un papel que se adopta al hacerlo. |
-| **Representante del negocio** | Visitante que habla en nombre de un local: cuenta su equipo y da los consentimientos. Moderación confirma por correo que lo es antes de publicar nada. |
-| **Moderador/a** | Revisa las solicitudes y decide. Al inicio, Marlon. Hoy se entra desde el menú (provisional); con la autenticación (P5) será la única persona con acceso. |
-| **Servicio de mapas** *(externo)* | Pone el mapa y las indicaciones para llegar (ADR 0002). |
-| **Geolocalización del dispositivo** *(externo)* | Da la posición, solo tras pulsar «Cerca de mí». |
+| **Visitante** | Cualquiera. Ve, busca y consulta sin registrarse. |
+| **Colaborador/a** | Visitante que propone, corrige o pide una retirada. Es un papel, no un usuario registrado. |
+| **Representante del negocio** | Visitante que habla por un local: cuenta su equipo y consiente. Moderación lo confirma por correo antes de publicar. |
+| **Moderador/a** | Revisa y decide. Al inicio, Marlon. Hoy se entra desde el menú (provisional, hasta P5). |
+| **Servicio de mapas** y **Geolocalización** | Externos. El mapa y la posición («Cerca de mí», solo si se pulsa). |
 
-Quien pide una retirada (CU-13) es un Visitante: puede ser el negocio o la persona cuyos datos aparecen.
+## Casos de uso
 
-## 4. Paquetes
-
-![Cinco paquetes (Descubrir, Colaborar, Negocio, Moderación e Información) y sus dependencias: Colaborar y Negocio dependen de Descubrir; Negocio, de Colaborar; y Moderación, de Colaborar, Negocio y Descubrir.](modelado/00-paquetes.svg)
-
-| Paquete | Qué agrupa | CU |
+| Caso de uso | Actor | Estado |
 |---|---|---|
-| **Descubrir** | Encontrar un sitio y ver su ficha | CU-01 a CU-09 |
-| **Colaborar** | Proponer, corregir, pedir retirada y el envío común | CU-10 a CU-14 |
-| **Negocio** | El negocio cuenta su equipo y consiente | CU-15 a CU-17 |
-| **Moderación** | Revisar y decidir | CU-18 a CU-27, CU-33, CU-34 |
-| **Información** | Páginas de contenido e idioma | CU-28 a CU-32 |
+| Explorar mapa y lista (buscar, filtrar por comida, ordenar por cercanía) | Visitante | Hecho |
+| Ver la ficha de un local (equipo, verificación, cómo llegar) | Visitante | Hecho |
+| Entender el proyecto (qué es, cómo se verifica, privacidad, contacto, idioma) | Visitante | Hecho |
+| Proponer un local (con borrador guardado 7 días) | Colaborador/a | Hecho, envío simulado |
+| Sugerir una corrección | Colaborador/a | Hecho, envío simulado |
+| Pedir una retirada | Colaborador/a | Hecho, envío simulado |
+| Contar el equipo y dar el consentimiento | Representante | Hecho, envío simulado |
+| Revisar la cola y decidir (aprobar, rechazar, pedir información) | Moderador/a | Hecho, decisión simulada |
+| Consultar la auditoría | Moderador/a | Hecho, simulado |
+| Autenticarse | Moderador/a | Pendiente (P5) |
 
-La flecha `A ⇢ B` significa «A necesita a B». La dependencia es de dirección única: lo que se aprueba en Moderación acaba en las fichas de Descubrir, pero Descubrir no sabe nada de Moderación.
+*Envío simulado:* la pantalla está terminada, pero lo enviado solo llega al buzón de prueba del navegador. Con servidor, solo se cambia `web/src/lib/data/`.
 
-## 5. Casos de uso por paquete
+## Cómo viaja una propuesta
 
-### 5.1 Descubrir
+Las cuatro acciones de Colaborar y Negocio (local nuevo, corrección, equipo, retirada) entran por el mismo sitio y llegan a la cola de moderación como **Pendiente**. Moderación la deja en uno de estos estados:
 
-Fichas: [casos-de-uso/descubrir.md](casos-de-uso/descubrir.md).
-
-![Casos de uso de Descubrir: el Visitante explora el mapa o la lista, busca, filtra, ordena por cercanía y consulta la ficha de un local, con sus extensiones.](modelado/01-descubrir.svg)
-
-| ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
-|---|---|---|---|---|---|---|
-| CU-01 | Explorar el mapa | Visitante; Servicio de mapas | Ve los locales sobre el mapa y toca un marcador para ver su tarjeta. Si el mapa no se puede mostrar, se ofrece la lista. | `/` | F1 | Hecho |
-| CU-02 | Ver la lista de locales | Visitante | Lo mismo que CU-01 en forma de lista; es la alternativa accesible al mapa. | `/list` | F1 | Hecho |
-| CU-03 | Buscar sitios | Visitante | Busca por local, barrio, ciudad o código postal. Si lo escrito parece una comida, sugiere la categoría. Extiende CU-01 y CU-02. | `/`, `/list` | F1 | Hecho |
-| CU-04 | Filtrar por tipo de comida | Visitante | Elige una o varias categorías con icono. El tipo de discapacidad **no** es un filtro (decisión de diseño n.º 9). | `/`, `/list` | F1 | Hecho |
-| CU-05 | Ordenar por cercanía | Visitante; Geolocalización | Con «Cerca de mí» pide la ubicación (solo tras el gesto) y ordena por distancia. Avisa si se deniega, no está disponible o está fuera de la zona. | `/`, `/list` | F1 | Hecho |
-| CU-06 | Consultar la ficha de un local | Visitante | Ve platos estrella, horario y contacto del local. Incluye CU-09. | `/place/[slug]` | F1 | Hecho |
-| CU-07 | Llegar al local o contactarlo | Visitante; Servicio de mapas | Abre las indicaciones, llama o abre la web del local. | `/place/[slug]` | F1 | Hecho |
-| CU-08 | Consultar el equipo del local | Visitante | Ve «El equipo detrás de cada plato» en el nivel que el negocio eligió (cifras; áreas y tipos; historias). Sin la confirmación del negocio, o en equipos de menos de 5 personas, solo la cifra. | `/place/[slug]` | F1, F3 | Hecho |
-| CU-09 | Consultar la verificación del local | Visitante | Ve la insignia (🟢 o 🟡), el método y la fecha, y un enlace a «Cómo verificamos». | `/place/[slug]` | F1 | Hecho |
-
-### 5.2 Colaborar
-
-Fichas: [casos-de-uso/colaborar.md](casos-de-uso/colaborar.md).
-
-![Casos de uso de Colaborar: el Colaborador/a propone un local y sugiere correcciones; el Visitante pide una retirada. Los tres incluyen el envío a moderación; gestionar el borrador extiende a proponer.](modelado/02-colaborar.svg)
-
-| ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
-|---|---|---|---|---|---|---|
-| CU-10 | Proponer un local | Colaborador/a | Formulario de 4 pasos: el local, los platos, el equipo (solo cómo lo conoce y un enlace; nunca nombres ni datos de salud) y el envío, con correo opcional. | `/propose` | F2 | Hecho (envío simulado) |
-| CU-11 | Gestionar el borrador de la propuesta | Colaborador/a | Mientras escribe, se guarda en el dispositivo (7 días, sin correo ni web); se recupera al volver y se borra al enviar o con «Empezar de cero». Extiende CU-10. | `/propose` | F2 | Hecho |
-| CU-12 | Sugerir una corrección | Colaborador/a | Elige qué está mal (dirección, horario, cerrado, equipo, otro), lo describe y, si quiere, aporta una prueba. | `/correct`, `/correct/[slug]` | F4 | Hecho (envío simulado) |
-| CU-13 | Pedir una retirada | Visitante | 3 pasos, sin cuenta: qué retirar, en qué local y correo obligatorio para confirmar la identidad. | `/removal` | F6 | Hecho (envío simulado) |
-| CU-14 | Enviar una solicitud a moderación | *(interno)* | Paso común de CU-10, CU-12, CU-13 y CU-15: valida, descarta el envío si el campo trampa viene relleno, enmascara el correo y deja la solicitud en la cola. | `lib/data` | — | Hecho (envío simulado) |
-
-### 5.3 Negocio
-
-Fichas: [casos-de-uso/negocio.md](casos-de-uso/negocio.md).
-
-![Casos de uso de Negocio: el Representante del negocio cuenta el equipo, lo que incluye previsualizar la ficha y enviar la solicitud; dar el consentimiento de una historia extiende a contar el equipo cuando el nivel es historias con nombre.](modelado/03-negocio.svg)
-
-| ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
-|---|---|---|---|---|---|---|
-| CU-15 | Contar el equipo del negocio | Representante del negocio | 4 pasos: «tú decides cuánto contar», nivel (solo cifras, áreas y tipos, historias con nombre), datos y revisión con correo obligatorio. En equipos de menos de 5 personas solo se pide y se muestra la cifra. | `/business`, `/business/[slug]` | F3 | Hecho (envío simulado) |
-| CU-16 | Previsualizar la ficha | Representante del negocio | Ve «así se verá» con el mismo componente que la ficha pública. Incluido en CU-15. | `/business/[slug]` | F3 | Hecho |
-| CU-17 | Dar el consentimiento de una historia | Representante del negocio | Cada historia lleva su permiso, de la persona o de su representante legal; sin él, no se puede enviar. Extiende CU-15 con el nivel «Historias con nombre» (hasta 3). | `/business/[slug]` | F3 | Hecho |
-
-El texto de consentimiento es **provisional** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
-
-### 5.4 Moderación
-
-Fichas: [casos-de-uso/moderacion.md](casos-de-uso/moderacion.md).
-
-![Casos de uso de Moderación: el Moderador/a consulta la cola y revisa solicitudes (cuatro variantes según el tipo); aprobar, rechazar o pedir más información extienden a la revisión y registran la acción en la auditoría. La autenticación y la revisión de fichas sin actualizar aparecen en gris como pendientes.](modelado/04-moderacion.svg)
-
-| ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
-|---|---|---|---|---|---|---|
-| CU-18 | Consultar la cola de solicitudes | Moderador/a | Ve pendientes y resueltas, con tipo, zona, antigüedad y aviso ⚠ si hay posible duplicado, cadena o falta de pruebas. | `/moderation` | F5 | Hecho (datos de ejemplo) |
-| CU-19 | Revisar una solicitud | Moderador/a | Abre el detalle: datos, pruebas, avisos y comprobaciones obligatorias. **Abstracto**: se concreta en CU-20 a CU-23. | `/moderation` | F5 | Hecho |
-| CU-20 | Revisar la propuesta de un local | Moderador/a | Comprueba que existe, es independiente, hay pruebas del equipo inclusivo y el negocio ha confirmado que quiere aparecer. | `/moderation` | F5 | Hecho |
-| CU-21 | Revisar una corrección | Moderador/a | Ve el dato antes y después y comprueba que es correcto. | `/moderation` | F5 | Hecho |
-| CU-22 | Revisar el equipo de un negocio | Moderador/a | Comprueba que quien envía representa al negocio, que las cifras son coherentes y, si hay historias, que cada una trae su consentimiento. Nunca ve nombres ni textos de historias. | `/moderation` | F5 | Hecho |
-| CU-23 | Revisar una petición de retirada | Moderador/a | Comprueba la identidad de quien la pide antes de ocultar nada. | `/moderation` | F5, F6 | Hecho |
-| CU-24 | Aprobar y publicar | Moderador/a | Se aprueba solo con todas las comprobaciones hechas; en un local nuevo, también con nivel de insignia y método elegidos. Si falta algo, se avisa y no se aprueba. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
-| CU-25 | Rechazar con motivo | Moderador/a | Motivo obligatorio: no independiente, sin pruebas, duplicado, fuera de zona u otro. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
-| CU-26 | Pedir más información | Moderador/a | Devuelve la solicitud con una nota obligatoria. Extiende CU-19. | `/moderation` | F5 | Hecho (decisión simulada) |
-| CU-27 | Registrar la acción en la auditoría | *(interno)* | Cada decisión deja quién, qué y cuándo. Incluido en CU-24, CU-25 y CU-26. | `/moderation` | F5 | Hecho (se muestra en el detalle; el registro real llega con el servidor) |
-| CU-33 | Autenticarse (enlace mágico) | Moderador/a | Entrar sin contraseña con un enlace enviado al correo. Al llegar, se oculta la entrada del menú. | — | — | **Pendiente** (decisión P5) |
-| CU-34 | Revisar fichas sin actualizar | Moderador/a | Revisar las fichas con más de 12 meses sin verificar. Hoy solo se marcan con «necesita revisión»; no hay flujo para tratarlas (`07_VERIFICACION.md`). | — | — | **Pendiente** |
-
-El contacto con el negocio para confirmar que quiere aparecer (paso 4 de `07_VERIFICACION.md`) ocurre **fuera** de la web, por correo o teléfono, y por eso no es un CU.
-
-### 5.5 Información
-
-Fichas: [casos-de-uso/informacion.md](casos-de-uso/informacion.md).
-
-![Casos de uso de Información: el Visitante consulta qué es HeartEats, cómo se verifica, la privacidad y datos, contacta con el proyecto y cambia el idioma.](modelado/05-informacion.svg)
-
-| ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
-|---|---|---|---|---|---|---|
-| CU-28 | Consultar qué es HeartEats | Visitante | Qué es el proyecto y por qué existe. | `/about` | — | Hecho |
-| CU-29 | Consultar cómo se verifica | Visitante | Qué significan las insignias y cómo se comprueba cada local. | `/verification` | — | Hecho |
-| CU-30 | Consultar privacidad y datos | Visitante | Qué se guarda y cuánto tiempo (**provisional** hasta la revisión legal). | `/privacy` | — | Hecho |
-| CU-31 | Contactar con el proyecto | Visitante | Muestra `contact@hearteats.org`, solo de recepción. | `/contact` | — | Hecho |
-| CU-32 | Cambiar el idioma | Visitante | Español o inglés desde el menú; la URL cambia de prefijo (ADR 0003). El inglés necesita revisión nativa. | menú ☰ | — | Hecho |
-
-## 6. Qué nos dice el modelo
-
-- **Cobertura del front**: de los 34 CU identificados, 32 tienen ya su pantalla; los 2 pendientes (CU-33 y CU-34) dependen de decisiones de backend o de un flujo aún por diseñar.
-- **Lo «simulado» es una sola cosa**: el envío (CU-14) y la decisión (CU-24 a CU-27). Cuando haya servidor, se cambia en `web/src/lib/data/` y el resto de pantallas no se toca.
-- **Hay un único punto de entrada de datos** (CU-14) para cuatro flujos. Es el lugar natural para el límite de envíos (rate limit) y la validación en servidor.
-- **Hueco sin CU**: aportar la foto y los platos de un local. Hoy no existe ningún flujo; la decisión n.º 4 dice que los aporta el negocio, pero no cómo. Queda como pregunta abierta (§7).
-
-### Observaciones recogidas en las fichas
-
-Cada ficha puede terminar con unas «Observaciones». Reunidas aquí, son los candidatos a hoja de ruta que ha hecho aflorar el análisis. **No son decisiones.**
-
-**Decisiones de producto**
-
-| Observación | Ficha |
+| Estado | Qué pasa |
 |---|---|
-| El plato estrella no es obligatorio al proponer, pero la ficha lo da por supuesto. | CU-10 |
-| No hay forma de aportar la foto y los platos de un local. | §6 |
-| La vista previa del negocio muestra solo el bloque del equipo, no la ficha entera como describe el diseño. | CU-16 |
-| La lista de motivos de rechazo es la misma para todos los tipos y algunos no encajan. | CU-25 |
-| «Info pedida» cierra la solicitud: no hay estado de espera ni se sabe qué pasa al responder. | CU-26 |
-| Las fichas con más de 12 meses solo se marcan; nada las trata. | CU-09, CU-34 |
-| No se puede pedir la retirada de algo que no esté publicado, y la ficha no enlaza a «Pedir una retirada». | CU-06, CU-13 |
-| «Volver» en la ficha lleva siempre al mapa inicial; al cambiar de idioma se pierde la búsqueda. | CU-06, CU-32 |
-| El marcado en grupo (clustering) previsto en el MVP no se hizo. | CU-01 |
+| **Aprobada** | Nuevo local o equipo: se publica. Corrección: se aplica. Retirada: se oculta. |
+| **Rechazada** | Se cierra con un motivo. |
+| **Info pedida** | Hoy se cierra igual que rechazar (ver «Decisiones abiertas»). |
 
-**Antes de abrir al público**
+## Qué falta y qué decidir
 
-| Observación | Ficha |
-|---|---|
-| Con el servidor será la primera vez que se reciban datos personales de terceros (nombres, historias). Hacen falta revisión legal, plazos reales y seguridad. | CU-15 |
-| No hay constancia verificable de quién dio el consentimiento de una historia. | CU-17 |
-| Moderación no ve los textos de las historias, así que no puede juzgarlos. | CU-22 |
-| El registro de auditoría no tiene persona ni hora y se pierde al recargar. | CU-27 |
-| Los plazos prometidos (borrado en 7 días) necesitan un proceso real. | CU-13, CU-17 |
-| Faltan el aviso legal y la política de cookies y almacenamiento. | CU-30 |
-| Cualquiera puede decir que es del negocio: la defensa es la confirmación por canal oficial. Hay que definir cómo (P9). | CU-15 |
+**Falta, y no es del front:** aviso legal y política de cookies y almacenamiento; revisión nativa del inglés; pruebas con personas; y, con servidor, revisión legal de recibir nombres e historias de terceros, verificación real del negocio y un registro de auditoría con persona y hora.
 
-## 7. Siguientes entregas y preguntas abiertas
+**Decisiones abiertas** (candidatas a hoja de ruta, no decididas):
 
-Entregas previstas, cada una en su PR:
+1. ¿Cómo aporta un negocio la foto y los platos de su local? Hoy no hay ningún flujo.
+2. «Info pedida»: **recomiendo** que vuelva a Pendiente cuando quien propuso responde, y que se cierre sola pasado un plazo (14 días). La alternativa, tratarla como final, es más simple pero pierde el hilo.
+3. `01_ESPECIFICACION_DATOS.md` define 2 tipos de solicitud y 3 estados; la web usa 4 y uno más. Alinear antes de escribir el servidor.
+4. Pequeños: «Volver» en la ficha lleva siempre al mapa inicial; cambiar de idioma pierde la búsqueda; el plato estrella no es obligatorio al proponer; las fichas de más de 12 meses solo se marcan.
 
-1. ✅ Actores, paquetes y diagramas de casos de uso (este documento).
-2. ✅ Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales), en dos PR:
-   - 2a ✅ Descubrir e Información (CU-01 a CU-09 y CU-28 a CU-32).
-   - 2b ✅ Colaborar, Negocio y Moderación (el resto).
-3. ✅ Diagrama de actividad con carriles del ciclo «proponer → verificar → publicar», diagrama de estados de una solicitud y modelo de dominio, en [`11_FLUJO_Y_DOMINIO.md`](11_FLUJO_Y_DOMINIO.md).
-4. *(Opcional; se propone no hacerla.)* Matriz de trazabilidad CU ↔ prueba e2e. Las fichas ya indican la ruta y los componentes de cada CU, así que solo aportaría la columna de pruebas.
+## Regenerar el diagrama
 
-Preguntas abiertas que el modelo ha hecho aflorar:
-
-- ❓ ¿Cómo aporta un negocio la foto y los platos de su local? (sin CU hoy)
-
-## 8. Regenerar los diagramas
-
-Hace falta `plantuml` y `graphviz`:
+Requiere PlantUML y Graphviz (`brew install plantuml graphviz`).
 
 ```bash
-brew install plantuml graphviz
+docs/modelado/render.sh
 ```
 
-Después, desde `docs/modelado/`:
-
-```bash
-./render.sh
-```
-
-Los `.puml` son la fuente; los `.svg` se versionan para que se vean directamente en GitHub y desde el móvil. El estilo común está en `modelado/estilo.puml`: fondo blanco (se lee igual en tema claro y oscuro) y texto oscuro sobre crema.
+El SVG se versiona para que se vea en GitHub y en el móvil.

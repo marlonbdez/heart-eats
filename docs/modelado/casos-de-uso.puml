@@ -1,0 +1,42 @@
+@startuml casos-de-uso
+!include estilo.puml
+left to right direction
+title HeartEats: actores y casos de uso
+
+actor "Visitante" as V
+actor "Colaborador/a" as C
+actor "Representante\ndel negocio" as R
+actor "Moderador/a" as M
+actor "Servicio de mapas" as MAP <<externo>>
+actor "Geolocalización" as GEO <<externo>>
+
+V <|-- C
+V <|-- R
+
+rectangle "HeartEats" {
+  usecase "Explorar mapa y lista\n(buscar, filtrar, ordenar)" as U1
+  usecase "Ver la ficha de un local\n(equipo y verificación)" as U2
+  usecase "Entender el proyecto\n(qué es, verificación,\nprivacidad, contacto, idioma)" as U3
+  usecase "Proponer un local" as U4
+  usecase "Sugerir una corrección" as U5
+  usecase "Pedir una retirada" as U6
+  usecase "Contar el equipo\ny dar el consentimiento" as U7
+  usecase "Revisar la cola\ny decidir\n(aprobar, rechazar,\npedir información)" as U8
+  usecase "Consultar la auditoría" as U9
+  usecase "Autenticarse\n(pendiente)" as U10
+}
+
+V --> U1
+V --> U2
+V --> U3
+C --> U4
+C --> U5
+C --> U6
+R --> U7
+M --> U8
+M --> U9
+M --> U10
+U8 ..> U10 : <<include>>
+U1 --> MAP
+U1 --> GEO
+@enduml
