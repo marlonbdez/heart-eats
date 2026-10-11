@@ -60,7 +60,7 @@ En escritorio el panel puede quedar fijo a la izquierda. Todo accesible por tecl
 ### F2 · Proponer un local nuevo
 Desde el menú ☰, la cabecera o los estados vacíos. Formulario de **4 pasos** con barra de progreso, botones Atrás/Continuar y validación en línea:
 1. **El local:** nombre (obligatorio), dirección, ciudad, código postal, tipo de comida (categorías con icono, multi-selección).
-2. **Platos:** de 1 a 3 platos estrella (nombre + descripción corta opcional). Fotos: las aporta el negocio o se usan con su permiso; no se piden aquí.
+2. **Platos:** de 0 a 3 platos estrella, opcionales (nombre + descripción corta opcional). Cada plato puede llevar una **foto opcional**: se reduce en el navegador, y si hay alguna se pide marcar «son mías o tengo permiso del negocio». Las fotos quedan en cuarentena hasta que Moderación las aprueba y no se guardan en el borrador.
 3. **Equipo:** cómo conoce el negocio quien propone, un enlace que lo confirme y casilla "negocio independiente". Aviso: **no escribir nombres ni datos de salud de personas**; el detalle del equipo lo cuenta solo el negocio con consentimiento (F3).
 4. **Enviar:** correo opcional (no público), resumen y aviso de privacidad.
 Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
@@ -132,13 +132,13 @@ Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no ven
 | 1 | Prototipo en **español**, con textos preparados para i18n (EN después) | Lanzamiento en Madrid |
 | 2 | **Marcador del mapa uniforme**; la insignia de verificación va en la tarjeta y en la ficha | Un mapa limpio se lee mejor; la transparencia sigue visible al primer toque |
 | 3 | **Ubicación solo tras pulsar "Cerca de mí"**; mientras tanto, mapa de Madrid | Privacidad y cero fricción |
-| 4 | **Una foto por ficha en el MVP**, aportada por el negocio o con su permiso; sin foto, ilustración neutra | Evita problemas de derechos de imagen y mantiene el MVP simple |
+| 4 | **Fotos opcionales**, subidas desde la web con confirmación de permiso y aprobadas por Moderación; sin foto, ilustración neutra | Evita problemas de derechos de imagen y mantiene el MVP simple |
 | 5 | "Para restaurantes" es **página informativa + correo de contacto**, sin formulario propio | Menos que construir y moderar |
 | 6 | **Tipografía del sistema** legible, sin fuentes externas | Carga rápida, accesible, sin dependencias |
 | 7 | **Sin cuenta para el público**: ver, buscar y proponer sin registrarse | Cero barreras |
 | 8 | **Sin gamificación, sin puntuaciones ni reseñas** en el MVP | No es el objetivo |
 | 9 | **Filtros por tipo de comida**, no por discapacidad. La inclusión se muestra como sello sobrio ("Equipo inclusivo") | Promocionar el negocio, no etiquetar a las personas |
-| 10 | **Cada ficha destaca 1–3 platos estrella** (nombre, descripción corta, foto opcional) | Es lo que mueve a ir |
+| 10 | **Cada ficha destaca hasta 3 platos estrella, si los tiene** (nombre, descripción corta, foto opcional); un café o una panadería pueden no tener ninguno | Es lo que mueve a ir |
 | 13 | **Buscador = sitios** (local, ciudad/barrio, código postal); **comida = categorías con icono**. Direcciones exactas fuera del MVP (requieren geocodificador, P4) | Cada cosa en su sitio, sin duplicar |
 | 12 | **Cabecera con menú lateral (☰)** que agrupa navegación, colaboración e información | Pantalla principal limpia y todo fácil de encontrar |
 | 11 | En la ficha, el bloque de verificación va **después** del contenido gastronómico | Transparente pero sin protagonismo |

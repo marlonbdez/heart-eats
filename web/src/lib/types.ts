@@ -75,7 +75,7 @@ export interface Restaurant {
     instagram?: string;
   };
   openingHours: OpeningHours[];
-  signatureDishes: SignatureDish[]; // 1-3
+  signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
   team?: Team;
   // El negocio sabe que aparece y ha dado el visto bueno. Sin esto, el equipo
   // no se muestra con detalle (ver lib/team.ts).
@@ -100,6 +100,11 @@ export interface RestaurantQuery {
   food?: string[]; // foodTags (OR)
 }
 
+// Plato de una propuesta: la foto, si la hay, ya viene reducida y sin subir.
+export interface ProposalDish extends SignatureDish {
+  photo?: Blob;
+}
+
 // Propuesta de un nuevo local (F2). Entra siempre en moderación; nunca se
 // publica sin verificación y sin el sí del negocio.
 export interface ProposalInput {
@@ -108,7 +113,7 @@ export interface ProposalInput {
   city: string;
   postalCode?: string;
   foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
-  dishes: SignatureDish[]; // 0-3, solo con nombre
+  dishes: ProposalDish[]; // 0-3, solo con nombre
   howKnown?: string;
   evidenceUrl?: string;
   independent: boolean;
@@ -187,6 +192,8 @@ export interface ModerationItem {
   // Solo en un local nuevo:
   foodTags?: string[];
   dishes?: string[];
+  // Cuántas fotos se adjuntaron; la imagen no se guarda en el buzón de prueba.
+  photoCount?: number;
   howKnown?: string;
   evidenceUrl?: string;
   // Solo en una corrección:

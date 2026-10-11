@@ -186,13 +186,21 @@
       "other": "Otra"
     },
     "s2": {
-      "intro": "¿Qué plato recomendarías? Puedes añadir de 1 a 3. Ayuda mucho a que la gente se anime a ir.",
+      "intro": "¿Qué plato recomendarías? Puedes añadir hasta 3, o ninguno si no encaja (por ejemplo, en un café). Ayuda mucho a que la gente se anime a ir.",
       "dish": "Plato {n}",
       "dishName": "Nombre del plato",
       "dishDesc": "Descripción corta",
       "optional": "(opcional)",
       "add": "+ Añadir otro plato",
-      "photos": "Las fotos las aporta el propio negocio, o se usan con su permiso. De momento no hace falta subir ninguna."
+      "photo": "Foto",
+      "photoAlt": "Foto del plato {n}",
+      "photoRemove": "Quitar foto",
+      "photoHint": "La foto es opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien. No se guarda en el borrador.",
+      "photoConsent": "Estas fotos son mías o tengo permiso del negocio para usarlas.",
+      "photoConsentError": "Marca la casilla para poder continuar con las fotos.",
+      "photoType": "Usa una foto en formato JPG, PNG o WebP.",
+      "photoSize": "La foto pesa demasiado (máximo 15 MB).",
+      "photoFailed": "No hemos podido preparar esa foto. Prueba con otra."
     },
     "s3": {
       "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Cuéntanos lo que sepas para que podamos comprobarlo.",
@@ -212,6 +220,7 @@
       "summary": "Resumen",
       "summaryFallback": "Tu propuesta",
       "noFood": "Sin tipo de comida indicado",
+      "photos": "{count, plural, one {1 foto} other {# fotos}}",
       "consent": "Al enviar, nos das permiso para revisar la propuesta y, si encaja con el criterio de negocio independiente con equipo inclusivo, publicarla.",
       "privacy": "Política de privacidad"
     },
@@ -533,7 +542,7 @@
         "items": [
           "Si usas la web: ninguno nuestro. El servidor de la web y el del mapa ven tu dirección IP al servirte la página, como cualquier servidor.",
           "Si pulsas «Cerca de mí»: tu ubicación se usa solo en tu dispositivo, para ordenar los locales por distancia. No se envía ni se guarda, y solo se pide cuando pulsas el botón.",
-          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 6 meses.",
+          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 6 meses.",
           "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
@@ -705,6 +714,8 @@
     "change": "Cambio propuesto",
     "food": "Comida",
     "dishes": "Platos estrella",
+    "photosCount": "Fotos",
+    "photosNote": "{count} (este prototipo no las muestra)",
     "howKnown": "Cómo lo conoce quien propone",
     "evidence": "Enlace aportado",
     "none": "Sin indicar",
@@ -722,6 +733,7 @@
       "teamOwner": "He confirmado con el negocio, por un canal oficial, que quien envía lo representa",
       "teamFigures": "Las cifras son coherentes (al menos una persona; no más con discapacidad que en total)",
       "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal",
+      "photos": "Las fotos son del plato o del local, sin caras reconocibles ni datos personales, y hay permiso para usarlas",
       "removalIdentity": "He confirmado, por el correo, que quien lo pide es la persona o su representante"
     },
     "decisionTitle": "Decisión",

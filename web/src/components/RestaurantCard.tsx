@@ -16,7 +16,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   return (
     <div className={styles.card}>
       <div className={styles.photo}>
-        {dish.photoUrl ? (
+        {dish?.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={dish.photoUrl} alt={dish.name} />
         ) : (
@@ -26,8 +26,12 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         )}
       </div>
       <div className={styles.body}>
-        <p className={styles.dishLabel}>{t('signatureDish')}</p>
-        <p className={styles.dish}>{dish.name}</p>
+        {dish && (
+          <>
+            <p className={styles.dishLabel}>{t('signatureDish')}</p>
+            <p className={styles.dish}>{dish.name}</p>
+          </>
+        )}
         <h2 className={styles.name}>{restaurant.name}</h2>
         <p className={styles.place}>
           {place}

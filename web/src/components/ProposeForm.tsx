@@ -6,6 +6,7 @@ import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
 import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
+import { MAX_PHOTO_BYTES, PHOTO_TYPES, resizePhoto } from '@/lib/image';
 import { isEmail, isHttpUrl } from '@/lib/validation';
 import s from './Form.module.css';
 
@@ -16,6 +17,8 @@ const DRAFT_KEY = 'hearteats:draft-propose';
 interface Dish {
   name: string;
   description: string;
+  // Foto ya reducida y su vista previa. No se guarda en el borrador.
+  photo?: { blob: Blob; url: string };
 }
 interface FormState {
   name: string;
@@ -28,6 +31,7 @@ interface FormState {
   evidenceUrl: string;
   independent: boolean;
   email: string;
+  photoConsent: boolean; // permiso para usar las fotos
   website: string; // honeypot
 }
 
@@ -42,18 +46,24 @@ const initial: FormState = {
   evidenceUrl: '',
   independent: false,
   email: '',
+  photoConsent: false,
   website: '',
 };
 
-// Lo que se guarda del borrador: nunca el correo (privado) ni el honeypot.
-type DraftForm = Omit<FormState, 'email' | 'website'>;
+// Lo que se guarda del borrador: nunca el correo (privado), el honeypot ni las
+// fotos (ni el permiso, que va con ellas).
+type DraftForm = Omit<
+  FormState,
+  'email' | 'website' | 'photoConsent' | 'dishes'
+> & { dishes: { name: string; description: string }[] };
 interface Draft {
   form: DraftForm;
   step: number;
 }
 
 const isPristine = (f: FormState) =>
-  JSON.stringify({ ...f, email: '', website: '' }) === JSON.stringify(initial);
+  JSON.stringify({ ...f, email: '', website: '', photoConsent: false }) ===
+  JSON.stringify(initial);
 
 // Un borrador viejo o a medias no debe romper el formulario.
 function sanitizeDraft(d: Draft | null): Draft | null {
@@ -61,7 +71,9 @@ function sanitizeDraft(d: Draft | null): Draft | null {
   const f = d.form;
   const str = (v: unknown, fallback = '') =>
     typeof v === 'string' ? v : fallback;
-  const dishes = Array.isArray(f.dishes)
+  const dishes: { name: string; description: string }[] = Array.isArray(
+    f.dishes,
+  )
     ? f.dishes.slice(0, MAX_DISHES).map((x) => ({
         name: str(x?.name),
         description: str(x?.description),
@@ -95,6 +107,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     'idle',
   );
   const [sentName, setSentName] = useState('');
+  // Aviso de la última foto que no se pudo usar, por plato.
+  const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
   const isDone = status === 'done';
   // «loaded» evita guardar el formulario vacío antes de leer el borrador.
   const [loaded, setLoaded] = useState(false);
@@ -123,10 +137,20 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       return;
     }
     const timer = setTimeout(() => {
-      const { email, website, ...rest } = form;
+      const { email, website, photoConsent, dishes, ...rest } = form;
       void email;
       void website;
-      saveDraft<Draft>(DRAFT_KEY, { form: rest, step });
+      void photoConsent;
+      saveDraft<Draft>(DRAFT_KEY, {
+        form: {
+          ...rest,
+          dishes: dishes.map((d) => ({
+            name: d.name,
+            description: d.description,
+          })),
+        },
+        step,
+      });
     }, 400);
     return () => clearTimeout(timer);
   }, [form, step, status, loaded]);
@@ -149,6 +173,33 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       'dishes',
       form.dishes.map((d, j) => (j === i ? { ...d, ...patch } : d)),
     );
+  const hasPhotos = form.dishes.some((d) => d.photo);
+  const clearPhoto = (i: number) => {
+    const url = form.dishes[i]?.photo?.url;
+    if (url) URL.revokeObjectURL(url);
+    setDish(i, { photo: undefined });
+  };
+  const choosePhoto = async (i: number, file?: File) => {
+    if (!file) return;
+    const fail = (key: string) => setPhotoErrors((e) => ({ ...e, [i]: key }));
+    setPhotoErrors((e) => ({ ...e, [i]: '' }));
+    if (!PHOTO_TYPES.includes(file.type)) return fail('photoType');
+    if (file.size > MAX_PHOTO_BYTES) return fail('photoSize');
+    try {
+      const blob = await resizePhoto(file);
+      clearPhoto(i);
+      setForm((f) => ({
+        ...f,
+        dishes: f.dishes.map((d, j) =>
+          j === i
+            ? { ...d, photo: { blob, url: URL.createObjectURL(blob) } }
+            : d,
+        ),
+      }));
+    } catch {
+      fail('photoFailed');
+    }
+  };
   const toggleFood = (key: string) =>
     set(
       'foods',
@@ -160,6 +211,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const validate = (): boolean => {
     const next: Record<string, boolean> = {};
     if (step === 1 && !form.name.trim()) next.name = true;
+    if (step === 2 && hasPhotos && !form.photoConsent) next.photoConsent = true;
     if (step === 3) {
       const url = form.evidenceUrl.trim();
       if (url && !isHttpUrl(url)) next.evidenceUrl = true;
@@ -187,6 +239,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
           .map((d) => ({
             name: d.name.trim(),
             description: clean(d.description),
+            photo: d.photo?.blob,
           })),
         howKnown: clean(form.howKnown),
         evidenceUrl: clean(form.evidenceUrl),
@@ -207,8 +260,13 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     else setStep(step + 1);
   };
 
+  const releasePhotos = () =>
+    form.dishes.forEach((d) => d.photo && URL.revokeObjectURL(d.photo.url));
+
   const discardDraft = () => {
     clearDraft(DRAFT_KEY);
+    releasePhotos();
+    setPhotoErrors({});
     setForm(initial);
     setErrors({});
     setStep(1);
@@ -216,6 +274,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   };
 
   const reset = () => {
+    releasePhotos();
+    setPhotoErrors({});
     setForm(initial);
     setErrors({});
     setStep(1);
@@ -413,6 +473,47 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   value={d.description}
                   onChange={(e) => setDish(i, { description: e.target.value })}
                 />
+                <p className={s.label} id={`d${i}pl`}>
+                  {t('s2.photo')}{' '}
+                  <span className={s.optional}>{t('s2.optional')}</span>
+                </p>
+                {d.photo ? (
+                  <div className={s.photoRow}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={d.photo.url}
+                      alt={t('s2.photoAlt', { n: i + 1 })}
+                      className={s.photoPreview}
+                    />
+                    <button
+                      type="button"
+                      className={s.linkButton}
+                      onClick={() => clearPhoto(i)}
+                    >
+                      {t('s2.photoRemove')}
+                    </button>
+                  </div>
+                ) : (
+                  <input
+                    id={`d${i}p`}
+                    type="file"
+                    accept={PHOTO_TYPES.join(',')}
+                    className={s.fileInput}
+                    aria-labelledby={`d${i}pl`}
+                    aria-describedby={
+                      photoErrors[i] ? `d${i}pe` : 's2-photo-hint'
+                    }
+                    onChange={(e) => {
+                      void choosePhoto(i, e.target.files?.[0]);
+                      e.target.value = '';
+                    }}
+                  />
+                )}
+                {photoErrors[i] && (
+                  <p id={`d${i}pe`} role="alert" className={s.error}>
+                    {t(`s2.${photoErrors[i]}`)}
+                  </p>
+                )}
               </div>
             ))}
             {form.dishes.length < MAX_DISHES && (
@@ -426,7 +527,30 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 {t('s2.add')}
               </button>
             )}
-            <p className={s.note}>{t('s2.photos')}</p>
+            <p id="s2-photo-hint" className={s.note}>
+              {t('s2.photoHint')}
+            </p>
+            {hasPhotos && (
+              <div className={s.field}>
+                <label className={s.check}>
+                  <input
+                    type="checkbox"
+                    checked={form.photoConsent}
+                    onChange={(e) => set('photoConsent', e.target.checked)}
+                    aria-invalid={errors.photoConsent || undefined}
+                    aria-describedby={
+                      errors.photoConsent ? 'e-photo-consent' : undefined
+                    }
+                  />
+                  <span>{t('s2.photoConsent')}</span>
+                </label>
+                {errors.photoConsent && (
+                  <p id="e-photo-consent" role="alert" className={s.error}>
+                    {t('s2.photoConsentError')}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -512,6 +636,16 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 {form.name.trim() || t('s4.summaryFallback')}
                 <br />
                 <span>{foodSummary || t('s4.noFood')}</span>
+                {hasPhotos && (
+                  <>
+                    <br />
+                    <span>
+                      {t('s4.photos', {
+                        count: form.dishes.filter((d) => d.photo).length,
+                      })}
+                    </span>
+                  </>
+                )}
               </p>
             </div>
             <p className={s.small}>
