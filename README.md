@@ -2,11 +2,11 @@
 
 Mapa colaborativo y de código abierto para descubrir y apoyar restaurantes y negocios gastronómicos locales que apuestan por la **inclusión laboral de personas con discapacidad**. Lanzamiento en Madrid, pensado para ser internacional.
 
-**Estado:** Fase 0 (definición y diseño). El frontend se construye con datos de ejemplo (mocks); aún no hay backend.
+**Estado:** frontend completo con datos de ejemplo y un backend simulado; el backend real está pendiente de decisiones (ver [`docs/05_ROADMAP.md`](docs/05_ROADMAP.md)). Publicado en [hearteats.org](https://hearteats.org).
 
 ## Documentación
 
-Empieza por [`docs/00_HANDOFF.md`](docs/00_HANDOFF.md) y el índice en [`docs/README.md`](docs/README.md).
+Empieza por el índice en [`docs/README.md`](docs/README.md) y la hoja de ruta [`docs/05_ROADMAP.md`](docs/05_ROADMAP.md). El contexto original está en [`docs/00_HANDOFF.md`](docs/00_HANDOFF.md). Las reglas de trabajo están en [`CLAUDE.md`](CLAUDE.md).
 
 ## Desarrollo local
 
@@ -31,7 +31,7 @@ npm run test:e2e   # prueba de humo en un navegador (requiere `npm run build` an
 
 ## Integración continua
 
-Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador que comprueba que el mapa se dibuja, que la vista previa abre y que el menú navega.
+Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador con pruebas de extremo a extremo (flujos, diseño móvil) y de accesibilidad automática (axe, WCAG 2.2 AA).
 
 ## Despliegue
 
