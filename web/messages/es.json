@@ -157,6 +157,15 @@
     "outside": "Aún no hay locales cerca de ti. Seguimos en Madrid.",
     "distanceLabel": "a {distance}"
   },
+  "photo": {
+    "optional": "(opcional)",
+    "remove": "Quitar foto",
+    "consent": "Estas fotos son mías o tengo permiso del negocio para usarlas.",
+    "consentError": "Marca la casilla para poder continuar con las fotos.",
+    "photoType": "Usa una foto en formato JPG, PNG o WebP.",
+    "photoSize": "La foto pesa demasiado (máximo 15 MB).",
+    "photoFailed": "No hemos podido preparar esa foto. Prueba con otra."
+  },
   "propose": {
     "title": "Proponer un local",
     "back": "Volver al mapa",
@@ -194,13 +203,7 @@
       "add": "+ Añadir otro plato",
       "photo": "Foto",
       "photoAlt": "Foto del plato {n}",
-      "photoRemove": "Quitar foto",
-      "photoHint": "La foto es opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien. No se guarda en el borrador.",
-      "photoConsent": "Estas fotos son mías o tengo permiso del negocio para usarlas.",
-      "photoConsentError": "Marca la casilla para poder continuar con las fotos.",
-      "photoType": "Usa una foto en formato JPG, PNG o WebP.",
-      "photoSize": "La foto pesa demasiado (máximo 15 MB).",
-      "photoFailed": "No hemos podido preparar esa foto. Prueba con otra."
+      "photoHint": "La foto es opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien. No se guarda en el borrador."
     },
     "s3": {
       "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Cuéntanos lo que sepas para que podamos comprobarlo.",
@@ -479,12 +482,17 @@
       "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto y lo escrito arriba. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.",
       "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto y lo escrito arriba de esta persona. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 7 días.",
       "consentNote": "Texto de consentimiento provisional: debe revisarlo un profesional antes de publicarse.",
+      "photosTitle": "Fotos de tu local",
+      "photosHint": "Opcional, hasta 3: de tus platos o del local. Se reducen en tu dispositivo y no se ven hasta que las revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien.",
+      "photoLabel": "Foto {n}",
+      "photoAlt": "Foto {n} de tu local",
       "storyError": "Completa el nombre, el puesto y la historia, y marca el permiso, para continuar.",
       "add": "+ Añadir otra persona"
     },
     "s4": {
       "intro": "Revísalo con calma. Así se verá en la ficha de tu local.",
       "previewLabel": "Así se verá:",
+      "photos": "{count, plural, one {1 foto} other {# fotos}} (se revisarán antes de verse)",
       "email": "Correo de contacto",
       "emailHint": "No se publica. Lo usamos para confirmar contigo que eres del negocio y para avisarte cuando esté publicado.",
       "emailError": "Escribe un correo válido para poder enviarlo.",
@@ -546,7 +554,7 @@
           "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
-          "Si eres un negocio y cuentas tu equipo: cifras del equipo y, en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona, para mostrar la ficha con el detalle que el negocio elija. Se conservan mientras el negocio y la persona lo mantengan."
+          "Si eres un negocio y cuentas tu equipo: cifras del equipo y, en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona; y, si quieres, fotos de tu local o de tus platos (con tu confirmación de permiso), para mostrar la ficha con el detalle que el negocio elija. Se conservan mientras el negocio y la persona lo mantengan."
         ],
         "paragraphs": [
           "Tu correo y lo que escribes en los formularios los tratamos porque tú nos los das al enviar (tu consentimiento). Los datos de una persona del equipo, solo con el consentimiento explícito de esa persona."

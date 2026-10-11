@@ -132,6 +132,7 @@ Candidatas a hoja de ruta, **no son decisiones**. El detalle está en las observ
 **De producto**
 - Las fichas de más de 12 meses solo se marcan; nada las trata (CU-34).
 - La lista de motivos de rechazo es la misma para todos los tipos.
+- Un negocio no puede enviar solo fotos: la petición sigue siendo de tipo «Equipo» y exige la cifra. Un tipo propio («Fotos») lo resolvería.
 
 **Decididas** (ver `07_VERIFICACION.md` y `11_FLUJO_Y_DOMINIO.md`)
 - «Info pedida» vuelve a Pendiente cuando quien propuso responde, y se cierra sola a los 14 días.

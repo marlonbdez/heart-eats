@@ -102,6 +102,7 @@ export async function submitBusinessTeam(
       disabilityTypes: input.disabilityTypes,
       stories: input.stories?.length ?? 0,
     },
+    photoCount: input.photos?.length ?? 0,
   });
 }
 
