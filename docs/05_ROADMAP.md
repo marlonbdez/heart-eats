@@ -58,7 +58,7 @@ Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3):
 - [ ] **Revisión legal** de privacidad y consentimientos (los plazos de conservación son provisionales)
 - [ ] **P6** estructura legal: hoy figura Marlon Bermúdez como responsable; decidir cuándo se constituye la asociación
 - [ ] **P8** búsqueda de marca (OEPM / EUIPO)
-- [ ] Aviso legal y política de cookies (`08_PRIVACIDAD_LEGAL.md`)
+- [x] Aviso legal (`/legal`) y política de cookies y almacenamiento (`/cookies`), en borrador; falta añadir domicilio y número fiscal (P6) y la revisión legal
 - [ ] Revisión nativa del inglés
 - [ ] Pruebas con personas usuarias, incluidas personas con discapacidad
 

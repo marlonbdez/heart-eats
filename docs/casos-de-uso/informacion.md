@@ -16,7 +16,8 @@
 - **Quién:** Visitante.
 - **Pasos:** menú o formularios (`/privacy`) → lee qué datos se tratan, para qué, cuánto tiempo y sus derechos. Desde aquí puede ir a Contacto (CU-31) o a «Pedir una retirada» (CU-13).
 - **Reglas:** **provisional** hasta la revisión legal; debe describir todo lo que la web guarda (hoy, solo en el navegador: el buzón de pruebas y el borrador de «Proponer un local»); cualquier dato nuevo se anota primero en `08_PRIVACIDAD_LEGAL.md`.
-- **Observación:** aún faltan el aviso legal y la política de cookies y almacenamiento.
+- **También:** el menú tiene dos páginas hermanas del mismo tipo: «Cookies y almacenamiento» (`/cookies`: no hay cookies ni analítica; lista lo que guarda el navegador) y «Aviso legal» (`/legal`: quién está detrás, licencias, uso y responsabilidad).
+- **Observación:** las dos son borrador: faltan domicilio y número fiscal del responsable (P6) y la revisión legal.
 
 ## CU-31 · Contactar con el proyecto
 - **Quién:** Visitante.

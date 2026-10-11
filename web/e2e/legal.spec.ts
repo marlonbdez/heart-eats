@@ -7,6 +7,8 @@ test('privacidad y contacto en el móvil: se leen sin desplazarse de lado', asyn
   for (const [path, title] of [
     ['/es/privacy', 'Privacidad y datos'],
     ['/es/contact', 'Contacto'],
+    ['/es/cookies', 'Cookies y almacenamiento'],
+    ['/es/legal', 'Aviso legal'],
   ]) {
     await page.goto(path);
     await expect(
@@ -59,4 +61,49 @@ test('el correo de contacto aparece en Contacto y en Privacidad, en ES y EN', as
   // Ya no se promete una dirección «en preparación».
   await page.goto('/es/contact');
   await expect(page.getByText('Todavía la estamos preparando')).toHaveCount(0);
+});
+
+test('el menú lleva al aviso legal y a cookies y almacenamiento, en ES y EN', async ({
+  page,
+}) => {
+  for (const [locale, menu, links] of [
+    [
+      'es',
+      /menú/i,
+      [
+        ['Cookies y almacenamiento', 'cookies'],
+        ['Aviso legal', 'legal'],
+      ],
+    ],
+    [
+      'en',
+      /menu/i,
+      [
+        ['Cookies and storage', 'cookies'],
+        ['Legal notice', 'legal'],
+      ],
+    ],
+  ] as const) {
+    for (const [name, path] of links) {
+      await page.goto(`/${locale}`);
+      await page.getByRole('button', { name: menu }).first().click();
+      await page
+        .getByRole('dialog')
+        .getByRole('link', { name, exact: true })
+        .click();
+      await expect(page).toHaveURL(new RegExp(`/${locale}/${path}$`));
+      await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
+    }
+  }
+});
+
+test('cookies y almacenamiento: dice que no hay cookies y lista lo que se guarda', async ({
+  page,
+}) => {
+  await page.goto('/es/cookies');
+  await expect(page.getByText('HeartEats no usa cookies.')).toBeVisible();
+  await expect(
+    page.getByText(/borrador de «Proponer un local»/i),
+  ).toBeVisible();
+  await expect(page.getByText(/Los envíos de prueba/)).toBeVisible();
 });
