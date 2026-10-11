@@ -186,13 +186,21 @@
       "other": "Other"
     },
     "s2": {
-      "intro": "What dish would you recommend? You can add 1 to 3. It really helps people decide to go.",
+      "intro": "What dish would you recommend? You can add up to 3, or none if it does not fit (a café, for example). It really helps people decide to go.",
       "dish": "Dish {n}",
       "dishName": "Name of the dish",
       "dishDesc": "Short description",
       "optional": "(optional)",
       "add": "+ Add another dish",
-      "photos": "Photos are provided by the business itself, or used with its permission. You don’t need to upload any for now."
+      "photo": "Photo",
+      "photoAlt": "Photo of dish {n}",
+      "photoRemove": "Remove photo",
+      "photoHint": "The photo is optional. It is shrunk on your device and stays hidden until we review it. Choose the dish over people: avoid photos where someone can be recognised. It is not saved in the draft.",
+      "photoConsent": "These photos are mine, or I have the business’s permission to use them.",
+      "photoConsentError": "Tick the box to continue with the photos.",
+      "photoType": "Use a JPG, PNG or WebP photo.",
+      "photoSize": "The photo is too large (15 MB at most).",
+      "photoFailed": "We could not prepare that photo. Try another one."
     },
     "s3": {
       "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Tell us what you know so we can check it.",
@@ -212,6 +220,7 @@
       "summary": "Summary",
       "summaryFallback": "Your suggestion",
       "noFood": "No kind of food given",
+      "photos": "{count, plural, one {1 photo} other {# photos}}",
       "consent": "By sending, you give us permission to review the suggestion and, if it fits the criteria of an independent business with an inclusive team, publish it.",
       "privacy": "Privacy policy"
     },
@@ -533,7 +542,7 @@
         "items": [
           "If you use the website: none of our own. The web server and the map server see your IP address when they serve you the page, like any server.",
           "If you tap Near me: your location is used only on your device, to sort places by distance. It is not sent or saved, and it is only requested when you tap the button.",
-          "If you suggest a place: the place details, how you know it, a link (optional) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 6 months at the most.",
+          "If you suggest a place: the place details, how you know it, a link (optional), photos of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 6 months at the most.",
           "If you suggest a correction: what needs correcting, your explanation, a link (optional) and your email (optional). We use them to review the notice and, if it is right, update the listing. They are kept like a suggestion.",
           "If you are a moderator: your email and the area you moderate, so you can sign in and review suggestions, for as long as you are one.",
           "To prevent unwanted messages: a temporary counter per IP address, kept for a few hours. The hidden field in the form does not store anything about you.",
@@ -705,6 +714,8 @@
     "change": "Proposed change",
     "food": "Food",
     "dishes": "Signature dishes",
+    "photosCount": "Photos",
+    "photosNote": "{count} (this prototype does not show them)",
     "howKnown": "How the sender knows the place",
     "evidence": "Link provided",
     "none": "Not given",
@@ -722,6 +733,7 @@
       "teamOwner": "I have confirmed through an official channel that the sender represents the business",
       "teamFigures": "The figures make sense (at least one person; not more with a disability than in total)",
       "teamConsents": "Each story comes with consent from the person or their legal representative",
+      "photos": "The photos show the dish or the place, with no recognisable faces or personal data, and there is permission to use them",
       "removalIdentity": "I have confirmed by email that the requester is the person or their representative"
     },
     "decisionTitle": "Decision",

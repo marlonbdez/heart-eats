@@ -17,6 +17,7 @@ const CHECKS_NEW = ['exists', 'independent', 'inclusive', 'owner'] as const;
 const CHECKS_EDIT = ['correct'] as const;
 const CHECKS_TEAM = ['teamOwner', 'teamFigures'] as const;
 const CHECK_TEAM_STORIES = 'teamConsents';
+const CHECK_PHOTOS = 'photos';
 const CHECKS_REMOVAL = ['removalIdentity'] as const;
 const LEVELS: VerificationLevel[] = ['admin', 'community'];
 const METHODS: VerificationMethod[] = [
@@ -54,7 +55,9 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
   const isRemoval = item.kind === 'removal';
   const k = isNew ? 'New' : isTeam ? 'Team' : isRemoval ? 'Removal' : 'Edit';
   const checkKeys: readonly string[] = isNew
-    ? CHECKS_NEW
+    ? item.photoCount
+      ? [...CHECKS_NEW, CHECK_PHOTOS]
+      : CHECKS_NEW
     : isTeam
       ? item.team && item.team.stories > 0
         ? [...CHECKS_TEAM, CHECK_TEAM_STORIES]
@@ -313,6 +316,12 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
               <dt>{t('dishes')}</dt>
               <dd>{item.dishes?.join(' · ') || t('none')}</dd>
             </div>
+            {item.photoCount ? (
+              <div>
+                <dt>{t('photosCount')}</dt>
+                <dd>{t('photosNote', { count: item.photoCount })}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>{t('howKnown')}</dt>
               <dd>{item.howKnown || t('none')}</dd>

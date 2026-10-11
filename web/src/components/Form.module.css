@@ -265,3 +265,23 @@
   margin: 8px 0 0;
   font-size: 1.1rem;
 }
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.photoPreview {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--hover);
+}
+.fileInput {
+  width: 100%;
+  min-height: 48px;
+  font: inherit;
+  color: inherit;
+}

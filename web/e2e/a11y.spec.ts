@@ -9,6 +9,7 @@ const PAGES = [
   '',
   '/list',
   '/place/demo-la-masa-madre',
+  '/place/demo-cafe-paso-a-paso',
   '/propose',
   '/correct/demo-la-masa-madre',
   '/business',
@@ -95,6 +96,28 @@ for (const scheme of ['light', 'dark'] as const) {
         .toContain('Local a medias');
       await page.reload();
       await expect(page.getByRole('status')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('proponer un local: paso de platos con foto y aviso de permiso', async ({
+      page,
+    }) => {
+      await page.goto('/es/propose');
+      await page.getByLabel('Nombre del local').fill('Local con foto');
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await page.locator('input[type=file]').setInputFiles({
+        name: 'plato.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+          'base64',
+        ),
+      });
+      await expect(
+        page.getByRole('img', { name: /Foto del plato 1/ }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
       await expectNoViolations(page);
     });
 

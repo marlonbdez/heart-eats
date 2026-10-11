@@ -75,29 +75,31 @@ export function RestaurantDetail({
           {description && <p>{description}</p>}
         </header>
 
-        <section aria-labelledby="platos">
-          <h2 id="platos">{t('dishes')}</h2>
-          <ul className={styles.dishes}>
-            {r.signatureDishes.map((d) => (
-              <li key={d.name} className={styles.dish}>
-                <div className={styles.dishPhoto}>
-                  {d.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={d.photoUrl} alt="" />
-                  ) : (
-                    <span aria-hidden="true">🍽️</span>
-                  )}
-                </div>
-                <div>
-                  <p className={styles.dishName}>{d.name}</p>
-                  {d.description && (
-                    <p className={styles.muted}>{d.description}</p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {r.signatureDishes.length > 0 && (
+          <section aria-labelledby="platos">
+            <h2 id="platos">{t('dishes')}</h2>
+            <ul className={styles.dishes}>
+              {r.signatureDishes.map((d) => (
+                <li key={d.name} className={styles.dish}>
+                  <div className={styles.dishPhoto}>
+                    {d.photoUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={d.photoUrl} alt="" />
+                    ) : (
+                      <span aria-hidden="true">🍽️</span>
+                    )}
+                  </div>
+                  <div>
+                    <p className={styles.dishName}>{d.name}</p>
+                    {d.description && (
+                      <p className={styles.muted}>{d.description}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <nav className={styles.actions} aria-label={t('actions')}>
           {actions.map((a) => (

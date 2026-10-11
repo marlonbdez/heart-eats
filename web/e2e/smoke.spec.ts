@@ -251,3 +251,19 @@ test('sin permiso de ubicación, avisa y la web sigue usable', async ({
   await expect(page.getByText(/No tenemos permiso/)).toBeVisible();
   await expect(page.locator('[data-marker]').first()).toBeVisible();
 });
+
+test('un local sin plato estrella (un café) se ve bien en la ficha y la lista', async ({
+  page,
+}) => {
+  await page.goto('/es/place/demo-cafe-paso-a-paso');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Café Paso a Paso',
+  );
+  await expect(
+    page.getByRole('heading', { name: 'Lo que te recomendamos probar' }),
+  ).toHaveCount(0);
+  await page.goto('/es/list?q=paso');
+  await expect(
+    page.getByRole('heading', { name: /Café Paso a Paso/ }),
+  ).toBeVisible();
+});

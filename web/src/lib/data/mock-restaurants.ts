@@ -78,9 +78,7 @@ export const restaurants: Restaurant[] = [
     location: { lat: 40.4263, lng: -3.7041 },
     contact: { instagram: '@ejemplo' },
     openingHours: week('08:00', '20:00', [1, 2, 3, 4, 5, 6]),
-    signatureDishes: [
-      { name: 'Tarta de zanahoria', description: 'Con frosting de queso.' },
-    ],
+    signatureDishes: [], // un café puede no tener plato estrella
     team: {
       level: 'minimal',
       summary: { totalStaff: 6, staffWithDisability: 2 },

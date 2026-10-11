@@ -46,6 +46,7 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
     warnings: input.evidenceUrl ? [] : [{ kind: 'noEvidence' }],
     foodTags: input.foodTags,
     dishes: input.dishes.map((d) => d.name),
+    photoCount: input.dishes.filter((d) => d.photo).length,
     howKnown: input.howKnown,
     evidenceUrl: input.evidenceUrl,
   });
