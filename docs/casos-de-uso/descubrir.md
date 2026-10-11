@@ -33,10 +33,10 @@
 
 ## CU-06 · Consultar la ficha de un local
 - **Quién:** Visitante. Incluye CU-09.
-- **Pasos:** llega desde una tarjeta o un enlace → ve foto, nombre, dirección y sello → platos estrella (1 a 3) → acciones (CU-07), equipo (CU-08), horario y verificación (CU-09) → al final, «Sugerir una corrección» y «¿Es tu local?».
+- **Pasos:** llega desde una tarjeta o un enlace → ve foto, nombre, dirección y sello → platos estrella (1 a 3) → acciones (CU-07), equipo (CU-08), horario y verificación (CU-09) → «Volver» regresa al mapa o a la lista de donde se venía, con su búsqueda → al final, «Sugerir una corrección» y «¿Es tu local?».
 - **Si no:** si la dirección no existe, aparece «No encontramos esta página».
 - **Reglas:** una foto por ficha, aportada por el negocio; la verificación va después del contenido gastronómico; los datos actuales son de ejemplo.
-- **Observaciones:** «Volver» siempre lleva al mapa inicial; la ficha no enlaza a «Pedir una retirada».
+- **Observación:** la ficha no enlaza a «Pedir una retirada».
 
 ## CU-07 · Llegar al local o contactarlo
 - **Quién:** Visitante; Servicio de mapas. Extiende CU-06.

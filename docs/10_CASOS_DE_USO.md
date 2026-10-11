@@ -133,7 +133,6 @@ Candidatas a hoja de ruta, **no son decisiones**. El detalle está en las observ
 - ¿Cómo aporta un negocio la foto y los platos de su local? Hoy no hay ningún flujo.
 - «Info pedida» cierra la solicitud: qué pasa al responder (ver `11_FLUJO_Y_DOMINIO.md`).
 - El plato estrella no es obligatorio al proponer, pero la ficha lo da por supuesto.
-- «Volver» en la ficha lleva siempre al mapa inicial; cambiar de idioma pierde la búsqueda.
 - La lista de motivos de rechazo es la misma para todos los tipos.
 - Las fichas de más de 12 meses solo se marcan; nada las trata (CU-34).
 

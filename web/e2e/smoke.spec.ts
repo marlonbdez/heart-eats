@@ -191,7 +191,28 @@ test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Horario' })).toBeVisible();
   await page.getByRole('link', { name: /Volver/ }).click();
-  await expect(page).toHaveURL(/\/es\/?$/);
+  await expect(page).toHaveURL(/\/es\/list$/);
+});
+
+test('volver desde la ficha regresa a la lista con su búsqueda', async ({
+  page,
+}) => {
+  await page.goto('/es/list');
+  await page.getByRole('searchbox').fill('lavapies');
+  await page.getByRole('link', { name: 'Ver local →' }).first().click();
+  await expect(page).toHaveURL(/\/es\/place\//);
+  await page.getByRole('link', { name: /Volver/ }).click();
+  await expect(page).toHaveURL(/\/es\/list\?q=lavapies$/);
+  await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
+});
+
+test('cambiar de idioma conserva la búsqueda', async ({ page }) => {
+  await page.goto('/es?q=lavapies');
+  await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
+  await page.getByRole('button', { name: /menú/i }).first().click();
+  await page.getByRole('link', { name: 'English' }).click();
+  await expect(page).toHaveURL(/\/en\?q=lavapies$/);
+  await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
 });
 
 test.describe('Cerca de mí', () => {

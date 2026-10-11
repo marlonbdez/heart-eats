@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { effectiveTeamLevel } from '@/lib/team';
 import type { Restaurant } from '@/lib/types';
+import { BackLink } from './BackLink';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
 import { TeamBlock } from './TeamBlock';
@@ -56,9 +57,9 @@ export function RestaurantDetail({
             🍽️
           </span>
         )}
-        <Link href="/" className={styles.back}>
+        <BackLink className={styles.back}>
           <span aria-hidden="true">←</span> {t('back')}
-        </Link>
+        </BackLink>
       </div>
 
       <div className={styles.content}>
