@@ -1,13 +1,13 @@
 # 10 · Casos de uso
 
-> **Estado:** borrador v0.1 · primera entrega (actores, paquetes y casos de uso). Pendiente de las siguientes: fichas detalladas, diagramas de actividad y de estados, modelo de dominio y matriz de trazabilidad (ver §7).
+> **Estado:** borrador v0.2 · entregas 1 y 2a (actores, paquetes, casos de uso y fichas de Descubrir e Información). Pendiente: fichas de Colaborar, Negocio y Moderación, diagramas de actividad y de estados, modelo de dominio y matriz de trazabilidad (ver §7).
 > Complementa a `04_DISENO_UI.md` (flujos y pantallas) y a `07_VERIFICACION.md` (proceso de moderación).
 
 ## 1. Para qué sirve este documento
 
 Es el mapa de **qué hace HeartEats y para quién**, en lenguaje UML. Sirve para entender la aplicación de un vistazo, ver qué está hecho y qué falta, y decidir con criterio el orden de lo que viene.
 
-Cada diagrama tiene debajo una tabla con lo mismo en texto, de modo que nada depende solo de la imagen.
+Cada diagrama tiene debajo una tabla con lo mismo en texto, de modo que nada depende solo de la imagen. El detalle de cada CU (flujo, alternativas, reglas) está en las **fichas**, en [`casos-de-uso/`](casos-de-uso/README.md).
 
 ## 2. Convenciones
 
@@ -56,6 +56,8 @@ La flecha `A ⇢ B` significa «A necesita a B». La dependencia es de direcció
 
 ### 5.1 Descubrir
 
+Fichas: [casos-de-uso/descubrir.md](casos-de-uso/descubrir.md).
+
 ![Casos de uso de Descubrir: el Visitante explora el mapa o la lista, busca, filtra, ordena por cercanía y consulta la ficha de un local, con sus extensiones.](modelado/01-descubrir.svg)
 
 | ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
@@ -67,7 +69,7 @@ La flecha `A ⇢ B` significa «A necesita a B». La dependencia es de direcció
 | CU-05 | Ordenar por cercanía | Visitante; Geolocalización | Con «Cerca de mí» pide la ubicación (solo tras el gesto) y ordena por distancia. Avisa si se deniega, no está disponible o está fuera de la zona. | `/`, `/list` | F1 | Hecho |
 | CU-06 | Consultar la ficha de un local | Visitante | Ve platos estrella, horario y contacto del local. Incluye CU-09. | `/place/[slug]` | F1 | Hecho |
 | CU-07 | Llegar al local o contactarlo | Visitante; Servicio de mapas | Abre las indicaciones, llama o abre la web del local. | `/place/[slug]` | F1 | Hecho |
-| CU-08 | Consultar el equipo del local | Visitante | Ve «El equipo detrás de cada plato» en el nivel que el negocio eligió (cifras; áreas y tipos; historias). Solo si el negocio lo ha confirmado. | `/place/[slug]` | F1, F3 | Hecho |
+| CU-08 | Consultar el equipo del local | Visitante | Ve «El equipo detrás de cada plato» en el nivel que el negocio eligió (cifras; áreas y tipos; historias). Sin la confirmación del negocio, o en equipos de menos de 5 personas, solo la cifra. | `/place/[slug]` | F1, F3 | Hecho |
 | CU-09 | Consultar la verificación del local | Visitante | Ve la insignia (🟢 o 🟡), el método y la fecha, y un enlace a «Cómo verificamos». | `/place/[slug]` | F1 | Hecho |
 
 ### 5.2 Colaborar
@@ -117,6 +119,8 @@ El contacto con el negocio para confirmar que quiere aparecer (paso 4 de `07_VER
 
 ### 5.5 Información
 
+Fichas: [casos-de-uso/informacion.md](casos-de-uso/informacion.md).
+
 ![Casos de uso de Información: el Visitante consulta qué es HeartEats, cómo se verifica, la privacidad y datos, contacta con el proyecto y cambia el idioma.](modelado/05-informacion.svg)
 
 | ID | Caso de uso | Actor | Qué hace | Ruta | Flujo | Estado |
@@ -139,7 +143,9 @@ El contacto con el negocio para confirmar que quiere aparecer (paso 4 de `07_VER
 Entregas previstas, cada una en su PR:
 
 1. ✅ Actores, paquetes y diagramas de casos de uso (este documento).
-2. Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales).
+2. Fichas detalladas de cada CU (resumen, precondiciones, poscondiciones, flujo principal y alternativos, requisitos especiales), en dos PR:
+   - 2a ✅ Descubrir e Información (CU-01 a CU-09 y CU-28 a CU-32).
+   - 2b Colaborar, Negocio y Moderación (el resto).
 3. Diagrama de actividad con carriles del ciclo «proponer → verificar → publicar», diagrama de estados de una solicitud y modelo de dominio.
 4. Matriz de trazabilidad: CU ↔ ruta ↔ componente ↔ prueba e2e ↔ documento.
 

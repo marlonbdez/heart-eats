@@ -15,6 +15,7 @@
 | [10_CASOS_DE_USO](10_CASOS_DE_USO.md) | Actores, paquetes y casos de uso (UML) |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
+| [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
 | [modelado/](modelado/) | Fuentes PlantUML y SVG de los diagramas |
 | [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo) |
 
