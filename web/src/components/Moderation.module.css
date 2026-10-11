@@ -206,8 +206,12 @@
 .actions .full {
   width: 100%;
 }
-.notReady {
-  opacity: 0.6;
+/* «Aún no se puede aprobar»: botón hueco y con borde discontinuo. No se
+   atenúa con opacidad porque el texto perdería el contraste mínimo (4,5:1). */
+.actions .notReady {
+  color: var(--accent-text);
+  background: var(--bg);
+  border: 2px dashed var(--accent-text);
 }
 .result {
   margin: 0;
