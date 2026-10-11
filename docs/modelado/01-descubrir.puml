@@ -34,7 +34,7 @@ CU04 ..> CU02 : <<extend>>
 CU05 ..> CU01 : <<extend>>
 CU05 ..> CU02 : <<extend>>
 CU07 ..> CU06 : <<extend>>
-CU08 ..> CU06 : <<extend>>\n[el negocio lo ha confirmado]
+CU08 ..> CU06 : <<extend>>\n[la ficha tiene datos del equipo]
 CU06 ..> CU09 : <<include>>
 
 CU01 -- MAP
