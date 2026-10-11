@@ -38,3 +38,11 @@
   color: var(--fg);
   background: var(--bg);
 }
+/* Móviles muy estrechos (320 px): hay que dejar sitio a «Cerca de mí» en la
+   misma fila, también con tipografías más anchas. */
+@media (max-width: 359px) {
+  .item {
+    min-width: 52px;
+    padding: 0 8px;
+  }
+}
