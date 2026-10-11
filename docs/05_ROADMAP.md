@@ -59,7 +59,8 @@ Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3):
 - [ ] **P6** estructura legal: hoy figura Marlon Bermúdez como responsable; decidir cuándo se constituye la asociación
 - [ ] **P8** búsqueda de marca (OEPM / EUIPO)
 - [x] Aviso legal (`/legal`) y política de cookies y almacenamiento (`/cookies`), en borrador; falta añadir domicilio y número fiscal (P6) y la revisión legal
-- [ ] Revisión nativa del inglés
+- [x] Revisión editorial del inglés hecha en octubre de 2026 (por IA, `fix/revision-ingles`)
+- [ ] Revisión del inglés por una persona nativa, antes de abrir al público
 - [ ] Pruebas con personas usuarias, incluidas personas con discapacidad
 
 ## Fase 5 · Datos reales y lanzamiento
