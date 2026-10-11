@@ -220,6 +220,11 @@
       "body": "Revisaremos {name} y, si todo encaja, lo verás en el mapa. Si necesitamos algo más, te escribiremos (solo si nos dejaste tu correo).",
       "back": "Volver al mapa",
       "again": "Proponer otro local"
+    },
+    "draft": {
+      "restored": "Hemos recuperado el borrador que dejaste a medias.",
+      "clear": "Empezar de cero",
+      "note": "Mientras escribes, se guarda un borrador solo en este dispositivo (sin tu correo). Se borra al enviar o a los 7 días."
     }
   },
   "correct": {

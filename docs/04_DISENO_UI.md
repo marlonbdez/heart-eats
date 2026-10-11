@@ -64,7 +64,7 @@ Desde el menú ☰, la cabecera o los estados vacíos. Formulario de **4 pasos**
 3. **Equipo:** cómo conoce el negocio quien propone, un enlace que lo confirme y casilla "negocio independiente". Aviso: **no escribir nombres ni datos de salud de personas**; el detalle del equipo lo cuenta solo el negocio con consentimiento (F3).
 4. **Enviar:** correo opcional (no público), resumen y aviso de privacidad.
 Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
-- Antispam: honeypot y rate limit. ❓ Guardar borrador si se sale.
+- Antispam: honeypot y rate limit. **Borrador:** se guarda en el dispositivo mientras se escribe (sin el correo, 7 días), se recupera al volver y se borra al enviar o con «Empezar de cero».
 
 ### F3 · Negocio cuenta su equipo y da los consentimientos
 Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el enlace «¿Es tu local?» de cada ficha —que deja el local ya elegido, `/business/[slug]`— o desde el contacto de moderación). **4 pasos**:
