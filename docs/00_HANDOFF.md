@@ -2,8 +2,19 @@
 
 > **Versión:** 1.0 · **Fecha:** 6 de octubre de 2026
 > **Propietario del proyecto:** Marlon (GitHub: `marlonbdez`)
-> **Estado:** Fase 0 (definición) — sin código escrito todavía
+> **Estado:** documento original de la Fase 0. **Ya no describe el estado actual**: ver el aviso de abajo y `05_ROADMAP.md`
 > **Propósito de este documento:** que cualquier sesión de trabajo (humana o con Claude Code) pueda arrancar el proyecto con todo el contexto, las decisiones ya tomadas y las pendientes.
+
+> **Aviso (2026-10-11).** Este documento se escribió antes de empezar el código y se conserva como contexto. Hoy hay un frontend completo con backend simulado. Qué ha cambiado respecto a lo que dice aquí:
+>
+> - **Estado y orden de trabajo:** manda `05_ROADMAP.md`. Se hace primero el frontend con datos simulados y después el backend (sustituye al plan de §15).
+> - **Mapas:** MapLibre + OpenFreeMap, no Leaflet (ADR 0002).
+> - **Licencias:** AGPL-3.0 para el código, ODbL para los datos y CC BY-SA para la documentación (ADR 0001); ya no están pendientes.
+> - **Rutas e idiomas:** ES y EN, URLs solo en inglés (ADR 0003).
+> - **PWA:** descartada por ahora (en «Ideas para más adelante» del roadmap).
+> - **Correo:** `contact@hearteats.org` ya funciona (`09_CORREO.md`).
+> - **Sigue abierto:** P1 hosting del backend, P4 geocodificación, P5 autenticación, P9 moderación inicial, P6 estructura legal.
+> - **Reglas de trabajo** (móvil primero, presupuesto, ramas, pruebas): `CLAUDE.md` en la raíz.
 
 ---
 

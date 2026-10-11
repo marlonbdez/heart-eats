@@ -16,6 +16,8 @@
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo) |
 
-## Estado (2026-10-06)
+## Estado (2026-10-11)
 
-Fase 0 en curso. Hecho: estructura, licencias (ADR 0001), flujos y prototipos (mapa, ficha, propuesta, equipo y consentimientos, moderación), proceso de verificación. Pendiente: `02_API_SPEC`, ADR de hosting/mapas/geocodificación/auth, páginas de contenido, revisión legal y de lenguaje.
+Fase 1 casi cerrada: la web completa funciona con datos de ejemplo y un backend simulado (`web/src/lib/data/`). **La fuente del estado actual es [05_ROADMAP](05_ROADMAP.md)**; el handoff (`00_HANDOFF.md`) es el contexto original y en algunos puntos ya está superado (ver su aviso inicial). Las reglas de trabajo para sesiones nuevas están en [`CLAUDE.md`](../CLAUDE.md).
+
+Pendiente principal: decisiones de backend (P1, P4, P5, P9), `02_API_SPEC` y `06_COSTES` (vacíos), revisión legal y revisión nativa del inglés.
