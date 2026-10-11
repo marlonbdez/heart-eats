@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: center;
   min-width: 64px;
-  min-height: 44px;
+  min-height: 36px; /* con el relleno, 44 px: igual que «Cerca de mí» */
   padding: 0 12px;
   font-weight: 700;
   color: var(--bg);
