@@ -33,7 +33,7 @@ Siguiente (por orden):
 - [x] Los envíos de F2, F3 y F4 llegan a la cola de moderación (buzón de prueba en el navegador)
 - [ ] «Pedir retirada» de una ficha o historia, con su flujo, sin depender del correo
 - [x] Pruebas automáticas de accesibilidad (axe, WCAG 2.2 AA) en todas las páginas y estados, en móvil, ES/EN y modo claro/oscuro (no sustituyen las pruebas con personas)
-- [ ] «Guardar borrador» en proponer un local
+- [x] «Guardar borrador» en proponer un local (en el propio dispositivo, sin el correo, 7 días)
 - [ ] PWA: icono en la pantalla de inicio y apertura a pantalla completa
 - [ ] Correo del dominio (`contact@hearteats.org`, reenvío gratuito) y ponerlo en `/contact` y `/privacy`
 

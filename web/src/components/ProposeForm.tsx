@@ -5,11 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
+import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
 import { isEmail, isHttpUrl } from '@/lib/validation';
 import s from './Form.module.css';
 
 const MAX_DISHES = 3;
 const OTHER = 'other';
+const DRAFT_KEY = 'hearteats:draft-propose';
 
 interface Dish {
   name: string;
@@ -43,6 +45,46 @@ const initial: FormState = {
   website: '',
 };
 
+// Lo que se guarda del borrador: nunca el correo (privado) ni el honeypot.
+type DraftForm = Omit<FormState, 'email' | 'website'>;
+interface Draft {
+  form: DraftForm;
+  step: number;
+}
+
+const isPristine = (f: FormState) =>
+  JSON.stringify({ ...f, email: '', website: '' }) === JSON.stringify(initial);
+
+// Un borrador viejo o a medias no debe romper el formulario.
+function sanitizeDraft(d: Draft | null): Draft | null {
+  if (!d || typeof d !== 'object' || !d.form) return null;
+  const f = d.form;
+  const str = (v: unknown, fallback = '') =>
+    typeof v === 'string' ? v : fallback;
+  const dishes = Array.isArray(f.dishes)
+    ? f.dishes.slice(0, MAX_DISHES).map((x) => ({
+        name: str(x?.name),
+        description: str(x?.description),
+      }))
+    : [];
+  return {
+    step: d.step >= 1 && d.step <= 4 ? Math.floor(d.step) : 1,
+    form: {
+      name: str(f.name),
+      street: str(f.street),
+      city: str(f.city, 'Madrid'),
+      postalCode: str(f.postalCode),
+      foods: Array.isArray(f.foods)
+        ? f.foods.filter((k) => typeof k === 'string')
+        : [],
+      dishes: dishes.length ? dishes : initial.dishes,
+      howKnown: str(f.howKnown),
+      evidenceUrl: str(f.evidenceUrl),
+      independent: f.independent === true,
+    },
+  };
+}
+
 export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const t = useTranslations('propose');
   const tFood = useTranslations('foodTags');
@@ -54,8 +96,40 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   );
   const [sentName, setSentName] = useState('');
   const isDone = status === 'done';
+  // «loaded» evita guardar el formulario vacío antes de leer el borrador.
+  const [loaded, setLoaded] = useState(false);
+  const [restored, setRestored] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
+
+  // Recuperar el borrador guardado, una vez, ya en el navegador.
+  useEffect(() => {
+    const draft = sanitizeDraft(loadDraft<Draft>(DRAFT_KEY));
+    if (draft) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setForm({ ...initial, ...draft.form });
+      setStep(draft.step);
+      setRestored(true);
+    }
+    setLoaded(true);
+  }, []);
+
+  // Guardar el borrador mientras se escribe (sin correo). Si el formulario
+  // vuelve a estar vacío o ya se envió, no queda nada guardado.
+  useEffect(() => {
+    if (!loaded) return;
+    if (status === 'done' || isPristine(form)) {
+      clearDraft(DRAFT_KEY);
+      return;
+    }
+    const timer = setTimeout(() => {
+      const { email, website, ...rest } = form;
+      void email;
+      void website;
+      saveDraft<Draft>(DRAFT_KEY, { form: rest, step });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [form, step, status, loaded]);
 
   // Al cambiar de paso o terminar, el foco va al título para lectores de pantalla.
   useEffect(() => {
@@ -133,6 +207,14 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     else setStep(step + 1);
   };
 
+  const discardDraft = () => {
+    clearDraft(DRAFT_KEY);
+    setForm(initial);
+    setErrors({});
+    setStep(1);
+    setRestored(false);
+  };
+
   const reset = () => {
     setForm(initial);
     setErrors({});
@@ -186,6 +268,14 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       >
         {t('title')}
       </h1>
+      {restored && (
+        <p role="status" className={s.note}>
+          {t('draft.restored')}{' '}
+          <button type="button" className={s.linkButton} onClick={discardDraft}>
+            {t('draft.clear')}
+          </button>
+        </p>
+      )}
       <p className={s.progressText}>
         {t('stepOf', { n: step })} · {t(`steps.${step}`)}
       </p>
@@ -199,6 +289,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       >
         <div className={s.barFill} style={{ width: `${step * 25}%` }} />
       </div>
+      <p className={s.small}>{t('draft.note')}</p>
 
       <form
         noValidate

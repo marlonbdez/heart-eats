@@ -220,6 +220,11 @@
       "body": "We’ll review {name} and, if everything fits, you’ll see it on the map. If we need anything else, we’ll write to you (only if you left your email).",
       "back": "Back to the map",
       "again": "Suggest another place"
+    },
+    "draft": {
+      "restored": "We restored the draft you left unfinished.",
+      "clear": "Start over",
+      "note": "While you type, a draft is saved only on this device (without your email). It is deleted when you send or after 7 days."
     }
   },
   "correct": {

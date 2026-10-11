@@ -83,6 +83,21 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('proponer un local con el borrador recuperado', async ({ page }) => {
+      await page.goto('/es/propose');
+      await page.getByLabel('Nombre del local').fill('Local a medias');
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            window.localStorage.getItem('hearteats:draft-propose'),
+          ),
+        )
+        .toContain('Local a medias');
+      await page.reload();
+      await expect(page.getByRole('status')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('petición de retirada con errores', async ({ page }) => {
       await page.goto('/es/removal');
       await page.getByRole('button', { name: 'Continuar' }).click();
