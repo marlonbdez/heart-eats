@@ -28,6 +28,22 @@ npm run dev        # http://localhost:3001/api/v1/health
 npm test
 ```
 
+### Con Docker (todo con un comando)
+
+Alternativa a instalar Node y MongoDB: levanta MongoDB, la API y la web con recarga al guardar. Requiere Docker con Compose.
+
+```bash
+docker compose up --build            # web :3000, API :3001, MongoDB :27017 (solo desde tu equipo)
+docker compose run --rm seed         # carga los locales [DEMO] (la primera vez)
+docker compose down                  # para todo; los datos de MongoDB se conservan
+docker compose down -v               # para todo y borra también los datos
+```
+
+- Los archivos se montan desde tu carpeta: editas con tu editor de siempre y los cambios se recargan solos.
+- Si cambias `package.json` de `web/` o `server/`, reconstruye con `docker compose up --build --renew-anon-volumes` para reinstalar las dependencias.
+- Las variables de `docker-compose.yml` tienen prioridad sobre el `.env` del servidor, así que no hace falta crearlo.
+- Es solo para desarrollo. La web se publica en Netlify y la API se construye con `server/Dockerfile` (último destino, `production`).
+
 Otros comandos de la web (desde `web/`):
 
 ```bash
@@ -53,6 +69,7 @@ El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiz
 - `web/` — frontend (Next.js, export estático)
 - `server/` — API (Node + Express + MongoDB)
 - `shared/` — tipos y constantes compartidos
+- `docker-compose.yml` — entorno de desarrollo local (MongoDB, API y web)
 
 ## Licencia
 

@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+public/maplibre
+test-results
+playwright-report
+.env
+.env.*
+!.env.example
+*.log
