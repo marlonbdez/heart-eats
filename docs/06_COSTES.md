@@ -7,7 +7,7 @@
 | Servicio | Para qué | Plan | Coste |
 |---|---|---|---|
 | Dominio `hearteats.org` | Dirección | Registro anual (Namecheap) | ~12–15 €/año |
-| Netlify | Web estática, DNS | Plan heredado de Marlon (❓ verificar límites) | 0 € |
+| Netlify | Web estática, DNS | Plan heredado | 0 € |
 | Render | API (ADR 0005) | Starter, siempre despierto | ~7 $/mes |
 | MongoDB Atlas | Base de datos | M0 | 0 € |
 | Cloudflare R2 | Fotos y copias | Gratuito | 0 € |
@@ -25,7 +25,7 @@
 | Servicio | Límite que importa | Qué pasa si se supera | Cómo se vigila |
 |---|---|---|---|
 | Render Starter | Memoria (512 MB) y CPU compartida; un servicio | Lentitud o reinicios con mucho tráfico | Registros y métricas del panel; subir de plan solo con datos reales |
-| Netlify | Plan heredado: Marlon cree que no limita los despliegues. Si fuera el plan gratuito actual: 300 créditos al mes (15 por despliegue de producción; el ancho de banda también gasta) | Con créditos agotados, los sitios se pausan | ❓ Comprobar en el panel qué límites tiene realmente. El diseño no depende de ello: la web no se recompila al publicar datos |
+| Netlify | Sin límite de despliegues asumido (plan heredado) | Si algún día hay un límite, se decide entonces: pagar o cambiar de proveedor | Despliegue en cada merge a `main` y vista previa en cada PR, sin racionarlos |
 | Atlas M0 | 512 MB de datos; no hay copias automáticas; verificar si pausa clústeres inactivos | Las escrituras fallan al llenarse | `mongodump` semanal a R2 (ADR 0005); sobra para cientos de locales |
 | R2 | 10 GB de almacenamiento, 1 M de operaciones de escritura y 10 M de lectura al mes; salida gratis | Se paga por encima (céntimos) | Fotos reducidas (< 1 MB), cuarentena que se limpia; copias que rotan a 4 semanas |
 | Resend | 3.000 correos al mes y 100 al día; un dominio | El envío se pausa, no se factura | Muy por debajo: solo enlaces de moderación y avisos |
@@ -38,7 +38,7 @@
 2. **Atlas:** conexiones máximas y política de pausa de M0, que la región UE esté disponible y el precio de un plan con copias automáticas.
 3. **Cloudflare:** si pide tarjeta para activar R2 y dónde se guardan los datos (jurisdicción UE).
 4. **Resend:** región de envío y de almacenamiento (UE), y que el subdominio `mail.hearteats.org` no choque con los registros de ImprovMX.
-5. **Netlify:** qué incluye exactamente el plan heredado (despliegues, ancho de banda, funciones) y cuánto ancho de banda gasta la web.
+5. **Netlify:** si aparece algún límite (despliegues, ancho de banda), anotarlo aquí y decidir entonces.
 6. **Conversión:** los precios en dólares fluctúan; contar con un pequeño margen sobre los 7 $.
 
 ## Si el presupuesto se queda corto
