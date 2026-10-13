@@ -4,7 +4,7 @@
 
 Criterios que valen para todo:
 - **Móvil primero**: cada pantalla se comprueba a 320–390 px antes de darla por buena.
-- **Presupuesto**: como máximo ~10 €/mes en total (ver `06_COSTES.md`). Estático y planes gratuitos mientras se pueda.
+- **Presupuesto**: Render de pago (~7 $/mes) más ~10 €/mes de margen para el resto, usado con austeridad (ver `06_COSTES.md`). Estático y planes gratuitos mientras se pueda.
 - **Accesibilidad**: WCAG 2.2 AA como criterio de aceptación.
 - **Todo texto en ES y EN** a la vez. El inglés necesita una revisión nativa antes de abrir al público.
 - Cada cambio entra por PR, con sus pruebas e2e (Playwright).
@@ -40,7 +40,7 @@ Siguiente (por orden):
 ## Fase 2 · Decisiones de backend
 
 Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3). Propuestas el 2026-10-13; se dan por cerradas al fusionar la PR de documentación:
-- [x] **P1** hosting del backend: Render (gratis en beta, Starter al abrir) + MongoDB Atlas M0 + R2 para fotos (ADR 0005)
+- [x] **P1** hosting del backend: Render (plan Starter de pago, siempre despierto) + MongoDB Atlas M0 + R2 para fotos (ADR 0005)
 - [x] **P4** geocodificación: Nominatim desde el servidor, al abrir la propuesta en moderación (ADR 0006)
 - [x] **P5** autenticación: enlace mágico solo para moderación; quien envía no tiene cuenta y responde a «Info pedida» con un enlace firmado (ADR 0007). Entonces se oculta la entrada de moderación del menú
 - [x] **P9** moderación inicial: Marlon como único admin; los demás, por invitación; equipo y retiradas solo los decide un admin al principio (ADR 0008)
