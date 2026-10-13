@@ -1,0 +1,74 @@
+# Entorno de desarrollo local: MongoDB, API y web con un solo comando.
+#   docker compose up --build
+# Web http://localhost:3000 · API http://localhost:3001/api/v1/health
+# Cargar los locales de ejemplo: docker compose run --rm seed
+# Solo para desarrollo: producción no usa este archivo (ver README).
+name: hearteats
+
+services:
+  mongo:
+    # Misma línea mayor que Atlas (comprobar al contratar, docs/06_COSTES.md).
+    image: mongo:8.0
+    ports:
+      # Solo desde este equipo, para MongoDB Compass o mongosh.
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", 'db.adminCommand("ping")']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    image: hearteats-api-dev
+    build:
+      context: ./server
+      target: dev
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      CORS_ORIGINS: http://localhost:3000
+      MONGODB_URI: mongodb://mongo:27017/hearteats
+    volumes:
+      - ./server:/app
+      # node_modules y dist se quedan en el contenedor, no en tu carpeta.
+      - /app/node_modules
+      - /app/dist
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      # Docker en Mac no siempre avisa de los cambios de archivo: se consulta.
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+      - /app/.next
+
+  # Carga los locales [DEMO]; no arranca con `up`, solo con `run`.
+  seed:
+    image: hearteats-api-dev
+    build:
+      context: ./server
+      target: dev
+    command: ["npm", "run", "seed"]
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/hearteats
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      mongo:
+        condition: service_healthy
+    profiles: ["tools"]
+
+volumes:
+  mongo-data:
