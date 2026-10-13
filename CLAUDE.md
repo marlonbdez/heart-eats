@@ -8,7 +8,7 @@ Mapa abierto y sin ánimo de lucro de negocios de hostelería de Madrid que empl
 - Marlon quiere tu criterio: da una recomendación, no un catálogo de opciones. Antes de empezar algo nuevo, propón y espera su confirmación.
 - Responde en español. Código y variables en inglés; documentación en español.
 - **Móvil primero, siempre**: toda pantalla se comprueba a 320–390 px antes de darla por buena.
-- **Presupuesto**: Render de pago (~7 $/mes, servidor siempre despierto) más ~10 €/mes de margen para el resto, usado con austeridad (`docs/06_COSTES.md`). Estático y planes gratuitos mientras se pueda.
+- **Presupuesto**: Railway (5 $/mes de mínimo, servidor siempre despierto) más ~10 €/mes de margen para el resto, usado con austeridad (`docs/06_COSTES.md`). Estático y planes gratuitos mientras se pueda.
 - **Frontend primero, con backend simulado**: los datos pasan por `web/src/lib/data/`, así el servidor se enchufa después sin tocar las pantallas. No se escribe backend hasta cerrar P1 (hosting), P4 (geocodificación), P5 (autenticación) y P9 (moderación inicial).
 - Estilo: código limpio, simple y estándar; que se lea como el que ya hay. Tono sereno en los textos. Mapa sobrio: pin clásico de un color, sin corazón (el logo solo es marca).
 - Nunca nombres sitios o empresas de terceros en producto, docs o repo.
