@@ -4,11 +4,11 @@
 |---|---|
 | [00_HANDOFF](00_HANDOFF.md) | Contexto, decisiones y hoja de ruta |
 | [01_ESPECIFICACION_DATOS](01_ESPECIFICACION_DATOS.md) | Esquemas, validaciones, índices |
-| [02_API_SPEC](02_API_SPEC.md) | Endpoints |
-| [03_ARQUITECTURA](03_ARQUITECTURA.md) | Arquitectura y ADR |
+| [02_API_SPEC](02_API_SPEC.md) | Endpoints de la API, errores y reglas |
+| [03_ARQUITECTURA](03_ARQUITECTURA.md) | Arquitectura: componentes, flujo de una propuesta y datos personales |
 | [04_DISENO_UI](04_DISENO_UI.md) | Diseño UI/UX |
 | [05_ROADMAP](05_ROADMAP.md) | Fases y hitos |
-| [06_COSTES](06_COSTES.md) | Presupuesto |
+| [06_COSTES](06_COSTES.md) | Presupuesto y límites de los planes gratuitos |
 | [07_VERIFICACION](07_VERIFICACION.md) | Verificación y moderación |
 | [08_PRIVACIDAD_LEGAL](08_PRIVACIDAD_LEGAL.md) | RGPD, consentimientos, licencias |
 | [09_CORREO](09_CORREO.md) | Correo del dominio |
@@ -19,10 +19,10 @@
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
 | [modelado/](modelado/) | Fuentes PlantUML y SVG de los diagramas |
-| [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo) |
+| [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo, 0005 hosting del backend, 0006 geocodificación, 0007 autenticación, 0008 moderación inicial) |
 
-## Estado (2026-10-11)
+## Estado (2026-10-13)
 
-Fase 1 casi cerrada: la web completa funciona con datos de ejemplo y un backend simulado (`web/src/lib/data/`). **La fuente del estado actual es [05_ROADMAP](05_ROADMAP.md)**; el handoff (`00_HANDOFF.md`) es el contexto original y en algunos puntos ya está superado (ver su aviso inicial). Las reglas de trabajo para sesiones nuevas están en [`CLAUDE.md`](../CLAUDE.md).
+La web completa funciona con datos de ejemplo y un backend simulado (`web/src/lib/data/`). Las decisiones de backend (P1, P4, P5, P9) están propuestas en los ADR 0005–0008, y la API, la arquitectura y los costes tienen su primer borrador. **La fuente del estado actual es [05_ROADMAP](05_ROADMAP.md)**; el handoff (`00_HANDOFF.md`) es el contexto original y en algunos puntos ya está superado (ver su aviso inicial). Las reglas de trabajo para sesiones nuevas están en [`CLAUDE.md`](../CLAUDE.md).
 
-Pendiente principal: decisiones de backend (P1, P4, P5, P9), `02_API_SPEC` y `06_COSTES` (vacíos), revisión legal y revisión nativa del inglés.
+Pendiente principal: construir el servidor (fase 3 del roadmap), revisión legal y revisión nativa del inglés.

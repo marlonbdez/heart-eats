@@ -17,7 +17,7 @@ Pendiente del gate (`04_DISENO_UI.md` §9):
 - [ ] Revisión de accesibilidad básica
 - [ ] Revisión de lenguaje (idealmente con alguien del sector)
 - [ ] Aprobación de Marlon
-- [ ] `02_API_SPEC.md` y `06_COSTES.md` (siguen vacíos o en borrador)
+- [x] `02_API_SPEC.md`, `03_ARQUITECTURA.md` y `06_COSTES.md` (primer borrador, 2026-10-13)
 
 ## Fase 1 · Frontend con backend simulado — en curso
 
@@ -39,19 +39,21 @@ Siguiente (por orden):
 
 ## Fase 2 · Decisiones de backend
 
-Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3):
-- [ ] **P1** hosting del backend (cabe en el presupuesto)
-- [ ] **P4** geocodificación
-- [ ] **P5** autenticación: enlace mágico para quien envía y para moderación; entonces se oculta la entrada de moderación del menú
-- [ ] **P9** quién modera Madrid al inicio y cómo se asciende a moderador
+Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3). Propuestas el 2026-10-13; se dan por cerradas al fusionar la PR de documentación:
+- [x] **P1** hosting del backend: Render (gratis en beta, Starter al abrir) + MongoDB Atlas M0 + R2 para fotos (ADR 0005)
+- [x] **P4** geocodificación: Nominatim desde el servidor, al abrir la propuesta en moderación (ADR 0006)
+- [x] **P5** autenticación: enlace mágico solo para moderación; quien envía no tiene cuenta y responde a «Info pedida» con un enlace firmado (ADR 0007). Entonces se oculta la entrada de moderación del menú
+- [x] **P9** moderación inicial: Marlon como único admin; los demás, por invitación; equipo y retiradas solo los decide un admin al principio (ADR 0008)
 
 ## Fase 3 · Backend e integración
 
-- [ ] Express + base de datos, modelos y validación
-- [ ] Endpoints de lectura, de sugerencias y de moderación (`02_API_SPEC.md`)
-- [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API (y retirar el buzón de prueba)
-- [ ] Registro de auditoría real y limitación de envíos (rate limit)
-- [ ] Tests y CI
+Una PR por paso:
+- [ ] Esqueleto de `server/`: Express, `/health`, validación, configuración y CI
+- [ ] Lectura: modelos, datos semilla (los de ejemplo de la web) y `GET /restaurants`
+- [ ] Envíos de F2, F3 y F4 y petición de retirada, con límite de envíos, honeypot y subida de fotos
+- [ ] Moderación: enlace mágico, cola, decisiones, geocodificación y registro de auditoría
+- [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
+- [ ] Despliegue (Render, Atlas, R2, Resend, DNS) y copia de seguridad semanal
 
 ## Fase 4 · Antes de abrir al público
 
