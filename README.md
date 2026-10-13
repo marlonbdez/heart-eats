@@ -18,7 +18,17 @@ npm install
 npm run dev        # http://localhost:3000, con recarga al guardar
 ```
 
-Otros comandos (desde `web/`):
+Servidor (desde `server/`, requiere Node.js 22 o superior; ver [`server/README.md`](server/README.md)):
+
+```bash
+cd server
+npm install
+cp .env.example .env
+npm run dev        # http://localhost:3001/api/v1/health
+npm test
+```
+
+Otros comandos de la web (desde `web/`):
 
 ```bash
 npm run typecheck  # comprueba tipos
@@ -31,11 +41,11 @@ npm run test:e2e   # prueba de humo en un navegador (requiere `npm run build` an
 
 ## Integración continua
 
-Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador con pruebas de extremo a extremo (flujos, diseño móvil) y de accesibilidad automática (axe, WCAG 2.2 AA).
+Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/workflows/ci.yml`): lint, tipos, build y una prueba de humo en un navegador con pruebas de extremo a extremo (flujos, diseño móvil) y de accesibilidad automática (axe, WCAG 2.2 AA) para la web; y lint, tipos, pruebas y build para el servidor.
 
 ## Despliegue
 
-El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiza producción y cada pull request genera una vista previa propia.
+El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiza producción y cada pull request genera una vista previa propia. El servidor todavía no se despliega (ver [`docs/adr/0005-hosting-del-backend.md`](docs/adr/0005-hosting-del-backend.md), propuesta en la PR de documentación del backend).
 
 ## Estructura
 
