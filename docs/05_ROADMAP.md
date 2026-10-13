@@ -48,7 +48,7 @@ Hay que cerrarlas antes de escribir servidor (`00_HANDOFF.md` §3). Propuestas e
 ## Fase 3 · Backend e integración
 
 Una PR por paso:
-- [ ] Esqueleto de `server/`: Express, `/health`, validación, configuración y CI
+- [x] Esqueleto de `server/`: Express, `/health`, validación, configuración y CI
 - [ ] Lectura: modelos, datos semilla (los de ejemplo de la web) y `GET /restaurants`
 - [ ] Envíos de F2, F3 y F4 y petición de retirada, con límite de envíos, honeypot y subida de fotos
 - [ ] Moderación: enlace mágico, cola, decisiones, geocodificación y registro de auditoría
