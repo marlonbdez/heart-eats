@@ -94,4 +94,4 @@ La CI actual (`.github/workflows/ci.yml`) cubre `web/`. Se añade un trabajo par
 
 1. ❓ Un único entorno de producción, sin staging, mientras sea beta privada.
 2. ❓ Si `shared/types` se publica como paquete o se importa por ruta relativa (monorepo con `npm workspaces`, ver nota del handoff §6).
-3. ❓ Registro y alertas del servidor (los logs del plan gratuito de Render son limitados).
+3. ❓ Registro y alertas del servidor (los registros de Render conservan poco tiempo; valorar un aviso de caída gratuito).

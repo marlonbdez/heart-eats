@@ -97,4 +97,4 @@ La lectura sigue el mismo patrón: `getRestaurants()`, `getRestaurant()` y `getF
 - Los tipos de `lib/types.ts`, salvo ajustes pequeños.
 - Las reglas de privacidad: qué se pide, qué se guarda y cuánto tiempo.
 
-**Decisión que condicionaba todo (propuesta el 2026-10-13, ADR 0005).** La web es estática (`output: 'export'`) y las fichas se generan al compilar con los datos de ejemplo. Con datos reales los locales se **leen desde el navegador al abrir la página**: recompilar al publicar gastaría los créditos gratuitos de Netlify. P1, P4, P5 y P9 están propuestas en los ADR 0005–0008.
+**Decisión que condicionaba todo (propuesta el 2026-10-13, ADR 0005).** La web es estática (`output: 'export'`) y las fichas se generan al compilar con los datos de ejemplo. Con datos reales los locales se **leen desde el navegador**, por zona del mapa o ciudad, en vez de recompilar la web al publicar. P1, P4, P5 y P9 están propuestas en los ADR 0005–0008.
