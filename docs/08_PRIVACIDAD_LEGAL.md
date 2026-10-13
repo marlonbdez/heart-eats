@@ -61,7 +61,9 @@ Este apartado es el que más nos importa, así que lo contamos con palabras senc
 
 - **Alojamiento de la web.** ❓ [Proveedor, p. ej. Netlify; confirmar y enlazar su política.] Registra la dirección IP de quien visita la web, como cualquier servidor.
 - **Mapa.** Las teselas y estilos del mapa las sirve OpenFreeMap. Al abrir el mapa, tu navegador se las pide directamente y ellos ven tu dirección IP. No les enviamos nada más.
-- **Backend y base de datos.** ❓ [P1: proveedor y país del servidor. Si está fuera del Espacio Económico Europeo, hay que indicarlo.]
+- **Backend y base de datos.** Previsto (ADR 0005, a confirmar al contratarlos): Render (API) y MongoDB Atlas (base de datos), ambos en la UE; Cloudflare R2 (fotos y copias de seguridad). ❓ Confirmar la región de cada uno y enlazar sus políticas; si alguno queda fuera del Espacio Económico Europeo, hay que indicarlo.
+- **Correo saliente.** Resend envía los enlaces de acceso de moderación y los avisos a quien dejó su correo (ADR 0007). Ve esas direcciones y el texto del aviso. ❓ Región y política.
+- **Direcciones.** Para colocar un local nuevo en el mapa, el servidor consulta Nominatim (OpenStreetMap) con la dirección del **local**, nunca con datos de quien propone (ADR 0006).
 - Ninguno de ellos recibe tus propuestas ni tu correo ❓ _(salvo el proveedor que aloje el backend)_. No vendemos ni cedemos datos a nadie.
 
 ### Datos abiertos
@@ -108,6 +110,6 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 | 2   | ❓ Plazo de borrado tras retirar una historia                                      | 7 días                                                  |
 | 3   | ❓ Umbral de equipo pequeño                                                        | Menos de 5 personas                                     |
 | 4   | ❓ Cuánto se guarda el correo de quien propone o corrige                           | Hasta resolver la propuesta, y como máximo 6 meses      |
-| 5   | ❓ Proveedor y país del hosting y de la base de datos (P1)                         | Dentro del Espacio Económico Europeo si es posible      |
+| 5   | ❓ Proveedor y país del hosting y de la base de datos (P1)                         | Render, Atlas y R2 en la UE (ADR 0005); confirmar regiones al contratar |
 | 6   | ❓ Si se usa analítica                                                             | Ninguna al inicio                                       |
 | 7   | ❓ Revisión legal y revisión por una entidad del sector, antes de abrir al público | Obligatoria (handoff §11.9)                             |

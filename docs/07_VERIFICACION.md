@@ -71,5 +71,5 @@ Se aceptan negocios independientes y proyectos con impacto social. Se rechazan g
 
 ## Preguntas abiertas
 
-1. ❓ Plazo objetivo de respuesta a una propuesta (propuesta: 14 días; es también el plazo para responder a una petición de información).
-2. ❓ Criterio para ascender a moderador/a local.
+1. ✅ Plazo objetivo de respuesta a una propuesta: 14 días, el mismo que para responder a una petición de información (ADR 0008).
+2. ✅ Criterio para ascender a moderador/a local: por invitación de un administrador, tras revisar junto a él un puñado de solicitudes (ADR 0008). Equipo y retiradas los decide solo un administrador al principio.

@@ -88,12 +88,13 @@ La lectura sigue el mismo patrón: `getRestaurants()`, `getRestaurant()` y `getF
 - Las funciones de `lib/data/index.ts`: de datos de ejemplo a `fetch`.
 - El buzón de prueba desaparece: la cola de moderación la alimenta el servidor.
 - `decideModeration()` guarda de verdad y deja registro de auditoría.
-- Las fotos se suben (Cloudflare R2 con un Worker que firma la subida) en vez de quedarse en el navegador.
-- Moderación se protege con cuentas (P5) y se oculta del menú.
+- Las fotos se suben (Cloudflare R2, con una URL que firma el servidor) en vez de quedarse en el navegador.
+- Moderación se protege con enlace mágico (ADR 0007) y se oculta del menú.
+- `/place/[slug]` pasa a leer la ficha desde el navegador, con estado de carga (ADR 0005).
 
 **No cambia**
 - Las pantallas, los formularios, los textos y las pruebas de accesibilidad.
 - Los tipos de `lib/types.ts`, salvo ajustes pequeños.
 - Las reglas de privacidad: qué se pide, qué se guarda y cuánto tiempo.
 
-**Decisión que condiciona todo.** Hoy la web es estática (`output: 'export'`): las fichas se generan al compilar con los datos de ejemplo. Con datos reales hay que elegir cómo se actualizan: recompilar la web cada vez que se publica o se aprueba algo, o leer los locales desde el navegador al abrir la página. Es la primera pregunta que hay que responder, junto con P1 (hosting), P4 (direcciones), P5 (cuentas) y P9 (moderación inicial).
+**Decisión que condicionaba todo (propuesta el 2026-10-13, ADR 0005).** La web es estática (`output: 'export'`) y las fichas se generan al compilar con los datos de ejemplo. Con datos reales los locales se **leen desde el navegador al abrir la página**: recompilar al publicar gastaría los créditos gratuitos de Netlify. P1, P4, P5 y P9 están propuestas en los ADR 0005–0008.

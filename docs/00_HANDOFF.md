@@ -13,7 +13,8 @@
 > - **Rutas e idiomas:** ES y EN, URLs solo en inglés (ADR 0003).
 > - **PWA:** descartada por ahora (en «Ideas para más adelante» del roadmap).
 > - **Correo:** `contact@hearteats.org` ya funciona (`09_CORREO.md`).
-> - **Sigue abierto:** P1 hosting del backend, P4 geocodificación, P5 autenticación, P9 moderación inicial, P6 estructura legal.
+> - **Backend (2026-10-13):** P1, P4, P5 y P9 propuestas en los ADR 0005–0008 (Render + MongoDB Atlas, Nominatim, enlace mágico, Marlon como admin inicial).
+> - **Sigue abierto:** P6 estructura legal y P8 marca.
 > - **Reglas de trabajo** (móvil primero, presupuesto, ramas, pruebas): `CLAUDE.md` en la raíz.
 
 ---

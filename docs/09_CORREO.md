@@ -17,6 +17,10 @@
 - **No** está activada la extensión «Email» de Netlify (es para enviar correos desde la web, no hace falta).
 - Probado el 2026-10-11 con un correo desde otra cuenta.
 
+## Correo que envía el servidor (pendiente de montar)
+
+`contact@` solo recibe. Los enlaces de moderación y los avisos de «Info pedida» los enviará el servidor con Resend (ADR 0007), desde un **subdominio** (`mail.hearteats.org`) con sus propios registros SPF y DKIM, para no tocar los de ImprovMX de arriba. `Reply-To: contact@hearteats.org`. Los registros concretos los da Resend al verificar el dominio y se añaden en el DNS de Netlify; se anotarán aquí al hacerlo.
+
 ## Qué hay que saber
 
 - **Spam:** la dirección es pública, recibirá. No hay filtro propio; el del correo personal basta por ahora. Si molesta, se cambia el alias sin tocar el DNS.
