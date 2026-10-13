@@ -18,10 +18,10 @@
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/restaurants` | Locales con `status = published`, paginados. Filtros: `bbox` (`oeste,sur,este,norte`), `near` (`lat,lng`, ordena por distancia), `country` (ISO 3166-1 alpha-2), `city`, `q` (nombre, barrio, ciudad, código postal), `food` (claves de `foodTag`, separadas por comas, OR), `limit` (máx. 100) y `cursor`. Sin ningún filtro de zona, `400`. Devuelve `{ items: Restaurant[], nextCursor? }` |
-| GET | `/restaurants/geojson` | Lo mínimo para pintar el mapa: un punto por local (`slug`, `name`, `foodTags`, coordenadas), con los mismos filtros. Máx. 1.000 puntos por respuesta; si hay más, `truncated: true` y la web acerca el mapa |
+| GET | `/restaurants` | Locales con `status = published`, paginados. Filtros: `bbox` (`oeste,sur,este,norte`), `near` (`lat,lng`, ordena por distancia), `country` (ISO 3166-1 alpha-2), `city`, `q` (nombre, barrio, ciudad, código postal), `food` (claves de `foodTag`, separadas por comas, OR), `limit` (máx. 100) y `cursor`. Sin ningún filtro de zona, `400 zone_required`; `bbox` y `near` a la vez, `400 invalid_zone`. Devuelve `{ items: Restaurant[], nextCursor? }`, **sin `team`** (el equipo va solo en la ficha). Con `near` el orden es por distancia; si no, por `slug`. `cursor` es opaco |
+| GET | `/restaurants/geojson` | Lo mínimo para pintar el mapa: un punto por local (`slug`, `name`, `foodTags`, coordenadas), con los mismos filtros. Devuelve un `FeatureCollection` de GeoJSON y `truncated`. Máx. 1.000 puntos por respuesta; si hay más, `truncated: true` y la web acerca el mapa |
 | GET | `/restaurants/:slug` | Una ficha, con su equipo según el nivel de visibilidad. `404` si no existe o no está publicada |
-| GET | `/meta/filters` | Catálogos: `foodTags` (clave e icono), `cuisineTypes`, `inclusionTypes`, `businessType` |
+| GET | `/meta/filters` | Catálogos: `foodTags` (clave e icono), `cuisineTypes`, `businessTypes`, `inclusionTypes` |
 | GET | `/health` | `{ "status": "ok" }`; no toca la base de datos |
 
 **Reglas de lectura**

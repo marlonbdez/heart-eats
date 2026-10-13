@@ -1,0 +1,180 @@
+import { Schema, model, type Types } from 'mongoose';
+import {
+  businessTypes,
+  restaurantStatuses,
+  verificationLevels,
+  verificationMethods,
+  type BusinessType,
+} from '../catalog.js';
+import { normalize } from '../text.js';
+
+// Forma de un local tal como sale de la base de datos con `.lean()`.
+export interface RestaurantRecord {
+  _id: Types.ObjectId;
+  slug: string;
+  name: string;
+  description?: Record<string, string>;
+  businessType: BusinessType;
+  cuisineTypes: string[];
+  foodTags: string[];
+  address: {
+    street: string;
+    postalCode?: string;
+    neighborhood?: string;
+    city: string;
+    region?: string;
+    country: string;
+  };
+  location: { type: 'Point'; coordinates: [number, number] }; // [lng, lat]
+  contact?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+    instagram?: string;
+  };
+  openingHours: { day: number; open: string; close: string }[];
+  signatureDishes: { name: string; description?: string; photoUrl?: string }[];
+  isIndependent: boolean;
+  status: (typeof restaurantStatuses)[number];
+  verification: {
+    level: (typeof verificationLevels)[number];
+    method?: (typeof verificationMethods)[number];
+    lastVerifiedAt?: Date;
+  };
+  ownerConfirmedAt?: Date;
+  isDemo?: boolean;
+}
+
+const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+const pointSchema = new Schema(
+  {
+    type: { type: String, enum: ['Point'], required: true },
+    coordinates: {
+      type: [Number],
+      required: true,
+      validate: {
+        validator: (v: number[]) =>
+          v.length === 2 &&
+          v[0]! >= -180 &&
+          v[0]! <= 180 &&
+          v[1]! >= -90 &&
+          v[1]! <= 90,
+        message: 'coordinates debe ser [lng, lat] en rango',
+      },
+    },
+  },
+  { _id: false },
+);
+
+const restaurantSchema = new Schema(
+  {
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      match: /^[a-z0-9-]+$/,
+      maxlength: 80,
+    },
+    name: { type: String, required: true, minlength: 2, maxlength: 120 },
+    // { es: '…', en: '…' }; si falta el idioma, la web usa el de lanzamiento.
+    description: { type: Schema.Types.Mixed },
+    businessType: { type: String, enum: businessTypes, required: true },
+    cuisineTypes: { type: [String], default: [] },
+    foodTags: {
+      type: [String],
+      validate: { validator: (v: string[]) => v.length >= 1 },
+    },
+    address: {
+      street: { type: String, required: true, maxlength: 200 },
+      postalCode: String,
+      neighborhood: String,
+      city: { type: String, required: true },
+      region: String,
+      country: { type: String, required: true, match: /^[A-Z]{2}$/ },
+    },
+    location: { type: pointSchema, required: true },
+    contact: {
+      phone: String,
+      email: String,
+      website: { type: String, match: /^https:\/\//i },
+      instagram: String,
+    },
+    openingHours: {
+      type: [
+        new Schema(
+          {
+            day: { type: Number, min: 0, max: 6, required: true },
+            open: { type: String, match: HHMM, required: true },
+            close: { type: String, match: HHMM, required: true },
+          },
+          { _id: false },
+        ),
+      ],
+      default: [],
+    },
+    signatureDishes: {
+      type: [
+        new Schema(
+          {
+            name: { type: String, required: true, maxlength: 80 },
+            description: { type: String, maxlength: 160 },
+            photoUrl: String,
+          },
+          { _id: false },
+        ),
+      ],
+      default: [],
+      validate: { validator: (v: unknown[]) => v.length <= 3 },
+    },
+    isIndependent: { type: Boolean, required: true },
+    status: {
+      type: String,
+      enum: restaurantStatuses,
+      required: true,
+      default: 'pending',
+    },
+    verification: {
+      level: { type: String, enum: verificationLevels, default: 'unverified' },
+      method: { type: String, enum: verificationMethods },
+      lastVerifiedAt: {
+        type: Date,
+        // Obligatoria en cuanto el local está verificado (spec §2.1).
+        required: [
+          function (this: { verification?: { level?: string } }) {
+            return this.verification?.level !== 'unverified';
+          },
+          'lastVerifiedAt es obligatoria si el local está verificado',
+        ],
+      },
+    },
+    // El negocio sabe que aparece y ha dado el visto bueno.
+    ownerConfirmedAt: Date,
+    isDemo: Boolean,
+    // Derivados de arriba, para buscar sin acentos ni mayúsculas.
+    cityKey: { type: String, required: true },
+    searchText: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
+// Los campos derivados se recalculan en cada guardado.
+restaurantSchema.pre('validate', function () {
+  const { name, address } = this;
+  if (!address?.city) return;
+  this.set('cityKey', normalize(address.city));
+  this.set(
+    'searchText',
+    normalize(
+      [name, address.neighborhood, address.city, address.postalCode]
+        .filter(Boolean)
+        .join(' '),
+    ),
+  );
+});
+
+restaurantSchema.index({ location: '2dsphere' });
+restaurantSchema.index({ status: 1, 'address.country': 1, cityKey: 1 });
+restaurantSchema.index({ status: 1, foodTags: 1 });
+
+export const Restaurant = model('Restaurant', restaurantSchema);

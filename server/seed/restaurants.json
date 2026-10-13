@@ -1,0 +1,469 @@
+[
+  {
+    "slug": "demo-la-masa-madre",
+    "name": "[DEMO] La Masa Madre",
+    "description": {
+      "es": "Pizzería de barrio con masa de 48 horas."
+    },
+    "businessType": "restaurant",
+    "cuisineTypes": ["italian"],
+    "foodTags": ["pizza", "italian"],
+    "address": {
+      "street": "Calle de Ejemplo 12",
+      "postalCode": "28012",
+      "neighborhood": "Lavapiés",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {
+      "phone": "+34 600 000 001",
+      "website": "https://example.org"
+    },
+    "openingHours": [
+      {
+        "day": 0,
+        "open": "13:00",
+        "close": "23:30"
+      },
+      {
+        "day": 2,
+        "open": "13:00",
+        "close": "23:30"
+      },
+      {
+        "day": 3,
+        "open": "13:00",
+        "close": "23:30"
+      },
+      {
+        "day": 4,
+        "open": "13:00",
+        "close": "23:30"
+      },
+      {
+        "day": 5,
+        "open": "13:00",
+        "close": "23:30"
+      },
+      {
+        "day": 6,
+        "open": "13:00",
+        "close": "23:30"
+      }
+    ],
+    "signatureDishes": [
+      {
+        "name": "Margarita de la casa",
+        "description": "Tomate, mozzarella fresca y albahaca."
+      },
+      {
+        "name": "Focaccia de romero"
+      }
+    ],
+    "ownerConfirmedAt": "2026-09-01T00:00:00Z",
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.7012, 40.4085]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "admin",
+      "method": "visit",
+      "lastVerifiedAt": "2026-09-02T00:00:00Z"
+    },
+    "isDemo": true,
+    "team": {
+      "visibilityLevel": "medium",
+      "summary": {
+        "totalStaff": 11,
+        "staffWithDisability": 4
+      },
+      "areas": ["kitchen", "dining"],
+      "disabilityTypes": ["hearing_impairment", "intellectual_disability"]
+    }
+  },
+  {
+    "slug": "demo-cafe-paso-a-paso",
+    "name": "[DEMO] Café Paso a Paso",
+    "description": {
+      "es": "Cafetería de especialidad y repostería casera."
+    },
+    "businessType": "cafe",
+    "cuisineTypes": [],
+    "foodTags": ["coffee", "desserts", "bakery"],
+    "address": {
+      "street": "Calle de Muestra 5",
+      "postalCode": "28004",
+      "neighborhood": "Malasaña",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {
+      "instagram": "@ejemplo"
+    },
+    "openingHours": [
+      {
+        "day": 1,
+        "open": "08:00",
+        "close": "20:00"
+      },
+      {
+        "day": 2,
+        "open": "08:00",
+        "close": "20:00"
+      },
+      {
+        "day": 3,
+        "open": "08:00",
+        "close": "20:00"
+      },
+      {
+        "day": 4,
+        "open": "08:00",
+        "close": "20:00"
+      },
+      {
+        "day": 5,
+        "open": "08:00",
+        "close": "20:00"
+      },
+      {
+        "day": 6,
+        "open": "08:00",
+        "close": "20:00"
+      }
+    ],
+    "signatureDishes": [],
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.7041, 40.4263]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "community",
+      "method": "owner_confirmed",
+      "lastVerifiedAt": "2026-07-15T00:00:00Z"
+    },
+    "isDemo": true,
+    "team": {
+      "visibilityLevel": "minimal",
+      "summary": {
+        "totalStaff": 6,
+        "staffWithDisability": 2
+      }
+    }
+  },
+  {
+    "slug": "demo-taberna-la-vereda",
+    "name": "[DEMO] Taberna La Vereda",
+    "description": {
+      "es": "Tapas y menú del día con producto de temporada."
+    },
+    "businessType": "bar",
+    "cuisineTypes": ["spanish"],
+    "foodTags": ["tapas", "set_menu"],
+    "address": {
+      "street": "Plaza de Prueba 3",
+      "postalCode": "28005",
+      "neighborhood": "La Latina",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {
+      "phone": "+34 600 000 003"
+    },
+    "openingHours": [
+      {
+        "day": 0,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 1,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 2,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 3,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 4,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 5,
+        "open": "12:00",
+        "close": "00:00"
+      },
+      {
+        "day": 6,
+        "open": "12:00",
+        "close": "00:00"
+      }
+    ],
+    "signatureDishes": [
+      {
+        "name": "Croquetas de jamón"
+      },
+      {
+        "name": "Menú del día",
+        "description": "Primero, segundo y postre."
+      }
+    ],
+    "ownerConfirmedAt": "2026-09-01T00:00:00Z",
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.7083, 40.4125]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "admin",
+      "method": "documentation",
+      "lastVerifiedAt": "2025-08-01T00:00:00Z"
+    },
+    "isDemo": true,
+    "team": {
+      "visibilityLevel": "full",
+      "summary": {
+        "totalStaff": 9,
+        "staffWithDisability": 3
+      },
+      "areas": ["bar"],
+      "disabilityTypes": ["physical_disability"],
+      "stories": [
+        {
+          "displayName": "Persona de ejemplo",
+          "role": "Cocina",
+          "storyText": "Texto ficticio de ejemplo para maquetar la historia.",
+          "consentRecordedAt": "2026-09-01T00:00:00Z",
+          "consentBy": "self"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "demo-verde-que-te-quiero",
+    "name": "[DEMO] Verde que te quiero",
+    "description": {
+      "es": "Cocina vegetariana de temporada."
+    },
+    "businessType": "restaurant",
+    "cuisineTypes": ["vegetarian"],
+    "foodTags": ["vegetarian", "set_menu"],
+    "address": {
+      "street": "Calle de Ensayo 20",
+      "postalCode": "28010",
+      "neighborhood": "Chamberí",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {
+      "website": "https://example.org"
+    },
+    "openingHours": [
+      {
+        "day": 1,
+        "open": "13:00",
+        "close": "16:30"
+      },
+      {
+        "day": 2,
+        "open": "13:00",
+        "close": "16:30"
+      },
+      {
+        "day": 3,
+        "open": "13:00",
+        "close": "16:30"
+      },
+      {
+        "day": 4,
+        "open": "13:00",
+        "close": "16:30"
+      },
+      {
+        "day": 5,
+        "open": "13:00",
+        "close": "16:30"
+      }
+    ],
+    "signatureDishes": [
+      {
+        "name": "Bol de legumbres y verduras asadas"
+      }
+    ],
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.7028, 40.4339]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "community",
+      "method": "call",
+      "lastVerifiedAt": "2026-06-20T00:00:00Z"
+    },
+    "isDemo": true,
+    "team": {
+      "visibilityLevel": "minimal",
+      "summary": {
+        "totalStaff": 8,
+        "staffWithDisability": 3
+      }
+    }
+  },
+  {
+    "slug": "demo-panaderia-el-horno",
+    "name": "[DEMO] Panadería El Horno",
+    "businessType": "bakery",
+    "cuisineTypes": [],
+    "foodTags": ["bakery", "desserts", "coffee"],
+    "address": {
+      "street": "Calle de Demostración 7",
+      "postalCode": "28045",
+      "neighborhood": "Arganzuela",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {},
+    "openingHours": [
+      {
+        "day": 1,
+        "open": "07:00",
+        "close": "15:00"
+      },
+      {
+        "day": 2,
+        "open": "07:00",
+        "close": "15:00"
+      },
+      {
+        "day": 3,
+        "open": "07:00",
+        "close": "15:00"
+      },
+      {
+        "day": 4,
+        "open": "07:00",
+        "close": "15:00"
+      },
+      {
+        "day": 5,
+        "open": "07:00",
+        "close": "15:00"
+      },
+      {
+        "day": 6,
+        "open": "07:00",
+        "close": "15:00"
+      }
+    ],
+    "signatureDishes": [
+      {
+        "name": "Pan de masa madre"
+      }
+    ],
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.6957, 40.3979]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "admin",
+      "method": "visit",
+      "lastVerifiedAt": "2026-08-10T00:00:00Z"
+    },
+    "isDemo": true
+  },
+  {
+    "slug": "demo-burger-del-barrio",
+    "name": "[DEMO] Burger del Barrio",
+    "businessType": "restaurant",
+    "cuisineTypes": ["american"],
+    "foodTags": ["burgers"],
+    "address": {
+      "street": "Calle de Maqueta 31",
+      "postalCode": "28028",
+      "neighborhood": "Salamanca",
+      "city": "Madrid",
+      "country": "ES"
+    },
+    "contact": {
+      "phone": "+34 600 000 006"
+    },
+    "openingHours": [
+      {
+        "day": 0,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 1,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 2,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 3,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 4,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 5,
+        "open": "13:00",
+        "close": "23:00"
+      },
+      {
+        "day": 6,
+        "open": "13:00",
+        "close": "23:00"
+      }
+    ],
+    "signatureDishes": [
+      {
+        "name": "Hamburguesa clásica",
+        "description": "Carne de ternera y cheddar."
+      }
+    ],
+    "location": {
+      "type": "Point",
+      "coordinates": [-3.6773, 40.4297]
+    },
+    "isIndependent": true,
+    "status": "published",
+    "verification": {
+      "level": "community",
+      "method": "owner_confirmed",
+      "lastVerifiedAt": "2026-09-18T00:00:00Z"
+    },
+    "isDemo": true,
+    "team": {
+      "visibilityLevel": "minimal",
+      "summary": {
+        "totalStaff": 14,
+        "staffWithDisability": 5
+      }
+    }
+  }
+]
