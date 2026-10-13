@@ -76,4 +76,9 @@ Una PR por paso:
 
 Sin fecha ni compromiso: PWA (icono en la pantalla de inicio y apertura a pantalla completa; descartada por ahora, aporta poco frente a una web que ya funciona bien en el móvil), más ciudades, más idiomas, avisos para fichas sin revisar desde hace tiempo.
 
+**Redis (u otra caché en memoria).** No hace falta hoy: hay un solo servidor, las sesiones y los enlaces mágicos caben en MongoDB con caducidad automática y la caché HTTP cubre las lecturas. Se valoraría si ocurre alguna de estas tres cosas:
+1. Hay más de una instancia del servidor y el límite de envíos por IP debe compartirse entre ellas o sobrevivir a reinicios.
+2. Las consultas del mapa se vuelven pesadas y la caché HTTP (o una CDN delante de la API) no basta.
+3. Aparecen colas de trabajos, como avisos por correo o geocodificación en lote.
+
 > Las duraciones dependen del tiempo disponible, por eso no se ponen fechas.
