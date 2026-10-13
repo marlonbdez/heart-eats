@@ -9,8 +9,8 @@
 - **Estados:** `200` lectura, `201`/`202` creación, `204` sin contenido, `400` petición mal formada, `401` sin sesión, `403` sin permiso, `404`, `409` conflicto de estado, `422` validación, `429` demasiadas peticiones, `5xx` servidor.
 - **Validación:** Zod en cada ruta; el servidor no confía en lo que valida la web. Cuerpo máximo de 32 KB.
 - **Idioma de los datos:** `LocalizedText` (`{ es, en }`); si falta el idioma pedido, `es` (ADR 0003).
-- **Paginación:** los listados públicos son pequeños (Madrid, decenas de locales) y se sirven enteros; la cola de moderación admite `limit` y `cursor`.
-- **Caché:** lecturas públicas con `Cache-Control: public, max-age=60` y `ETag`.
+- **Paginación:** los listados admiten `limit` y `cursor`. Los locales **nunca se sirven «todos»**: se piden por zona visible (`bbox`), por cercanía (`near`) o por país y ciudad, para que la API aguante tantos locales como haya en el mundo.
+- **Caché:** lecturas públicas con `Cache-Control: public, max-age=60` y `ETag`. La web redondea el `bbox` a una cuadrícula para que muchas visitas compartan la misma respuesta en caché.
 - **Privacidad:** la lectura pública nunca lleva correos, `contactEmail`, notas de moderación ni datos de quien propone.
 - **Idioma de las respuestas:** `Accept-Language` no se usa; la web decide el idioma y manda `locale` cuando hace falta escribir a alguien.
 
@@ -18,7 +18,8 @@
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/restaurants` | Locales con `status = published`. Filtros opcionales: `q` (nombre, barrio, ciudad, código postal), `food` (claves de `foodTag`, separadas por comas, OR), `bbox` (`oeste,sur,este,norte`). Devuelve `Restaurant[]` |
+| GET | `/restaurants` | Locales con `status = published`, paginados. Filtros: `bbox` (`oeste,sur,este,norte`), `near` (`lat,lng`, ordena por distancia), `country` (ISO 3166-1 alpha-2), `city`, `q` (nombre, barrio, ciudad, código postal), `food` (claves de `foodTag`, separadas por comas, OR), `limit` (máx. 100) y `cursor`. Sin ningún filtro de zona, `400`. Devuelve `{ items: Restaurant[], nextCursor? }` |
+| GET | `/restaurants/geojson` | Lo mínimo para pintar el mapa: un punto por local (`slug`, `name`, `foodTags`, coordenadas), con los mismos filtros. Máx. 1.000 puntos por respuesta; si hay más, `truncated: true` y la web acerca el mapa |
 | GET | `/restaurants/:slug` | Una ficha, con su equipo según el nivel de visibilidad. `404` si no existe o no está publicada |
 | GET | `/meta/filters` | Catálogos: `foodTags` (clave e icono), `cuisineTypes`, `inclusionTypes`, `businessType` |
 | GET | `/health` | `{ "status": "ok" }`; no toca la base de datos |
@@ -70,6 +71,8 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 | POST | `/replies/:token` | `{ "message": "…" }`. Añade la respuesta a la **misma** solicitud, que vuelve a `pending`. El token se invalida |
 
 El token es un HMAC firmado que identifica la solicitud y caduca con el plazo de 14 días (ADR 0007). Si no hay respuesta en 14 días, un proceso programado cierra la solicitud como `rejected` con motivo «sin respuesta» y deja una línea en la auditoría.
+
+**Internacional desde el primer día.** Nada de España está fijo en el servidor: ni la zona inicial, ni el formato de dirección, ni los barrios. Los locales llevan país (ISO), región y ciudad; la zona inicial del mapa es configuración por región (ADR 0003) y el catálogo de comidas es global. Madrid es solo la primera ciudad con datos. Los índices son `2dsphere` sobre `location` y `{status, address.country, address.city}` (`01_ESPECIFICACION_DATOS.md`).
 
 ## Autenticación (moderación)
 

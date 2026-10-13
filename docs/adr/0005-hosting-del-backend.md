@@ -23,13 +23,15 @@ La web ya está completa con datos simulados (`web/src/lib/data/`). El servidor 
 
 Hoy la web es estática y genera las fichas al compilar. Con datos reales, lo más sencillo parecería recompilar la web al aprobar algo, pero **no es viable en el plan gratuito de Netlify**: son 300 créditos al mes y cada despliegue de producción gasta 15, es decir, unos 20 despliegues contando solo eso.
 
-**Decisión:** la web **lee los locales desde el navegador** al abrir (`GET /api/v1/restaurants`, con caché HTTP corta) y no se recompila al publicar. Consecuencias para la web (PR de integración):
+**Decisión:** la web **lee los locales desde el navegador** y no se recompila al publicar. Como el proyecto es internacional desde el primer día, la web **nunca pide «todos los locales»**: pide los de la zona que se ve en el mapa (`bbox`), los más cercanos (`near`) o los de una ciudad, con caché HTTP corta (`02_API_SPEC.md`). Hoy, con unos pocos locales, cada respuesta es diminuta; cuando haya miles en muchas ciudades, el contrato no cambia. Consecuencias para la web (PR de integración):
 
 - `/place/[slug]` deja de generarse por local y pasa a una sola página que lee el `slug` y pide la ficha.
 - Las listas y la ficha muestran un estado de carga mientras la API despierta.
+- El mapa pide los locales al moverse (con un pequeño margen, y con el `bbox` redondeado para que se pueda cachear), y el buscador y los filtros pasan a hacerse en el servidor.
+- La vista inicial depende de la región (configuración, no una constante de Madrid).
 - Los datos de ejemplo (`mock-restaurants.ts`) pasan a ser los datos semilla del servidor.
 
-**Plan B si el sueño de Render molesta en la beta:** el servidor publica una copia JSON de los locales publicados en R2 (con caché de CDN) cada vez que cambia algo, y la web lee esa copia. Las lecturas no dependen de que la API esté despierta; las escrituras sí (un formulario que tarda en enviar es asumible). Si no basta, plan Starter.
+**Plan B si el sueño de Render molesta en la beta:** el servidor publica en R2 una copia JSON de los locales publicados **por ciudad** (con caché de CDN) cada vez que cambia algo en esa ciudad, y la web lee esa copia. Las lecturas no dependen de que la API esté despierta; las escrituras sí (un formulario que tarda en enviar es asumible). Si no basta, plan Starter.
 
 ## Alternativas descartadas
 

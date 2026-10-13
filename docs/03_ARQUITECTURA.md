@@ -27,7 +27,7 @@
 ```
 
 - **La web no cambia de arquitectura:** sigue siendo estática y solo habla con el servidor a través de `web/src/lib/data/`.
-- **La lectura pública** se hace desde el navegador, al abrir (ADR 0005). No se recompila la web al publicar.
+- **La lectura pública** se hace desde el navegador, por zona del mapa o ciudad (ADR 0005), y no se recompila la web al publicar. No hay ningún dato de locales fijo en la web.
 - **El servidor** es el único que escribe en la base de datos, firma las subidas de fotos, envía correo y llama a Nominatim.
 
 ## Componentes
