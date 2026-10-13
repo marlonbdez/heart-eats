@@ -21,7 +21,12 @@ La web ya está completa con datos simulados (`web/src/lib/data/`). El servidor 
 
 ## Cómo llegan los datos a la web
 
-Hoy la web es estática y genera las fichas al compilar. Con datos reales, una opción sería recompilar la web cada vez que se aprueba algo. La descartamos aunque el plan de Netlify de Marlon (heredado, «legacy») quizá no tenga el límite de despliegues del plan gratuito actual (300 créditos al mes, 15 por despliegue; ❓ comprobar en el panel): dependería de reconstruir todas las páginas en cada aprobación, algo que no escala a muchas ciudades y retrasa la publicación varios minutos.
+Hoy la web es estática y genera las fichas al compilar. Con datos reales, una opción sería recompilar la web cada vez que se aprueba algo. **El plan de Netlify no condiciona esta decisión**: se despliega todas las veces que haga falta, y si algún día se llega a un límite se decide entonces entre pagar o cambiar de proveedor. La descartamos por motivos de producto:
+
+- **Retirar tiene que ser inmediato.** Una historia o una foto retirada deja de mostrarse al instante (`08_PRIVACIDAD_LEGAL.md`). Con páginas generadas al compilar, el texto seguiría publicado hasta terminar el build y en las cachés.
+- **Publicar tiene que ser inmediato.** Una aprobación se ve en cuanto se decide, sin esperar minutos a un build.
+- **Escala.** Reconstruir todas las páginas en cada aprobación tarda más cuantos más locales y ciudades haya.
+- **Más simple.** Un cambio de datos no dispara ningún despliegue, y los despliegues de la web quedan para cambios de la propia web.
 
 **Decisión:** la web **lee los locales desde el navegador** y no se recompila al publicar. Como el proyecto es internacional desde el primer día, la web **nunca pide «todos los locales»**: pide los de la zona que se ve en el mapa (`bbox`), los más cercanos (`near`) o los de una ciudad, con caché HTTP corta (`02_API_SPEC.md`). Hoy, con unos pocos locales, cada respuesta es diminuta; cuando haya miles en muchas ciudades, el contrato no cambia. Consecuencias para la web (PR de integración):
 
