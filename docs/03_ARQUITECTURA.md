@@ -14,7 +14,7 @@
         ▼                                          │
 ┌─────────────────────────┐                        ▼
 │ Netlify                 │                ┌──────────────────────────┐
-│ hearteats.org (estática)│                │ API Express (Render, UE) │
+│ hearteats.org (estática)│                │ API Express (Railway, UE) │
 └─────────────────────────┘                └───┬──────────┬───────┬───┘
                                                │          │       │
                        Mongoose                ▼          ▼       ▼
@@ -35,7 +35,7 @@
 | Componente | Dónde | Responsabilidad |
 |---|---|---|
 | Web | Netlify (`web/`) | Pantallas, formularios, validación en el navegador, reducción de fotos |
-| API | Render (`server/`) | Validación, solicitudes, moderación, publicación, auditoría, límite de envíos |
+| API | Railway (`server/`) | Validación, solicitudes, moderación, publicación, auditoría, límite de envíos |
 | Base de datos | MongoDB Atlas M0 | `Restaurant`, `Team`, `Suggestion`, `User`, `AuditLog`, sesiones y tokens |
 | Fotos | Cloudflare R2 | Cuarentena (`q/`) y público (`p/`); URLs firmadas por el servidor |
 | Correo saliente | Resend | Enlaces mágicos, «Info pedida», avisos de resolución |
@@ -82,7 +82,7 @@ Detalle y bases legales: `08_PRIVACIDAD_LEGAL.md`.
 
 ## Entornos
 
-- **Producción:** `hearteats.org` (Netlify) + `api.hearteats.org` (Render) + Atlas M0.
+- **Producción:** `hearteats.org` (Netlify) + `api.hearteats.org` (Railway) + Atlas M0.
 - **Local:** `npm run dev` en `web/` y en `server/`, con MongoDB en local o un clúster de pruebas, y `.env` fuera del repo.
 - **PRs:** Netlify genera una vista previa de la web; la vista previa usa la API de producción solo en lectura hasta que se acuerde otra cosa. ❓ Entorno de pruebas del servidor.
 
@@ -94,4 +94,4 @@ La CI actual (`.github/workflows/ci.yml`) cubre `web/`. Se añade un trabajo par
 
 1. ❓ Un único entorno de producción, sin staging, mientras sea beta privada.
 2. ❓ Si `shared/types` se publica como paquete o se importa por ruta relativa (monorepo con `npm workspaces`, ver nota del handoff §6).
-3. ❓ Registro y alertas del servidor (los registros de Render conservan poco tiempo; valorar un aviso de caída gratuito).
+3. ❓ Registro y alertas del servidor (los registros de Railway conservan 7 días; valorar un aviso de caída gratuito).
