@@ -47,11 +47,11 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 
 **Trampa y límites**
 - `website` relleno (honeypot): el servidor responde `202` igual y **no guarda nada**.
-- Límite por IP (contador temporal, horas, sin guardar la IP en la solicitud): ❓ propuesta, 5 envíos por hora y 20 al día. `429` con `Retry-After`.
+- Límite por IP (contador temporal en memoria, sin guardar la IP en la solicitud): ❓ propuesta, 5 envíos por hora y 20 al día (`SUBMISSIONS_PER_HOUR` / `SUBMISSIONS_PER_DAY`). `429` con `Retry-After`. Cuenta también los envíos que el honeypot descarta.
 - Una historia sin `consentBy` se rechaza (`422`): nunca se guarda sin consentimiento registrado.
 - Se descartan en servidor nombres de personas del equipo en `proposals` (`07_VERIFICACION.md`): la propuesta de un tercero no admite datos de personas.
 
-**Filtro automático** (al crear, deja `warnings` en la solicitud): `noEvidence` (sin `evidenceUrl`), `chain` (nombre en una lista de cadenas conocidas) y `duplicate` (mismo nombre o dirección normalizados; la distancia en metros se calcula tras geocodificar, ADR 0006).
+**Filtro automático** (al crear, deja `warnings` en la solicitud): `noEvidence` (sin `evidenceUrl`), `chain` (nombre en una lista de cadenas conocidas, que es configuración del servidor — `KNOWN_CHAINS` — y no vive en el repo) y `duplicate` (mismo nombre o dirección normalizados, en la misma ciudad y frente a locales y propuestas pendientes; la distancia en metros se calcula tras geocodificar, ADR 0006).
 
 ### Subida de fotos
 

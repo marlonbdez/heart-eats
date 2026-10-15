@@ -8,7 +8,34 @@ describe('loadConfig', () => {
       PORT: 3001,
       CORS_ORIGINS: ['http://localhost:3000'],
       MONGODB_URI: 'mongodb://127.0.0.1:27017/hearteats',
+      TRUST_PROXY: 0,
+      SUBMISSIONS_PER_HOUR: 5,
+      SUBMISSIONS_PER_DAY: 20,
+      KNOWN_CHAINS: [],
     });
+  });
+
+  it('lee el límite de envíos y la confianza en el proxy', () => {
+    const config = loadConfig({
+      TRUST_PROXY: '1',
+      SUBMISSIONS_PER_HOUR: '3',
+      SUBMISSIONS_PER_DAY: '10',
+    });
+    expect(config).toMatchObject({
+      TRUST_PROXY: 1,
+      SUBMISSIONS_PER_HOUR: 3,
+      SUBMISSIONS_PER_DAY: 10,
+    });
+    expect(() => loadConfig({ SUBMISSIONS_PER_HOUR: '0' })).toThrow(
+      /SUBMISSIONS_PER_HOUR/,
+    );
+  });
+
+  it('normaliza la lista de cadenas: sin acentos, mayúsculas ni vacíos', () => {
+    expect(
+      loadConfig({ KNOWN_CHAINS: ' Gran  Cadena, Café Central ,, ' })
+        .KNOWN_CHAINS,
+    ).toEqual(['gran cadena', 'cafe central']);
   });
 
   it('en producción exige la cadena de MongoDB', () => {
