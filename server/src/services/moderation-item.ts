@@ -26,6 +26,9 @@ export interface ModerationItem {
   contactMasked?: string;
   warnings: SuggestionWarning[];
   evidenceUrl?: string;
+  // Lo que se pidió y lo que respondió quien propuso, si hubo «Info pedida».
+  infoRequest?: { note: string; deadline: string };
+  replies?: { message: string; at: string }[];
   // Solo en un local nuevo:
   // El pin que dejó el geocodificador; sin él, se coloca a mano.
   location?: { lat: number; lng: number };
@@ -74,6 +77,13 @@ export function toModerationItem(
     contactMasked: maskEmail(s.contactEmail),
     warnings: s.warnings,
     evidenceUrl: s.evidence[0],
+    infoRequest: s.infoRequest && {
+      note: s.infoRequest.note,
+      deadline: s.infoRequest.deadline.toISOString(),
+    },
+    replies: s.replies?.length
+      ? s.replies.map((r) => ({ message: r.message, at: r.at.toISOString() }))
+      : undefined,
   };
 
   if (s.type === 'new') {

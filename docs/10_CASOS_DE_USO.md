@@ -135,7 +135,7 @@ Candidatas a hoja de ruta, **no son decisiones**. El detalle está en las observ
 - Un negocio no puede enviar solo fotos: la petición sigue siendo de tipo «Equipo» y exige la cifra. Un tipo propio («Fotos») lo resolvería.
 
 **Decididas** (ver `07_VERIFICACION.md` y `11_FLUJO_Y_DOMINIO.md`)
-- «Info pedida» vuelve a Pendiente cuando quien propuso responde, y se cierra sola a los 14 días.
+- «Info pedida» vuelve a Pendiente cuando quien propuso responde, y se cierra sola a los 30 días.
 - Los platos estrella son opcionales; sin ellos, la ficha no muestra el bloque.
 - Las fotos se suben desde la web, en cuarentena hasta que Moderación las aprueba.
 

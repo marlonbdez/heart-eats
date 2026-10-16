@@ -21,7 +21,7 @@ Propuesta (F2) → Filtro automático → Revisión humana → Contacto con el n
    - **Equipo inclusivo:** enlace aportado, noticias, web propia, convenios con centros especiales de empleo, referencias de entidades del sector.
 4. **Contacto con el negocio** por canal oficial (teléfono o correo del dominio oficial). Se confirma que quiere aparecer y se le ofrece F3 (nivel de información del equipo y consentimientos).
 5. **Decisión:** aprobar (fija nivel y método de verificación), pedir más información, o rechazar con motivo.
-   - **Pedir información** (decidido): la solicitud pasa a `info_requested` y se envía la nota a quien propuso, **si dejó correo** (sin correo, solo se puede rechazar o dejar pendiente). Quien propuso responde desde un enlace del correo; la **misma solicitud vuelve a `pending`** con la respuesta. Si no responde en **14 días**, se cierra sola como rechazada («sin respuesta»).
+   - **Pedir información** (decidido): la solicitud pasa a `info_requested` y se envía la nota a quien propuso, **si dejó correo** (sin correo, solo se puede rechazar o dejar pendiente). Quien propuso responde desde un enlace del correo; la **misma solicitud vuelve a `pending`** con la respuesta. Si no responde en **30 días** (más 3 de margen), se cierra sola como rechazada («sin respuesta»).
 6. **Registro.** Toda acción queda en `AuditLog`.
 
 ## Fotos y platos
@@ -71,5 +71,5 @@ Se aceptan negocios independientes y proyectos con impacto social. Se rechazan g
 
 ## Preguntas abiertas
 
-1. ✅ Plazo objetivo de respuesta a una propuesta: 14 días, el mismo que para responder a una petición de información (ADR 0008).
+1. ✅ Plazo objetivo de respuesta a una propuesta: 14 días (ADR 0008). Quien propuso tiene más tiempo, 30 días, para responder a una petición de información.
 2. ✅ Criterio para ascender a moderador/a local: por invitación de un administrador, tras revisar junto a él un puñado de solicitudes (ADR 0008). Equipo y retiradas los decide solo un administrador al principio.

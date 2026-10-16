@@ -23,7 +23,7 @@ Protecciones: límite de solicitudes por correo y por IP, comprobación de `Orig
 ### Quien envía: sin cuenta
 
 - Los envíos son anónimos, con un correo opcional y privado. Sin correo no se puede pedir información.
-- Para responder a «Info pedida», el correo lleva un enlace con un **token firmado** (HMAC con secreto del servidor) que identifica la solicitud, caduca con el plazo de 14 días y se invalida al usarlo. No es una sesión: solo permite añadir una respuesta a esa solicitud.
+- Para responder a «Info pedida», el correo lleva un enlace con un **token firmado** (HMAC con secreto del servidor) que identifica la solicitud, caduca con el plazo de 30 días (más 3 de margen) y se invalida al usarlo. No es una sesión: solo permite añadir una respuesta a esa solicitud.
 
 ### Envío de correo
 

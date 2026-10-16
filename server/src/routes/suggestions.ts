@@ -21,7 +21,11 @@ import {
   IncompleteProposalError,
   publishProposal,
 } from '../services/publish-proposal.js';
-import { REPLY_DAYS, signReplyToken } from '../services/reply-token.js';
+import {
+  replyCutoff,
+  replyDeadline,
+  signReplyToken,
+} from '../services/reply-token.js';
 import {
   encodeQueueCursor,
   objectIdPattern,
@@ -378,7 +382,7 @@ export function suggestionsRouter({
           'Ya se pidió información en esta solicitud',
         );
       }
-      const deadline = new Date(now.getTime() + REPLY_DAYS * 24 * 60 * 60_000);
+      const deadline = replyDeadline(now);
       const nonce = randomBytes(16).toString('base64url');
       updated = await Suggestion.findOneAndUpdate(
         { _id: record._id, status: 'pending' },
@@ -399,7 +403,7 @@ export function suggestionsRouter({
 
       const token = signReplyToken(replyTokenSecret, {
         suggestionId: String(record._id),
-        expiresAt: deadline,
+        expiresAt: replyCutoff(deadline),
         nonce,
       });
       try {

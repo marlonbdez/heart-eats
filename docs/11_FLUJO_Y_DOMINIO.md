@@ -10,16 +10,16 @@ Es el ciclo de un **local nuevo** (CU-10, CU-14, CU-20, CU-24 a CU-27). Correcci
 
 ## 2. Estados de una solicitud
 
-![Diagrama de estados. Una solicitud entra como Pendiente. Desde ahí puede pasar a Aprobada, a Rechazada o a Info pedida. Desde Info pedida vuelve a Pendiente si responde quien propuso, o pasa a Rechazada si no responde en 14 días.](modelado/07-estados-solicitud.svg)
+![Diagrama de estados. Una solicitud entra como Pendiente. Desde ahí puede pasar a Aprobada, a Rechazada o a Info pedida. Desde Info pedida vuelve a Pendiente si responde quien propuso, o pasa a Rechazada si no responde en 30 días.](modelado/07-estados-solicitud.svg)
 
 | Estado | Significa | Hoy |
 |---|---|---|
 | **Pendiente** | Espera revisión. | Hecho |
 | **Aprobada** | Se publica, se aplica o se oculta, según el tipo. | Simulado |
 | **Rechazada** | Descartada con motivo. | Simulado |
-| **Info pedida** | Moderación necesita saber más; espera la respuesta (14 días). | Cierra la solicitud |
+| **Info pedida** | Moderación necesita saber más; espera la respuesta (30 días). | Cierra la solicitud |
 
-**Decidido.** Una solicitud con «Info pedida» **vuelve a Pendiente** cuando quien propuso responde, y **se cierra sola como rechazada** si no responde en **14 días**. Mantiene todo el historial en una sola solicitud. Quien propone no tiene cuenta, así que responde desde un enlace del correo. Sin correo no se puede pedir información: Moderación solo puede rechazar o dejarla pendiente.
+**Decidido.** Una solicitud con «Info pedida» **vuelve a Pendiente** cuando quien propuso responde, y **se cierra sola como rechazada** si no responde en **30 días**. Mantiene todo el historial en una sola solicitud. Quien propone no tiene cuenta, así que responde desde un enlace del correo. Sin correo no se puede pedir información: Moderación solo puede rechazar o dejarla pendiente.
 
 **Hoy** (prototipo): «Info pedida» manda la solicitud a «Resueltas», igual que un rechazo. Cambia con el servidor, no antes.
 

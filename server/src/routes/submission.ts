@@ -8,7 +8,7 @@ import { parseOrThrow } from '../validation.js';
 // Lo que cada ruta decide de una solicitud; el estado y la fecha los pone el modelo.
 export type NewSuggestion = Omit<
   SuggestionRecord,
-  '_id' | 'status' | 'createdAt'
+  '_id' | 'status' | 'createdAt' | 'replies'
 >;
 
 interface SubmissionOptions<S extends z.ZodType> {

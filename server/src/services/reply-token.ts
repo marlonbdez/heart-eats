@@ -3,7 +3,16 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 // Enlace de «Info pedida» para quien propuso (ADR 0007). No es una sesión: solo
 // identifica una solicitud, caduca con el plazo y el `nonce` guardado en la
 // solicitud lo invalida al usarlo o al cerrarla.
-export const REPLY_DAYS = 14;
+export const REPLY_DAYS = 30;
+// Margen de cortesía: el enlace sigue valiendo unos días después del plazo que
+// se dice en el correo, y hasta entonces no se cierra la solicitud.
+export const REPLY_GRACE_DAYS = 3;
+
+const DAY = 24 * 60 * 60_000;
+export const replyDeadline = (from: Date) =>
+  new Date(from.getTime() + REPLY_DAYS * DAY);
+export const replyCutoff = (deadline: Date) =>
+  new Date(deadline.getTime() + REPLY_GRACE_DAYS * DAY);
 
 export interface ReplyClaims {
   suggestionId: string;
