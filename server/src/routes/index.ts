@@ -17,6 +17,7 @@ interface ApiOptions {
   allowedOrigins: readonly string[];
   secureCookies: boolean;
   knownChains: readonly string[];
+  replyTokenSecret: string;
   geocoder?: Geocoder;
 }
 
@@ -29,6 +30,7 @@ export function createApiRouter({
   allowedOrigins,
   secureCookies,
   knownChains,
+  replyTokenSecret,
   geocoder,
 }: ApiOptions) {
   const api = Router();
@@ -45,6 +47,14 @@ export function createApiRouter({
       secureCookies,
     }),
   );
-  api.use(suggestionsRouter({ allowedOrigins, geocoder }));
+  api.use(
+    suggestionsRouter({
+      allowedOrigins,
+      mailer,
+      webUrl,
+      replyTokenSecret,
+      geocoder,
+    }),
+  );
   return api;
 }

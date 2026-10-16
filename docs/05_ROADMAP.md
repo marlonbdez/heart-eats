@@ -59,7 +59,9 @@ Una PR por paso:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
   - [x] Cola: `GET /suggestions` y `/suggestions/:id`, con filtro por ámbito y correo enmascarado
   - [x] Geocodificación con Nominatim al abrir un local nuevo, y aviso de duplicado por distancia (ADR 0006)
-  - [ ] Decisiones (aprobar, rechazar, pedir información), geocodificación, avisos por correo y borrado del correo al resolver
+  - [x] Decisiones de rechazar (borra el correo) y pedir información (enlace firmado, 14 días): `POST /suggestions/:id/decision`
+  - [ ] Decisión de aprobar: publicar la ficha, mover fotos y avisar por correo
+  - [ ] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 14 días
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal

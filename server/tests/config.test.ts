@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { loadConfig } from '../src/config/env.js';
 
+const SECRET = 'x'.repeat(32);
+
 describe('loadConfig', () => {
   it('usa valores por defecto para desarrollo local', () => {
     expect(loadConfig({})).toEqual({
@@ -61,8 +63,24 @@ describe('loadConfig', () => {
     };
     expect(() => loadConfig(production)).toThrow(/RESEND_API_KEY/);
     expect(() =>
-      loadConfig({ ...production, RESEND_API_KEY: 're_clave' }),
+      loadConfig({
+        ...production,
+        RESEND_API_KEY: 're_clave',
+        REPLY_TOKEN_SECRET: SECRET,
+      }),
     ).not.toThrow();
+  });
+
+  it('en producción exige un secreto largo para los enlaces de respuesta', () => {
+    const production = {
+      NODE_ENV: 'production',
+      MONGODB_URI: 'mongodb+srv://usuario:clave@cluster.example.net/hearteats',
+      RESEND_API_KEY: 're_clave',
+    };
+    expect(() => loadConfig(production)).toThrow(/REPLY_TOKEN_SECRET/);
+    expect(() =>
+      loadConfig({ ...production, REPLY_TOKEN_SECRET: 'corto' }),
+    ).toThrow(/REPLY_TOKEN_SECRET/);
   });
 
   it('lee el límite de envíos y la confianza en el proxy', () => {
@@ -97,6 +115,7 @@ describe('loadConfig', () => {
     const config = loadConfig({
       NODE_ENV: 'production',
       RESEND_API_KEY: 're_clave',
+      REPLY_TOKEN_SECRET: SECRET,
       MONGODB_URI: 'mongodb+srv://usuario:clave@cluster.example.net/hearteats',
     });
     expect(config.MONGODB_URI).toContain('mongodb+srv://');
@@ -112,6 +131,7 @@ describe('loadConfig', () => {
     const config = loadConfig({
       NODE_ENV: 'production',
       RESEND_API_KEY: 're_clave',
+      REPLY_TOKEN_SECRET: SECRET,
       PORT: '10000',
       MONGODB_URI: 'mongodb://127.0.0.1:27017/hearteats',
       CORS_ORIGINS: 'https://hearteats.org, https://www.hearteats.org',
