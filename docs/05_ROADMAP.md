@@ -63,7 +63,8 @@ Una PR por paso:
   - [x] Decisión de aprobar un local nuevo: publicar la ficha, borrar el correo y avisar por correo
   - [x] Aprobar correcciones (nombre, dirección, pin, horario, cerrado) y retiradas (ficha o historia)
   - [ ] Aprobar el equipo, retiradas de fotos y de datos, y mover las fotos al aprobar (cuando existan `POST /teams` y `POST /uploads`)
-  - [ ] Borrado definitivo de lo retirado y tope de conservación del correo (política de `08_PRIVACIDAD_LEGAL.md`)
+  - [x] Borrado definitivo de las historias retiradas (21 días) y tope de conservación del correo (9 meses), en el trabajo horario
+  - [ ] Borrado definitivo de una ficha retirada y de su equipo (hoy solo se archiva; hace falta marcar cuándo se retiró) y de las fotos retiradas (cuando existan)
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`

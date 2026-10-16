@@ -24,19 +24,33 @@ export interface TeamRecord {
     consentRecordedAt: Date;
     consentBy: (typeof consentBy)[number];
     revokedAt?: Date;
+    // Cuándo se borró el contenido de una historia retirada. Desde entonces
+    // solo quedan el consentimiento y las fechas; faltan nombre, puesto, texto y
+    // foto (la historia ya no se sirve: tiene `revokedAt`).
+    purgedAt?: Date;
   }[];
 }
 
-// Una historia sin consentimiento registrado no se guarda (spec §2.2).
+// Una historia sin consentimiento registrado no se guarda (spec §2.2). Al
+// borrar una retirada se conserva el hueco (su posición no cambia) sin los
+// textos, por eso estos son obligatorios salvo en una historia purgada.
+const contentRequired: [(this: { purgedAt?: Date }) => boolean, string] = [
+  function () {
+    return !this.purgedAt;
+  },
+  'Falta el contenido de la historia',
+];
+
 const storySchema = new Schema(
   {
-    displayName: { type: String, required: true, maxlength: 80 },
-    role: { type: String, required: true, maxlength: 80 },
-    storyText: { type: String, required: true, maxlength: 2000 },
+    displayName: { type: String, required: contentRequired, maxlength: 80 },
+    role: { type: String, required: contentRequired, maxlength: 80 },
+    storyText: { type: String, required: contentRequired, maxlength: 2000 },
     photoUrl: String,
     consentRecordedAt: { type: Date, required: true },
     consentBy: { type: String, enum: consentBy, required: true },
     revokedAt: Date,
+    purgedAt: Date,
   },
   { _id: false },
 );

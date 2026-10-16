@@ -1,9 +1,9 @@
 import { createApp } from './app.js';
 import { loadConfig } from './config/env.js';
 import { connectDb, disconnectDb } from './db.js';
-import { startExpiryJob } from './services/close-expired.js';
 import { ensureAdmin } from './services/ensure-admin.js';
 import { nominatimGeocoder } from './services/geocoder.js';
+import { startMaintenanceJob } from './services/maintenance.js';
 import { consoleMailer, resendMailer } from './services/mailer.js';
 
 const config = loadConfig();
@@ -38,13 +38,13 @@ const server = createApp(config, {
   console.log(`API escuchando en el puerto ${config.PORT}`);
 });
 
-const stopExpiryJob = startExpiryJob();
+const stopMaintenanceJob = startMaintenanceJob();
 
 // El hosting avisa con SIGTERM al reiniciar o desplegar: se termina lo que
 // está en curso antes de salir.
 for (const signal of ['SIGTERM', 'SIGINT'] as const) {
   process.on(signal, () => {
-    stopExpiryJob();
+    stopMaintenanceJob();
     server.close(() => {
       void disconnectDb().finally(() => process.exit(0));
     });
