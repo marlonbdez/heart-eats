@@ -530,9 +530,9 @@
         ]
       },
       {
-        "heading": "Esta versión es una prueba",
+        "heading": "Esta versión está empezando",
         "paragraphs": [
-          "Ahora mismo el envío de propuestas, correcciones y formularios de negocio es una simulación: no se guarda nada. Lo que sigue describe cómo tratamos los datos cuando el envío sea real."
+          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo y el envío de fotos todavía son una simulación: no se guarda nada. Lo que sigue describe cómo tratamos los datos."
         ]
       },
       {
@@ -552,8 +552,9 @@
         "items": [
           "Si usas la web: ninguno nuestro. El servidor de la web y el del mapa ven tu dirección IP al servirte la página, como cualquier servidor.",
           "Si pulsas «Cerca de mí»: tu ubicación se usa solo en tu dispositivo, para ordenar los locales por distancia. No se envía ni se guarda, y solo se pide cuando pulsas el botón.",
-          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 6 meses.",
+          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
+          "Si pides una retirada: qué quieres retirar, tu explicación (sin datos de salud ni nombres de terceros) y tu correo, que es obligatorio para confirmar por correo que eres la persona o su representante antes de ocultar nada. Se conservan igual que una propuesta; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
           "Si eres un negocio y cuentas tu equipo: cifras del equipo y, en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona; y, si quieres, fotos de tu local o de tus platos (con tu confirmación de permiso), para mostrar la ficha con el detalle que el negocio elija. Se conservan mientras el negocio y la persona lo mantengan."
@@ -572,7 +573,7 @@
           "Solo el negocio puede contar la historia de su equipo, y nunca con detalle sin que lo sepa. Hasta que el negocio lo confirme, solo mostramos información pública y verificable.",
           "Cada persona decide por sí misma si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si corresponde, lo decide su representante legal.",
           "Una historia sin consentimiento registrado no se guarda.",
-          "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 7 días.",
+          "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 21 días.",
           "En equipos pequeños (menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.",
           "Las historias, nombres y fotos no están bajo licencia abierta y nunca se incluyen en las exportaciones de datos abiertos."
         ]
@@ -582,6 +583,8 @@
         "items": [
           "Alojamiento de la web: Netlify. Registra la dirección IP de quien visita la web, como cualquier servidor.",
           "Mapa: las teselas y estilos las sirve OpenFreeMap. Al abrir el mapa, tu navegador se las pide directamente y ellos ven tu dirección IP. No les enviamos nada más.",
+          "Correo: usamos Resend para enviar los enlaces de acceso de moderación y los avisos a quien dejó su correo (por ejemplo, que su propuesta ya está publicada). Ven esa dirección y el texto del aviso.",
+          "Geocodificación: para colocar un local en el mapa, nuestro servidor envía su dirección (calle, código postal y ciudad) a Nominatim (OpenStreetMap). No envía tu correo ni datos tuyos.",
           "Servidor y base de datos: cuando exista, indicaremos aquí el proveedor y el país donde se guardan los datos.",
           "No vendemos ni cedemos datos a nadie."
         ]
@@ -1016,5 +1019,8 @@
     "missingTitle": "No encontramos este local",
     "missingBody": "Puede que ya no esté publicado o que la dirección no sea correcta.",
     "missingBack": "Volver al mapa"
+  },
+  "submit": {
+    "limited": "Se han enviado muchas solicitudes desde tu conexión en poco tiempo. No pasa nada: vuelve a intentarlo dentro de un rato."
   }
 }

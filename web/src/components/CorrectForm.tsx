@@ -1,7 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { isRateLimited } from '@/lib/api';
 import { submitCorrection } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { CorrectionKind } from '@/lib/types';
@@ -35,12 +36,14 @@ export function CorrectForm({
   placeName: string;
 }) {
   const t = useTranslations('correct');
+  const tSubmit = useTranslations('submit');
+  const locale = useLocale() === 'en' ? 'en' : 'es';
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'error' | 'limited' | 'done'
+  >('idle');
   const isDone = status === 'done';
   const headingRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -87,10 +90,11 @@ export function CorrectForm({
         evidenceUrl: clean(form.evidenceUrl),
         contactEmail: clean(form.email),
         website: form.website,
+        locale,
       });
       setStatus('done');
-    } catch {
-      setStatus('error');
+    } catch (err) {
+      setStatus(isRateLimited(err) ? 'limited' : 'error');
     }
   };
 
@@ -301,9 +305,9 @@ export function CorrectForm({
                 />
               </label>
             </div>
-            {status === 'error' && (
+            {(status === 'error' || status === 'limited') && (
               <p role="alert" className={s.error}>
-                {t('sendError')}
+                {status === 'limited' ? tSubmit('limited') : t('sendError')}
               </p>
             )}
           </div>

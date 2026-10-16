@@ -2,8 +2,9 @@ import { expect, test } from './support/test';
 
 test.use({ viewport: { width: 360, height: 800 } });
 
-test('pedir una retirada: 3 pasos, valida y llega a moderación', async ({
+test('pedir una retirada: 3 pasos, valida y se envía a la API', async ({
   page,
+  sent,
 }) => {
   await page.goto('/es/removal');
   await expect(
@@ -41,17 +42,18 @@ test('pedir una retirada: 3 pasos, valida y llega a moderación', async ({
   );
   expect(overflow).toBeLessThanOrEqual(0);
 
-  // En moderación: no se retira nada sin confirmar la identidad.
-  await page.goto('/es/moderation');
-  await page.getByRole('button', { name: /Retirada.*La Masa Madre/s }).click();
-  await expect(page.getByText('p***@ejemplo.org')).toBeVisible();
-  await page.getByRole('button', { name: 'Retirar ahora' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText(
-    'confirmar la identidad',
-  );
-  await page.getByLabel(/He confirmado, por el correo/).check();
-  await page.getByRole('button', { name: 'Retirar ahora' }).click();
-  await expect(page.getByRole('status')).toContainText('Retirado');
+  // Se envía a la API con el idioma y el correo (necesario para confirmar quién pide).
+  expect(sent).toEqual([
+    {
+      path: '/removals',
+      body: {
+        restaurantSlug: 'demo-la-masa-madre',
+        what: 'story',
+        contactEmail: 'persona@ejemplo.org',
+        locale: 'es',
+      },
+    },
+  ]);
 });
 
 test('la retirada se encuentra desde el menú, contacto y privacidad, y existe en inglés', async ({

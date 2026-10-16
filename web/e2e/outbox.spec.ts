@@ -57,9 +57,49 @@ test('lo que cuenta un negocio (F3) llega a moderación, sin su correo entero', 
   await expect(page.getByText('Tienes 1 envío de prueba')).toHaveCount(0);
 });
 
-test('una propuesta y una corrección también llegan a moderación', async ({
+test('una propuesta se envía a la API con su idioma y sin fotos', async ({
+  page,
+  sent,
+}) => {
+  await page.goto('/en/propose');
+  await page.getByLabel('Name of the place').fill('Local de prueba');
+  await page.getByRole('button', { name: /Pizza/ }).click();
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole('button', { name: 'Continue' }).click();
+  }
+  await page.getByRole('button', { name: /Send/ }).click();
+  await expect(page.getByRole('heading', { name: /Thank/ })).toBeVisible();
+
+  expect(sent).toHaveLength(1);
+  expect(sent[0]).toMatchObject({
+    path: '/proposals',
+    body: {
+      name: 'Local de prueba',
+      city: 'Madrid',
+      foodTags: ['pizza'],
+      locale: 'en',
+    },
+  });
+  // Nada se guarda en el navegador: va todo a la API.
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem('hearteats:demo-outbox'),
+    ),
+  ).toBeNull();
+});
+
+test('si hay demasiados envíos desde la conexión, lo dice sin alarmar', async ({
   page,
 }) => {
+  await page.route('http://localhost:3001/api/v1/proposals', (route) =>
+    route.request().method() === 'POST'
+      ? route.fulfill({
+          status: 429,
+          headers: { 'access-control-allow-origin': '*', 'retry-after': '60' },
+          json: { error: { code: 'rate_limited', message: 'Demasiadas' } },
+        })
+      : route.fallback(),
+  );
   await page.goto('/es/propose');
   await page.getByLabel('Nombre del local').fill('Local de prueba');
   await page.getByRole('button', { name: /Pizza/ }).click();
@@ -67,16 +107,7 @@ test('una propuesta y una corrección también llegan a moderación', async ({
     await page.getByRole('button', { name: 'Continuar' }).click();
   }
   await page.getByRole('button', { name: /Enviar/ }).click();
-  await expect(page.getByRole('heading', { name: /Gracias/ })).toBeVisible();
-
-  await page.goto('/es/moderation');
-  await expect(page.getByText('Tienes 1 envío de prueba')).toBeVisible();
-  await page
-    .getByRole('button', { name: /Nuevo local.*Local de prueba/s })
-    .click();
-  await expect(
-    page.getByRole('heading', { name: 'Local de prueba' }),
-  ).toBeVisible();
-  // Sin enlace de prueba, el filtro lo avisa.
-  await expect(page.getByText('No se aportó ninguna prueba')).toBeVisible();
+  await expect(page.locator('p[role=alert]')).toContainText(
+    'vuelve a intentarlo',
+  );
 });

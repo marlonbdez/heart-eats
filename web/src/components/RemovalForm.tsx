@@ -1,7 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { isRateLimited } from '@/lib/api';
 import { submitRemoval } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { RemovalWhat } from '@/lib/types';
@@ -33,12 +34,14 @@ const initial: FormState = {
 // para confirmar que quien lo pide es quien dice ser antes de ocultar nada.
 export function RemovalForm({ places }: { places: PlaceOption[] }) {
   const t = useTranslations('removal');
+  const tSubmit = useTranslations('submit');
+  const locale = useLocale() === 'en' ? 'en' : 'es';
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'error' | 'limited' | 'done'
+  >('idle');
   const isDone = status === 'done';
   const headingRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -78,10 +81,11 @@ export function RemovalForm({ places }: { places: PlaceOption[] }) {
         details: form.details.trim() || undefined,
         contactEmail: form.email.trim(),
         website: form.website,
+        locale,
       });
       setStatus('done');
-    } catch {
-      setStatus('error');
+    } catch (err) {
+      setStatus(isRateLimited(err) ? 'limited' : 'error');
     }
   };
 
@@ -282,9 +286,9 @@ export function RemovalForm({ places }: { places: PlaceOption[] }) {
                 />
               </label>
             </div>
-            {status === 'error' && (
+            {(status === 'error' || status === 'limited') && (
               <p role="alert" className={s.error}>
-                {t('sendError')}
+                {status === 'limited' ? tSubmit('limited') : t('sendError')}
               </p>
             )}
           </div>
