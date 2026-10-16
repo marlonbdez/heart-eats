@@ -129,6 +129,32 @@ describe('resendMailer', () => {
     );
   });
 
+  it('avisa de la ficha publicada, en el idioma de quien propuso', async () => {
+    const fetchFn = vi.fn().mockResolvedValue({ ok: true, status: 200 });
+    const mailer = resendMailer({
+      apiKey: 'k',
+      from: 'a',
+      replyTo: 'b@example.org',
+      fetchFn,
+    });
+    const approval = {
+      to: 'ana@example.org',
+      url: 'https://hearteats.org/es/place/casa-nueva-madrid',
+      name: 'Casa Nueva',
+      locale: 'es',
+    } as const;
+    await mailer.sendApproval(approval);
+    await mailer.sendApproval({ ...approval, locale: 'en' });
+
+    const [es, en] = fetchFn.mock.calls.map(([, init]) =>
+      JSON.parse(init.body),
+    );
+    expect(es.subject).toMatch(/ya está en HeartEats/);
+    expect(es.text).toContain(approval.url);
+    expect(es.text).toContain('Casa Nueva');
+    expect(en.subject).toMatch(/now on HeartEats/);
+  });
+
   it('falla si el proveedor rechaza, sin repetir la dirección', async () => {
     const fetchFn = vi.fn().mockResolvedValue({ ok: false, status: 422 });
     const mailer = resendMailer({
