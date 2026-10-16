@@ -146,6 +146,9 @@ export function parseListQuery(raw: unknown): ListQuery {
   };
 }
 
+// Forma válida de un slug (también lo usan los envíos que apuntan a un local).
+export const slugPattern = /^[a-z0-9-]{1,80}$/;
+
 // Lo que cualquiera puede ver: publicado y con verificación pública.
 export const visibleFilter = {
   status: 'published',
