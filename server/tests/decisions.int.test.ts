@@ -23,6 +23,7 @@ const mailer: Mailer = {
     if (failMail) throw new Error('Resend respondió 500');
     sent.push(info);
   },
+  async sendApproval() {},
 };
 const app = createApp(
   { CORS_ORIGINS: [WEB], WEB_URL: WEB, REPLY_TOKEN_SECRET: SECRET },
@@ -395,8 +396,12 @@ describe('pedir información', () => {
 });
 
 describe('aprobar', () => {
-  it('todavía no está disponible: 501 y no cambia nada', async () => {
-    const s = await proposal();
+  it('solo un local nuevo: lo demás da 501 y no cambia nada', async () => {
+    const s = await proposal({
+      type: 'edit',
+      targetRestaurantId: restaurantId,
+      payload: { kind: 'address', details: 'Calle Nueva 1' },
+    });
     const cookie = await signedInCookie();
     const res = await decide(s._id, { action: 'approve' }, cookie);
     expect(res.status).toBe(501);

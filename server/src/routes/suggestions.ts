@@ -7,14 +7,20 @@ import { AuditLog } from '../models/audit-log.js';
 import { Restaurant } from '../models/restaurant.js';
 import { Suggestion, type SuggestionRecord } from '../models/suggestion.js';
 import type { ModerationScope } from '../models/user.js';
-import { decisionSchema } from '../services/decision-input.js';
+import {
+  decisionSchema,
+  newPlaceApprovalSchema,
+} from '../services/decision-input.js';
 import type { Geocoder } from '../services/geocoder.js';
 import type { Mailer } from '../services/mailer.js';
 import {
   toModerationItem,
   type TargetRestaurant,
 } from '../services/moderation-item.js';
-import { ensureGeocode } from '../services/suggestion-geocode.js';
+import {
+  IncompleteProposalError,
+  publishProposal,
+} from '../services/publish-proposal.js';
 import { REPLY_DAYS, signReplyToken } from '../services/reply-token.js';
 import {
   encodeQueueCursor,
@@ -24,6 +30,7 @@ import {
   scopeFilter,
   statusesOf,
 } from '../services/suggestion-query.js';
+import { ensureGeocode } from '../services/suggestion-geocode.js';
 import { parseOrThrow } from '../validation.js';
 
 interface SuggestionsOptions {
@@ -69,6 +76,13 @@ async function findVisible(id: string, scope: readonly ModerationScope[]) {
     : null;
   if (!record) throw new ApiError(404, 'not_found', 'Solicitud no encontrada');
   return record;
+}
+
+// País de la ficha cuando el geocodificador no lo da (pin puesto a mano): el
+// del ámbito de quien aprueba, si es uno solo.
+function scopeCountry(scope: readonly ModerationScope[]) {
+  const countries = new Set(scope.map((entry) => entry.country));
+  return countries.size === 1 ? [...countries][0] : undefined;
 }
 
 // Otra persona decidió entre la lectura y la escritura.
@@ -154,7 +168,134 @@ export function suggestionsRouter({
       );
   });
 
-  // Rechazar o pedir información. Aprobar (publicar la ficha) llega aparte.
+  // Aprobar un local nuevo: publica su ficha y cierra la solicitud. Primero se
+  // crea la ficha y después se cierra la solicitud: si crearla falla, la
+  // solicitud no cambia; si otra persona se adelantó, se deshace la ficha.
+  async function approveNewPlace(
+    found: SuggestionRecord,
+    user: ReturnType<typeof authOf>,
+    body: unknown,
+    now: Date,
+  ) {
+    const approval = parseOrThrow(newPlaceApprovalSchema, body);
+    // Si no se abrió antes, se geocodifica ahora (salvo pin a mano).
+    const record = approval.location
+      ? found
+      : await ensureGeocode(found, geocoder);
+
+    const { lat, lng } = approval.location ?? record.geocode ?? {};
+    if (lat === undefined || lng === undefined) {
+      throw new ApiError(
+        422,
+        'geocoding_required',
+        'No hay pin: la dirección no se pudo geocodificar; colócalo a mano (location)',
+      );
+    }
+    const country =
+      record.geocode?.country ?? scopeCountry(user.moderationScope);
+    if (!country) {
+      throw new ApiError(
+        422,
+        'country_required',
+        'No se sabe el país del local; el geocodificador no lo dio',
+      );
+    }
+
+    let restaurant;
+    try {
+      restaurant = await publishProposal({
+        payload: record.payload,
+        approval,
+        pin: { lat, lng },
+        country,
+        now,
+      });
+    } catch (err) {
+      if (err instanceof IncompleteProposalError) {
+        throw new ApiError(
+          422,
+          'proposal_incomplete',
+          `A la propuesta le falta ${err.field === 'street' ? 'la calle' : 'una categoría de comida'}: pídela a quien propuso`,
+        );
+      }
+      throw err;
+    }
+
+    // El correo se borra al resolver (docs/08) y el enlace de respuesta, si lo
+    // había, deja de valer.
+    let updated: SuggestionRecord | null;
+    try {
+      updated = await Suggestion.findOneAndUpdate(
+        { _id: record._id, status: { $in: ['pending', 'info_requested'] } },
+        {
+          $set: {
+            status: 'approved',
+            resolution: {
+              restaurantId: restaurant._id,
+              decidedBy: user.id,
+              decidedAt: now,
+            },
+          },
+          $unset: { contactEmail: 1, 'infoRequest.nonce': 1 },
+        },
+        { returnDocument: 'after' },
+      ).lean<SuggestionRecord>();
+    } catch (err) {
+      await Restaurant.deleteOne({ _id: restaurant._id });
+      throw err;
+    }
+    if (!updated) {
+      await Restaurant.deleteOne({ _id: restaurant._id });
+      throw changed();
+    }
+
+    const actorId = new Types.ObjectId(user.id);
+    await AuditLog.create([
+      {
+        entity: 'suggestion',
+        entityId: record._id,
+        action: 'approve',
+        actorId,
+        diff: {
+          status: { from: record.status, to: 'approved' },
+          restaurantId: String(restaurant._id),
+        },
+      },
+      {
+        entity: 'restaurant',
+        entityId: restaurant._id,
+        action: 'create',
+        actorId,
+        diff: {
+          status: { to: 'published' },
+          level: approval.level,
+          method: approval.method,
+          suggestionId: String(record._id),
+        },
+      },
+    ]);
+
+    // Aviso a quien propuso, si dejó correo. La ficha ya está publicada: si el
+    // correo falla solo se anota, sin la dirección.
+    if (record.contactEmail) {
+      try {
+        await mailer.sendApproval({
+          to: record.contactEmail,
+          url: `${webUrl}/${record.locale}/place/${restaurant.slug}`,
+          name: restaurant.name,
+          locale: record.locale,
+        });
+      } catch (err) {
+        console.error(
+          'No se pudo enviar el aviso de ficha publicada:',
+          err instanceof Error ? err.message : err,
+        );
+      }
+    }
+    return updated;
+  }
+
+  // Aprobar, rechazar o pedir información.
   router.post('/suggestions/:id/decision', ...auth, async (req, res) => {
     const user = authOf(res);
     const record = await findVisible(
@@ -169,18 +310,18 @@ export function suggestionsRouter({
       );
     }
     const decision = parseOrThrow(decisionSchema, req.body);
-    if (decision.action === 'approve') {
-      throw new ApiError(
-        501,
-        'not_implemented',
-        'Aprobar aún no está disponible',
-      );
-    }
     if (record.status === 'approved' || record.status === 'rejected') {
       throw new ApiError(
         409,
         'already_resolved',
         'La solicitud ya está resuelta',
+      );
+    }
+    if (decision.action === 'approve' && record.type !== 'new') {
+      throw new ApiError(
+        501,
+        'not_implemented',
+        'Por ahora solo se puede aprobar un local nuevo',
       );
     }
 
@@ -195,7 +336,9 @@ export function suggestionsRouter({
       });
 
     let updated: SuggestionRecord | null;
-    if (decision.action === 'reject') {
+    if (decision.action === 'approve') {
+      updated = await approveNewPlace(record, user, req.body, now);
+    } else if (decision.action === 'reject') {
       // El correo ya no hace falta: se borra al resolver (docs/08) y el enlace
       // de respuesta, si lo había, deja de valer.
       updated = await Suggestion.findOneAndUpdate(

@@ -15,9 +15,18 @@ export interface InfoRequest {
   locale: 'es' | 'en';
 }
 
+// Aviso a quien propuso un local de que ya está en el mapa.
+export interface Approval {
+  to: string;
+  url: string;
+  name: string;
+  locale: 'es' | 'en';
+}
+
 export interface Mailer {
   sendLoginLink(link: LoginLink): Promise<void>;
   sendInfoRequest(request: InfoRequest): Promise<void>;
+  sendApproval(approval: Approval): Promise<void>;
 }
 
 const copy = {
@@ -43,6 +52,19 @@ const infoCopy = {
     subject: 'HeartEats needs one more detail about your suggestion',
     body: ({ url, note, deadline }: InfoRequest) =>
       `Hello,\n\nThank you for your suggestion. To review it, the moderator needs to know:\n\n${note}\n\nYou can reply from this link until ${deadline.toLocaleDateString('en-GB', { timeZone: 'UTC' })}. It works only once:\n\n${url}\n\nIf that date passes without a reply, we will close the request.`,
+  },
+} as const;
+
+const approvalCopy = {
+  es: {
+    subject: 'Tu propuesta ya está en HeartEats',
+    body: ({ url, name }: Approval) =>
+      `Hola,\n\nGracias por proponer ${name}. Ya está en el mapa de HeartEats:\n\n${url}\n\nNo guardamos tu correo: este es el único aviso que recibirás sobre esta propuesta. Si ves algo que corregir, puedes decírnoslo desde la propia ficha.`,
+  },
+  en: {
+    subject: 'Your suggestion is now on HeartEats',
+    body: ({ url, name }: Approval) =>
+      `Hello,\n\nThank you for suggesting ${name}. It is now on the HeartEats map:\n\n${url}\n\nWe do not keep your email: this is the only message you will get about this suggestion. If you spot something to correct, you can tell us from the page itself.`,
   },
 } as const;
 
@@ -89,6 +111,10 @@ export function resendMailer({
       const { subject, body } = infoCopy[request.locale];
       await send(request.to, subject, body(request));
     },
+    async sendApproval(approval) {
+      const { subject, body } = approvalCopy[approval.locale];
+      await send(approval.to, subject, body(approval));
+    },
   };
 }
 
@@ -99,5 +125,8 @@ export const consoleMailer: Mailer = {
   },
   async sendInfoRequest({ url }) {
     console.log(`Enlace de respuesta (solo desarrollo): ${url}`);
+  },
+  async sendApproval({ url }) {
+    console.log(`Ficha publicada (solo desarrollo): ${url}`);
   },
 };

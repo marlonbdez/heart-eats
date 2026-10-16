@@ -37,10 +37,12 @@ export interface SuggestionRecord {
     lng?: number;
     country?: string;
   };
-  // Por qué se rechazó y quién lo decidió.
+  // Quién la resolvió y cuándo. Al rechazar lleva el motivo; al aprobar un
+  // local nuevo, la ficha publicada.
   resolution?: {
-    reason: string;
+    reason?: string;
     note?: string;
+    restaurantId?: Types.ObjectId;
     decidedBy: Types.ObjectId;
     decidedAt: Date;
   };
@@ -97,8 +99,9 @@ const suggestionSchema = new Schema(
     resolution: {
       type: new Schema(
         {
-          reason: { type: String, required: true },
+          reason: String,
           note: String,
+          restaurantId: { type: Schema.Types.ObjectId, ref: 'Restaurant' },
           decidedBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',

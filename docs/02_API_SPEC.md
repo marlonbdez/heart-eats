@@ -101,7 +101,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 |---|---|---|---|
 | GET | `/suggestions` | moderator, admin | Cola. Filtros: `status` (`pending`, `info_requested`, `resolved`), `type`, `limit`, `cursor`. Devuelve `ModerationItem[]` (correo siempre enmascarado) |
 | GET | `/suggestions/:id` | moderator, admin | Detalle. Para `new`, la primera apertura geocodificará y guardará el pin (ADR 0006; llega con las decisiones) |
-| POST | `/suggestions/:id/decision` | ver abajo | Cuerpo: `ModerationDecision`. Registra la decisión y deja una línea en `AuditLog`. Hoy: `reject` y `ask_info`; `approve` da `501` hasta su PR |
+| POST | `/suggestions/:id/decision` | ver abajo | Cuerpo: `ModerationDecision`. Registra la decisión y deja una línea en `AuditLog`. Hoy: `reject`, `ask_info` y `approve` de un local nuevo; `approve` de lo demás da `501` hasta su PR |
 | GET | `/audit` | admin | Registro de auditoría, con `entity`, `entityId`, `limit`, `cursor` |
 | GET | `/users` · POST `/users` · DELETE `/users/:id` | admin | Alta por invitación y baja de moderadores (ADR 0008) |
 
@@ -116,11 +116,14 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 
 **Decisión**
 
-- `approve`: en un local nuevo exige `level` y `method`, y acepta un `location` opcional (`{lat,lng}`) para colocar el pin a mano. Si no hay pin ni geocodificación válida, `422 geocoding_required`. Publica la ficha, mueve las fotos aprobadas a público y envía correo a quien propuso, si dejó uno.
+- `approve` (hoy solo un local nuevo; correcciones, equipo y retiradas dan `501`): exige `level` (`community` o `admin`), `method` y `ownerConfirmed: true` (el negocio da siempre el último sí; se guarda como `ownerConfirmedAt`). Acepta `businessType` (por defecto `restaurant`) y un `location` opcional (`{lat,lng}`) que manda sobre la geocodificación. Publica la ficha con `lastVerifiedAt` en la fecha de la decisión; el `slug` sale del nombre y la ciudad (con un número si ya existe); el país, de la geocodificación o, si el pin es a mano y no la hay, del ámbito de quien aprueba si es uno solo. Cierra la solicitud con `resolution.restaurantId`, deja dos líneas en `AuditLog` (`approve` de la solicitud y `create` de la ficha, con nivel y método) y avisa a quien propuso si dejó correo.
+  - Errores: `422 validation_failed` (falta `level`, `method` o `ownerConfirmed`, o no valen); `422 geocoding_required` (sin pin ni geocodificación: se geocodifica en ese momento si no se había abierto); `422 country_required` (pin a mano, sin país geocodificado y ámbito de varios países); `422 proposal_incomplete` (a la propuesta le falta la calle o una categoría de comida: se pide a quien propuso con `ask_info`).
+  - Primero se crea la ficha y después se cierra la solicitud: si crear la ficha falla, la solicitud no cambia; si otra persona decide en el mismo instante, `409 conflict` y se deshace la ficha. Si el aviso por correo falla, la ficha sigue publicada y solo se anota el fallo (sin la dirección).
+  - Las fotos no se mueven todavía: llegan con `POST /uploads`.
 - `reject`: exige `reason` (`not_independent`, `no_evidence`, `duplicate`, `out_of_zone`, `other`) y admite `note`.
 - `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 14 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
 - Una solicitud ya resuelta no admite otra decisión (`409 already_resolved`). `reject` también cierra una solicitud en `info_requested`. Si otra persona decide en el mismo instante, `409 conflict`.
-- **Al rechazar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
+- **Al rechazar o aprobar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
 - El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la integración de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.
 - `team` y `removal` solo los decide un `admin` (ADR 0008); un `moderator` recibe `403`.
 - Una **retirada** aprobada oculta lo pedido al momento (la historia deja de servirse) y programa el borrado definitivo en el plazo de la política (❓ 7 días).
