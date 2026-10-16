@@ -55,7 +55,7 @@
 ## CU-27 · Registrar la acción en la auditoría
 - **Quién:** interno. Incluido en CU-24, CU-25 y CU-26.
 - **Pasos:** tras cada decisión se añade una línea al registro de la solicitud (qué se hizo, sobre qué y con qué nivel, método o motivo).
-- **Observación:** hoy es una línea en pantalla, sin persona ni hora, y se pierde al recargar. Con servidor será persistente (`AuditLog`) y no editable.
+- **Observación:** hoy es una línea en pantalla, sin persona ni hora, y se pierde al recargar. Con servidor será persistente (`AuditLog`) y no editable. Un administrador la consulta en `/moderation`, sección «Registro» (quién, cuándo y qué cambió; nunca nombres ni historias).
 
 ## CU-33 · Autenticarse (enlace mágico) — *pendiente*
 - **Quién:** Moderador/a. Depende de P5 y P9.

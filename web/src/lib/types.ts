@@ -262,3 +262,40 @@ export interface ModerationSession {
   role: 'moderator' | 'admin';
   moderationScope: { country: string; city?: string }[];
 }
+
+// Quien modera, tal como lo lista GET /users (solo administración).
+export interface StaffMember {
+  id: string;
+  email: string;
+  role: 'moderator' | 'admin';
+  moderationScope: { country: string; city?: string }[];
+  createdAt: string;
+  // Presente si está de baja.
+  disabledAt?: string;
+}
+
+export interface StaffInvite {
+  email: string;
+  country: string;
+  city?: string;
+}
+
+export type AuditEntity = 'restaurant' | 'team' | 'suggestion' | 'user';
+
+// Una línea del registro (GET /audit). Nunca lleva nombres ni textos de
+// historias: solo qué cambió y quién lo hizo.
+export interface AuditLine {
+  id: string;
+  entity: AuditEntity;
+  entityId: string;
+  action: string;
+  at: string;
+  // Sin `actor`, lo hizo el sistema (o esa persona ya no existe).
+  actor?: string;
+  diff?: Record<string, unknown>;
+}
+
+export interface AuditPage {
+  items: AuditLine[];
+  nextCursor?: string;
+}

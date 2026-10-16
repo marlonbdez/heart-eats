@@ -21,7 +21,7 @@ export class ApiRequestError extends Error {
 type Params = Record<string, string | number | undefined>;
 
 async function request(
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'DELETE',
   path: string,
   {
     params = {},
@@ -81,6 +81,10 @@ export async function sessionGet<T>(path: string, params: Params = {}) {
 export async function sessionPost<T = void>(path: string, body?: unknown) {
   const res = await request('POST', path, { body, session: true });
   return (res.status === 204 ? undefined : await res.json()) as T;
+}
+
+export async function sessionDelete(path: string) {
+  await request('DELETE', path, { session: true });
 }
 
 // Demasiados envíos desde esta conexión (429): se avisa distinto que un fallo.

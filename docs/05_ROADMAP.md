@@ -75,6 +75,7 @@ Una PR por paso:
   - [x] Equipo del negocio: el formulario envía a `POST /teams` (con el idioma y el aviso de «demasiados envíos»); moderación lo aprueba desde la web y el admin lee las historias; `/privacy` actualizada
   - [ ] Fotos (`POST /uploads` + R2): hasta entonces ni «Proponer un local» ni el formulario del negocio piden fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
   - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Falta: horario y pin en la corrección, retiradas de fotos y de datos
+  - [x] Administración en la moderación (`/moderation`, solo si el rol es `admin`): «Usuarios» (invitar a un moderador con correo, país y ciudad; darlo de baja con confirmación; reponerlo invitándolo de nuevo) y «Registro» (la auditoría con filtro por tipo y «Cargar más»)
   - [x] Página `/reply` para responder a «Info pedida» (lee el token del fragmento, muestra la nota y el plazo, y explica con calma el enlace ya usado o caducado); `/privacy` recoge la respuesta
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal

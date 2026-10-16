@@ -287,3 +287,56 @@
 .reply p {
   margin: 0 0 4px;
 }
+
+/* Secciones de administración: botones que pasan a otra línea si no caben. */
+.sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.sections .tab {
+  flex: 1 1 auto;
+  padding: 0 16px;
+}
+.admin {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 40rem;
+}
+.admin h2,
+.admin h3 {
+  margin: 0;
+}
+.admin h2 {
+  font-size: 1.4rem;
+}
+.admin h3 {
+  font-size: 1.1rem;
+}
+.invite {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.person {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  overflow-wrap: anywhere;
+}
+.person:focus,
+.person:focus-visible {
+  outline: none;
+}
+.diffText {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.person .confirmRow p,
+.person .confirmRow [role='alert'] {
+  grid-column: 1 / -1;
+}

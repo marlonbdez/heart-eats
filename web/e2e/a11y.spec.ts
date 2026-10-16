@@ -236,6 +236,32 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('moderación: usuarios (alta con error y baja)', async ({
+      page,
+      session,
+    }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: 'Usuarios' }).click();
+      await expect(page.getByText('lucia@ejemplo.org')).toBeVisible();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Dar de alta' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+      await page
+        .getByRole('button', { name: 'Dar de baja a lucia@ejemplo.org' })
+        .click();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: registro', async ({ page, session }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: 'Registro' }).click();
+      await expect(page.getByText('Alta de moderador')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('responder a Moderación: formulario, error y enviado', async ({
       page,
     }) => {

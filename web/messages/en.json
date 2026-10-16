@@ -1020,6 +1020,80 @@
       "error": "We could not send the link. Please try again in a moment.",
       "invalidLink": "The link is not valid or has expired. Request a new one.",
       "entering": "Signing in…"
+    },
+    "sections": {
+      "label": "Sections",
+      "queue": "Requests",
+      "staff": "Users",
+      "audit": "Log"
+    },
+    "staff": {
+      "title": "Who moderates",
+      "intro": "Invite someone with their email and the place where they can decide. Nothing is sent to them: they sign in by asking for their access link with that same email.",
+      "inviteTitle": "Invite a moderator",
+      "email": "Email",
+      "country": "Country (two letters)",
+      "city": "City",
+      "optional": "(optional)",
+      "submit": "Add person",
+      "saving": "Saving…",
+      "invited": "Done: {email} can now ask for their access link.",
+      "listTitle": "People with access",
+      "roles": {
+        "moderator": "Moderator",
+        "admin": "Administrator"
+      },
+      "scope": "decides in {scope}",
+      "scopeNone": "no scope",
+      "since": "Added on {date}",
+      "disabledOn": "Removed on {date}",
+      "disable": "Remove access",
+      "disableLabel": "Remove access for {email}",
+      "confirmAsk": "Remove access for {email}? They lose access right away; what they did stays in the log.",
+      "confirm": "Confirm removal",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidEmail": "Enter a valid email.",
+        "invalidCountry": "The country is two letters, for example ES.",
+        "exists": "That person already has access.",
+        "forbidden": "You do not have permission to do this.",
+        "save": "We could not save it. You can try again.",
+        "disable": "We could not remove access. You can try again."
+      }
+    },
+    "audit": {
+      "title": "Log",
+      "intro": "What has been done, most recent first. It keeps no names or stories.",
+      "filterLabel": "Show",
+      "all": "Everything",
+      "entities": {
+        "restaurant": "Place",
+        "team": "Team",
+        "suggestion": "Request",
+        "user": "Person"
+      },
+      "actions": {
+        "approve": "Approved",
+        "reject": "Rejected",
+        "ask_info": "Information requested",
+        "login": "Sign-in",
+        "invite": "Moderator added",
+        "reinstate": "Access restored",
+        "disable": "Access removed",
+        "archive": "Archived",
+        "auto_close": "Closed on deadline",
+        "create": "Created",
+        "update": "Edited",
+        "purge_email": "Email deleted",
+        "purge_stories": "Stories deleted",
+        "revoke_story": "Story removed"
+      },
+      "by": "by {email}",
+      "system": "by the system",
+      "empty": "There is nothing in the log yet.",
+      "more": "Load more",
+      "loadingMore": "Loading…",
+      "moreError": "We could not load more. You can try again."
     }
   },
   "removal": {
