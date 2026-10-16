@@ -399,13 +399,13 @@ describe('pedir información', () => {
 });
 
 describe('aprobar', () => {
-  it('solo un local nuevo: lo demás da 501 y no cambia nada', async () => {
+  it('el equipo todavía no se aprueba: 501 y no cambia nada', async () => {
     const s = await proposal({
-      type: 'edit',
+      type: 'team',
       targetRestaurantId: restaurantId,
-      payload: { kind: 'address', details: 'Calle Nueva 1' },
+      payload: { summary: { totalStaff: 9, staffWithDisability: 3 } },
     });
-    const cookie = await signedInCookie();
+    const cookie = await signedInCookie({ role: 'admin' });
     const res = await decide(s._id, { action: 'approve' }, cookie);
     expect(res.status).toBe(501);
     expect((await stored(s._id))?.status).toBe('pending');

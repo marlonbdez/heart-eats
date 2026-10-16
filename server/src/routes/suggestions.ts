@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { Router } from 'express';
 import { Types } from 'mongoose';
-import { ApiError } from '../errors.js';
+import { ApiError, requestChanged } from '../errors.js';
 import { authOf, requireSession } from '../middleware/session.js';
 import { AuditLog } from '../models/audit-log.js';
 import { Restaurant } from '../models/restaurant.js';
@@ -36,6 +36,7 @@ import {
 } from '../services/suggestion-query.js';
 import { ensureGeocode } from '../services/suggestion-geocode.js';
 import { parseOrThrow } from '../validation.js';
+import { approveCorrection, approveRemoval } from './approve-changes.js';
 
 interface SuggestionsOptions {
   allowedOrigins: readonly string[];
@@ -88,14 +89,6 @@ function scopeCountry(scope: readonly ModerationScope[]) {
   const countries = new Set(scope.map((entry) => entry.country));
   return countries.size === 1 ? [...countries][0] : undefined;
 }
-
-// Otra persona decidió entre la lectura y la escritura.
-const changed = () =>
-  new ApiError(
-    409,
-    'conflict',
-    'La solicitud acaba de cambiar; vuelve a abrirla',
-  );
 
 export function suggestionsRouter({
   allowedOrigins,
@@ -250,7 +243,7 @@ export function suggestionsRouter({
     }
     if (!updated) {
       await Restaurant.deleteOne({ _id: restaurant._id });
-      throw changed();
+      throw requestChanged();
     }
 
     const actorId = new Types.ObjectId(user.id);
@@ -321,11 +314,11 @@ export function suggestionsRouter({
         'La solicitud ya está resuelta',
       );
     }
-    if (decision.action === 'approve' && record.type !== 'new') {
+    if (decision.action === 'approve' && record.type === 'team') {
       throw new ApiError(
         501,
         'not_implemented',
-        'Por ahora solo se puede aprobar un local nuevo',
+        'Por ahora no se puede aprobar el equipo de un negocio',
       );
     }
 
@@ -341,7 +334,12 @@ export function suggestionsRouter({
 
     let updated: SuggestionRecord | null;
     if (decision.action === 'approve') {
-      updated = await approveNewPlace(record, user, req.body, now);
+      updated =
+        record.type === 'edit'
+          ? await approveCorrection(record, user, req.body, now, geocoder)
+          : record.type === 'removal'
+            ? await approveRemoval(record, user, req.body, now)
+            : await approveNewPlace(record, user, req.body, now);
     } else if (decision.action === 'reject') {
       // El correo ya no hace falta: se borra al resolver (docs/08) y el enlace
       // de respuesta, si lo había, deja de valer.
@@ -361,7 +359,7 @@ export function suggestionsRouter({
         },
         { returnDocument: 'after' },
       ).lean<SuggestionRecord>();
-      if (!updated) throw changed();
+      if (!updated) throw requestChanged();
       await audit('reject', {
         status: { from: record.status, to: 'rejected' },
         reason: decision.reason,
@@ -399,7 +397,7 @@ export function suggestionsRouter({
         },
         { returnDocument: 'after' },
       ).lean<SuggestionRecord>();
-      if (!updated) throw changed();
+      if (!updated) throw requestChanged();
 
       const token = signReplyToken(replyTokenSecret, {
         suggestionId: String(record._id),

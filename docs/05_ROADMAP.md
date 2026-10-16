@@ -61,7 +61,9 @@ Una PR por paso:
   - [x] Geocodificación con Nominatim al abrir un local nuevo, y aviso de duplicado por distancia (ADR 0006)
   - [x] Decisiones de rechazar (borra el correo) y pedir información (enlace firmado, 30 días): `POST /suggestions/:id/decision`
   - [x] Decisión de aprobar un local nuevo: publicar la ficha, borrar el correo y avisar por correo
-  - [ ] Aprobar correcciones, equipo y retiradas, y mover las fotos al aprobar (cuando exista `POST /uploads`)
+  - [x] Aprobar correcciones (nombre, dirección, pin, horario, cerrado) y retiradas (ficha o historia)
+  - [ ] Aprobar el equipo, retiradas de fotos y de datos, y mover las fotos al aprobar (cuando existan `POST /teams` y `POST /uploads`)
+  - [ ] Borrado definitivo de lo retirado y tope de conservación del correo (política de `08_PRIVACIDAD_LEGAL.md`)
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
