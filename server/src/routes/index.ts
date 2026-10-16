@@ -2,6 +2,7 @@ import { Router } from 'express';
 import type { RateLimiter } from '../middleware/rate-limit.js';
 import type { Geocoder } from '../services/geocoder.js';
 import type { Mailer } from '../services/mailer.js';
+import { auditRouter } from './audit.js';
 import { authRouter } from './auth.js';
 import { healthRouter } from './health.js';
 import { proposalsRouter } from './proposals.js';
@@ -58,5 +59,6 @@ export function createApiRouter({
       geocoder,
     }),
   );
+  api.use(auditRouter({ allowedOrigins }));
   return api;
 }
