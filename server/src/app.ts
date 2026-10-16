@@ -3,12 +3,28 @@ import express from 'express';
 import helmet from 'helmet';
 import type { Config } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errors.js';
-import { apiRouter } from './routes/index.js';
+import { createRateLimiter } from './middleware/rate-limit.js';
+import { createApiRouter } from './routes/index.js';
 
-export function createApp(config: Pick<Config, 'CORS_ORIGINS'>) {
+const HOUR = 60 * 60 * 1000;
+
+// Solo CORS_ORIGINS es obligatorio; lo demás tiene valores por defecto.
+type AppConfig = Pick<Config, 'CORS_ORIGINS'> &
+  Partial<
+    Pick<
+      Config,
+      | 'TRUST_PROXY'
+      | 'SUBMISSIONS_PER_HOUR'
+      | 'SUBMISSIONS_PER_DAY'
+      | 'KNOWN_CHAINS'
+    >
+  >;
+
+export function createApp(config: AppConfig) {
   const app = express();
 
   app.disable('x-powered-by');
+  if (config.TRUST_PROXY) app.set('trust proxy', config.TRUST_PROXY);
   // La web (hearteats.org) y la API (api.hearteats.org) son del mismo sitio
   // pero de distinto origen: same-site permite que la web lea las respuestas.
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
@@ -23,7 +39,19 @@ export function createApp(config: Pick<Config, 'CORS_ORIGINS'>) {
   );
   app.use(express.json({ limit: '32kb' }));
 
-  app.use('/api/v1', apiRouter);
+  // Un único contador para todos los envíos de la comunidad. Sin valor (como
+  // en las pruebas) no hay límite; en el servidor los fija la configuración.
+  const submissionLimiter = createRateLimiter([
+    { ms: HOUR, max: config.SUBMISSIONS_PER_HOUR ?? 0 },
+    { ms: 24 * HOUR, max: config.SUBMISSIONS_PER_DAY ?? 0 },
+  ]);
+  app.use(
+    '/api/v1',
+    createApiRouter({
+      submissionLimiter,
+      knownChains: config.KNOWN_CHAINS ?? [],
+    }),
+  );
 
   app.use(notFound);
   app.use(errorHandler);
