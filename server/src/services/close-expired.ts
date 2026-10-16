@@ -51,25 +51,3 @@ export async function closeExpiredRequests(now = new Date()): Promise<number> {
   }
   return closed;
 }
-
-const HOUR = 60 * 60_000;
-
-// Repasa las solicitudes caducadas al arrancar y cada hora. El temporizador no
-// mantiene vivo el proceso. Devuelve la función que lo detiene.
-export function startExpiryJob(intervalMs = HOUR) {
-  const run = () =>
-    closeExpiredRequests().then(
-      (n) => {
-        if (n > 0) console.log(`Solicitudes cerradas sin respuesta: ${n}`);
-      },
-      (err: unknown) =>
-        console.error(
-          'No se pudieron cerrar las solicitudes caducadas:',
-          err instanceof Error ? err.message : err,
-        ),
-    );
-  void run();
-  const timer = setInterval(() => void run(), intervalMs);
-  timer.unref();
-  return () => clearInterval(timer);
-}

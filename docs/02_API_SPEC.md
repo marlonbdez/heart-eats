@@ -121,7 +121,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
   - Primero se crea la ficha y después se cierra la solicitud: si crear la ficha falla, la solicitud no cambia; si otra persona decide en el mismo instante, `409 conflict` y se deshace la ficha. Si el aviso por correo falla, la ficha sigue publicada y solo se anota el fallo (sin la dirección).
   - Las fotos no se mueven todavía: llegan con `POST /uploads`.
   - **Corrección** (`edit`): lo que cuenta quien la envía es texto libre, así que quien aprueba escribe el cambio ya comprobado. Admite `name`, `address` (`street`, `city`, `postalCode`; basta uno), `location` (`{lat,lng}`), `openingHours` (`[{day 0–6, open, close}]`, `HH:MM`) y `closed: true` (el local cerró para siempre: la ficha pasa a `archived` y deja de verse). Hace falta al menos un campo (`422 validation_failed`). Si cambia la dirección y no viene `location`, se geocodifica la dirección ya corregida; si no se puede, `422 geocoding_required` y se coloca el pin a mano. La ficha se guarda con `save()`, que recalcula `cityKey` y el texto de búsqueda. No toca la verificación (`level`, `method`, `lastVerifiedAt`). Contacto, descripción y fotos se corrigen aún a mano: llegarán cuando haga falta. Si la ficha ya no está publicada, `409 target_unavailable`.
-  - **Retirada** (`removal`, solo `admin`): exige `identityConfirmed: true` (Moderación ha confirmado por correo que quien la pide es la persona o su representante). `listing` archiva la ficha; `story` revoca una historia (`revokedAt`) y exige `storyIndex` (0–2, su posición en la ficha: `422 story_required`; si no existe o ya está retirada, `422 story_not_found`). `photo` y `data` dan `501` por ahora. Lo retirado deja de servirse al momento; el borrado definitivo del contenido llega con el plazo de la política (❓ 7 días) en otra PR.
+  - **Retirada** (`removal`, solo `admin`): exige `identityConfirmed: true` (Moderación ha confirmado por correo que quien la pide es la persona o su representante). `listing` archiva la ficha; `story` revoca una historia (`revokedAt`) y exige `storyIndex` (0–2, su posición en la ficha: `422 story_required`; si no existe o ya está retirada, `422 story_not_found`). `photo` y `data` dan `501` por ahora. Lo retirado deja de servirse al momento; el contenido de una historia retirada se borra pasado un plazo (ver «Conservación»). El borrado definitivo de una ficha retirada y de su equipo queda pendiente.
   - **Orden y concurrencia** (corrección y retirada): primero se reclama la solicitud —solo una de las decisiones simultáneas lo consigue— y después se cambia la ficha; si el cambio falla, la solicitud vuelve a como estaba (con su correo). Deja dos líneas en `AuditLog`: `approve` de la solicitud y la de la ficha (`update` con el antes y el después de cada campo, `archive`) o la del equipo (`revoke_story`, solo con la posición, nunca el nombre ni el texto). Se borra el correo y no se envía aviso: quien pidió la retirada ya habló con Moderación por correo, y una corrección no promete respuesta.
 - `reject`: exige `reason` (`not_independent`, `no_evidence`, `duplicate`, `out_of_zone`, `other`) y admite `note`.
 - `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 30 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
@@ -129,8 +129,18 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 - **Al rechazar o aprobar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
 - El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la integración de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.
 - `team` y `removal` solo los decide un `admin` (ADR 0008); un `moderator` recibe `403`.
-- Una **retirada** aprobada oculta lo pedido al momento (la historia deja de servirse). El borrado definitivo en el plazo de la política (❓ 7 días) queda pendiente.
+- Una **retirada** aprobada oculta lo pedido al momento (la historia deja de servirse). El borrado de una historia retirada llega a los ❓ 21 días (ver «Conservación»); el de una ficha retirada queda pendiente.
 - Fuera del ámbito del usuario (`moderationScope`), `404`, igual que en el detalle: no se distingue de una solicitud que no existe.
+
+## Conservación (trabajo horario del servidor)
+
+Sin ninguna llamada de por medio, el servidor repasa los plazos al arrancar y cada hora (`services/maintenance.ts`). Cada tarea falla por su cuenta y es segura con varias instancias a la vez. Todas dejan una línea en la auditoría sin actor (la hizo el sistema) y sin contenido ni correos.
+
+- **Solicitudes sin respuesta:** se cierran como `rejected` / `no_reply` (ver «Responder a "Info pedida"»).
+- **Historias retiradas:** pasados ❓ **21 días** desde `revokedAt`, se borran el nombre, el puesto, el texto y la foto. Se conserva el hueco (las posiciones no se mueven), el consentimiento y las fechas, con `purgedAt`. Auditoría: `purge_stories` con las posiciones.
+- **Correo de las solicitudes:** pasados ❓ **270 días** (≈ 9 meses) desde que se envió, se borra el correo aunque la solicitud siga sin resolver. Auditoría: `purge_email`.
+
+Los plazos son constantes en `services/retention.ts` y provisionales hasta la revisión legal. Las fotos de una historia retirada se borrarán del almacenamiento cuando existan.
 
 ## Modelo de la solicitud (resumen)
 
@@ -148,5 +158,5 @@ Ampliación de `Suggestion` (`01_ESPECIFICACION_DATOS.md` §2.3) con lo que nece
 
 1. ❓ Cómo revisa Moderación el **contenido** de las historias antes de publicarlas (CU-22): hoy solo ve cuántas hay. Con servidor, el administrador necesita verlas; hay que decidir dónde, con qué registro de acceso y si se cifran en reposo.
 2. ❓ Límites exactos de envíos por IP.
-3. ❓ Plazo de borrado del correo y de las historias retiradas (`08_PRIVACIDAD_LEGAL.md`).
+3. ❓ Plazos de borrado del correo (270 días) y de las historias retiradas (21 días), provisionales hasta la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
 4. ❓ Si la API pública de datos abiertos (ODbL) se expone aparte, con su propio formato.

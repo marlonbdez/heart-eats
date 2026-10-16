@@ -144,5 +144,10 @@ suggestionSchema.index({ status: 1, createdAt: 1 });
 // Cierre de las peticiones de información sin respuesta.
 suggestionSchema.index({ status: 1, 'infoRequest.deadline': 1 });
 suggestionSchema.index({ type: 1, cityKey: 1 });
+// Borrado del correo que se conserva más de la cuenta (solo indexa los que lo tienen).
+suggestionSchema.index(
+  { createdAt: 1 },
+  { partialFilterExpression: { contactEmail: { $exists: true } } },
+);
 
 export const Suggestion = model('Suggestion', suggestionSchema);
