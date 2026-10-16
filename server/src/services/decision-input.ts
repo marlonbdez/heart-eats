@@ -103,3 +103,14 @@ export const removalApprovalSchema = z.object({
 });
 
 export type RemovalApproval = z.infer<typeof removalApprovalSchema>;
+
+// Aprobar el equipo de un negocio. El negocio da siempre el último sí antes de
+// publicar la historia de su equipo (CLAUDE.md): quien aprueba confirma que ha
+// comprobado, por el correo de contacto, que lo envía el propio negocio.
+export const teamApprovalSchema = z.object({
+  ownerConfirmed: z.literal(true, {
+    error: 'el negocio tiene que haber confirmado su equipo',
+  }),
+});
+
+export type TeamApproval = z.infer<typeof teamApprovalSchema>;

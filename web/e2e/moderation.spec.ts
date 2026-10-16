@@ -55,7 +55,7 @@ test.describe('con la sesión abierta', () => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto('/es/moderation');
     await expect(
-      page.getByRole('button', { name: 'Pendientes (5)' }),
+      page.getByRole('button', { name: 'Pendientes (6)' }),
     ).toBeVisible();
     await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
     await expect(
@@ -107,7 +107,7 @@ test.describe('con la sesión abierta', () => {
     ]);
     await page.getByRole('button', { name: 'Volver a la lista' }).click();
     await expect(
-      page.getByRole('button', { name: 'Pendientes (4)' }),
+      page.getByRole('button', { name: 'Pendientes (5)' }),
     ).toBeVisible();
   });
 
@@ -185,7 +185,9 @@ test.describe('con la sesión abierta', () => {
     sent,
   }) => {
     await page.goto('/es/moderation');
-    await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
+    await page
+      .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
+      .click();
     await page.getByRole('button', { name: 'Aprobar cambio' }).click();
     await expect(page.locator('p[role=alert]')).toContainText(
       'Marca la comprobación',
@@ -232,6 +234,74 @@ test.describe('con la sesión abierta', () => {
     ]);
   });
 
+  test('aprobar el equipo: se leen las historias y se confirma al negocio', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Equipo.*Café Paso a Paso/s })
+      .click();
+    await expect(page.getByText('4 de 9 con discapacidad')).toBeVisible();
+    await expect(
+      page.getByText('Texto de ejemplo de una historia.'),
+    ).toBeVisible();
+    await expect(page.getByText(/Persona de ejemplo · Cocina/)).toBeVisible();
+
+    // Sin las comprobaciones no se publica.
+    await page
+      .getByRole('button', { name: 'Aprobar y publicar el equipo' })
+      .click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'Faltan comprobaciones',
+    );
+    for (const name of [
+      /He confirmado con el negocio/,
+      /Las cifras son coherentes/,
+      /Cada historia trae el consentimiento/,
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page
+      .getByRole('button', { name: 'Aprobar y publicar el equipo' })
+      .click();
+    await expect(page.getByRole('status')).toHaveText('Equipo publicado');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s7/decision',
+        body: { action: 'approve', ownerConfirmed: true },
+      },
+    ]);
+  });
+
+  test('si no caben las historias nuevas, lo dice', async ({ page }) => {
+    await page.route('**/suggestions/s7/decision', (route) =>
+      route.fulfill({
+        status: 422,
+        headers: {
+          'access-control-allow-origin': 'http://localhost:4173',
+          'access-control-allow-credentials': 'true',
+        },
+        json: { error: { code: 'too_many_stories', message: 'Muchas' } },
+      }),
+    );
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Equipo.*Café Paso a Paso/s })
+      .click();
+    for (const name of [
+      /He confirmado con el negocio/,
+      /Las cifras son coherentes/,
+      /Cada historia trae el consentimiento/,
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page
+      .getByRole('button', { name: 'Aprobar y publicar el equipo' })
+      .click();
+    await expect(page.locator('p[role=alert]')).toContainText('máximo 3');
+  });
+
   test('si otra persona decidió antes, lo dice', async ({ page }) => {
     await page.route('**/suggestions/s2/decision', (route) =>
       route.fulfill({
@@ -269,7 +339,7 @@ test.describe('con la sesión abierta', () => {
     await expect(page.getByText('Elige una solicitud')).toBeVisible();
     await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
     await expect(
-      page.getByRole('button', { name: 'Pendientes (5)' }),
+      page.getByRole('button', { name: 'Pendientes (6)' }),
     ).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Cocina del Pilar' }),
@@ -282,7 +352,7 @@ test.describe('con la sesión abierta', () => {
       page.getByRole('heading', { name: 'Moderation' }),
     ).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Pending (5)' }),
+      page.getByRole('button', { name: 'Pending (6)' }),
     ).toBeVisible();
   });
 });

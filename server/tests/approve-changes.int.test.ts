@@ -433,3 +433,183 @@ describe('aprobar una retirada', () => {
     expect(await AuditLog.countDocuments()).toBe(0);
   });
 });
+
+describe('aprobar el equipo', () => {
+  const admin = () => signedInCookie({ role: 'admin' });
+  const confirmed = (over: Record<string, unknown> = {}) =>
+    approve({ ownerConfirmed: true, ...over });
+  const story = (name: string) => ({
+    displayName: name,
+    role: 'Cocina',
+    storyText: `Historia de ${name}`,
+    consentBy: 'self',
+  });
+  const team = (payload: Record<string, unknown> = {}) =>
+    Suggestion.create({
+      type: 'team',
+      targetRestaurantId: placeId,
+      payload: {
+        level: 'full',
+        summary: { totalStaff: 8, staffWithDisability: 3 },
+        areas: ['kitchen'],
+        disabilityTypes: ['intellectual_disability'],
+        stories: [story('Marta')],
+        ...payload,
+      },
+      contactEmail: CONTACT,
+      evidence: [],
+      locale: 'es',
+    });
+  const teamOf = () => Team.findOne({ restaurantId: placeId }).lean();
+
+  it('un moderador no puede: solo un administrador', async () => {
+    const s = await team();
+    const res = await decide(s._id, confirmed(), await signedInCookie());
+    expect(res.status).toBe(403);
+    expect(await teamOf()).toBeNull();
+  });
+
+  it('sin la confirmación del negocio, 422 y no cambia nada', async () => {
+    const s = await team();
+    const res = await decide(s._id, approve(), await admin());
+    expect(res.status).toBe(422);
+    expect(await teamOf()).toBeNull();
+    expect((await stored(s._id))?.status).toBe('pending');
+  });
+
+  it('crea el equipo con sus historias y el consentimiento de cuando se envió', async () => {
+    const s = await team();
+    const res = await decide(s._id, confirmed(), await admin());
+
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('approved');
+    const doc = await teamOf();
+    expect(doc).toMatchObject({
+      visibilityLevel: 'full',
+      summary: { totalStaff: 8, staffWithDisability: 3 },
+      areas: ['kitchen'],
+      disabilityTypes: ['intellectual_disability'],
+    });
+    expect(doc?.stories).toHaveLength(1);
+    expect(doc?.stories?.[0]).toMatchObject({
+      displayName: 'Marta',
+      consentBy: 'self',
+    });
+    expect(doc?.stories?.[0]?.consentRecordedAt).toEqual(
+      (await stored(s._id))?.createdAt,
+    );
+  });
+
+  it('saca las historias de la solicitud y el correo se borra', async () => {
+    const s = await team();
+    const res = await decide(s._id, confirmed(), await admin());
+
+    const after = await stored(s._id);
+    expect(after?.payload).not.toHaveProperty('stories');
+    expect(after?.contactEmail).toBeUndefined();
+    expect(res.body.team.stories).toBe(0);
+    expect(JSON.stringify(res.body)).not.toContain('Marta');
+  });
+
+  it('deja la auditoría sin nombres ni textos', async () => {
+    const s = await team();
+    await decide(s._id, confirmed(), await admin());
+
+    const lines = await AuditLog.find().lean();
+    expect(lines.map((l) => `${l.entity}:${l.action}`).sort()).toEqual([
+      'suggestion:approve',
+      'team:create',
+    ]);
+    expect(JSON.stringify(lines)).not.toMatch(/Marta|Historia/);
+    expect(lines.find((l) => l.entity === 'team')?.diff).toMatchObject({
+      storiesAdded: 1,
+    });
+  });
+
+  it('actualiza un equipo que ya existe y añade las historias detrás de las que había', async () => {
+    await Team.create({
+      restaurantId: placeId,
+      visibilityLevel: 'medium',
+      summary: { totalStaff: 5, staffWithDisability: 1 },
+      stories: [
+        {
+          displayName: 'Antigua',
+          role: 'Sala',
+          storyText: 'Ya estaba',
+          consentRecordedAt: new Date('2026-01-01'),
+          consentBy: 'self',
+          revokedAt: new Date('2026-02-01'),
+        },
+      ],
+    });
+    const s = await team({ areas: undefined, disabilityTypes: undefined });
+    await decide(s._id, confirmed(), await admin());
+
+    const doc = await teamOf();
+    expect(doc?.visibilityLevel).toBe('full');
+    expect(doc?.summary).toMatchObject({
+      totalStaff: 8,
+      staffWithDisability: 3,
+    });
+    expect(doc?.stories?.map((x) => x.displayName)).toEqual([
+      'Antigua',
+      'Marta',
+    ]);
+    expect(doc?.stories?.[0]?.revokedAt).toBeDefined();
+    expect(await Team.countDocuments()).toBe(1);
+  });
+
+  it('un equipo sin historias solo cambia las cifras', async () => {
+    const s = await team({ level: 'minimal', stories: undefined });
+    await decide(s._id, confirmed(), await admin());
+
+    const doc = await teamOf();
+    expect(doc?.visibilityLevel).toBe('minimal');
+    expect(doc?.stories).toBeUndefined();
+  });
+
+  it('si no caben las historias, 422 y nada cambia', async () => {
+    await Team.create({
+      restaurantId: placeId,
+      visibilityLevel: 'full',
+      summary: { totalStaff: 8, staffWithDisability: 3 },
+      stories: ['A', 'B'].map((displayName) => ({
+        displayName,
+        role: 'Sala',
+        storyText: 'x',
+        consentRecordedAt: new Date(),
+        consentBy: 'self',
+      })),
+    });
+    const s = await team({ stories: [story('Uno'), story('Dos')] });
+    const res = await decide(s._id, confirmed(), await admin());
+
+    expect(res.status).toBe(422);
+    expect(res.body.error.code).toBe('too_many_stories');
+    expect((await stored(s._id))?.status).toBe('pending');
+    expect((await teamOf())?.stories).toHaveLength(2);
+  });
+
+  it('si la ficha ya no está publicada, 409 y nada cambia', async () => {
+    await Restaurant.updateOne({ _id: placeId }, { status: 'archived' });
+    const s = await team();
+    const res = await decide(s._id, confirmed(), await admin());
+
+    expect(res.status).toBe(409);
+    expect(res.body.error.code).toBe('target_unavailable');
+    expect(await teamOf()).toBeNull();
+  });
+
+  it('al rechazarlo, las historias salen de la solicitud', async () => {
+    const s = await team();
+    const res = await decide(
+      s._id,
+      { action: 'reject', reason: 'other' },
+      await admin(),
+    );
+
+    expect(res.status).toBe(200);
+    expect((await stored(s._id))?.payload).not.toHaveProperty('stories');
+    expect(await teamOf()).toBeNull();
+  });
+});

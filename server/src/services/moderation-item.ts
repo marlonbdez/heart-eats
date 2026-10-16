@@ -39,8 +39,9 @@ export interface ModerationItem {
   restaurantSlug?: string;
   correction?: { kind: string; before?: string; after: string };
   removal?: { what: string; details?: string };
-  // Solo en el equipo de un negocio. Nunca lleva nombres ni textos de
-  // historias: solo cuántas hay.
+  // Solo en el equipo de un negocio. La lista y quien no es admin ven solo
+  // cuántas historias hay; los nombres y los textos (`storyTexts`) salen
+  // únicamente al abrir la solicitud un administrador, que es quien decide.
   team?: {
     level: string;
     totalStaff: number;
@@ -48,7 +49,20 @@ export interface ModerationItem {
     areas?: string[];
     disabilityTypes?: string[];
     stories: number;
+    storyTexts?: TeamStory[];
   };
+}
+
+export interface TeamStory {
+  displayName: string;
+  role: string;
+  storyText: string;
+  consentBy: string;
+}
+
+export interface ItemOptions {
+  // Incluye los nombres y textos de las historias de un equipo.
+  withStories?: boolean;
 }
 
 // Lo que guardan las rutas de envío en `payload` (routes/proposals.ts y
@@ -71,7 +85,7 @@ interface TeamPayload {
   summary: { totalStaff: number; staffWithDisability: number };
   areas?: string[];
   disabilityTypes?: string[];
-  stories?: unknown[];
+  stories?: TeamStory[];
 }
 interface RemovalPayload {
   what: string;
@@ -84,6 +98,7 @@ const join = (...parts: (string | undefined)[]) =>
 export function toModerationItem(
   s: SuggestionRecord,
   target?: TargetRestaurant,
+  { withStories = false }: ItemOptions = {},
 ): ModerationItem {
   const base = {
     id: String(s._id),
@@ -160,6 +175,18 @@ export function toModerationItem(
       areas: p.areas,
       disabilityTypes: p.disabilityTypes,
       stories: p.stories?.length ?? 0,
+      ...(withStories && p.stories?.length
+        ? {
+            storyTexts: p.stories.map(
+              ({ displayName, role, storyText, consentBy }) => ({
+                displayName,
+                role,
+                storyText,
+                consentBy,
+              }),
+            ),
+          }
+        : {}),
     },
   };
 }

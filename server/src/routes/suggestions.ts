@@ -36,7 +36,11 @@ import {
 } from '../services/suggestion-query.js';
 import { ensureGeocode } from '../services/suggestion-geocode.js';
 import { parseOrThrow } from '../validation.js';
-import { approveCorrection, approveRemoval } from './approve-changes.js';
+import {
+  approveCorrection,
+  approveRemoval,
+  approveTeam,
+} from './approve-changes.js';
 
 interface SuggestionsOptions {
   allowedOrigins: readonly string[];
@@ -148,9 +152,10 @@ export function suggestionsRouter({
 
   // Una solicitud.
   router.get('/suggestions/:id', ...auth, async (req, res) => {
+    const user = authOf(res);
     const found = await findVisible(
       String(req.params.id),
-      authOf(res).moderationScope,
+      user.moderationScope,
     );
     // La primera apertura de un local nuevo geocodifica su dirección.
     const record = await ensureGeocode(found, geocoder);
@@ -161,6 +166,7 @@ export function suggestionsRouter({
         toModerationItem(
           record,
           targets.get(String(record.targetRestaurantId)),
+          { withStories: user.role === 'admin' },
         ),
       );
   });
@@ -314,13 +320,6 @@ export function suggestionsRouter({
         'La solicitud ya está resuelta',
       );
     }
-    if (decision.action === 'approve' && record.type === 'team') {
-      throw new ApiError(
-        501,
-        'not_implemented',
-        'Por ahora no se puede aprobar el equipo de un negocio',
-      );
-    }
 
     const now = new Date();
     const audit = (action: string, diff: Record<string, unknown>) =>
@@ -339,7 +338,9 @@ export function suggestionsRouter({
           ? await approveCorrection(record, user, req.body, now, geocoder)
           : record.type === 'removal'
             ? await approveRemoval(record, user, req.body, now)
-            : await approveNewPlace(record, user, req.body, now);
+            : record.type === 'team'
+              ? await approveTeam(record, user, req.body, now)
+              : await approveNewPlace(record, user, req.body, now);
     } else if (decision.action === 'reject') {
       // El correo ya no hace falta: se borra al resolver (docs/08) y el enlace
       // de respuesta, si lo había, deja de valer.
@@ -355,7 +356,12 @@ export function suggestionsRouter({
               decidedAt: now,
             },
           },
-          $unset: { contactEmail: 1, 'infoRequest.nonce': 1 },
+          // Las historias del equipo solo estaban de paso hasta esta decisión.
+          $unset: {
+            contactEmail: 1,
+            'infoRequest.nonce': 1,
+            ...(record.type === 'team' ? { 'payload.stories': 1 } : {}),
+          },
         },
         { returnDocument: 'after' },
       ).lean<SuggestionRecord>();

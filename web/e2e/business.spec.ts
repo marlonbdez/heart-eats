@@ -1,6 +1,6 @@
 import { expect, test } from './support/test';
 
-test('soy de un negocio: solo cifras, en 4 pasos', async ({ page }) => {
+test('soy de un negocio: solo cifras, en 4 pasos', async ({ page, sent }) => {
   await page.goto('/es/business');
   await expect(
     page.getByRole('heading', { name: 'Cuenta tu equipo' }),
@@ -42,10 +42,25 @@ test('soy de un negocio: solo cifras, en 4 pasos', async ({ page }) => {
   await page.getByLabel(/Soy responsable del negocio/).check();
   await page.getByRole('button', { name: 'Enviar a revisión' }).click();
   await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
+
+  // Se envía a la API con el idioma y el correo, y sin lo que no hay.
+  expect(sent).toEqual([
+    {
+      path: '/teams',
+      body: {
+        restaurantSlug: 'demo-cafe-paso-a-paso',
+        level: 'minimal',
+        summary: { totalStaff: 8, staffWithDisability: 3 },
+        contactEmail: 'negocio@ejemplo.org',
+        locale: 'es',
+      },
+    },
+  ]);
 });
 
 test('soy de un negocio: una historia no se envía sin el permiso de la persona', async ({
   page,
+  sent,
 }) => {
   await page.goto('/es/business');
   await page
@@ -71,6 +86,59 @@ test('soy de un negocio: una historia no se envía sin el permiso de la persona'
   await expect(page.getByText('4 de 11 personas')).toBeVisible();
   await expect(page.getByText('Persona de ejemplo')).toBeVisible();
   await expect(page.getByText('Áreas: cocina')).toBeVisible();
+
+  // La historia viaja con quién da el permiso.
+  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+  await page.getByLabel(/Soy responsable del negocio/).check();
+  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
+  await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
+  expect(sent).toEqual([
+    {
+      path: '/teams',
+      body: {
+        restaurantSlug: 'demo-la-masa-madre',
+        level: 'full',
+        summary: { totalStaff: 11, staffWithDisability: 4 },
+        areas: ['kitchen'],
+        disabilityTypes: [],
+        stories: [
+          {
+            displayName: 'Persona de ejemplo',
+            role: 'Cocina',
+            storyText: 'Texto de ejemplo.',
+            consentBy: 'self',
+          },
+        ],
+        contactEmail: 'negocio@ejemplo.org',
+        locale: 'es',
+      },
+    },
+  ]);
+});
+
+test('soy de un negocio: si se envía demasiado, lo dice con calma', async ({
+  page,
+}) => {
+  await page.route('**/teams', (route) =>
+    route.fulfill({
+      status: 429,
+      headers: { 'access-control-allow-origin': '*' },
+      json: { error: { code: 'rate_limited', message: 'Muchas' } },
+    }),
+  );
+  await page.goto('/es/business/demo-la-masa-madre');
+  await page.getByRole('button', { name: 'Empezar' }).click();
+  await page.getByLabel(/Solo cifras/).check();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByLabel('Personas en el equipo').fill('8');
+  await page.getByLabel('De ellas, con discapacidad').fill('3');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+  await page.getByLabel(/Soy responsable del negocio/).check();
+  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
+  await expect(page.locator('p[role=alert]')).toContainText(
+    'vuelve a intentarlo dentro de un rato',
+  );
 });
 
 test('soy de un negocio: en un equipo pequeño solo se muestra la cifra', async ({
@@ -114,40 +182,13 @@ test('soy de un negocio: desde la ficha, el local ya viene elegido', async ({
   await expect(page.getByText('Paso 2 de 4')).toBeVisible();
 });
 
-// PNG de 1×1 píxel, para probar la subida sin depender de ningún archivo.
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-  'base64',
-);
-
-test('el negocio puede añadir fotos de su local, con permiso, hasta moderación', async ({
+test('soy de un negocio: de momento no pide fotos (no hay dónde subirlas)', async ({
   page,
 }) => {
   await page.goto('/es/business/demo-la-masa-madre');
   await page.getByRole('button', { name: 'Empezar' }).click();
   await page.getByLabel(/Solo cifras/).check();
   await page.getByRole('button', { name: 'Continuar' }).click();
-  await page.getByLabel('Personas en el equipo').fill('8');
-  await page.getByLabel('De ellas, con discapacidad').fill('3');
-
-  await page.locator('input[type=file]').setInputFiles({
-    name: 'local.png',
-    mimeType: 'image/png',
-    buffer: PIXEL,
-  });
-  await expect(
-    page.getByRole('img', { name: 'Foto 1 de tu local' }),
-  ).toBeVisible();
-  // Aparece un campo para la siguiente foto, y se pide el permiso.
-  await expect(page.locator('input[type=file]')).toHaveCount(1);
-  await page.getByRole('button', { name: 'Continuar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('Marca la casilla');
-  await page.getByLabel(/Estas fotos son mías/).check();
-  await page.getByRole('button', { name: 'Continuar' }).click();
-
-  await expect(page.getByText('1 foto')).toBeVisible();
-  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
-  await page.getByLabel(/Soy responsable del negocio/).check();
-  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
-  await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
+  await expect(page.getByLabel('Personas en el equipo')).toBeVisible();
+  await expect(page.locator('input[type=file]')).toHaveCount(0);
 });

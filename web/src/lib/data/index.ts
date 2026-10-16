@@ -1,5 +1,5 @@
 // Capa de datos de la web: todo lo que sale o llega de la API (/api/v1) pasa por
-// aquí, y no hay datos fijos. Lo único simulado es el equipo del negocio.
+// aquí, y no hay datos fijos.
 import type {
   BusinessTeamInput,
   CorrectionInput,
@@ -82,13 +82,30 @@ export async function submitCorrection(input: CorrectionInput): Promise<void> {
   });
 }
 
-// Simulado hasta que exista POST /api/v1/teams (el servidor aún no recibe el
-// equipo de un negocio): no se envía ni se guarda nada.
+// El equipo que cuenta un negocio (POST /api/v1/teams). Entra en moderación,
+// que escribe al correo para confirmar que lo envía el negocio. Las fotos no
+// se envían todavía (falta POST /uploads).
 export async function submitBusinessTeam(
   input: BusinessTeamInput,
 ): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
-  await new Promise((resolve) => setTimeout(resolve, 600));
+  await apiPost('/teams', {
+    restaurantSlug: input.restaurantSlug,
+    level: input.level,
+    summary: input.summary,
+    areas: input.areas,
+    disabilityTypes: input.disabilityTypes,
+    stories: input.stories?.map(
+      ({ displayName, role, storyText, consentBy }) => ({
+        displayName,
+        role,
+        storyText,
+        consentBy,
+      }),
+    ),
+    contactEmail: input.contactEmail,
+    locale: input.locale,
+  });
 }
 
 // Petición de retirada (POST /api/v1/removals). Moderación escribe al correo

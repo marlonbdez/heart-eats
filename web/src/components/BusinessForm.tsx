@@ -1,8 +1,10 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { isRateLimited } from '@/lib/api';
 import { submitBusinessTeam } from '@/lib/data';
+import { photoUploads } from '@/lib/features';
 import { Link } from '@/i18n/navigation';
 import type { PreparedPhoto } from '@/lib/image';
 import { isSmallTeam } from '@/lib/team';
@@ -99,15 +101,17 @@ export function BusinessForm({
 }) {
   const t = useTranslations('business');
   const tTeam = useTranslations('team');
+  const tSubmit = useTranslations('submit');
+  const locale = useLocale() === 'en' ? 'en' : 'es';
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>({
     ...initial,
     slug: initialSlug ?? '',
   });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'error' | 'limited' | 'done'
+  >('idle');
   const [photoError, setPhotoError] = useState('');
   const isDone = status === 'done';
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -201,10 +205,11 @@ export function BusinessForm({
         photos: form.photos.map((p) => p.blob),
         contactEmail: form.email.trim(),
         website: form.website,
+        locale,
       });
       setStatus('done');
-    } catch {
-      setStatus('error');
+    } catch (err) {
+      setStatus(isRateLimited(err) ? 'limited' : 'error');
     }
   };
 
@@ -571,49 +576,51 @@ export function BusinessForm({
                 <p className={s.small}>{t('s3.consentNote')}</p>
               </>
             )}
-            <div className={s.card}>
-              <h2 className={s.cardTitle}>{t('s3.photosTitle')}</h2>
-              <p id="b-photo-hint" className={s.small}>
-                {t('s3.photosHint')}
-              </p>
-              {form.photos.map((photo, i) => (
-                <PhotoPicker
-                  key={photo.url}
-                  id={`b-photo-${i}`}
-                  label={t('s3.photoLabel', { n: i + 1 })}
-                  alt={t('s3.photoAlt', { n: i + 1 })}
-                  photo={photo}
-                  onChange={() =>
-                    set(
-                      'photos',
-                      form.photos.filter((_, j) => j !== i),
-                    )
-                  }
-                  onError={setPhotoError}
-                />
-              ))}
-              {form.photos.length < MAX_PHOTOS && (
-                <PhotoPicker
-                  id="b-photo-new"
-                  label={t('s3.photoLabel', { n: form.photos.length + 1 })}
-                  alt=""
-                  error={photoError}
-                  describedBy="b-photo-hint"
-                  onChange={(photo) =>
-                    photo && set('photos', [...form.photos, photo])
-                  }
-                  onError={setPhotoError}
-                />
-              )}
-              {form.photos.length > 0 && (
-                <PhotoConsent
-                  id="b-photo-consent"
-                  checked={form.photoConsent}
-                  error={errors.photoConsent}
-                  onChange={(v) => set('photoConsent', v)}
-                />
-              )}
-            </div>
+            {photoUploads && (
+              <div className={s.card}>
+                <h2 className={s.cardTitle}>{t('s3.photosTitle')}</h2>
+                <p id="b-photo-hint" className={s.small}>
+                  {t('s3.photosHint')}
+                </p>
+                {form.photos.map((photo, i) => (
+                  <PhotoPicker
+                    key={photo.url}
+                    id={`b-photo-${i}`}
+                    label={t('s3.photoLabel', { n: i + 1 })}
+                    alt={t('s3.photoAlt', { n: i + 1 })}
+                    photo={photo}
+                    onChange={() =>
+                      set(
+                        'photos',
+                        form.photos.filter((_, j) => j !== i),
+                      )
+                    }
+                    onError={setPhotoError}
+                  />
+                ))}
+                {form.photos.length < MAX_PHOTOS && (
+                  <PhotoPicker
+                    id="b-photo-new"
+                    label={t('s3.photoLabel', { n: form.photos.length + 1 })}
+                    alt=""
+                    error={photoError}
+                    describedBy="b-photo-hint"
+                    onChange={(photo) =>
+                      photo && set('photos', [...form.photos, photo])
+                    }
+                    onError={setPhotoError}
+                  />
+                )}
+                {form.photos.length > 0 && (
+                  <PhotoConsent
+                    id="b-photo-consent"
+                    checked={form.photoConsent}
+                    error={errors.photoConsent}
+                    onChange={(v) => set('photoConsent', v)}
+                  />
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -681,9 +688,9 @@ export function BusinessForm({
                 />
               </label>
             </div>
-            {status === 'error' && (
+            {(status === 'error' || status === 'limited') && (
               <p role="alert" className={s.error}>
-                {t('sendError')}
+                {status === 'limited' ? tSubmit('limited') : t('sendError')}
               </p>
             )}
           </div>

@@ -8,9 +8,11 @@ import { Team, type TeamRecord } from '../models/team.js';
 import {
   correctionApprovalSchema,
   removalApprovalSchema,
+  teamApprovalSchema,
   type CorrectionApproval,
 } from '../services/decision-input.js';
 import type { Geocoder } from '../services/geocoder.js';
+import type { TeamInput } from '../services/team-input.js';
 import { parseOrThrow } from '../validation.js';
 
 type User = ReturnType<typeof authOf>;
@@ -275,4 +277,91 @@ export async function approveRemoval(
     'not_implemented',
     'Por ahora solo se pueden retirar una ficha o una historia',
   );
+}
+
+const tooManyStories = (current: number, adding: number) =>
+  new ApiError(
+    422,
+    'too_many_stories',
+    `El equipo ya tiene ${current} historias y no caben ${adding} más (máximo 3): se retiran antes o se rechaza`,
+  );
+
+// Aprobar el equipo de un negocio: crea o actualiza su `Team`. Las historias
+// nuevas se añaden detrás de las que ya había (también las retiradas, para que
+// las posiciones no cambien: las retiradas apuntan a ellas por su índice) con el
+// consentimiento de cuando se enviaron. Después salen de la solicitud, donde
+// solo estaban de paso hasta esta decisión.
+export async function approveTeam(
+  record: SuggestionRecord,
+  user: User,
+  body: unknown,
+  now: Date,
+) {
+  parseOrThrow(teamApprovalSchema, body);
+  const id = targetOf(record);
+  const place = await Restaurant.exists({ _id: id, status: 'published' });
+  if (!place) throw unavailable();
+
+  const payload = record.payload as unknown as Pick<
+    TeamInput,
+    'level' | 'summary' | 'areas' | 'disabilityTypes' | 'stories'
+  >;
+  const incoming = (payload.stories ?? []).map((s) => ({
+    displayName: s.displayName,
+    role: s.role,
+    storyText: s.storyText,
+    consentBy: s.consentBy,
+    consentRecordedAt: record.createdAt,
+  }));
+  const current = await Team.findOne({ restaurantId: id }).lean<TeamRecord>();
+  const kept = current?.stories?.length ?? 0;
+  if (kept + incoming.length > 3) throw tooManyStories(kept, incoming.length);
+
+  const approved = await approveAndApply(record, user, now, id, async () => {
+    const level = payload.level;
+    const doc =
+      (await Team.findOne({ restaurantId: id })) ??
+      new Team({ restaurantId: id });
+    const created = doc.isNew;
+    if (kept !== (doc.stories?.length ?? 0)) {
+      throw tooManyStories(doc.stories?.length ?? 0, incoming.length);
+    }
+    doc.set({
+      visibilityLevel: level,
+      summary: payload.summary,
+      areas: payload.areas,
+      disabilityTypes: payload.disabilityTypes,
+    });
+    if (incoming.length) {
+      if (doc.stories) doc.stories.push(...incoming);
+      else doc.set('stories', incoming);
+    }
+    await doc.save();
+    await Suggestion.updateOne(
+      { _id: record._id },
+      { $unset: { 'payload.stories': 1 } },
+    );
+    // Sin nombres ni textos: solo cuántas historias se añaden.
+    return {
+      entity: 'team',
+      entityId: doc._id,
+      action: created ? 'create' : 'update',
+      diff: {
+        level: { from: current?.visibilityLevel, to: level },
+        totalStaff: {
+          from: current?.summary.totalStaff,
+          to: payload.summary.totalStaff,
+        },
+        staffWithDisability: {
+          from: current?.summary.staffWithDisability,
+          to: payload.summary.staffWithDisability,
+        },
+        storiesAdded: incoming.length,
+      },
+    };
+  });
+  // La respuesta ya sin las historias, igual que queda guardada.
+  const payloadWithout = { ...approved.payload };
+  delete payloadWithout.stories;
+  return { ...approved, payload: payloadWithout };
 }
