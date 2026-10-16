@@ -253,6 +253,9 @@ export type ModerationDecision =
 export interface CorrectionChange {
   name?: string;
   address?: { street?: string; city?: string; postalCode?: string };
+  location?: { lat: number; lng: number };
+  // El horario completo: sustituye al de la ficha.
+  openingHours?: OpeningHours[];
   closed?: true;
 }
 

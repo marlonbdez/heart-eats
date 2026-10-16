@@ -231,6 +231,20 @@
   display: grid;
   gap: 10px;
 }
+.hoursDay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px 10px;
+}
+.hoursName {
+  grid-column: 1 / -1;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.hoursLabel {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
 
 @media (min-width: 520px) {
   .diff {

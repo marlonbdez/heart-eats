@@ -14,6 +14,7 @@ import type {
   VerificationMethod,
 } from '@/lib/types';
 import form from './Form.module.css';
+import { HoursFields, hoursFromDraft, type HoursDraft } from './HoursFields';
 import styles from './Moderation.module.css';
 
 const CHECKS_NEW = ['exists', 'independent', 'inclusive', 'owner'] as const;
@@ -126,7 +127,9 @@ export function ModerationDetail({
     postalCode: '',
     city: '',
     closed: false,
+    hours: false,
   });
+  const [hours, setHours] = useState<HoursDraft>({});
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -155,8 +158,9 @@ export function ModerationDetail({
   const allChecked = checkKeys.every((k) => checks[k]);
   const ready = allChecked && (!isNew || (level !== null && method !== null));
 
-  // El cambio de una corrección, solo con lo que se haya rellenado.
-  function buildChange(): CorrectionChange {
+  // El cambio de una corrección, solo con lo que se haya rellenado. Devuelve
+  // la clave del error si lo escrito no vale.
+  function buildChange(): CorrectionChange | 'badPin' | 'badHours' {
     const clean = (v: string) => v.trim() || undefined;
     const address = {
       street: clean(change.street),
@@ -164,9 +168,21 @@ export function ModerationDetail({
       city: clean(change.city),
     };
     const hasAddress = Object.values(address).some(Boolean);
+    const lat = num(pin.lat);
+    const lng = num(pin.lng);
+    const hasPin = pin.lat.trim() !== '' || pin.lng.trim() !== '';
+    if (hasPin && !(Math.abs(lat) <= 90 && Math.abs(lng) <= 180)) {
+      return 'badPin';
+    }
+    const openingHours = change.hours ? hoursFromDraft(hours) : undefined;
+    if (openingHours === 'incomplete' || openingHours?.length === 0) {
+      return 'badHours';
+    }
     return {
       ...(clean(change.name) ? { name: clean(change.name) } : {}),
       ...(hasAddress ? { address } : {}),
+      ...(hasPin ? { location: { lat, lng } } : {}),
+      ...(openingHours ? { openingHours } : {}),
       ...(change.closed ? { closed: true as const } : {}),
     };
   }
@@ -195,6 +211,7 @@ export function ModerationDetail({
       setError(t('errors.needStory'));
     } else if (!isNew && !isRemoval && !isTeam) {
       const body = buildChange();
+      if (typeof body === 'string') return setError(t(`errors.${body}`));
       if (Object.keys(body).length === 0) {
         return setError(t('errors.needChange'));
       }
@@ -574,6 +591,49 @@ export function ModerationDetail({
                   />
                 </div>
               ))}
+              <p className={styles.meta}>{t('changePinHelp')}</p>
+              {(
+                [
+                  ['lat', 'lat'],
+                  ['lng', 'lng'],
+                ] as const
+              ).map(([field, label]) => (
+                <div key={field} className={form.field}>
+                  <label className={form.label} htmlFor={`mod-${field}`}>
+                    {t(label)}
+                  </label>
+                  <input
+                    id={`mod-${field}`}
+                    className={form.input}
+                    inputMode="decimal"
+                    value={pin[field]}
+                    onChange={(e) => {
+                      setPin({ ...pin, [field]: e.target.value });
+                      setError('');
+                    }}
+                  />
+                </div>
+              ))}
+              <label className={form.check}>
+                <input
+                  type="checkbox"
+                  checked={change.hours}
+                  onChange={(e) => {
+                    setChange({ ...change, hours: e.target.checked });
+                    setError('');
+                  }}
+                />
+                <span>{t('changeHours')}</span>
+              </label>
+              {change.hours && (
+                <HoursFields
+                  value={hours}
+                  onChange={(next) => {
+                    setHours(next);
+                    setError('');
+                  }}
+                />
+              )}
               <label className={form.check}>
                 <input
                   type="checkbox"

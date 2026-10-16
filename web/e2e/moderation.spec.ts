@@ -208,6 +208,72 @@ test.describe('con la sesión abierta', () => {
     ]);
   });
 
+  test('una corrección de horario y pin envía el horario completo', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
+      .click();
+    await page.getByLabel('He comprobado que el cambio es correcto').check();
+    await page.getByLabel('Latitud').fill('40.4231');
+    await page.getByLabel('Longitud').fill('-3.7050');
+
+    await page.getByLabel('Cambiar el horario').check();
+    const day = (name: string) => page.getByRole('group', { name });
+    await day('lunes').getByLabel('Abre').fill('09:00');
+    await day('lunes').getByLabel('Cierra').fill('17:30');
+    // Un día a medias no vale.
+    await day('martes').getByLabel('Abre').fill('09:00');
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'apertura y de cierre',
+    );
+    await day('martes').getByLabel('Cierra').fill('17:30');
+    await day('domingo').getByLabel('Abre').fill('10:00');
+    await day('domingo').getByLabel('Cierra').fill('14:00');
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.getByRole('status')).toHaveText('Cambio aplicado');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s3/decision',
+        body: {
+          action: 'approve',
+          location: { lat: 40.4231, lng: -3.705 },
+          openingHours: [
+            { day: 1, open: '09:00', close: '17:30' },
+            { day: 2, open: '09:00', close: '17:30' },
+            { day: 0, open: '10:00', close: '14:00' },
+          ],
+        },
+      },
+    ]);
+  });
+
+  test('un pin a medias o un horario vacío no se envían', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
+      .click();
+    await page.getByLabel('He comprobado que el cambio es correcto').check();
+    await page.getByLabel('Latitud').fill('40.4231');
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'coordenadas no son válidas',
+    );
+    await page.getByLabel('Latitud').fill('');
+    await page.getByLabel('Cambiar el horario').check();
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'al menos un día',
+    );
+    expect(sent).toEqual([]);
+  });
+
   test('retirar una historia pide cuál, y confirma la identidad', async ({
     page,
     sent,
@@ -401,4 +467,26 @@ test('en 320 px la entrada y la cola no se desbordan', async ({
     page.getByRole('heading', { name: 'Cocina del Pilar' }),
   ).toBeVisible();
   expect(await overflow()).toBeLessThanOrEqual(0);
+});
+
+test('en 320 px el horario de una corrección cabe, también con letra ancha', async ({
+  page,
+  session,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  session.role = 'admin';
+  await page.goto('/es/moderation');
+  await page
+    .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
+    .click();
+  await page.addStyleTag({ content: '* { font-family: Verdana !important; }' });
+  await page.getByLabel('Cambiar el horario').check();
+  await expect(page.getByRole('group', { name: 'domingo' })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    ),
+  ).toBeLessThanOrEqual(0);
 });

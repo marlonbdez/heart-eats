@@ -217,6 +217,9 @@ for (const scheme of ['light', 'dark'] as const) {
         .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
         .click();
       await expectNoViolations(page);
+      await page.getByLabel('Cambiar el horario').check();
+      await expect(page.getByRole('group', { name: 'lunes' })).toBeVisible();
+      await expectNoViolations(page);
       await page.getByRole('button', { name: 'Volver a la lista' }).click();
       await page
         .getByRole('button', { name: /Retirada.*La Masa Madre/s })
