@@ -100,10 +100,18 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 | Método | Ruta | Rol | Descripción |
 |---|---|---|---|
 | GET | `/suggestions` | moderator, admin | Cola. Filtros: `status` (`pending`, `info_requested`, `resolved`), `type`, `limit`, `cursor`. Devuelve `ModerationItem[]` (correo siempre enmascarado) |
-| GET | `/suggestions/:id` | moderator, admin | Detalle. Para `new`, la primera apertura geocodifica y guarda el pin (ADR 0006) |
+| GET | `/suggestions/:id` | moderator, admin | Detalle. Para `new`, la primera apertura geocodificará y guardará el pin (ADR 0006; llega con las decisiones) |
 | POST | `/suggestions/:id/decision` | ver abajo | Cuerpo: `ModerationDecision`. Registra la decisión y deja una línea en `AuditLog` |
 | GET | `/audit` | admin | Registro de auditoría, con `entity`, `entityId`, `limit`, `cursor` |
 | GET | `/users` · POST `/users` · DELETE `/users/:id` | admin | Alta por invitación y baja de moderadores (ADR 0008) |
+
+**Cola y detalle (ya en el servidor)**
+
+- `GET /suggestions` → `{ items, nextCursor? }`. `status` por defecto `pending`; `resolved` agrupa `approved` y `rejected`. `type` ∈ `new`, `edit`, `team`, `removal`. `limit` 1–50 (20 por defecto). Lo pendiente va de la más antigua a la más reciente (se atiende por orden de llegada); lo resuelto, al revés. Cursor opaco; uno roto da `422`.
+- Cada elemento sigue `ModerationItem` de la web con dos diferencias: `type` en lugar de `kind` (`edit` ↔ `correction`) y `createdAt` (ISO) en lugar de `daysAgo`. El correo sale siempre enmascarado (`a***@dominio`); el entero no se expone por ninguna ruta.
+- Solo se ve lo de tu **ámbito** (`moderationScope`): las propuestas por ciudad y el resto por el local al que apuntan. Una propuesta aún no lleva país, así que un ámbito de solo país ve todas las propuestas. Un ámbito vacío no ve nada.
+- `GET /suggestions/:id`: la misma forma. `404` si no existe, el id no es válido o está fuera del ámbito (no se distingue).
+- Las respuestas llevan `Cache-Control: no-store`.
 
 **Decisión**
 

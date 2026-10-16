@@ -6,6 +6,7 @@ import { healthRouter } from './health.js';
 import { proposalsRouter } from './proposals.js';
 import { reportsRouter } from './reports.js';
 import { restaurantsRouter } from './restaurants.js';
+import { suggestionsRouter } from './suggestions.js';
 
 interface ApiOptions {
   submissionLimiter: RateLimiter;
@@ -41,5 +42,6 @@ export function createApiRouter({
       secureCookies,
     }),
   );
+  api.use(suggestionsRouter({ allowedOrigins }));
   return api;
 }

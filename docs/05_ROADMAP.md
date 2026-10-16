@@ -57,7 +57,7 @@ Una PR por paso:
   - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
-  - [ ] Cola: `GET /suggestions` y `/suggestions/:id`, con permisos por rol y ámbito
+  - [x] Cola: `GET /suggestions` y `/suggestions/:id`, con filtro por ámbito y correo enmascarado
   - [ ] Decisiones (aprobar, rechazar, pedir información), geocodificación, avisos por correo y borrado del correo al resolver
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
