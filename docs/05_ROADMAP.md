@@ -58,6 +58,7 @@ Una PR por paso:
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
   - [x] Cola: `GET /suggestions` y `/suggestions/:id`, con filtro por ámbito y correo enmascarado
+  - [x] Geocodificación con Nominatim al abrir un local nuevo, y aviso de duplicado por distancia (ADR 0006)
   - [ ] Decisiones (aprobar, rechazar, pedir información), geocodificación, avisos por correo y borrado del correo al resolver
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`

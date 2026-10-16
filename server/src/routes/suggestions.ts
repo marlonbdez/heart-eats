@@ -5,6 +5,7 @@ import { authOf, requireSession } from '../middleware/session.js';
 import { Restaurant } from '../models/restaurant.js';
 import { Suggestion, type SuggestionRecord } from '../models/suggestion.js';
 import type { ModerationScope } from '../models/user.js';
+import type { Geocoder } from '../services/geocoder.js';
 import {
   toModerationItem,
   type TargetRestaurant,
@@ -17,9 +18,11 @@ import {
   scopeFilter,
   statusesOf,
 } from '../services/suggestion-query.js';
+import { ensureGeocode } from '../services/suggestion-geocode.js';
 
 interface SuggestionsOptions {
   allowedOrigins: readonly string[];
+  geocoder?: Geocoder;
 }
 
 // Solicitudes que caen en el ámbito de quien modera.
@@ -43,7 +46,10 @@ async function loadTargets(records: readonly SuggestionRecord[]) {
   return new Map(places.map((p) => [String(p._id), p]));
 }
 
-export function suggestionsRouter({ allowedOrigins }: SuggestionsOptions) {
+export function suggestionsRouter({
+  allowedOrigins,
+  geocoder,
+}: SuggestionsOptions) {
   const router = Router();
   const auth = requireSession(allowedOrigins);
 
@@ -96,14 +102,16 @@ export function suggestionsRouter({ allowedOrigins }: SuggestionsOptions) {
   // Una solicitud. Fuera del ámbito se responde igual que si no existiera.
   router.get('/suggestions/:id', ...auth, async (req, res) => {
     const id = String(req.params.id);
-    const record = objectIdPattern.test(id)
+    const found = objectIdPattern.test(id)
       ? await Suggestion.findOne({
           $and: [{ _id: id }, await inScope(authOf(res).moderationScope)],
         }).lean<SuggestionRecord>()
       : null;
-    if (!record) {
+    if (!found) {
       throw new ApiError(404, 'not_found', 'Solicitud no encontrada');
     }
+    // La primera apertura de un local nuevo geocodifica su dirección.
+    const record = await ensureGeocode(found, geocoder);
     const targets = await loadTargets([record]);
     res
       .set('Cache-Control', 'no-store')

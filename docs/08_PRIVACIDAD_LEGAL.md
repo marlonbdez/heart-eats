@@ -60,6 +60,7 @@ Este apartado es el que más nos importa, así que lo contamos con palabras senc
 ### Terceros que intervienen
 
 - **Alojamiento de la web.** ❓ [Proveedor, p. ej. Netlify; confirmar y enlazar su política.] Registra la dirección IP de quien visita la web, como cualquier servidor.
+- **Geocodificación.** Al abrir una propuesta de local nuevo, nuestro servidor envía a Nominatim (OpenStreetMap) la dirección del local (calle, código postal y ciudad) para colocarlo en el mapa. No envía correos ni datos de quien propone, y sus servidores ven la IP del nuestro, no la de nadie más. ❓ Confirmar al contratar el despliegue y reflejarlo en `/privacy` al integrar la web.
 - **Mapa.** Las teselas y estilos del mapa las sirve OpenFreeMap. Al abrir el mapa, tu navegador se las pide directamente y ellos ven tu dirección IP. No les enviamos nada más.
 - **Backend y base de datos.** Previsto (ADR 0005, a confirmar al contratarlos): Railway (API) y MongoDB Atlas (base de datos), ambos en la UE; Cloudflare R2 (fotos y copias de seguridad). ❓ Confirmar la región de cada uno y enlazar sus políticas; si alguno queda fuera del Espacio Económico Europeo, hay que indicarlo.
 - **Correo saliente.** Resend envía los enlaces de acceso de moderación y los avisos a quien dejó su correo (ADR 0007). Ve esas direcciones y el texto del aviso. ❓ Región y política.

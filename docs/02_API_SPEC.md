@@ -111,6 +111,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 - Cada elemento sigue `ModerationItem` de la web con dos diferencias: `type` en lugar de `kind` (`edit` ↔ `correction`) y `createdAt` (ISO) en lugar de `daysAgo`. El correo sale siempre enmascarado (`a***@dominio`); el entero no se expone por ninguna ruta.
 - Solo se ve lo de tu **ámbito** (`moderationScope`): las propuestas por ciudad y el resto por el local al que apuntan. Una propuesta aún no lleva país, así que un ámbito de solo país ve todas las propuestas. Un ámbito vacío no ve nada.
 - `GET /suggestions/:id`: la misma forma. `404` si no existe, el id no es válido o está fuera del ámbito (no se distingue).
+- **Geocodificación (ADR 0006).** La primera vez que se abre el detalle de un local nuevo con calle, y mientras esté `pending` o `info_requested`, el servidor consulta Nominatim (cola de una petición por segundo, `User-Agent` con contacto) y guarda el resultado en la solicitud: no se repite. El detalle trae `location: {lat, lng}` (el pin) y, si hay un local publicado o pendiente a menos de 50 m, un aviso `duplicate` con `meters` (si ya había uno por nombre o dirección, se le añade la distancia). Sin resultado, `location` no viene y el pin se coloca a mano. Si Nominatim falla, la solicitud se ve igual sin pin y se reintenta en la próxima apertura. Sin calle no se geocodifica. La cola (`GET /suggestions`) nunca geocodifica.
 - Las respuestas llevan `Cache-Control: no-store`.
 
 **Decisión**
