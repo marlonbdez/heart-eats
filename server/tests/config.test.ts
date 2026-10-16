@@ -9,8 +9,8 @@ describe('loadConfig', () => {
       CORS_ORIGINS: ['http://localhost:3000'],
       MONGODB_URI: 'mongodb://127.0.0.1:27017/hearteats',
       TRUST_PROXY: 0,
-      SUBMISSIONS_PER_HOUR: 5,
-      SUBMISSIONS_PER_DAY: 20,
+      SUBMISSIONS_PER_HOUR: 30,
+      SUBMISSIONS_PER_DAY: 200,
       KNOWN_CHAINS: [],
     });
   });
@@ -26,8 +26,12 @@ describe('loadConfig', () => {
       SUBMISSIONS_PER_HOUR: 3,
       SUBMISSIONS_PER_DAY: 10,
     });
-    expect(() => loadConfig({ SUBMISSIONS_PER_HOUR: '0' })).toThrow(
+    expect(() => loadConfig({ SUBMISSIONS_PER_HOUR: '-1' })).toThrow(
       /SUBMISSIONS_PER_HOUR/,
+    );
+    // 0 desactiva el tope (desarrollo local).
+    expect(loadConfig({ SUBMISSIONS_PER_HOUR: '0' }).SUBMISSIONS_PER_HOUR).toBe(
+      0,
     );
   });
 

@@ -180,7 +180,7 @@ describe('POST /api/v1/proposals', () => {
     });
   });
 
-  describe('límite de envíos', () => {
+  describe('tope de envíos', () => {
     it('da 429 con Retry-After al pasar el máximo por hora', async () => {
       const limited = createApp({ ...config, SUBMISSIONS_PER_HOUR: 2 });
       expect((await post(proposal, limited)).status).toBe(202);
@@ -193,9 +193,11 @@ describe('POST /api/v1/proposals', () => {
       expect(await Suggestion.countDocuments()).toBe(2);
     });
 
-    it('también cuenta los envíos descartados por el honeypot', async () => {
+    it('no gasta cupo con envíos inválidos ni con el honeypot', async () => {
       const limited = createApp({ ...config, SUBMISSIONS_PER_HOUR: 1 });
+      await post({ ...proposal, name: 'A' }, limited);
       await post({ ...proposal, website: 'x' }, limited);
+      expect((await post(proposal, limited)).status).toBe(202);
       expect((await post(proposal, limited)).status).toBe(429);
     });
   });

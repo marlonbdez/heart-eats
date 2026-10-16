@@ -1,5 +1,6 @@
-import { Router, type RequestHandler } from 'express';
+import { Router } from 'express';
 import { Types } from 'mongoose';
+import type { RateLimiter } from '../middleware/rate-limit.js';
 import { Suggestion } from '../models/suggestion.js';
 import {
   proposalSchema,
@@ -10,7 +11,7 @@ import { normalize } from '../text.js';
 import { parseOrThrow } from '../validation.js';
 
 interface ProposalsOptions {
-  limiter: RequestHandler;
+  limiter: RateLimiter;
   chains: readonly string[];
 }
 
@@ -34,7 +35,7 @@ function toPayload(input: ProposalInput) {
 export function proposalsRouter({ limiter, chains }: ProposalsOptions) {
   const router = Router();
 
-  router.post('/proposals', limiter, async (req, res) => {
+  router.post('/proposals', limiter.check, async (req, res) => {
     // Trampa para bots: «website» viene vacío desde la web. Si trae algo se
     // responde igual que si todo fuera bien y no se guarda nada.
     const body: unknown = req.body;
@@ -52,6 +53,7 @@ export function proposalsRouter({ limiter, chains }: ProposalsOptions) {
     }
 
     const input = parseOrThrow(proposalSchema, body);
+    limiter.hit(req); // solo cuenta lo que se va a guardar
     const cityKey = normalize(input.city);
     const warnings = await proposalWarnings({
       name: input.name,

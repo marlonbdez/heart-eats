@@ -3,7 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import type { Config } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errors.js';
-import { rateLimit } from './middleware/rate-limit.js';
+import { createRateLimiter } from './middleware/rate-limit.js';
 import { createApiRouter } from './routes/index.js';
 
 const HOUR = 60 * 60 * 1000;
@@ -39,10 +39,11 @@ export function createApp(config: AppConfig) {
   );
   app.use(express.json({ limit: '32kb' }));
 
-  // Un único contador para todos los envíos de la comunidad.
-  const submissionLimiter = rateLimit([
-    { ms: HOUR, max: config.SUBMISSIONS_PER_HOUR ?? 5 },
-    { ms: 24 * HOUR, max: config.SUBMISSIONS_PER_DAY ?? 20 },
+  // Un único contador para todos los envíos de la comunidad. Sin valor (como
+  // en las pruebas) no hay límite; en el servidor los fija la configuración.
+  const submissionLimiter = createRateLimiter([
+    { ms: HOUR, max: config.SUBMISSIONS_PER_HOUR ?? 0 },
+    { ms: 24 * HOUR, max: config.SUBMISSIONS_PER_DAY ?? 0 },
   ]);
   app.use(
     '/api/v1',

@@ -1,10 +1,11 @@
-import { Router, type RequestHandler } from 'express';
+import { Router } from 'express';
+import type { RateLimiter } from '../middleware/rate-limit.js';
 import { healthRouter } from './health.js';
 import { proposalsRouter } from './proposals.js';
 import { restaurantsRouter } from './restaurants.js';
 
 interface ApiOptions {
-  submissionLimiter: RequestHandler;
+  submissionLimiter: RateLimiter;
   knownChains: readonly string[];
 }
 
