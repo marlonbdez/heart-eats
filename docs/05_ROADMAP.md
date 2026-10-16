@@ -69,7 +69,8 @@ Una PR por paso:
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Conectar la web a la API, por partes:
   - [x] Lecturas (inicio, lista, fichas y categorías) desde el navegador, sin datos fijos; las fichas se sirven con una reescritura y no se generan al compilar
-  - [ ] Envíos (propuestas, correcciones, equipo, retiradas) y retirar el buzón de prueba; actualizar `/privacy` (Resend y Nominatim)
+  - [x] Envíos de propuestas, correcciones y retiradas a la API (con el idioma, y el aviso de «demasiados envíos»); `/privacy` actualizada (Resend, Nominatim, plazos); topes de envío del servidor subidos a 100/hora y 1000/día
+  - [ ] Equipo del negocio (`POST /teams`) y fotos (`POST /uploads` + R2): hasta entonces el formulario del negocio sigue simulado y «Proponer un local» no pide fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
   - [ ] Moderación: entrada con enlace por correo, cola y decisiones; actualizar `/cookies` (`he_session`)
   - [ ] Página `/reply` para responder a «Info pedida»
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)

@@ -1,7 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { isRateLimited } from '@/lib/api';
+import { photoUploads } from '@/lib/features';
 import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { FoodTag } from '@/lib/types';
@@ -101,13 +103,15 @@ function sanitizeDraft(d: Draft | null): Draft | null {
 
 export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const t = useTranslations('propose');
+  const tSubmit = useTranslations('submit');
+  const locale = useLocale() === 'en' ? 'en' : 'es';
   const tFood = useTranslations('foodTags');
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'done'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'error' | 'limited' | 'done'
+  >('idle');
   const [sentName, setSentName] = useState('');
   // Aviso de la última foto que no se pudo usar, por plato.
   const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
@@ -222,11 +226,12 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
         independent: form.independent,
         contactEmail: clean(form.email),
         website: form.website,
+        locale,
       });
       setSentName(form.name.trim());
       setStatus('done');
-    } catch {
-      setStatus('error');
+    } catch (err) {
+      setStatus(isRateLimited(err) ? 'limited' : 'error');
     }
   };
 
@@ -449,16 +454,20 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   value={d.description}
                   onChange={(e) => setDish(i, { description: e.target.value })}
                 />
-                <PhotoPicker
-                  id={`d${i}p`}
-                  label={t('s2.photo')}
-                  alt={t('s2.photoAlt', { n: i + 1 })}
-                  photo={d.photo}
-                  error={photoErrors[i]}
-                  describedBy="s2-photo-hint"
-                  onChange={(photo) => setDish(i, { photo })}
-                  onError={(e) => setPhotoErrors((all) => ({ ...all, [i]: e }))}
-                />
+                {photoUploads && (
+                  <PhotoPicker
+                    id={`d${i}p`}
+                    label={t('s2.photo')}
+                    alt={t('s2.photoAlt', { n: i + 1 })}
+                    photo={d.photo}
+                    error={photoErrors[i]}
+                    describedBy="s2-photo-hint"
+                    onChange={(photo) => setDish(i, { photo })}
+                    onError={(e) =>
+                      setPhotoErrors((all) => ({ ...all, [i]: e }))
+                    }
+                  />
+                )}
               </div>
             ))}
             {form.dishes.length < MAX_DISHES && (
@@ -472,9 +481,11 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 {t('s2.add')}
               </button>
             )}
-            <p id="s2-photo-hint" className={s.note}>
-              {t('s2.photoHint')}
-            </p>
+            {photoUploads && (
+              <p id="s2-photo-hint" className={s.note}>
+                {t('s2.photoHint')}
+              </p>
+            )}
             {hasPhotos && (
               <PhotoConsent
                 id="s2-photo-consent"
@@ -595,9 +606,9 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 />
               </label>
             </div>
-            {status === 'error' && (
+            {(status === 'error' || status === 'limited') && (
               <p role="alert" className={s.error}>
-                {t('sendError')}
+                {status === 'limited' ? tSubmit('limited') : t('sendError')}
               </p>
             )}
           </div>

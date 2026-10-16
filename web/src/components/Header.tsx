@@ -139,10 +139,9 @@ export function Header() {
                     // solo se conoce en el navegador.
                     onClick={(e) => {
                       e.preventDefault();
-                      router.replace(
-                        `${pathname}${window.location.search}`,
-                        { locale: code },
-                      );
+                      router.replace(`${pathname}${window.location.search}`, {
+                        locale: code,
+                      });
                     }}
                   >
                     {t(`languages.${code}`)}

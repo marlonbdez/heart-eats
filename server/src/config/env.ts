@@ -37,8 +37,8 @@ const schema = z
     TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
     // Tope de envíos guardados por IP contra inundaciones, no un freno para
     // personas (docs/02_API_SPEC.md). 0 lo desactiva.
-    SUBMISSIONS_PER_HOUR: z.coerce.number().int().min(0).default(30),
-    SUBMISSIONS_PER_DAY: z.coerce.number().int().min(0).default(200),
+    SUBMISSIONS_PER_HOUR: z.coerce.number().int().min(0).default(100),
+    SUBMISSIONS_PER_DAY: z.coerce.number().int().min(0).default(1000),
     // Nombres de grandes cadenas, separados por comas. Una propuesta que los
     // contiene recibe el aviso «chain». Es configuración, no vive en el repo.
     KNOWN_CHAINS: z

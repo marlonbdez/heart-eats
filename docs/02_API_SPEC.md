@@ -49,7 +49,7 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 
 **Trampa y límites**
 - `website` relleno (honeypot): el servidor responde `202` igual y **no guarda nada**.
-- Tope por IP (contador temporal en memoria, sin guardar la IP en la solicitud): ❓ propuesta, 30 envíos guardados por hora y 200 al día (`SUBMISSIONS_PER_HOUR` / `SUBMISSIONS_PER_DAY`; `0` lo desactiva). Es un tope contra inundaciones, no un freno para personas: las defensas reales son el honeypot y que nada se publica sin revisión humana. Solo cuenta los envíos válidos (uno con errores o el del honeypot no gasta cupo) y es un único contador para todas las rutas de envío. `429` con `Retry-After`.
+- Tope por IP (contador temporal en memoria, sin guardar la IP en la solicitud): ❓ propuesta holgada (una asociación o una biblioteca comparten IP), 100 envíos guardados por hora y 1000 al día (`SUBMISSIONS_PER_HOUR` / `SUBMISSIONS_PER_DAY`; `0` lo desactiva). Es un tope contra inundaciones, no un freno para personas: las defensas reales son el honeypot y que nada se publica sin revisión humana. Solo cuenta los envíos válidos (uno con errores o el del honeypot no gasta cupo) y es un único contador para todas las rutas de envío. `429` con `Retry-After`.
 - Una historia sin `consentBy` se rechaza (`422`): nunca se guarda sin consentimiento registrado.
 - Se descartan en servidor nombres de personas del equipo en `proposals` (`07_VERIFICACION.md`): la propuesta de un tercero no admite datos de personas.
 

@@ -2,6 +2,7 @@ import { expect, test } from './support/test';
 
 test('corregir un dato: se entra desde la ficha y recorre los 3 pasos', async ({
   page,
+  sent,
 }) => {
   await page.goto('/es/place/demo-la-masa-madre');
   await page.getByRole('link', { name: 'Sugerir una corrección' }).click();
@@ -35,6 +36,18 @@ test('corregir un dato: se entra desde la ficha y recorre los 3 pasos', async ({
   await expect(
     page.getByRole('heading', { name: '¡Gracias por avisarnos!' }),
   ).toBeFocused();
+  expect(sent).toEqual([
+    {
+      path: '/corrections',
+      body: {
+        restaurantSlug: 'demo-la-masa-madre',
+        kind: 'hours',
+        details: 'Ahora cierra a las 18:00.',
+        evidenceUrl: 'https://ejemplo.org',
+        locale: 'es',
+      },
+    },
+  ]);
   await page.getByRole('link', { name: 'Volver a la ficha' }).click();
   await expect(
     page.getByRole('heading', { name: '[DEMO] La Masa Madre' }),

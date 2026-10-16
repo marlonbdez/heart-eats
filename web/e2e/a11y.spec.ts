@@ -136,25 +136,11 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
-    test('proponer un local: paso de platos con foto y aviso de permiso', async ({
-      page,
-    }) => {
+    test('proponer un local: paso de platos', async ({ page }) => {
       await page.goto('/es/propose');
-      await page.getByLabel('Nombre del local').fill('Local con foto');
+      await page.getByLabel('Nombre del local').fill('Local con platos');
       await page.getByRole('button', { name: 'Continuar' }).click();
-      await page.locator('input[type=file]').setInputFiles({
-        name: 'plato.png',
-        mimeType: 'image/png',
-        buffer: Buffer.from(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-          'base64',
-        ),
-      });
-      await expect(
-        page.getByRole('img', { name: /Foto del plato 1/ }),
-      ).toBeVisible();
-      await page.getByRole('button', { name: 'Continuar' }).click();
-      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expect(page.getByLabel('Nombre del plato')).toBeVisible();
       await expectNoViolations(page);
     });
 

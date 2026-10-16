@@ -30,3 +30,19 @@ export async function apiGet<T>(path: string, params: Params = {}) {
   }
   return (await res.json()) as T;
 }
+
+// Envío de la comunidad (sin cuenta ni cookies): JSON y, si va bien, 202.
+export async function apiPost(path: string, body: unknown) {
+  const res = await fetch(`${apiBase}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new ApiRequestError(res.status, `La API respondió ${res.status}`);
+  }
+}
+
+// Demasiados envíos desde esta conexión (429): se avisa distinto que un fallo.
+export const isRateLimited = (err: unknown) =>
+  err instanceof ApiRequestError && err.status === 429;

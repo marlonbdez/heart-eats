@@ -10,7 +10,7 @@ import type {
   RemovalInput,
   Restaurant,
 } from '../types';
-import { ApiRequestError, apiGet } from '../api';
+import { ApiRequestError, apiGet, apiPost } from '../api';
 import { moderationQueue } from './mock-moderation';
 import { addToOutbox, clearOutbox, maskEmail, readOutbox } from './outbox';
 
@@ -51,53 +51,43 @@ export async function getFoodTags(): Promise<FoodTag[]> {
   return res.foodTags;
 }
 
-// Envío simulado: no hay backend todavía. Cuando exista, esto pasa a
-// POST /api/v1/proposals con la misma firma.
+// Propuesta de un local nuevo (POST /api/v1/proposals). Entra en moderación.
+// Las fotos de los platos no se envían todavía (falta POST /uploads).
 export async function submitProposal(input: ProposalInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  addToOutbox({
-    kind: 'new',
+  await apiPost('/proposals', {
     name: input.name,
-    neighborhood: input.city,
-    address: [input.street, input.postalCode, input.city]
-      .filter(Boolean)
-      .join(', '),
-    contactMasked: maskEmail(input.contactEmail),
-    warnings: input.evidenceUrl ? [] : [{ kind: 'noEvidence' }],
+    street: input.street,
+    city: input.city,
+    postalCode: input.postalCode,
     foodTags: input.foodTags,
-    dishes: input.dishes.map((d) => d.name),
-    photoCount: input.dishes.filter((d) => d.photo).length,
+    dishes: input.dishes.map(({ name, description }) => ({
+      name,
+      description,
+    })),
     howKnown: input.howKnown,
     evidenceUrl: input.evidenceUrl,
+    independent: input.independent,
+    contactEmail: input.contactEmail,
+    locale: input.locale,
   });
 }
 
-// Igual que la propuesta: simulado hasta que exista POST /api/v1/corrections.
+// Corrección sobre un local publicado (POST /api/v1/corrections).
 export async function submitCorrection(input: CorrectionInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  const place = await getRestaurant(input.restaurantSlug).catch(() => null);
-  addToOutbox({
-    kind: 'correction',
-    name: place?.name ?? input.restaurantSlug,
-    neighborhood: place?.address.neighborhood ?? place?.address.city ?? '',
-    address: place
-      ? `${place.address.street}, ${place.address.city}`
-      : input.restaurantSlug,
-    contactMasked: maskEmail(input.contactEmail),
-    warnings: [],
+  await apiPost('/corrections', {
     restaurantSlug: input.restaurantSlug,
+    kind: input.kind,
+    details: input.details,
     evidenceUrl: input.evidenceUrl,
-    correction: {
-      kind: input.kind,
-      before: input.kind === 'address' ? place?.address.street : undefined,
-      after: input.details,
-    },
+    contactEmail: input.contactEmail,
+    locale: input.locale,
   });
 }
 
-// Igual que las anteriores: simulado hasta que exista POST /api/v1/teams.
+// Simulado hasta que exista POST /api/v1/teams (el servidor aún no recibe el
+// equipo de un negocio).
 export async function submitBusinessTeam(
   input: BusinessTeamInput,
 ): Promise<void> {
@@ -127,22 +117,16 @@ export async function submitBusinessTeam(
   });
 }
 
-// Petición de retirada: simulada hasta que exista POST /api/v1/removals.
+// Petición de retirada (POST /api/v1/removals). Moderación escribe al correo
+// para confirmar quién la hace antes de ocultar nada.
 export async function submitRemoval(input: RemovalInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  const place = await getRestaurant(input.restaurantSlug).catch(() => null);
-  addToOutbox({
-    kind: 'removal',
-    name: place?.name ?? input.restaurantSlug,
-    neighborhood: place?.address.neighborhood ?? place?.address.city ?? '',
-    address: place
-      ? `${place.address.street}, ${place.address.city}`
-      : input.restaurantSlug,
-    contactMasked: maskEmail(input.contactEmail),
-    warnings: [],
+  await apiPost('/removals', {
     restaurantSlug: input.restaurantSlug,
-    removal: { what: input.what, details: input.details },
+    what: input.what,
+    details: input.details,
+    contactEmail: input.contactEmail,
+    locale: input.locale,
   });
 }
 

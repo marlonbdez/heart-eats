@@ -108,6 +108,7 @@ export interface ProposalDish extends SignatureDish {
 // Propuesta de un nuevo local (F2). Entra siempre en moderación; nunca se
 // publica sin verificación y sin el sí del negocio.
 export interface ProposalInput {
+  locale?: 'es' | 'en'; // idioma en que se escribe a quien envía
   name: string;
   street?: string;
   city: string;
@@ -127,6 +128,7 @@ export type CorrectionKind = 'address' | 'hours' | 'closed' | 'team' | 'other';
 // Corrección sugerida sobre un local publicado (F4). Entra en moderación;
 // nada cambia en la ficha hasta que alguien lo revisa.
 export interface CorrectionInput {
+  locale?: 'es' | 'en'; // idioma en que se escribe a quien envía
   restaurantSlug: string;
   kind: CorrectionKind;
   details: string;
@@ -163,6 +165,7 @@ export type RemovalWhat = 'story' | 'photo' | 'listing' | 'data';
 // Petición de retirada. Entra en moderación, que escribe al correo para
 // confirmar que quien la hace es quien dice ser antes de ocultar nada.
 export interface RemovalInput {
+  locale?: 'es' | 'en'; // idioma en que se escribe a quien envía
   restaurantSlug: string;
   what: RemovalWhat;
   details?: string; // sin datos de salud ni nombres de terceros
