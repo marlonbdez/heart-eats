@@ -101,7 +101,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 |---|---|---|---|
 | GET | `/suggestions` | moderator, admin | Cola. Filtros: `status` (`pending`, `info_requested`, `resolved`), `type`, `limit`, `cursor`. Devuelve `ModerationItem[]` (correo siempre enmascarado) |
 | GET | `/suggestions/:id` | moderator, admin | Detalle. Para `new`, la primera apertura geocodificará y guardará el pin (ADR 0006; llega con las decisiones) |
-| POST | `/suggestions/:id/decision` | ver abajo | Cuerpo: `ModerationDecision`. Registra la decisión y deja una línea en `AuditLog` |
+| POST | `/suggestions/:id/decision` | ver abajo | Cuerpo: `ModerationDecision`. Registra la decisión y deja una línea en `AuditLog`. Hoy: `reject` y `ask_info`; `approve` da `501` hasta su PR |
 | GET | `/audit` | admin | Registro de auditoría, con `entity`, `entityId`, `limit`, `cursor` |
 | GET | `/users` · POST `/users` · DELETE `/users/:id` | admin | Alta por invitación y baja de moderadores (ADR 0008) |
 
@@ -117,11 +117,13 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 
 - `approve`: en un local nuevo exige `level` y `method`, y acepta un `location` opcional (`{lat,lng}`) para colocar el pin a mano. Si no hay pin ni geocodificación válida, `422 geocoding_required`. Publica la ficha, mueve las fotos aprobadas a público y envía correo a quien propuso, si dejó uno.
 - `reject`: exige `reason` (`not_independent`, `no_evidence`, `duplicate`, `out_of_zone`, `other`) y admite `note`.
-- `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 14 días, y se envía el enlace de respuesta.
-- Una solicitud ya resuelta no admite otra decisión (`409 already_resolved`).
+- `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 14 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
+- Una solicitud ya resuelta no admite otra decisión (`409 already_resolved`). `reject` también cierra una solicitud en `info_requested`. Si otra persona decide en el mismo instante, `409 conflict`.
+- **Al rechazar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
+- El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la integración de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.
 - `team` y `removal` solo los decide un `admin` (ADR 0008); un `moderator` recibe `403`.
 - Una **retirada** aprobada oculta lo pedido al momento (la historia deja de servirse) y programa el borrado definitivo en el plazo de la política (❓ 7 días).
-- Fuera del ámbito del usuario (`moderationScope`), `403`.
+- Fuera del ámbito del usuario (`moderationScope`), `404`, igual que en el detalle: no se distingue de una solicitud que no existe.
 
 ## Modelo de la solicitud (resumen)
 

@@ -16,6 +16,7 @@ interface ApiOptions {
   allowedOrigins: readonly string[];
   secureCookies: boolean;
   knownChains: readonly string[];
+  replyTokenSecret: string;
 }
 
 // Todo cuelga de /api/v1 (docs/02_API_SPEC.md).
@@ -27,6 +28,7 @@ export function createApiRouter({
   allowedOrigins,
   secureCookies,
   knownChains,
+  replyTokenSecret,
 }: ApiOptions) {
   const api = Router();
   api.use(healthRouter);
@@ -42,6 +44,8 @@ export function createApiRouter({
       secureCookies,
     }),
   );
-  api.use(suggestionsRouter({ allowedOrigins }));
+  api.use(
+    suggestionsRouter({ allowedOrigins, mailer, webUrl, replyTokenSecret }),
+  );
   return api;
 }
