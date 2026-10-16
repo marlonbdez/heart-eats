@@ -67,7 +67,8 @@ Una PR por paso:
   - [x] Borrado definitivo de las historias retiradas (21 días) y tope de conservación del correo (9 meses), en el trabajo horario
   - [ ] Borrado definitivo de una ficha retirada y de su equipo (hoy solo se archiva; hace falta marcar cuándo se retiró) y de las fotos retiradas (cuando existan)
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
-  - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
+  - [x] Consulta de la auditoría (`GET /audit`, solo admin, con filtros y paginación)
+  - [ ] Altas y bajas de moderadores (`/users`)
 - [ ] Conectar la web a la API, por partes:
   - [x] Lecturas (inicio, lista, fichas y categorías) desde el navegador, sin datos fijos; las fichas se sirven con una reescritura y no se generan al compilar
   - [x] Envíos de propuestas, correcciones y retiradas a la API (con el idioma, y el aviso de «demasiados envíos»); `/privacy` actualizada (Resend, Nominatim, plazos); topes de envío del servidor subidos a 100/hora y 1000/día
