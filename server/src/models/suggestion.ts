@@ -43,9 +43,13 @@ export interface SuggestionRecord {
     reason?: string;
     note?: string;
     restaurantId?: Types.ObjectId;
-    decidedBy: Types.ObjectId;
+    // Sin `decidedBy`, la cerró el sistema (por ejemplo, sin respuesta a tiempo).
+    decidedBy?: Types.ObjectId;
     decidedAt: Date;
   };
+  // Respuestas de quien propuso a «Info pedida», de la más antigua a la más
+  // reciente. Se guardan en la propia solicitud, sin el correo.
+  replies: { message: string; at: Date }[];
   // «Info pedida»: la nota de Moderación, el plazo y el `nonce` que valida el
   // enlace del correo (se borra al responder o cerrar la solicitud).
   infoRequest?: {
@@ -102,15 +106,23 @@ const suggestionSchema = new Schema(
           reason: String,
           note: String,
           restaurantId: { type: Schema.Types.ObjectId, ref: 'Restaurant' },
-          decidedBy: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-          },
+          decidedBy: { type: Schema.Types.ObjectId, ref: 'User' },
           decidedAt: { type: Date, required: true },
         },
         { _id: false },
       ),
+    },
+    replies: {
+      type: [
+        new Schema(
+          {
+            message: { type: String, required: true, maxlength: 2000 },
+            at: { type: Date, required: true },
+          },
+          { _id: false },
+        ),
+      ],
+      default: [],
     },
     infoRequest: {
       type: new Schema(
@@ -129,6 +141,8 @@ const suggestionSchema = new Schema(
 
 // Cola de moderación y búsqueda de duplicados.
 suggestionSchema.index({ status: 1, createdAt: 1 });
+// Cierre de las peticiones de información sin respuesta.
+suggestionSchema.index({ status: 1, 'infoRequest.deadline': 1 });
 suggestionSchema.index({ type: 1, cityKey: 1 });
 
 export const Suggestion = model('Suggestion', suggestionSchema);

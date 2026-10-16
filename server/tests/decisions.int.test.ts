@@ -261,7 +261,7 @@ describe('rechazar', () => {
 });
 
 describe('pedir información', () => {
-  it('pasa a «Info pedida» con 14 días y envía el enlace firmado', async () => {
+  it('pasa a «Info pedida» con 30 días y envía el enlace firmado, que vale unos días más', async () => {
     const s = await proposal({ locale: 'en' });
     const cookie = await signedInCookie();
     const before = Date.now();
@@ -282,7 +282,7 @@ describe('pedir información', () => {
     expect(info.note).toBe('¿Tiene web propia?');
     const days =
       (info.deadline.getTime() - info.requestedAt.getTime()) / 86_400_000;
-    expect(days).toBe(14);
+    expect(days).toBe(30);
     expect(info.requestedAt.getTime()).toBeGreaterThanOrEqual(before);
     expect(doc?.contactEmail).toBe('ana@example.org'); // sigue hasta resolver
 
@@ -298,7 +298,10 @@ describe('pedir información', () => {
     const claims = verifyReplyToken(SECRET, mail.url.split('#token=')[1]!);
     expect(claims).toEqual({
       suggestionId: String(s._id),
-      expiresAt: new Date(Math.floor(info.deadline.getTime() / 1000) * 1000),
+      // El enlace vale 3 días más que el plazo que dice el correo.
+      expiresAt: new Date(
+        Math.floor((info.deadline.getTime() + 3 * 86_400_000) / 1000) * 1000,
+      ),
       nonce: info.nonce,
     });
   });

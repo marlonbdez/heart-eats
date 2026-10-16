@@ -69,10 +69,10 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/replies/:token` | Comprueba el enlace del correo. Devuelve la nota de Moderación y el plazo. `404` si el enlace caducó o ya se usó |
-| POST | `/replies/:token` | `{ "message": "…" }`. Añade la respuesta a la **misma** solicitud, que vuelve a `pending`. El token se invalida |
+| GET | `/replies/:token` | Comprueba el enlace del correo. Devuelve `{ name, note, deadline, locale }` (nunca el correo). `404` si el enlace caducó, ya se usó o la solicitud se cerró: no se distingue |
+| POST | `/replies/:token` | `{ "message": "…" }` (1–2000 caracteres). Añade la respuesta a la **misma** solicitud, que vuelve a `pending`, y responde `201 { "status": "received" }`. El token se invalida (`422` si el mensaje no vale, y entonces el enlace sigue valiendo) |
 
-El token es un HMAC firmado que identifica la solicitud y caduca con el plazo de 14 días (ADR 0007). Si no hay respuesta en 14 días, un proceso programado cierra la solicitud como `rejected` con motivo «sin respuesta» y deja una línea en la auditoría.
+El token es un HMAC firmado que identifica la solicitud y se invalida al usarlo (ADR 0007). El plazo es de **30 días**, y el enlace sigue valiendo **3 días más** de margen de cortesía, que el correo no menciona. Pasado ese margen, un proceso del servidor (al arrancar y cada hora) cierra la solicitud como `rejected` con motivo `no_reply`, borra `contactEmail` y deja una línea `auto_close` en la auditoría, sin actor (`resolution.decidedBy` vacío). Si Moderación pide información otra vez, el enlace anterior deja de valer.
 
 **Internacional desde el primer día.** Nada de España está fijo en el servidor: ni la zona inicial, ni el formato de dirección, ni los barrios. Los locales llevan país (ISO), región y ciudad; la zona inicial del mapa es configuración por región (ADR 0003) y el catálogo de comidas es global. Madrid es solo la primera ciudad con datos. Los índices son `2dsphere` sobre `location` y `{status, address.country, address.city}` (`01_ESPECIFICACION_DATOS.md`).
 
@@ -108,7 +108,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 **Cola y detalle (ya en el servidor)**
 
 - `GET /suggestions` → `{ items, nextCursor? }`. `status` por defecto `pending`; `resolved` agrupa `approved` y `rejected`. `type` ∈ `new`, `edit`, `team`, `removal`. `limit` 1–50 (20 por defecto). Lo pendiente va de la más antigua a la más reciente (se atiende por orden de llegada); lo resuelto, al revés. Cursor opaco; uno roto da `422`.
-- Cada elemento sigue `ModerationItem` de la web con dos diferencias: `type` en lugar de `kind` (`edit` ↔ `correction`) y `createdAt` (ISO) en lugar de `daysAgo`. El correo sale siempre enmascarado (`a***@dominio`); el entero no se expone por ninguna ruta.
+- Cada elemento sigue `ModerationItem` de la web, más `infoRequest?` (`{note, deadline}`) y `replies?` (`{message, at}[]`) cuando hubo «Info pedida», con dos diferencias: `type` en lugar de `kind` (`edit` ↔ `correction`) y `createdAt` (ISO) en lugar de `daysAgo`. El correo sale siempre enmascarado (`a***@dominio`); el entero no se expone por ninguna ruta.
 - Solo se ve lo de tu **ámbito** (`moderationScope`): las propuestas por ciudad y el resto por el local al que apuntan. Una propuesta aún no lleva país, así que un ámbito de solo país ve todas las propuestas. Un ámbito vacío no ve nada.
 - `GET /suggestions/:id`: la misma forma. `404` si no existe, el id no es válido o está fuera del ámbito (no se distingue).
 - **Geocodificación (ADR 0006).** La primera vez que se abre el detalle de un local nuevo con calle, y mientras esté `pending` o `info_requested`, el servidor consulta Nominatim (cola de una petición por segundo, `User-Agent` con contacto) y guarda el resultado en la solicitud: no se repite. El detalle trae `location: {lat, lng}` (el pin) y, si hay un local publicado o pendiente a menos de 50 m, un aviso `duplicate` con `meters` (si ya había uno por nombre o dirección, se le añade la distancia). Sin resultado, `location` no viene y el pin se coloca a mano. Si Nominatim falla, la solicitud se ve igual sin pin y se reintenta en la próxima apertura. Sin calle no se geocodifica. La cola (`GET /suggestions`) nunca geocodifica.
@@ -121,7 +121,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
   - Primero se crea la ficha y después se cierra la solicitud: si crear la ficha falla, la solicitud no cambia; si otra persona decide en el mismo instante, `409 conflict` y se deshace la ficha. Si el aviso por correo falla, la ficha sigue publicada y solo se anota el fallo (sin la dirección).
   - Las fotos no se mueven todavía: llegan con `POST /uploads`.
 - `reject`: exige `reason` (`not_independent`, `no_evidence`, `duplicate`, `out_of_zone`, `other`) y admite `note`.
-- `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 14 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
+- `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 30 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
 - Una solicitud ya resuelta no admite otra decisión (`409 already_resolved`). `reject` también cierra una solicitud en `info_requested`. Si otra persona decide en el mismo instante, `409 conflict`.
 - **Al rechazar o aprobar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
 - El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la integración de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.

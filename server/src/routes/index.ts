@@ -5,6 +5,7 @@ import type { Mailer } from '../services/mailer.js';
 import { authRouter } from './auth.js';
 import { healthRouter } from './health.js';
 import { proposalsRouter } from './proposals.js';
+import { repliesRouter } from './replies.js';
 import { reportsRouter } from './reports.js';
 import { restaurantsRouter } from './restaurants.js';
 import { suggestionsRouter } from './suggestions.js';
@@ -47,6 +48,7 @@ export function createApiRouter({
       secureCookies,
     }),
   );
+  api.use(repliesRouter({ replyTokenSecret }));
   api.use(
     suggestionsRouter({
       allowedOrigins,

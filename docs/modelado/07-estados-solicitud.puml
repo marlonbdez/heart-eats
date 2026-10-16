@@ -12,7 +12,7 @@ P --> A : aprobar (CU-24)\n[comprobaciones hechas]
 P --> R : rechazar (CU-25)\n[motivo]
 P --> I : pedir información (CU-26)\n[nota]
 I --> P : responde quien propuso
-I --> R : no responde en 14 días
+I --> R : no responde en 30 días
 A --> [*]
 R --> [*]
 
