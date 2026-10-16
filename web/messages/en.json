@@ -552,6 +552,7 @@
           "If you tap Near me: your location is used only on your device, to sort places by distance. It is not sent or saved, and it is only requested when you tap the button.",
           "If you suggest a place: the place details, how you know it, a link (optional), photos of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 9 months at the latest.",
           "If you suggest a correction: what needs correcting, your explanation, a link (optional) and your email (optional). We use them to review the notice and, if it is right, update the listing. They are kept like a suggestion.",
+          "If you reply to a request for information: the text you write (up to 2000 characters; please do not include health details or other people’s names). It is kept with the proposal to decide on it, and for as long as it. To write to you we use the email you left, and the reply link works only once.",
           "If you request a removal: what you want removed, your explanation (without health data or third-party names) and your email, which is required so we can confirm by email that you are the person or their representative before hiding anything. They are kept like a suggestion; your email is deleted when it is resolved or after 9 months at the latest.",
           "If you are a moderator: your email and the area you moderate, so you can sign in and review suggestions, for as long as you are one.",
           "To prevent unwanted messages: a temporary counter per IP address, kept for a few hours. The hidden field in the form does not store anything about you.",
@@ -1073,5 +1074,31 @@
   },
   "submit": {
     "limited": "Many requests have been sent from your connection in a short time. No problem: please try again in a little while."
+  },
+  "reply": {
+    "title": "Reply to Moderation",
+    "intro": "Moderation needs one more detail about “{name}” to make a decision.",
+    "introNoName": "Moderation needs one more detail about your proposal to make a decision.",
+    "note": "What we need to know",
+    "deadline": "You can reply until {date}. If you would rather leave it as it is, you do not need to do anything.",
+    "message": "Your reply",
+    "hint": "Take your time. Up to 2000 characters.",
+    "consent": "We keep your reply only to decide on this proposal. More in",
+    "privacy": "the privacy policy",
+    "submit": "Send reply",
+    "sending": "Sending…",
+    "invalid": "Write your reply before sending it.",
+    "limited": "Many replies have been sent from your connection in a short time. Please try again in a while.",
+    "error": "We could not send your reply. Please try again in a moment.",
+    "done": {
+      "title": "Thank you for replying!",
+      "body": "We have received your reply and the proposal goes back to the Moderation queue. We will write to you if we need anything else.",
+      "back": "Back to the map"
+    },
+    "invalidLink": {
+      "title": "This link is no longer valid",
+      "body": "You may have already replied, it may have expired, or Moderation may have sent a newer one. If you want to add something, write to us.",
+      "contact": "Go to contact"
+    }
   }
 }

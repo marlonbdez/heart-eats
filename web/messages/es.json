@@ -552,6 +552,7 @@
           "Si pulsas «Cerca de mí»: tu ubicación se usa solo en tu dispositivo, para ordenar los locales por distancia. No se envía ni se guarda, y solo se pide cuando pulsas el botón.",
           "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
+          "Si respondes a una petición de información: el texto que escribas (hasta 2000 caracteres; te pedimos que no incluyas datos de salud ni nombres de otras personas). Se guarda con la propuesta para decidir sobre ella y se conserva como ella. Para escribirte usamos el correo que dejaste, y el enlace de respuesta sirve una sola vez.",
           "Si pides una retirada: qué quieres retirar, tu explicación (sin datos de salud ni nombres de terceros) y tu correo, que es obligatorio para confirmar por correo que eres la persona o su representante antes de ocultar nada. Se conservan igual que una propuesta; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
@@ -1073,5 +1074,31 @@
   },
   "submit": {
     "limited": "Se han enviado muchas solicitudes desde tu conexión en poco tiempo. No pasa nada: vuelve a intentarlo dentro de un rato."
+  },
+  "reply": {
+    "title": "Responder a Moderación",
+    "intro": "Moderación necesita un dato más sobre «{name}» para poder decidir.",
+    "introNoName": "Moderación necesita un dato más sobre tu propuesta para poder decidir.",
+    "note": "Lo que nos hace falta saber",
+    "deadline": "Puedes responder hasta el {date}. Si prefieres que lo dejemos así, no hace falta que hagas nada.",
+    "message": "Tu respuesta",
+    "hint": "Escribe con calma, sin prisa. Hasta 2000 caracteres.",
+    "consent": "Guardamos tu respuesta solo para decidir sobre esta propuesta. Más en",
+    "privacy": "la política de privacidad",
+    "submit": "Enviar respuesta",
+    "sending": "Enviando…",
+    "invalid": "Escribe tu respuesta antes de enviarla.",
+    "limited": "Se han enviado muchas respuestas desde tu conexión en poco tiempo. Vuelve a intentarlo dentro de un rato.",
+    "error": "No hemos podido enviar tu respuesta. Inténtalo de nuevo en un momento.",
+    "done": {
+      "title": "¡Gracias por responder!",
+      "body": "Hemos recibido tu respuesta y la propuesta vuelve a la cola de Moderación. Te escribiremos si necesitamos algo más.",
+      "back": "Volver al mapa"
+    },
+    "invalidLink": {
+      "title": "Este enlace ya no es válido",
+      "body": "Puede que ya hayas respondido, que haya caducado o que Moderación haya enviado uno más reciente. Si quieres añadir algo, escríbenos.",
+      "contact": "Ir a contacto"
+    }
   }
 }
