@@ -10,7 +10,9 @@ const config = {
   CORS_ORIGINS: ['https://hearteats.org'],
   KNOWN_CHAINS: ['gran cadena'],
 };
-const app = createApp(config);
+// Cada prueba arranca su propia app: el límite de envíos es por instancia y
+// compartirlo haría que las últimas pruebas recibieran 429.
+let app: ReturnType<typeof createApp>;
 const post = (body: unknown, target = app) =>
   request(target)
     .post('/api/v1/proposals')
@@ -33,7 +35,10 @@ const proposal = {
 
 beforeAll(startTestDb);
 afterAll(stopTestDb);
-beforeEach(clearTestDb);
+beforeEach(async () => {
+  app = createApp(config);
+  await clearTestDb();
+});
 
 describe('POST /api/v1/proposals', () => {
   it('crea una solicitud pendiente y responde 202 con su id', async () => {
