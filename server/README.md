@@ -41,6 +41,8 @@ Se validan al arrancar con Zod (`src/config/env.ts`); si alguna está mal, el se
 | `MAIL_FROM` / `MAIL_REPLY_TO`                  | `HeartEats <acceso@mail.hearteats.org>` / `contact@hearteats.org`                                | Remitente (subdominio propio, ADR 0007) y dirección a la que responden                                                                |
 | `KNOWN_CHAINS`                                 | vacío                                                                                            | Nombres de grandes cadenas, separados por comas, para el aviso `chain`. Es configuración: no se escriben en el repo                   |
 
+**En producción hay que poner a mano** `MONGODB_URI`, `RESEND_API_KEY`, `REPLY_TOKEN_SECRET` (por ejemplo, `openssl rand -hex 32`) y `ADMIN_EMAIL`, y además `WEB_URL` (`https://hearteats.org`), `CORS_ORIGINS` y `TRUST_PROXY=1`. Si falta una de las tres primeras, el servidor no arranca y el despliegue falla: el motivo está en los registros del despliegue.
+
 `.env` no se sube al repo.
 
 ## Estructura

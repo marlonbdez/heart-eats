@@ -48,3 +48,58 @@ export const newPlaceApprovalSchema = z.object({
 });
 
 export type NewPlaceApproval = z.infer<typeof newPlaceApprovalSchema>;
+
+const pin = z.object({
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+});
+
+const hhmm = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+const hasValue = (value: object) =>
+  Object.values(value).some((entry) => entry !== undefined);
+
+// Aprobar una corrección. Lo que cuenta quien la envía es texto libre, así que
+// quien aprueba escribe aquí el cambio ya comprobado. Solo se puede tocar lo
+// que se corrige a menudo; el resto (contacto, descripción…) llegará cuando
+// haga falta. Si cambia la dirección y no viene `location`, se geocodifica.
+export const correctionApprovalSchema = z
+  .object({
+    name: z.string().trim().min(2).max(120).optional(),
+    address: z
+      .object({
+        street: text(200).optional(),
+        city: text(100).optional(),
+        postalCode: text(10).optional(),
+      })
+      .refine(hasValue, { error: 'indica al menos un campo' })
+      .optional(),
+    location: pin.optional(),
+    openingHours: z
+      .array(
+        z.object({
+          day: z.number().int().min(0).max(6),
+          open: z.string().regex(hhmm),
+          close: z.string().regex(hhmm),
+        }),
+      )
+      .max(21)
+      .optional(),
+    // El local ha cerrado para siempre: deja de mostrarse.
+    closed: z.literal(true).optional(),
+  })
+  .refine(hasValue, { error: 'indica qué cambia en la ficha' });
+
+export type CorrectionApproval = z.infer<typeof correctionApprovalSchema>;
+
+// Aprobar una retirada. Sin confirmar por correo que quien la pide es la
+// persona o su representante, no se retira nada (docs/casos-de-uso/moderacion.md,
+// CU-23). Para una historia hay que decir cuál, por su posición en la ficha.
+export const removalApprovalSchema = z.object({
+  identityConfirmed: z.literal(true, {
+    error: 'hay que confirmar quién pide la retirada',
+  }),
+  storyIndex: z.number().int().min(0).max(2).optional(),
+});
+
+export type RemovalApproval = z.infer<typeof removalApprovalSchema>;

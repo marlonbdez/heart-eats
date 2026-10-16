@@ -11,3 +11,11 @@ export class ApiError extends Error {
     this.name = 'ApiError';
   }
 }
+
+// Otra persona decidió entre la lectura y la escritura.
+export const requestChanged = () =>
+  new ApiError(
+    409,
+    'conflict',
+    'La solicitud acaba de cambiar; vuelve a abrirla',
+  );
