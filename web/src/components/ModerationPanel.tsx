@@ -9,12 +9,16 @@ import type {
   ModerationItem,
   ModerationSession,
 } from '@/lib/types';
+import { AuditAdmin } from './AuditAdmin';
 import { ModerationDetail } from './ModerationDetail';
 import { Remote } from './Remote';
+import { StaffAdmin } from './StaffAdmin';
 import form from './Form.module.css';
 import styles from './Moderation.module.css';
 
 type Tab = 'pending' | 'resolved';
+type Section = 'queue' | 'staff' | 'audit';
+const sections: Section[] = ['queue', 'staff', 'audit'];
 
 // Las tres listas de la cola: lo pendiente, lo que espera respuesta de quien
 // propuso y lo ya resuelto.
@@ -37,7 +41,8 @@ export function ModerationPanel({
   onSignOut: () => void;
 }) {
   const t = useTranslations('moderation');
-  const queue = useLoad(loadQueue);
+  const [section, setSection] = useState<Section>('queue');
+  const isAdmin = session.role === 'admin';
   return (
     <>
       <div className={styles.bar}>
@@ -55,10 +60,42 @@ export function ModerationPanel({
           {t('signOut')}
         </button>
       </div>
-      <Remote state={queue}>
-        {(items) => <Queue items={items} role={session.role} />}
-      </Remote>
+      {isAdmin && (
+        <div
+          className={styles.sections}
+          role="group"
+          aria-label={t('sections.label')}
+        >
+          {sections.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className={styles.tab}
+              aria-pressed={section === s}
+              onClick={() => setSection(s)}
+            >
+              {t(`sections.${s}`)}
+            </button>
+          ))}
+        </div>
+      )}
+      {section === 'queue' || !isAdmin ? (
+        <QueueSection role={session.role} />
+      ) : section === 'staff' ? (
+        <StaffAdmin />
+      ) : (
+        <AuditAdmin />
+      )}
     </>
+  );
+}
+
+function QueueSection({ role }: { role: ModerationSession['role'] }) {
+  const queue = useLoad(loadQueue);
+  return (
+    <Remote state={queue}>
+      {(items) => <Queue items={items} role={role} />}
+    </Remote>
   );
 }
 

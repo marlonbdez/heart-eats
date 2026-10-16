@@ -1,6 +1,7 @@
 import { test as base, type Route } from '@playwright/test';
 import { foodTags, restaurants } from '../fixtures/restaurants';
 import { suggestions } from '../fixtures/moderation';
+import { auditLines, staff, type ApiStaff } from '../fixtures/staff';
 
 export * from '@playwright/test';
 
@@ -43,6 +44,15 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
       moderationScope: [{ country: 'ES' }],
     });
 
+    // Quién modera cambia con las altas y bajas de la propia prueba.
+    const team: ApiStaff[] = structuredClone(staff);
+    const denied = (route: Route) =>
+      route.fulfill({
+        status: 403,
+        headers: cors(route),
+        json: { error: { code: 'forbidden', message: 'Solo administración' } },
+      });
+
     await page.route(`${API}/**`, async (route) => {
       const request = route.request();
       const { pathname, searchParams } = new URL(request.url());
@@ -59,6 +69,15 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
             'access-control-allow-headers': 'content-type, x-requested-with',
           },
         });
+      }
+
+      if (method === 'DELETE') {
+        sent.push({ path, body: {} });
+        if (session.role !== 'admin') return denied(route);
+        const member = team.find((m) => `/users/${m.id}` === path);
+        if (!member) return route.fulfill({ status: 404, headers, json: {} });
+        member.disabledAt ??= new Date().toISOString();
+        return route.fulfill({ status: 204, headers });
       }
 
       if (method === 'POST') {
@@ -96,6 +115,32 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
             headers,
             json: { status: 'received' },
           });
+        }
+        if (path === '/users') {
+          if (session.role !== 'admin') return denied(route);
+          const email = String(body.email);
+          const found = team.find((m) => m.email === email);
+          if (found && !found.disabledAt) {
+            return route.fulfill({
+              status: 409,
+              headers,
+              json: { error: { code: 'already_exists', message: 'Ya existe' } },
+            });
+          }
+          const member: ApiStaff = {
+            id: found?.id ?? `u${team.length + 1}`,
+            email,
+            role: 'moderator',
+            moderationScope:
+              body.moderationScope as ApiStaff['moderationScope'],
+            createdAt: found?.createdAt ?? new Date().toISOString(),
+          };
+          team.splice(
+            found ? team.indexOf(found) : team.length,
+            found ? 1 : 0,
+            member,
+          );
+          return route.fulfill({ status: 201, headers, json: member });
         }
         if (path === '/auth/logout') {
           session.role = null;
@@ -139,6 +184,27 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
           });
         }
         return route.fulfill({ headers, json: me() });
+      }
+      if (path === '/users') {
+        if (session.role !== 'admin') return denied(route);
+        return route.fulfill({ headers, json: { items: team } });
+      }
+      if (path === '/audit') {
+        if (session.role !== 'admin') return denied(route);
+        const entity = searchParams.get('entity');
+        const lines = auditLines.filter((l) => !entity || l.entity === entity);
+        // Páginas de tres: el cursor es el índice por donde seguir.
+        const from = Number(searchParams.get('cursor') ?? 0);
+        const items = lines.slice(from, from + 3);
+        return route.fulfill({
+          headers,
+          json: {
+            items,
+            ...(from + 3 < lines.length
+              ? { nextCursor: String(from + 3) }
+              : {}),
+          },
+        });
       }
       if (path === '/suggestions' || path.startsWith('/suggestions/')) {
         if (!session.role) {

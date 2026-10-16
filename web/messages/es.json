@@ -1020,6 +1020,80 @@
       "error": "No hemos podido enviar el enlace. Inténtalo de nuevo en un momento.",
       "invalidLink": "El enlace no es válido o ha caducado. Pide uno nuevo.",
       "entering": "Entrando…"
+    },
+    "sections": {
+      "label": "Secciones",
+      "queue": "Solicitudes",
+      "staff": "Usuarios",
+      "audit": "Registro"
+    },
+    "staff": {
+      "title": "Quién modera",
+      "intro": "Invita a una persona con su correo y el lugar donde puede decidir. No se le envía nada: entra pidiendo su enlace de acceso con ese mismo correo.",
+      "inviteTitle": "Invitar a un moderador",
+      "email": "Correo",
+      "country": "País (dos letras)",
+      "city": "Ciudad",
+      "optional": "(opcional)",
+      "submit": "Dar de alta",
+      "saving": "Guardando…",
+      "invited": "Listo: {email} ya puede pedir su enlace de acceso.",
+      "listTitle": "Personas con acceso",
+      "roles": {
+        "moderator": "Moderador",
+        "admin": "Administrador"
+      },
+      "scope": "decide en {scope}",
+      "scopeNone": "sin ámbito",
+      "since": "Alta el {date}",
+      "disabledOn": "De baja desde el {date}",
+      "disable": "Dar de baja",
+      "disableLabel": "Dar de baja a {email}",
+      "confirmAsk": "¿Dar de baja a {email}? Perderá el acceso ahora mismo; lo que hizo seguirá en el registro.",
+      "confirm": "Confirmar baja",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidEmail": "Escribe un correo válido.",
+        "invalidCountry": "El país son dos letras, por ejemplo ES.",
+        "exists": "Esa persona ya tiene acceso.",
+        "forbidden": "No tienes permiso para hacer esto.",
+        "save": "No hemos podido guardarlo. Puedes intentarlo de nuevo.",
+        "disable": "No hemos podido dar de baja. Puedes intentarlo de nuevo."
+      }
+    },
+    "audit": {
+      "title": "Registro",
+      "intro": "Lo que se ha hecho, de lo más reciente a lo más antiguo. No guarda nombres ni historias.",
+      "filterLabel": "Mostrar",
+      "all": "Todo",
+      "entities": {
+        "restaurant": "Local",
+        "team": "Equipo",
+        "suggestion": "Solicitud",
+        "user": "Persona"
+      },
+      "actions": {
+        "approve": "Aprobada",
+        "reject": "Rechazada",
+        "ask_info": "Información pedida",
+        "login": "Inicio de sesión",
+        "invite": "Alta de moderador",
+        "reinstate": "Alta repuesta",
+        "disable": "Baja",
+        "archive": "Archivada",
+        "auto_close": "Cerrada por plazo",
+        "create": "Creada",
+        "update": "Modificada",
+        "purge_email": "Correo borrado",
+        "purge_stories": "Historias borradas",
+        "revoke_story": "Historia retirada"
+      },
+      "by": "por {email}",
+      "system": "por el sistema",
+      "empty": "Todavía no hay nada en el registro.",
+      "more": "Cargar más",
+      "loadingMore": "Cargando…",
+      "moreError": "No hemos podido cargar más. Puedes intentarlo de nuevo."
     }
   },
   "removal": {
