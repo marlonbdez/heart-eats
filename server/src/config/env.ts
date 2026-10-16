@@ -62,6 +62,9 @@ const schema = z
     // Resend envía los enlaces de acceso. Sin clave solo hay consola, y solo
     // en desarrollo.
     RESEND_API_KEY: optional(z.string().min(1)),
+    // Secreto con el que se firman los enlaces de «Info pedida» (ADR 0007).
+    // Sin él, fuera de producción, cada arranque usa uno al azar.
+    REPLY_TOKEN_SECRET: optional(z.string().min(32)),
     MAIL_FROM: z
       .string()
       .min(3)
@@ -76,6 +79,10 @@ const schema = z
   })
   .refine((env) => env.NODE_ENV !== 'production' || env.RESEND_API_KEY, {
     path: ['RESEND_API_KEY'],
+    message: 'es obligatoria en producción',
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || env.REPLY_TOKEN_SECRET, {
+    path: ['REPLY_TOKEN_SECRET'],
     message: 'es obligatoria en producción',
   })
   .transform((env) => ({

@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -20,6 +21,7 @@ type AppConfig = Pick<Config, 'CORS_ORIGINS'> &
       | 'KNOWN_CHAINS'
       | 'NODE_ENV'
       | 'WEB_URL'
+      | 'REPLY_TOKEN_SECRET'
     >
   >;
 
@@ -70,6 +72,9 @@ export function createApp(config: AppConfig, { mailer }: AppDeps = {}) {
       allowedOrigins: config.CORS_ORIGINS,
       secureCookies: config.NODE_ENV === 'production',
       knownChains: config.KNOWN_CHAINS ?? [],
+      // Sin secreto (desarrollo y pruebas), los enlaces solo valen hasta reiniciar.
+      replyTokenSecret:
+        config.REPLY_TOKEN_SECRET ?? randomBytes(32).toString('hex'),
     }),
   );
 

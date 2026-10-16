@@ -20,6 +20,7 @@ const mailer: Mailer = {
   async sendLoginLink(link) {
     sent.push(link);
   },
+  async sendInfoRequest() {},
 };
 const tokenOf = (link: LoginLink) => link.url.split('#token=')[1]!;
 const requestLink = (email = 'ana@example.org') =>
