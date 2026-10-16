@@ -1,6 +1,6 @@
 # Servidor de HeartEats
 
-API en Node.js + Express + MongoDB (TypeScript). Hoy tiene la **lectura pública** (`GET /api/v1/restaurants`, `/restaurants/geojson`, `/restaurants/:slug`, `/meta/filters` y `/health`) y los envíos de la comunidad sin cuenta: **propuestas de locales nuevos** (`POST /api/v1/proposals`), **correcciones** (`/corrections`) y **retiradas** (`/removals`), y la **entrada de moderación** por enlace mágico (`/auth/magic-link`, `/auth/session`, `/auth/me`, `/auth/logout`). El equipo (`/teams`), las fotos, la cola y las decisiones de moderación y el despliegue llegan en las siguientes PRs (ver `docs/05_ROADMAP.md`, fase 3).
+API en Node.js + Express + MongoDB (TypeScript). Hoy tiene la **lectura pública** (`GET /api/v1/restaurants`, `/restaurants/geojson`, `/restaurants/:slug`, `/meta/filters` y `/health`) y los envíos de la comunidad sin cuenta: **propuestas de locales nuevos** (`POST /api/v1/proposals`), **correcciones** (`/corrections`) y **retiradas** (`/removals`), y la **entrada de moderación** por enlace mágico (`/auth/magic-link`, `/auth/session`, `/auth/me`, `/auth/logout`) y la **cola** de solicitudes (`GET /suggestions`, `/suggestions/:id`). El equipo (`/teams`), las fotos, las decisiones de moderación y el despliegue llegan en las siguientes PRs (ver `docs/05_ROADMAP.md`, fase 3).
 
 Los endpoints previstos están en [`docs/02_API_SPEC.md`](../docs/02_API_SPEC.md) y la arquitectura en [`docs/03_ARQUITECTURA.md`](../docs/03_ARQUITECTURA.md).
 
@@ -68,5 +68,6 @@ seed/              # restaurants.json (6 locales [DEMO]) y el script que los car
 - Los envíos de la comunidad no publican nada: crean una `Suggestion` en `pending`. Solo se guarda lo que el esquema de Zod conoce (lo demás se descarta, también cualquier dato de personas del equipo) y el correo va aparte del contenido, nunca por la lectura pública.
 - Honeypot (`website` relleno): respuesta `202` igual y no se guarda nada. La IP vive solo en los contadores en memoria del tope de envíos, unas horas. Ese tope, único para todas las rutas de envío, solo cuenta los envíos válidos: uno con errores o el del honeypot no gasta cupo.
 - Moderación entra sin contraseña (ADR 0007): el token del enlace caduca a los 15 minutos, sirve una vez y solo se guarda su hash. La sesión vive en Mongo, caduca a los 7 días sin actividad y viaja en la cookie `he_session` (`HttpOnly`, `Secure` en producción, `SameSite=Strict`). Las escrituras con sesión exigen el `Origin` de la web y la cabecera `X-Requested-With`. `/auth/magic-link` responde siempre `202`, exista o no el correo, y no envía a quien no puede moderar.
+- La cola de moderación solo enseña lo del ámbito de quien la mira y nunca el correo entero (`services/mask-email.ts`); fuera de ámbito, `404`.
 - Los locales nunca se piden «todos»: hace falta una zona (`bbox`, `near`, `country` o `city`).
 - Un código de error estable en inglés (`validation_failed`, `not_found`…); el mensaje no está pensado para mostrarse.
