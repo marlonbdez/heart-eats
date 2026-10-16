@@ -55,7 +55,11 @@ Una PR por paso:
   - [x] `POST /corrections` (F4) y `POST /removals`
   - [ ] `POST /teams` (F3): aparte, porque guarda historias y depende de cómo las revisa Moderación (`02_API_SPEC.md`, pregunta 1)
   - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
-- [ ] Moderación: enlace mágico, cola, decisiones, geocodificación y registro de auditoría
+- [ ] Moderación. Por partes:
+  - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
+  - [ ] Cola: `GET /suggestions` y `/suggestions/:id`, con permisos por rol y ámbito
+  - [ ] Decisiones (aprobar, rechazar, pedir información), geocodificación, avisos por correo y borrado del correo al resolver
+  - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal
 
