@@ -219,41 +219,68 @@ describe('GET /api/v1/suggestions/:id', () => {
     });
   });
 
-  it('el equipo de un negocio sale sin nombres ni textos de historias', async () => {
-    const [s] = await seed({
-      type: 'team',
-      targetRestaurantId: madridId,
-      payload: {
-        level: 'full',
-        summary: { totalStaff: 8, staffWithDisability: 3 },
-        areas: ['kitchen'],
-        stories: [
-          {
-            displayName: 'Lucía',
-            role: 'Cocina',
-            storyText: 'Mi historia',
-            consentBy: 'self',
-          },
-        ],
-      },
-      contactEmail: 'ana@example.org',
-      createdAt: new Date('2026-10-01T00:00:00Z'),
+  describe('el equipo de un negocio', () => {
+    const seedTeam = async () => {
+      const [s] = await seed({
+        type: 'team',
+        targetRestaurantId: madridId,
+        payload: {
+          level: 'full',
+          summary: { totalStaff: 8, staffWithDisability: 3 },
+          areas: ['kitchen'],
+          stories: [
+            {
+              displayName: 'Lucía',
+              role: 'Cocina',
+              storyText: 'Mi historia',
+              consentBy: 'self',
+            },
+          ],
+        },
+        contactEmail: 'ana@example.org',
+        createdAt: new Date('2026-10-01T00:00:00Z'),
+      });
+      return s!;
+    };
+
+    it('un administrador lee las historias al abrirla', async () => {
+      const s = await seedTeam();
+      const cookie = await signedInCookie({ role: 'admin' });
+      const res = await get(`/suggestions/${s._id}`, cookie);
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        type: 'team',
+        name: '[DEMO] Uno',
+        team: {
+          level: 'full',
+          totalStaff: 8,
+          staffWithDisability: 3,
+          areas: ['kitchen'],
+          stories: 1,
+          storyTexts: [
+            {
+              displayName: 'Lucía',
+              role: 'Cocina',
+              storyText: 'Mi historia',
+              consentBy: 'self',
+            },
+          ],
+        },
+      });
     });
-    const cookie = await signedInCookie({ role: 'admin' });
-    const res = await get(`/suggestions/${s!._id}`, cookie);
-    expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({
-      type: 'team',
-      name: '[DEMO] Uno',
-      team: {
-        level: 'full',
-        totalStaff: 8,
-        staffWithDisability: 3,
-        areas: ['kitchen'],
-        stories: 1,
-      },
+
+    it('quien no es administrador y la lista solo ven cuántas hay', async () => {
+      const s = await seedTeam();
+      const admin = await signedInCookie({ role: 'admin' });
+      const moderator = await signedInCookie({ email: 'mod@example.org' });
+      const opened = await get(`/suggestions/${s._id}`, moderator);
+      const listed = await get('/suggestions', admin);
+      for (const res of [opened, listed]) {
+        expect(res.status).toBe(200);
+        expect(JSON.stringify(res.body)).toContain('"stories":1');
+        expect(JSON.stringify(res.body)).not.toMatch(/Lucía|Mi historia/);
+      }
     });
-    expect(JSON.stringify(res.body)).not.toMatch(/Lucía|Mi historia/);
   });
 
   it('404 si no existe, el id no es válido o está fuera del ámbito', async () => {

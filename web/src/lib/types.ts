@@ -148,13 +148,14 @@ export interface BusinessStoryInput extends TeamStory {
 // El negocio cuenta su equipo (F3). Entra en moderación, que se pone en
 // contacto con el negocio para confirmar que es quien dice ser.
 export interface BusinessTeamInput {
+  locale?: 'es' | 'en'; // idioma en que se escribe a quien envía
   restaurantSlug: string;
   level: TeamLevel;
   summary: Team['summary'];
   areas?: TeamArea[];
   disabilityTypes?: DisabilityType[];
   stories?: BusinessStoryInput[]; // 0-3
-  photos?: Blob[]; // 0-3, ya reducidas; sin subir
+  photos?: Blob[]; // 0-3, ya reducidas; todavía no se envían (falta /uploads)
   contactEmail: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }
@@ -216,8 +217,8 @@ export interface ModerationItem {
   correction?: { kind: CorrectionKind; before?: string; after: string };
   // Solo en una petición de retirada.
   removal?: { what: RemovalWhat; details?: string };
-  // Solo en el equipo de un negocio (F3). Nunca lleva nombres ni textos de
-  // historias: solo cuántas hay (una historia sin consentimiento no se envía).
+  // Solo en el equipo de un negocio (F3). La lista y quien no es admin ven solo
+  // cuántas historias hay; un administrador las lee al abrir la solicitud.
   team?: {
     level: TeamLevel;
     totalStaff: number;
@@ -225,6 +226,7 @@ export interface ModerationItem {
     areas?: TeamArea[];
     disabilityTypes?: DisabilityType[];
     stories: number;
+    storyTexts?: BusinessStoryInput[];
   };
 }
 

@@ -89,6 +89,32 @@ export const suggestions: ApiSuggestion[] = [
   },
   {
     ...base,
+    id: 's7',
+    type: 'team',
+    status: 'pending',
+    createdAt: daysAgo(5),
+    name: '[DEMO] Café Paso a Paso',
+    neighborhood: 'Malasaña',
+    address: 'Calle del Pez 3, Madrid',
+    restaurantSlug: 'demo-cafe-paso-a-paso',
+    team: {
+      level: 'full',
+      totalStaff: 9,
+      staffWithDisability: 4,
+      areas: ['kitchen'],
+      stories: 1,
+      storyTexts: [
+        {
+          displayName: 'Persona de ejemplo',
+          role: 'Cocina',
+          storyText: 'Texto de ejemplo de una historia.',
+          consentBy: 'self',
+        },
+      ],
+    },
+  },
+  {
+    ...base,
     id: 's6',
     type: 'new',
     status: 'approved',

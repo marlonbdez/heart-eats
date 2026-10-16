@@ -145,24 +145,38 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
-    test('negocio: fotos de su local con aviso de permiso', async ({
+    test('negocio: historia con nombre y aviso de permiso', async ({
       page,
     }) => {
+      await page.goto('/es/business/demo-la-masa-madre');
+      await page.getByRole('button', { name: 'Empezar' }).click();
+      await page.getByLabel(/Historias con nombre/).check();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await page.getByLabel('Personas en el equipo').fill('11');
+      await page.getByLabel('De ellas, con discapacidad').fill('4');
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]').first()).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('negocio: aviso de demasiados envíos', async ({ page }) => {
+      await page.route(`${API}/teams`, (route) =>
+        route.fulfill({
+          status: 429,
+          headers: { 'access-control-allow-origin': '*' },
+          json: { error: { code: 'rate_limited', message: 'Muchas' } },
+        }),
+      );
       await page.goto('/es/business/demo-la-masa-madre');
       await page.getByRole('button', { name: 'Empezar' }).click();
       await page.getByLabel(/Solo cifras/).check();
       await page.getByRole('button', { name: 'Continuar' }).click();
       await page.getByLabel('Personas en el equipo').fill('8');
       await page.getByLabel('De ellas, con discapacidad').fill('3');
-      await page.locator('input[type=file]').setInputFiles({
-        name: 'local.png',
-        mimeType: 'image/png',
-        buffer: Buffer.from(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-          'base64',
-        ),
-      });
       await page.getByRole('button', { name: 'Continuar' }).click();
+      await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+      await page.getByLabel(/Soy responsable del negocio/).check();
+      await page.getByRole('button', { name: 'Enviar a revisión' }).click();
       await expect(page.locator('p[role=alert]')).toBeVisible();
       await expectNoViolations(page);
     });
@@ -199,12 +213,26 @@ for (const scheme of ['light', 'dark'] as const) {
     test('moderación: corrección y retirada', async ({ page, session }) => {
       session.role = 'admin';
       await page.goto('/es/moderation');
-      await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
+      await page
+        .getByRole('button', { name: /Corrección.*Café Paso a Paso/s })
+        .click();
       await expectNoViolations(page);
       await page.getByRole('button', { name: 'Volver a la lista' }).click();
       await page
         .getByRole('button', { name: /Retirada.*La Masa Madre/s })
         .click();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: equipo con historias', async ({ page, session }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page
+        .getByRole('button', { name: /Equipo.*Café Paso a Paso/s })
+        .click();
+      await expect(
+        page.getByText('Texto de ejemplo de una historia.'),
+      ).toBeVisible();
       await expectNoViolations(page);
     });
 

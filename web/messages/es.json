@@ -530,7 +530,7 @@
       {
         "heading": "Esta versión está empezando",
         "paragraphs": [
-          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo y el envío de fotos todavía son una simulación: no se guarda nada. Lo que sigue describe cómo tratamos los datos."
+          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo también se envía de verdad. El envío de fotos todavía no está disponible: por ahora no se piden. Lo que sigue describe cómo tratamos los datos."
         ]
       },
       {
@@ -556,7 +556,7 @@
           "Si pides una retirada: qué quieres retirar, tu explicación (sin datos de salud ni nombres de terceros) y tu correo, que es obligatorio para confirmar por correo que eres la persona o su representante antes de ocultar nada. Se conservan igual que una propuesta; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
-          "Si eres un negocio y cuentas tu equipo: cifras del equipo y, en el nivel máximo, nombre o seudónimo, puesto, historia y foto de cada persona; y, si quieres, fotos de tu local o de tus platos (con tu confirmación de permiso), para mostrar la ficha con el detalle que el negocio elija. Se conservan mientras el negocio y la persona lo mantengan."
+          "Si eres un negocio y cuentas tu equipo: cifras del equipo, tu correo (obligatorio, para confirmar contigo que lo envía el negocio) y, en el nivel máximo, nombre o seudónimo, puesto e historia de cada persona, con su permiso (las fotos todavía no se piden). Los usamos para mostrar la ficha con el detalle que el negocio elija. Mientras se revisa, solo las lee un administrador; el correo se borra al resolver la solicitud o, como máximo, a los 9 meses. Las historias salen de la solicitud al resolverla: si se aprueba, pasan a la ficha y se conservan mientras el negocio y la persona lo mantengan; si no, se borran."
         ],
         "paragraphs": [
           "Tu correo y lo que escribes en los formularios los tratamos porque tú nos los das al enviar (tu consentimiento). Los datos de una persona del equipo, solo con el consentimiento explícito de esa persona."
@@ -947,7 +947,8 @@
       "alreadyAsked": "Ya se pidió información sobre esta solicitud.",
       "mailFailed": "No se pudo enviar el correo. Puedes intentarlo de nuevo.",
       "targetGone": "La ficha ya no está publicada.",
-      "storyNotFound": "Esa historia no existe o ya está retirada."
+      "storyNotFound": "Esa historia no existe o ya está retirada.",
+      "tooManyStories": "El equipo ya tiene historias y no caben las nuevas (máximo 3). Rechaza la solicitud o pide que se retire alguna."
     },
     "result": {
       "approvedNew": "Aprobada y publicada",
@@ -975,7 +976,13 @@
     "teamAreas": "Áreas",
     "teamTypes": "Tipos de discapacidad",
     "teamStories": "Historias",
-    "teamStoriesValue": "{n, plural, =0 {Ninguna} one {# historia, con su consentimiento} other {# historias, cada una con su consentimiento}}. Aquí no se muestran nombres ni textos.",
+    "teamStoriesValue": "{n, plural, =0 {Ninguna} one {# historia, con su consentimiento} other {# historias, cada una con su consentimiento}}.",
+    "teamStoriesHidden": "Solo un administrador puede leerlas.",
+    "teamStoryBy": "{name} · {role} · {consent}",
+    "teamConsent": {
+      "self": "permiso de la propia persona",
+      "legal_representative": "permiso de su representante legal"
+    },
     "approveTeam": "Aprobar y publicar el equipo",
     "removalTitle": "Qué se pide retirar",
     "removalWhat": "Qué",

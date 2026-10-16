@@ -53,7 +53,7 @@ Una PR por paso:
 - [ ] Envíos de F2, F3 y F4 y petición de retirada, con límite de envíos, honeypot y subida de fotos. Por partes:
   - [x] `POST /proposals` (F2): validación, honeypot, límite por IP y filtro automático
   - [x] `POST /corrections` (F4) y `POST /removals`
-  - [x] `POST /teams` (F3): nivel, cifras, áreas, tipos e historias (con el permiso de quien la cuenta); la cola muestra el equipo sin nombres ni textos. Aprobarlo queda para la siguiente PR (`02_API_SPEC.md`, pregunta 1)
+  - [x] `POST /teams` (F3): nivel, cifras, áreas, tipos e historias (con el permiso de quien la cuenta); la cola muestra el equipo sin nombres ni textos
   - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
@@ -62,7 +62,8 @@ Una PR por paso:
   - [x] Decisiones de rechazar (borra el correo) y pedir información (enlace firmado, 30 días): `POST /suggestions/:id/decision`
   - [x] Decisión de aprobar un local nuevo: publicar la ficha, borrar el correo y avisar por correo
   - [x] Aprobar correcciones (nombre, dirección, pin, horario, cerrado) y retiradas (ficha o historia)
-  - [ ] Aprobar el equipo, retiradas de fotos y de datos, y mover las fotos al aprobar (cuando existan `POST /teams` y `POST /uploads`)
+  - [x] Aprobar el equipo (solo admin): crea o actualiza el `Team`, añade las historias con su consentimiento y las saca de la solicitud; el admin las lee al abrirla
+  - [ ] Retiradas de fotos y de datos, y mover las fotos al aprobar (cuando exista `POST /uploads`)
   - [x] Borrado definitivo de las historias retiradas (21 días) y tope de conservación del correo (9 meses), en el trabajo horario
   - [ ] Borrado definitivo de una ficha retirada y de su equipo (hoy solo se archiva; hace falta marcar cuándo se retiró) y de las fotos retiradas (cuando existan)
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
@@ -70,8 +71,9 @@ Una PR por paso:
 - [ ] Conectar la web a la API, por partes:
   - [x] Lecturas (inicio, lista, fichas y categorías) desde el navegador, sin datos fijos; las fichas se sirven con una reescritura y no se generan al compilar
   - [x] Envíos de propuestas, correcciones y retiradas a la API (con el idioma, y el aviso de «demasiados envíos»); `/privacy` actualizada (Resend, Nominatim, plazos); topes de envío del servidor subidos a 100/hora y 1000/día
-  - [ ] Equipo del negocio (`POST /teams`) y fotos (`POST /uploads` + R2): hasta entonces el formulario del negocio sigue simulado y «Proponer un local» no pide fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
-  - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Falta: horario y pin en la corrección, aprobar el equipo (`POST /teams`), retiradas de fotos y de datos
+  - [x] Equipo del negocio: el formulario envía a `POST /teams` (con el idioma y el aviso de «demasiados envíos»); moderación lo aprueba desde la web y el admin lee las historias; `/privacy` actualizada
+  - [ ] Fotos (`POST /uploads` + R2): hasta entonces ni «Proponer un local» ni el formulario del negocio piden fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
+  - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Falta: horario y pin en la corrección, retiradas de fotos y de datos
   - [x] Página `/reply` para responder a «Info pedida» (lee el token del fragmento, muestra la nota y el plazo, y explica con calma el enlace ya usado o caducado); `/privacy` recoge la respuesta
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal

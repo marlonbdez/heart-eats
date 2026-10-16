@@ -69,6 +69,8 @@ function errorKey(err: unknown) {
       return 'targetGone';
     case 'story_not_found':
       return 'storyNotFound';
+    case 'too_many_stories':
+      return 'tooManyStories';
     default:
       return 'save';
   }
@@ -386,7 +388,12 @@ export function ModerationDetail({
               )}
             <div>
               <dt>{t('teamStories')}</dt>
-              <dd>{t('teamStoriesValue', { n: item.team.stories })}</dd>
+              <dd>
+                {t('teamStoriesValue', { n: item.team.stories })}{' '}
+                {item.team.stories > 0 &&
+                  !item.team.storyTexts &&
+                  t('teamStoriesHidden')}
+              </dd>
             </div>
             {item.photoCount ? (
               <div>
@@ -395,6 +402,21 @@ export function ModerationDetail({
               </div>
             ) : null}
           </dl>
+          {item.team.storyTexts?.map((st) => (
+            <blockquote
+              key={`${st.displayName}-${st.role}`}
+              className={styles.reply}
+            >
+              <p>{st.storyText}</p>
+              <footer className={styles.meta}>
+                {t('teamStoryBy', {
+                  name: st.displayName,
+                  role: st.role,
+                  consent: t(`teamConsent.${st.consentBy}`),
+                })}
+              </footer>
+            </blockquote>
+          ))}
           {item.restaurantSlug && (
             <Link
               href={`/place/${item.restaurantSlug}`}

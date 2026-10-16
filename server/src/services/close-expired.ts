@@ -34,7 +34,12 @@ export async function closeExpiredRequests(now = new Date()): Promise<number> {
           status: 'rejected',
           resolution: { reason: 'no_reply', decidedAt: now },
         },
-        $unset: { contactEmail: 1, 'infoRequest.nonce': 1 },
+        // Las historias de un equipo solo estaban de paso hasta la decisión.
+        $unset: {
+          contactEmail: 1,
+          'infoRequest.nonce': 1,
+          'payload.stories': 1,
+        },
       },
     );
     if (done.modifiedCount === 0) continue; // respondió o la resolvieron a la vez

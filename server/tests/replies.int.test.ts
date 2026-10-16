@@ -238,6 +238,31 @@ describe('cierre automático', () => {
     expect((await stored(grace._id))?.status).toBe('info_requested');
   });
 
+  it('al cerrar el equipo de un negocio, sus historias salen de la solicitud', async () => {
+    const restaurant = await Restaurant.create(restaurantData());
+    const s = await asked(REPLY_DAYS + REPLY_GRACE_DAYS + 1, {
+      type: 'team',
+      targetRestaurantId: restaurant._id,
+      payload: {
+        level: 'full',
+        summary: { totalStaff: 8, staffWithDisability: 3 },
+        stories: [
+          {
+            displayName: 'Marta',
+            role: 'Cocina',
+            storyText: 'Mi historia',
+            consentBy: 'self',
+          },
+        ],
+      },
+    });
+    expect(await closeExpiredRequests()).toBe(1);
+    const doc = await stored(s._id);
+    expect(doc?.status).toBe('rejected');
+    expect(doc?.payload).not.toHaveProperty('stories');
+    expect(doc?.payload).toMatchObject({ level: 'full' });
+  });
+
   it('cierra la que pasó el plazo y el margen: rechazada, sin correo, con auditoría', async () => {
     const s = await asked(REPLY_DAYS + REPLY_GRACE_DAYS + 1);
     const now = new Date();

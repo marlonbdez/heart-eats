@@ -530,7 +530,7 @@
       {
         "heading": "This version is just starting",
         "paragraphs": [
-          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story and photo sending are still a simulation: nothing is saved. What follows describes how we handle data."
+          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story is also really sent. Photo sending is not available yet: photos are not asked for for now. What follows describes how we handle data."
         ]
       },
       {
@@ -556,7 +556,7 @@
           "If you request a removal: what you want removed, your explanation (without health data or third-party names) and your email, which is required so we can confirm by email that you are the person or their representative before hiding anything. They are kept like a suggestion; your email is deleted when it is resolved or after 9 months at the latest.",
           "If you are a moderator: your email and the area you moderate, so you can sign in and review suggestions, for as long as you are one.",
           "To prevent unwanted messages: a temporary counter per IP address, kept for a few hours. The hidden field in the form does not store anything about you.",
-          "If you are a business and tell your team story: team figures and, at the highest level, name or pseudonym, role, story and photo of each person; and, if you want, photos of your place or dishes (with your confirmation of permission), to show the listing with the detail the business chooses. They are kept for as long as the business and the person keep them."
+          "If you are a business and tell your team story: team figures, your email (required, so we can confirm with you that the business is sending it) and, at the highest level, name or pseudonym, role and story of each person, with their permission (photos are not asked for yet). We use them to show the listing with the detail the business chooses. While it is being reviewed, only an administrator reads them; the email is deleted when the request is resolved or after 9 months at most. The stories leave the request once it is resolved: if it is approved, they move to the listing and are kept for as long as the business and the person keep them; if not, they are deleted."
         ],
         "paragraphs": [
           "We process your email and what you write in the forms because you give them to us when you send them (your consent). The data of a team member is processed only with that person’s explicit consent."
@@ -947,7 +947,8 @@
       "alreadyAsked": "Information was already requested for this request.",
       "mailFailed": "The email could not be sent. You can try again.",
       "targetGone": "The listing is no longer published.",
-      "storyNotFound": "That story does not exist or is already withdrawn."
+      "storyNotFound": "That story does not exist or is already withdrawn.",
+      "tooManyStories": "The team already has stories and the new ones do not fit (3 at most). Reject the request or ask for one to be withdrawn."
     },
     "result": {
       "approvedNew": "Approved and published",
@@ -975,7 +976,13 @@
     "teamAreas": "Areas",
     "teamTypes": "Types of disability",
     "teamStories": "Stories",
-    "teamStoriesValue": "{n, plural, =0 {None} one {# story, with consent} other {# stories, each with consent}}. Names and texts are not shown here.",
+    "teamStoriesValue": "{n, plural, =0 {None} one {# story, with consent} other {# stories, each with consent}}.",
+    "teamStoriesHidden": "Only an administrator can read them.",
+    "teamStoryBy": "{name} · {role} · {consent}",
+    "teamConsent": {
+      "self": "permission from the person themself",
+      "legal_representative": "permission from their legal representative"
+    },
     "approveTeam": "Approve and publish the team",
     "removalTitle": "What is asked to be removed",
     "removalWhat": "What",

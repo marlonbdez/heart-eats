@@ -80,7 +80,7 @@ Fichas: [negocio](casos-de-uso/negocio.md).
 
 | ID | Caso de uso | Actor | Estado |
 |---|---|---|---|
-| CU-15 | Contar el equipo del negocio | Representante del negocio | Hecho (envío simulado) |
+| CU-15 | Contar el equipo del negocio | Representante del negocio | Hecho |
 | CU-16 | Previsualizar la ficha | Representante del negocio | Hecho |
 | CU-17 | Dar el consentimiento de una historia | Representante del negocio | Hecho |
 
