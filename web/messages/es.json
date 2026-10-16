@@ -17,8 +17,7 @@
     "groups": {
       "navigate": "Navegar",
       "collaborate": "Colaborar",
-      "about": "Sobre HeartEats",
-      "team": "Equipo de moderación (demo)"
+      "about": "Sobre HeartEats"
     },
     "links": {
       "map": "Mapa",
@@ -32,7 +31,6 @@
       "cookies": "Cookies y almacenamiento",
       "legal": "Aviso legal",
       "contact": "Contacto",
-      "moderation": "Moderar propuestas (demo)",
       "removal": "Pedir una retirada"
     },
     "language": "Idioma"
@@ -713,20 +711,30 @@
       {
         "heading": "En pocas palabras",
         "items": [
-          "HeartEats no usa cookies.",
+          "Para quien visita la web, HeartEats no usa cookies. Solo las personas que moderan reciben una, necesaria para mantener su sesión (más abajo).",
           "No hay analítica, publicidad ni seguimiento.",
           "Por eso no verás ningún aviso de cookies.",
-          "Solo guarda un par de cosas en tu navegador, y únicamente cuando usas una función que las necesita."
+          "Solo guarda una cosa en tu navegador, y únicamente cuando usas una función que la necesita: el borrador de «Proponer un local»."
         ]
       },
       {
         "heading": "Lo que se guarda en tu navegador",
         "items": [
-          "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 7 días como máximo y se borra al enviar o al pulsar «Empezar de cero».",
-          "Los envíos de prueba: en esta versión de prueba, un resumen de lo que envías, sin el correo entero ni nombres ni historias, para verlo en la pantalla de moderación de prueba. Se puede borrar desde esa pantalla y desaparecerá cuando el envío sea real."
+          "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 7 días como máximo y se borra al enviar o al pulsar «Empezar de cero»."
         ],
         "paragraphs": [
           "Todo se queda en tu dispositivo y no se envía a nadie. Lo guarda tu navegador para una función que has pedido tú, por eso no te pedimos permiso."
+        ]
+      },
+      {
+        "heading": "La cookie de moderación",
+        "items": [
+          "Si eres moderador o moderadora, al entrar con el enlace del correo el servidor guarda una cookie llamada he_session.",
+          "Sirve solo para mantener tu sesión. La web no puede leerla (es httpOnly) y no se envía a nadie más.",
+          "Caduca tras 7 días sin actividad o al pulsar «Salir»."
+        ],
+        "paragraphs": [
+          "Es imprescindible para que puedas entrar, por eso no se pide permiso. Nadie más la recibe."
         ]
       },
       {
@@ -829,7 +837,6 @@
   },
   "moderation": {
     "title": "Moderación",
-    "demo": "Prototipo con datos de ejemplo. Lo que envíes tú desde este navegador aparece aquí arriba y se guarda solo en tu dispositivo. Las decisiones no se guardan. Con el servidor, se entrará con un enlace enviado al correo de quien modera, y esta pantalla no aparecerá en el menú.",
     "queueLabel": "Solicitudes",
     "tabs": {
       "pending": "Pendientes ({n})",
@@ -926,7 +933,20 @@
       "needNote": "Escribe qué información necesitas.",
       "save": "No hemos podido guardar la decisión. Puedes intentarlo de nuevo.",
       "notReadyTeam": "Faltan comprobaciones. Sin la confirmación del negocio y los consentimientos, el equipo no se publica.",
-      "notReadyRemoval": "Falta confirmar la identidad. Sin eso no se retira nada."
+      "notReadyRemoval": "Falta confirmar la identidad. Sin eso no se retira nada.",
+      "needStory": "Elige qué historia se retira.",
+      "needChange": "Escribe qué cambia en la ficha.",
+      "badPin": "Las coordenadas no son válidas.",
+      "forbidden": "No tienes permiso para decidir esto.",
+      "notImplemented": "Esto todavía no se puede hacer desde aquí.",
+      "conflict": "Otra persona acaba de decidir esta solicitud. Vuelve a abrir la lista.",
+      "geocodingRequired": "No se encontró el pin. Escribe las coordenadas a mano.",
+      "incomplete": "A la propuesta le falta la calle o el tipo de comida. Pídele información a quien la envió.",
+      "noContact": "Quien propuso no dejó correo, así que no se puede pedir información.",
+      "alreadyAsked": "Ya se pidió información sobre esta solicitud.",
+      "mailFailed": "No se pudo enviar el correo. Puedes intentarlo de nuevo.",
+      "targetGone": "La ficha ya no está publicada.",
+      "storyNotFound": "Esa historia no existe o ya está retirada."
     },
     "result": {
       "approvedNew": "Aprobada y publicada",
@@ -946,8 +966,6 @@
       "approvedTeam": "Hoy · Moderación · aprobó y publicó el equipo de «{name}»",
       "approvedRemoval": "Hoy · Moderación · retiró lo pedido en «{name}»"
     },
-    "mine": "Tienes {n, plural, one {# envío de prueba hecho} other {# envíos de prueba hechos}} desde este navegador.",
-    "clearMine": "Borrar mis envíos de prueba",
     "proposal": "Propuesta",
     "teamTitle": "Equipo que cuenta el negocio",
     "teamLevel": "Nivel elegido",
@@ -961,7 +979,40 @@
     "removalTitle": "Qué se pide retirar",
     "removalWhat": "Qué",
     "removalDetails": "Detalles",
-    "approveRemoval": "Retirar ahora"
+    "approveRemoval": "Retirar ahora",
+    "signedInAs": "Has entrado como {email}",
+    "signOut": "Salir",
+    "adminOnly": "Esta solicitud la decide un administrador. Puedes verla, pero no decidirla.",
+    "infoTitle": "Información pedida",
+    "infoDeadline": "Plazo de respuesta: hasta el {date}",
+    "pin": "Pin en el mapa",
+    "noPin": "No se ha encontrado; hay que ponerlo a mano",
+    "pinHelp": "Si no hay pin, escribe las coordenadas del local (por ejemplo, 40.4168 y -3.7038).",
+    "lat": "Latitud",
+    "lng": "Longitud",
+    "changeLegend": "Qué cambia en la ficha",
+    "changeHelp": "Escribe solo lo que has comprobado. Lo que dejes en blanco no se toca.",
+    "changeName": "Nombre",
+    "changeStreet": "Calle",
+    "changePostalCode": "Código postal",
+    "changeCity": "Ciudad",
+    "changeClosed": "El local ha cerrado para siempre (la ficha dejará de verse)",
+    "storyLabel": "¿Qué historia se retira?",
+    "storyChoose": "Elige una",
+    "storyN": "Historia {n}",
+    "storyHelp": "Su posición en la ficha, contando también las ya retiradas.",
+    "login": {
+      "intro": "Entra con tu correo de moderación: te enviamos un enlace que caduca en 15 minutos.",
+      "email": "Tu correo",
+      "submit": "Enviarme el enlace",
+      "sending": "Enviando…",
+      "sent": "Si ese correo es de una persona que modera, ya tiene el enlace en su buzón. Caduca en 15 minutos y solo se puede usar una vez.",
+      "invalid": "Escribe un correo válido.",
+      "limited": "Se han pedido muchos enlaces en poco tiempo. Vuelve a intentarlo dentro de un rato.",
+      "error": "No hemos podido enviar el enlace. Inténtalo de nuevo en un momento.",
+      "invalidLink": "El enlace no es válido o ha caducado. Pide uno nuevo.",
+      "entering": "Entrando…"
+    }
   },
   "removal": {
     "title": "Pedir una retirada",

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ModerationPanel } from '@/components/ModerationPanel';
-import { getModerationQueue } from '@/lib/data';
+import { ModerationApp } from '@/components/ModerationApp';
 
 export async function generateMetadata({
   params,
@@ -10,10 +9,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'moderation' });
-  return { title: t('title') };
+  return { title: t('title'), robots: { index: false } };
 }
 
-// No está en el menú público: más adelante se entrará con un enlace mágico.
+// No está en el menú público: se entra con un enlace enviado al correo.
 export default async function ModerationPage({
   params,
 }: {
@@ -21,6 +20,5 @@ export default async function ModerationPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const items = await getModerationQueue();
-  return <ModerationPanel items={items} />;
+  return <ModerationApp />;
 }

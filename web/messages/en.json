@@ -17,8 +17,7 @@
     "groups": {
       "navigate": "Browse",
       "collaborate": "Contribute",
-      "about": "About HeartEats",
-      "team": "Moderation team (demo)"
+      "about": "About HeartEats"
     },
     "links": {
       "map": "Map",
@@ -32,7 +31,6 @@
       "cookies": "Cookies and storage",
       "legal": "Legal notice",
       "contact": "Contact",
-      "moderation": "Moderate suggestions (demo)",
       "removal": "Ask for a removal"
     },
     "language": "Language"
@@ -713,20 +711,30 @@
       {
         "heading": "In short",
         "items": [
-          "HeartEats does not use cookies.",
+          "For people who visit the website, HeartEats does not use cookies. Only moderators receive one, needed to keep their session (see below).",
           "There is no analytics, advertising or tracking.",
           "That is why you will not see a cookie notice.",
-          "It only keeps a couple of things in your browser, and only when you use a feature that needs them."
+          "It only stores one thing in your browser, and only when you use a feature that needs it: the draft of Suggest a place."
         ]
       },
       {
         "heading": "What is kept in your browser",
         "items": [
-          "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over.",
-          "Test submissions: in this test version, a summary of what you send, without the full email, names or stories, so it can be seen on the test moderation screen. It can be deleted from that screen and will disappear once sending is real."
+          "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over."
         ],
         "paragraphs": [
           "Everything stays on your device and is not sent to anyone. Your browser keeps it for a feature you asked for, so we do not ask for permission."
+        ]
+      },
+      {
+        "heading": "The moderation cookie",
+        "items": [
+          "If you are a moderator, when you sign in with the emailed link the server stores a cookie called he_session.",
+          "It is only used to keep your session. The website cannot read it (it is httpOnly) and it is not sent to anyone else.",
+          "It expires after 7 days without activity or when you press Sign out."
+        ],
+        "paragraphs": [
+          "It is essential for you to be able to sign in, so no permission is asked. Nobody else receives it."
         ]
       },
       {
@@ -829,7 +837,6 @@
   },
   "moderation": {
     "title": "Moderation",
-    "demo": "Prototype with sample data. What you send from this browser shows up at the top and is stored only on your device. Decisions are not saved. With the server, moderators will sign in with a link sent to their email, and this screen will not appear in the menu.",
     "queueLabel": "Requests",
     "tabs": {
       "pending": "Pending ({n})",
@@ -926,7 +933,20 @@
       "needNote": "Write what information you need.",
       "save": "We could not save the decision. You can try again.",
       "notReadyTeam": "Some checks are missing. Without the business’s confirmation and the consents, the team is not published.",
-      "notReadyRemoval": "Identity not confirmed yet. Nothing is removed without it."
+      "notReadyRemoval": "Identity not confirmed yet. Nothing is removed without it.",
+      "needStory": "Choose which story is withdrawn.",
+      "needChange": "Write what changes on the listing.",
+      "badPin": "The coordinates are not valid.",
+      "forbidden": "You do not have permission to decide this.",
+      "notImplemented": "This cannot be done from here yet.",
+      "conflict": "Someone else has just decided this request. Open the list again.",
+      "geocodingRequired": "The pin was not found. Type the coordinates by hand.",
+      "incomplete": "The suggestion is missing the street or the type of food. Ask the sender for more information.",
+      "noContact": "The sender left no email, so information cannot be requested.",
+      "alreadyAsked": "Information was already requested for this request.",
+      "mailFailed": "The email could not be sent. You can try again.",
+      "targetGone": "The listing is no longer published.",
+      "storyNotFound": "That story does not exist or is already withdrawn."
     },
     "result": {
       "approvedNew": "Approved and published",
@@ -946,8 +966,6 @@
       "approvedTeam": "Today · Moderation · approved and published the team of “{name}”",
       "approvedRemoval": "Today · Moderation · removed what was requested on “{name}”"
     },
-    "mine": "You have {n, plural, one {# test submission} other {# test submissions}} made from this browser.",
-    "clearMine": "Delete my test submissions",
     "proposal": "Proposal",
     "teamTitle": "Team shared by the business",
     "teamLevel": "Level chosen",
@@ -961,7 +979,40 @@
     "removalTitle": "What is asked to be removed",
     "removalWhat": "What",
     "removalDetails": "Details",
-    "approveRemoval": "Remove now"
+    "approveRemoval": "Remove now",
+    "signedInAs": "Signed in as {email}",
+    "signOut": "Sign out",
+    "adminOnly": "An administrator decides this request. You can see it, but not decide it.",
+    "infoTitle": "Information requested",
+    "infoDeadline": "Reply by {date}",
+    "pin": "Pin on the map",
+    "noPin": "Not found; it has to be set by hand",
+    "pinHelp": "If there is no pin, type the place coordinates (for example, 40.4168 and -3.7038).",
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "changeLegend": "What changes on the listing",
+    "changeHelp": "Write only what you have checked. Anything left blank is not touched.",
+    "changeName": "Name",
+    "changeStreet": "Street",
+    "changePostalCode": "Postal code",
+    "changeCity": "City",
+    "changeClosed": "The place has closed for good (the listing will stop being shown)",
+    "storyLabel": "Which story is being withdrawn?",
+    "storyChoose": "Choose one",
+    "storyN": "Story {n}",
+    "storyHelp": "Its position on the listing, counting those already withdrawn.",
+    "login": {
+      "intro": "Sign in with your moderation email: we send you a link that expires in 15 minutes.",
+      "email": "Your email",
+      "submit": "Send me the link",
+      "sending": "Sending…",
+      "sent": "If that email belongs to a moderator, the link is already in their inbox. It expires in 15 minutes and can only be used once.",
+      "invalid": "Enter a valid email.",
+      "limited": "Many links have been requested in a short time. Please try again in a little while.",
+      "error": "We could not send the link. Please try again in a moment.",
+      "invalidLink": "The link is not valid or has expired. Request a new one.",
+      "entering": "Signing in…"
+    }
   },
   "removal": {
     "title": "Ask for something to be removed",

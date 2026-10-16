@@ -173,11 +173,37 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
-    test('moderación: detalle abierto y rechazo', async ({ page }) => {
+    test('moderación: sin sesión (entrada)', async ({ page }) => {
       await page.goto('/es/moderation');
+      await expect(page.getByLabel('Tu correo')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: cola, detalle abierto y rechazo', async ({
+      page,
+      session,
+    }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await expect(
+        page.getByRole('button', { name: /Cocina del Pilar/ }),
+      ).toBeVisible();
+      await expectNoViolations(page);
       await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
       await expectNoViolations(page);
       await page.getByRole('button', { name: 'Rechazar' }).click();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: corrección y retirada', async ({ page, session }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Volver a la lista' }).click();
+      await page
+        .getByRole('button', { name: /Retirada.*La Masa Madre/s })
+        .click();
       await expectNoViolations(page);
     });
 

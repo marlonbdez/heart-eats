@@ -9,6 +9,8 @@ export const apiBase = `${base}/api/v1`;
 export class ApiRequestError extends Error {
   constructor(
     readonly status: number,
+    // El `error.code` de la API (`conflict`, `geocoding_required`…), si lo hay.
+    readonly code: string | undefined,
     message: string,
   ) {
     super(message);
@@ -18,29 +20,67 @@ export class ApiRequestError extends Error {
 
 type Params = Record<string, string | number | undefined>;
 
-// Lectura pública (sin sesión ni cookies).
-export async function apiGet<T>(path: string, params: Params = {}) {
+async function request(
+  method: 'GET' | 'POST',
+  path: string,
+  {
+    params = {},
+    body,
+    session = false,
+  }: {
+    params?: Params;
+    body?: unknown;
+    // Con sesión de moderación: lleva la cookie y, al escribir, la cabecera
+    // que exige el servidor (ADR 0007).
+    session?: boolean;
+  } = {},
+) {
   const url = new URL(`${apiBase}${path}`);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined) url.searchParams.set(key, String(value));
   }
-  const res = await fetch(url);
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (session && method !== 'GET') headers['X-Requested-With'] = 'fetch';
+
+  const res = await fetch(url, {
+    method,
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+    credentials: session ? 'include' : 'omit',
+  });
   if (!res.ok) {
-    throw new ApiRequestError(res.status, `La API respondió ${res.status}`);
+    const error = (await res.json().catch(() => null)) as {
+      error?: { code?: string };
+    } | null;
+    throw new ApiRequestError(
+      res.status,
+      error?.error?.code,
+      `La API respondió ${res.status}`,
+    );
   }
-  return (await res.json()) as T;
+  return res;
+}
+
+// Lectura pública (sin sesión ni cookies).
+export async function apiGet<T>(path: string, params: Params = {}) {
+  return (await (await request('GET', path, { params })).json()) as T;
 }
 
 // Envío de la comunidad (sin cuenta ni cookies): JSON y, si va bien, 202.
 export async function apiPost(path: string, body: unknown) {
-  const res = await fetch(`${apiBase}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    throw new ApiRequestError(res.status, `La API respondió ${res.status}`);
-  }
+  await request('POST', path, { body });
+}
+
+// Moderación: con la cookie de sesión.
+export async function sessionGet<T>(path: string, params: Params = {}) {
+  const res = await request('GET', path, { params, session: true });
+  return (await res.json()) as T;
+}
+
+export async function sessionPost<T = void>(path: string, body?: unknown) {
+  const res = await request('POST', path, { body, session: true });
+  return (res.status === 204 ? undefined : await res.json()) as T;
 }
 
 // Demasiados envíos desde esta conexión (429): se avisa distinto que un fallo.

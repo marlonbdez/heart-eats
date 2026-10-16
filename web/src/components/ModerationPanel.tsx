@@ -2,46 +2,92 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import {
-  clearDemoSubmissions,
-  decideModeration,
-  getDemoSubmissions,
-} from '@/lib/data';
-import type { ModerationDecision, ModerationItem } from '@/lib/types';
+import { decideModeration, endSession, getModerationQueue } from '@/lib/data';
+import { useLoad } from '@/lib/use-load';
+import type {
+  ModerationDecision,
+  ModerationItem,
+  ModerationSession,
+} from '@/lib/types';
 import { ModerationDetail } from './ModerationDetail';
+import { Remote } from './Remote';
 import form from './Form.module.css';
 import styles from './Moderation.module.css';
 
 type Tab = 'pending' | 'resolved';
 
-const STATUS = { approve: 'approved', reject: 'rejected', ask_info: 'info' };
+// Las tres listas de la cola: lo pendiente, lo que espera respuesta de quien
+// propuso y lo ya resuelto.
+const loadQueue = async () => {
+  const [pending, waiting, resolved] = await Promise.all([
+    getModerationQueue('pending'),
+    getModerationQueue('info_requested'),
+    getModerationQueue('resolved'),
+  ]);
+  return [...pending, ...waiting, ...resolved];
+};
 
 // Pantalla de moderación (F5). En el móvil la lista y el detalle son dos
 // vistas, una a la vez; en pantallas anchas se ven juntas.
 export function ModerationPanel({
-  items: examples,
+  session,
+  onSignOut,
 }: {
-  items: ModerationItem[];
+  session: ModerationSession;
+  onSignOut: () => void;
 }) {
   const t = useTranslations('moderation');
-  // Envíos hechos desde este navegador (solo se leen en el cliente).
-  const [mine, setMine] = useState<ModerationItem[]>([]);
-  const items = [...mine, ...examples];
+  const queue = useLoad(loadQueue);
+  return (
+    <>
+      <div className={styles.bar}>
+        <p className={styles.who}>
+          {t('signedInAs', { email: session.email })}
+        </p>
+        <button
+          type="button"
+          className={form.linkButton}
+          onClick={async () => {
+            await endSession().catch(() => undefined);
+            onSignOut();
+          }}
+        >
+          {t('signOut')}
+        </button>
+      </div>
+      <Remote state={queue}>
+        {(items) => <Queue items={items} role={session.role} />}
+      </Remote>
+    </>
+  );
+}
+
+function Queue({
+  items,
+  role,
+}: {
+  items: ModerationItem[];
+  role: ModerationSession['role'];
+}) {
+  const t = useTranslations('moderation');
   const [tab, setTab] = useState<Tab>('pending');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Lo decidido desde esta pantalla, que aún no está en las listas cargadas.
   const [decisions, setDecisions] = useState<
     Record<string, ModerationDecision>
   >({});
-  useEffect(() => {
-    void getDemoSubmissions().then(setMine);
-  }, []);
 
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabRef = useRef<HTMLButtonElement>(null);
   const lastId = useRef<string | null>(null);
 
-  const pending = items.filter((i) => !decisions[i.id]);
-  const resolved = items.filter((i) => decisions[i.id]);
+  const isResolved = (i: ModerationItem) => {
+    const d = decisions[i.id];
+    if (d) return d.action !== 'ask_info';
+    return i.status === 'approved' || i.status === 'rejected';
+  };
+  const pending = items.filter((i) => !isResolved(i));
+  const resolved = items.filter(isResolved);
   const shown = tab === 'pending' ? pending : resolved;
   const selected = items.find((i) => i.id === selectedId) ?? null;
 
@@ -58,29 +104,13 @@ export function ModerationPanel({
     setSelectedId(id);
   }
 
-  async function clearMine() {
-    await clearDemoSubmissions();
-    if (selected && mine.some((m) => m.id === selected.id)) setSelectedId(null);
-    setMine([]);
-  }
-
   async function decide(item: ModerationItem, decision: ModerationDecision) {
-    await decideModeration(item.id, decision);
+    await decideModeration(item, decision);
     setDecisions((d) => ({ ...d, [item.id]: decision }));
   }
 
   return (
-    <main id="contenido" tabIndex={-1} className={styles.main}>
-      <h1>{t('title')}</h1>
-      <p className={styles.demo}>{t('demo')}</p>
-      {mine.length > 0 && (
-        <p className={styles.demo}>
-          {t('mine', { n: mine.length })}{' '}
-          <button type="button" className={form.linkButton} onClick={clearMine}>
-            {t('clearMine')}
-          </button>
-        </p>
-      )}
+    <>
       <div className={styles.layout} data-detail={selected ? 'true' : 'false'}>
         <section className={styles.queue} aria-label={t('queueLabel')}>
           <div
@@ -114,6 +144,18 @@ export function ModerationPanel({
             <ul className={styles.items}>
               {shown.map((item) => {
                 const decision = decisions[item.id];
+                const status = decision
+                  ? {
+                      approve: 'approved',
+                      reject: 'rejected',
+                      ask_info: 'info',
+                    }[decision.action]
+                  : {
+                      pending: null,
+                      info_requested: 'info',
+                      approved: 'approved',
+                      rejected: 'rejected',
+                    }[item.status];
                 return (
                   <li key={item.id}>
                     <button
@@ -129,15 +171,15 @@ export function ModerationPanel({
                         <span className={styles.tag}>
                           {t(`kinds.${item.kind}`)}
                         </span>
-                        {!decision && item.warnings.length > 0 && (
+                        {!status && item.warnings.length > 0 && (
                           <span className={styles.flag}>
                             <span aria-hidden="true">⚠ </span>
                             {t('review')}
                           </span>
                         )}
-                        {decision && (
+                        {status && (
                           <span className={styles.status}>
-                            {t(`status.${STATUS[decision.action]}`)}
+                            {t(`status.${status}`)}
                           </span>
                         )}
                       </span>
@@ -158,6 +200,7 @@ export function ModerationPanel({
             <ModerationDetail
               key={selected.id}
               item={selected}
+              role={role}
               decision={decisions[selected.id]}
               onBack={() => setSelectedId(null)}
               onDecide={(d) => decide(selected, d)}
@@ -167,6 +210,6 @@ export function ModerationPanel({
           )}
         </section>
       </div>
-    </main>
+    </>
   );
 }

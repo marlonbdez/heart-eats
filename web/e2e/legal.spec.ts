@@ -97,13 +97,13 @@ test('el menú lleva al aviso legal y a cookies y almacenamiento, en ES y EN', a
   }
 });
 
-test('cookies y almacenamiento: dice que no hay cookies y lista lo que se guarda', async ({
+test('cookies y almacenamiento: dice qué cookie hay (solo moderación) y lista lo que se guarda', async ({
   page,
 }) => {
   await page.goto('/es/cookies');
-  await expect(page.getByText('HeartEats no usa cookies.')).toBeVisible();
+  await expect(page.getByText(/HeartEats no usa cookies/)).toBeVisible();
+  await expect(page.getByText(/he_session/).first()).toBeVisible();
   await expect(
-    page.getByText(/borrador de «Proponer un local»/i),
+    page.getByText(/El borrador de «Proponer un local»/),
   ).toBeVisible();
-  await expect(page.getByText(/Los envíos de prueba/)).toBeVisible();
 });
