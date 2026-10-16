@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ProposeForm } from '@/components/ProposeForm';
-import { getFoodTags } from '@/lib/data';
+import { ProposeLoader } from '@/components/ProposeLoader';
 
 export async function generateMetadata({
   params,
@@ -20,6 +19,5 @@ export default async function ProposePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const foodTags = await getFoodTags();
-  return <ProposeForm foodTags={foodTags} />;
+  return <ProposeLoader />;
 }

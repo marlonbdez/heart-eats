@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/:locale/place/:slug",
+      "destination": "/:locale/place/_.html"
+    },
+    {
+      "source": "/:locale/correct/:slug",
+      "destination": "/:locale/correct/_.html"
+    },
+    {
+      "source": "/:locale/business/:slug",
+      "destination": "/:locale/business/_.html"
+    }
+  ]
+}

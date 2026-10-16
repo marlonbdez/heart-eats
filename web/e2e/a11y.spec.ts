@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { API, expect, test } from './support/test';
 
 // Revisión automática de accesibilidad (WCAG 2.2 AA) en todas las pantallas,
 // en español e inglés, con tema claro y oscuro, en móvil. Una revisión
@@ -52,6 +52,8 @@ for (const locale of ['es', 'en']) {
         await page.emulateMedia({ colorScheme: scheme });
         await page.goto(`/${locale}${path}`);
         await page.locator('#contenido, main').first().waitFor();
+        // Los datos llegan de la API: se revisa la pantalla ya cargada.
+        await expect(page.getByText(/^(Cargando|Loading)…$/)).toHaveCount(0);
         await expectNoViolations(page);
       });
     }
@@ -63,6 +65,39 @@ for (const scheme of ['light', 'dark'] as const) {
   test.describe(`estados interactivos (${scheme})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });
+    });
+
+    test('sin locales publicados', async ({ page }) => {
+      await page.route(`${API}/restaurants?**`, (route) =>
+        route.fulfill({
+          headers: { 'access-control-allow-origin': '*' },
+          json: { items: [] },
+        }),
+      );
+      await page.goto('/es');
+      await expect(
+        page.getByRole('heading', { name: /Todavía no hay locales/ }),
+      ).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('error al cargar los datos', async ({ page }) => {
+      await page.route(`${API}/restaurants?**`, (route) =>
+        route.fulfill({ status: 503, body: '' }),
+      );
+      await page.goto('/es');
+      await expect(
+        page.getByRole('button', { name: 'Reintentar' }),
+      ).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('ficha que no existe', async ({ page }) => {
+      await page.goto('/es/place/no-existe');
+      await expect(
+        page.getByRole('heading', { name: 'No encontramos este local' }),
+      ).toBeVisible();
+      await expectNoViolations(page);
     });
 
     test('menú lateral abierto', async ({ page }) => {

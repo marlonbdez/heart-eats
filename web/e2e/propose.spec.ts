@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
   page,

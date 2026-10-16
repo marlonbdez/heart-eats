@@ -93,7 +93,9 @@
     "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
     "clearFilters": "Quitar filtros",
     "propose": "Proponer un local",
-    "listLabel": "Lista de locales"
+    "listLabel": "Lista de locales",
+    "noneTitle": "Todavía no hay locales publicados",
+    "noneBody": "Estamos empezando. Si conoces un sitio que debería estar aquí, puedes proponerlo."
   },
   "view": {
     "label": "Vista",
@@ -379,9 +381,7 @@
       },
       {
         "heading": "Cómo lo comprobamos",
-        "paragraphs": [
-          "Usamos estos métodos, del más al menos sólido:"
-        ],
+        "paragraphs": ["Usamos estos métodos, del más al menos sólido:"],
         "items": [
           "Una visita al local.",
           "La confirmación directa del negocio, por teléfono o por correo desde su dominio oficial.",
@@ -693,9 +693,7 @@
       },
       {
         "heading": "Ley aplicable",
-        "paragraphs": [
-          "Se aplica la legislación española."
-        ]
+        "paragraphs": ["Se aplica la legislación española."]
       },
       {
         "heading": "Cambios en este texto",
@@ -1010,5 +1008,13 @@
       "back": "Volver al mapa",
       "again": "Hacer otra petición"
     }
+  },
+  "load": {
+    "loading": "Cargando…",
+    "error": "No hemos podido cargar los datos. Inténtalo de nuevo en un momento.",
+    "retry": "Reintentar",
+    "missingTitle": "No encontramos este local",
+    "missingBody": "Puede que ya no esté publicado o que la dirección no sea correcta.",
+    "missingBack": "Volver al mapa"
   }
 }

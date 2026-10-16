@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { BusinessForm } from '@/components/BusinessForm';
-import { getPlaceOptions } from './places';
+import { BusinessLoader } from '@/components/LocalLoaders';
 
 export async function generateMetadata({
   params,
@@ -20,6 +19,5 @@ export default async function BusinessPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const places = await getPlaceOptions(locale);
-  return <BusinessForm places={places} />;
+  return <BusinessLoader />;
 }

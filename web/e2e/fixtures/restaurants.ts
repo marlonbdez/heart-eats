@@ -1,4 +1,4 @@
-import type { FoodTag, Restaurant } from '../types';
+import type { FoodTag, Restaurant } from '../../src/lib/types';
 
 export const foodTags: FoodTag[] = [
   { key: 'pizza', icon: '🍕' },

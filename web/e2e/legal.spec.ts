@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test('privacidad y contacto en el móvil: se leen sin desplazarse de lado', async ({
   page,

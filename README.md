@@ -2,7 +2,7 @@
 
 Mapa colaborativo y de código abierto para descubrir y apoyar restaurantes y negocios gastronómicos locales que apuestan por la **inclusión laboral de personas con discapacidad**. Lanzamiento en Madrid, pensado para ser internacional.
 
-**Estado:** frontend completo con datos de ejemplo y un backend simulado; el backend real está pendiente de decisiones (ver [`docs/05_ROADMAP.md`](docs/05_ROADMAP.md)). Publicado en [hearteats.org](https://hearteats.org).
+**Estado:** frontend completo y backend (`server/`) casi completo; la web ya lee los locales de la API y los envíos y la moderación se conectan por partes (ver [`docs/05_ROADMAP.md`](docs/05_ROADMAP.md)). Publicado en [hearteats.org](https://hearteats.org).
 
 ## Documentación
 
@@ -17,6 +17,8 @@ cd web
 npm install
 npm run dev        # http://localhost:3000, con recarga al guardar
 ```
+
+La web pide los locales a la API (`http://localhost:3001` por defecto; cámbialo con `NEXT_PUBLIC_API_URL` al compilar). Sin el servidor en marcha verás el aviso de que no se han podido cargar los datos; con la base de datos vacía, que todavía no hay locales. Las pruebas e2e no necesitan servidor: responden con sus propios datos.
 
 Servidor (desde `server/`, requiere Node.js 22 o superior; ver [`server/README.md`](server/README.md)):
 
@@ -61,7 +63,7 @@ Cada pull request y cada push a `main` ejecutan en GitHub Actions (`.github/work
 
 ## Despliegue
 
-El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiza producción y cada pull request genera una vista previa propia. El servidor todavía no se despliega (ver [`docs/adr/0005-hosting-del-backend.md`](docs/adr/0005-hosting-del-backend.md), propuesta en la PR de documentación del backend).
+El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiza producción y cada pull request genera una vista previa propia. `NEXT_PUBLIC_API_URL` se fija en `netlify.toml`. El servidor todavía no se despliega (ver [`docs/adr/0005-hosting-del-backend.md`](docs/adr/0005-hosting-del-backend.md), propuesta en la PR de documentación del backend).
 
 ## Estructura
 

@@ -86,7 +86,7 @@ export interface Restaurant {
     lastVerifiedAt: string; // ISO
     needsReview: boolean;
   };
-  isDemo: true;
+  isDemo?: true;
 }
 
 // La etiqueta de cada categoría vive en messages/<idioma>.json (foodTags.<key>).

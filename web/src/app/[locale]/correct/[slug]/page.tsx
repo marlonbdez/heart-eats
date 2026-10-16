@@ -1,17 +1,14 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { CorrectForm } from '@/components/CorrectForm';
+import { CorrectLoader } from '@/components/LocalLoaders';
 import { routing } from '@/i18n/routing';
-import { getRestaurant, getRestaurants } from '@/lib/data';
 
 export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const all = await getRestaurants();
-  return routing.locales.flatMap((locale) =>
-    all.map((r) => ({ locale, slug: r.slug })),
-  );
+// Solo se genera una página por idioma: el servidor reescribe cualquier
+// dirección con slug a esta (netlify.toml) y el local se pide a la API.
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale, slug: '_' }));
 }
 
 export async function generateMetadata({
@@ -27,11 +24,9 @@ export async function generateMetadata({
 export default async function CorrectPage({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { locale } = await params;
   setRequestLocale(locale);
-  const restaurant = await getRestaurant(slug);
-  if (!restaurant) notFound();
-  return <CorrectForm slug={restaurant.slug} placeName={restaurant.name} />;
+  return <CorrectLoader />;
 }

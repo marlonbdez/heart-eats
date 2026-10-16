@@ -26,7 +26,7 @@
                               Nominatim (geocodificación, solo desde el servidor)
 ```
 
-- **La web no cambia de arquitectura:** sigue siendo estática y solo habla con el servidor a través de `web/src/lib/data/`.
+- **La web no cambia de arquitectura:** sigue siendo estática y solo habla con el servidor a través de `web/src/lib/data/`, desde el navegador (`NEXT_PUBLIC_API_URL`, fijada al compilar). Las fichas (`/place/<slug>`) no se generan al compilar: una reescritura de Netlify (`netlify.toml`, y `web/serve.json` en las pruebas) sirve una sola página para cualquier slug y esta pide el local a la API. Por eso la ficha no lleva el nombre del local en el HTML inicial; el título se pone al cargar.
 - **La lectura pública** se hace desde el navegador, por zona del mapa o ciudad (ADR 0005), y no se recompila la web al publicar. No hay ningún dato de locales fijo en la web.
 - **El servidor** es el único que escribe en la base de datos, firma las subidas de fotos, envía correo y llama a Nominatim.
 
@@ -84,7 +84,7 @@ Detalle y bases legales: `08_PRIVACIDAD_LEGAL.md`.
 
 - **Producción:** `hearteats.org` (Netlify) + `api.hearteats.org` (Railway) + Atlas M0.
 - **Local:** `npm run dev` en `web/` y en `server/`, con MongoDB en local o un clúster de pruebas, y `.env` fuera del repo.
-- **PRs:** Netlify genera una vista previa de la web; la vista previa usa la API de producción solo en lectura hasta que se acuerde otra cosa. ❓ Entorno de pruebas del servidor.
+- **PRs:** Netlify genera una vista previa de la web; la vista previa usa la API de producción solo en lectura hasta que se acuerde otra cosa; para que el navegador la deje leer, `CORS_ORIGINS` del servidor tiene que incluir ese origen (❓ pendiente: comodín para las vistas previas). ❓ Entorno de pruebas del servidor.
 
 ## CI
 

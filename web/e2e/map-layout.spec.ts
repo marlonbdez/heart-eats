@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 // El conmutador Mapa / Lista va arriba, en la misma fila que «Cerca de mí»:
 // a la izquierda en el móvil y centrado en pantallas anchas. Abajo solo queda

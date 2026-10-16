@@ -1,41 +1,29 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { RestaurantDetail } from '@/components/RestaurantDetail';
+import { PlaceLoader } from '@/components/LocalLoaders';
 import { routing } from '@/i18n/routing';
-import { getRestaurant, getRestaurants } from '@/lib/data';
 
 export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const all = await getRestaurants();
-  return routing.locales.flatMap((locale) =>
-    all.map((r) => ({ locale, slug: r.slug })),
-  );
+// Solo se genera una página por idioma: el servidor reescribe cualquier
+// dirección con slug a esta (netlify.toml) y el local se pide a la API.
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale, slug: '_' }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const r = await getRestaurant(slug);
-  return { title: r ? `${r.name} · HeartEats` : 'HeartEats' };
-}
+// El nombre del local solo se conoce en el navegador: PlaceLoader pone el título.
+export const metadata: Metadata = { title: 'HeartEats' };
 
 export default async function LocalPage({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { locale } = await params;
   setRequestLocale(locale);
-  const restaurant = await getRestaurant(slug);
-  if (!restaurant) notFound();
   return (
     <main id="contenido" tabIndex={-1}>
-      <RestaurantDetail restaurant={restaurant} />
+      <PlaceLoader />
     </main>
   );
 }
