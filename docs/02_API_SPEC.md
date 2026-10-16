@@ -85,7 +85,15 @@ El token es un HMAC firmado que identifica la solicitud y caduca con el plazo de
 | GET | `/auth/me` | `{ "email", "role", "moderationScope" }` o `401` |
 | POST | `/auth/logout` | Cierra la sesión (`204`) |
 
-Detalle de caducidades, cookie y protecciones: ADR 0007.
+Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
+
+- `POST /auth/magic-link` solo envía el enlace si el correo es de un `moderator` o `admin` sin baja, y como mucho 5 enlaces vivos por persona. Tope por IP: 20 solicitudes por hora (`429`).
+- El enlace es `<WEB_URL>/<idioma>/moderation/login#token=…` (la página de entrada llega con la integración de la web).
+- `POST /auth/session`: `422` si el token no tiene la forma esperada; `401 invalid_token` si no existe, caducó, ya se usó o el usuario ya no puede moderar. Devuelve lo mismo que `/auth/me`.
+- Las respuestas de `/auth/*` llevan `Cache-Control: no-store`.
+- Toda escritura con sesión (de momento `POST /auth/logout`, luego las decisiones) exige el `Origin` de la web y la cabecera `X-Requested-With` (cualquier valor); si no, `403 forbidden`. Sin sesión válida, `401 unauthorized`.
+- `POST /auth/logout` es idempotente: `204` aunque la sesión ya no exista.
+- El primer administrador se da de alta al arrancar con `ADMIN_EMAIL`. Cada inicio de sesión deja una línea `login` en `AuditLog`.
 
 ## Moderación (requiere sesión)
 

@@ -1,6 +1,8 @@
 import { createApp } from './app.js';
 import { loadConfig } from './config/env.js';
 import { connectDb, disconnectDb } from './db.js';
+import { ensureAdmin } from './services/ensure-admin.js';
+import { consoleMailer, resendMailer } from './services/mailer.js';
 
 const config = loadConfig();
 try {
@@ -14,7 +16,17 @@ try {
   process.exit(1);
 }
 
-const server = createApp(config).listen(config.PORT, () => {
+if (config.ADMIN_EMAIL) await ensureAdmin(config.ADMIN_EMAIL);
+
+const mailer = config.RESEND_API_KEY
+  ? resendMailer({
+      apiKey: config.RESEND_API_KEY,
+      from: config.MAIL_FROM,
+      replyTo: config.MAIL_REPLY_TO,
+    })
+  : consoleMailer;
+
+const server = createApp(config, { mailer }).listen(config.PORT, () => {
   console.log(`API escuchando en el puerto ${config.PORT}`);
 });
 

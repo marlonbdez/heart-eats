@@ -12,7 +12,43 @@ describe('loadConfig', () => {
       SUBMISSIONS_PER_HOUR: 30,
       SUBMISSIONS_PER_DAY: 200,
       KNOWN_CHAINS: [],
+      WEB_URL: 'http://localhost:3000',
+      MAIL_FROM: 'HeartEats <acceso@mail.hearteats.org>',
+      MAIL_REPLY_TO: 'contact@hearteats.org',
     });
+  });
+
+  it('lee el administrador, la web y el correo, y normaliza lo que toca', () => {
+    const config = loadConfig({
+      ADMIN_EMAIL: 'Admin@Example.org',
+      WEB_URL: 'https://hearteats.org/',
+      RESEND_API_KEY: 're_clave',
+    });
+    expect(config).toMatchObject({
+      ADMIN_EMAIL: 'admin@example.org',
+      WEB_URL: 'https://hearteats.org',
+      RESEND_API_KEY: 're_clave',
+    });
+    expect(() => loadConfig({ ADMIN_EMAIL: 'no-es-un-correo' })).toThrow(
+      /ADMIN_EMAIL/,
+    );
+  });
+
+  it('una variable vacía cuenta como no puesta', () => {
+    const config = loadConfig({ ADMIN_EMAIL: '', RESEND_API_KEY: '' });
+    expect(config.ADMIN_EMAIL).toBeUndefined();
+    expect(config.RESEND_API_KEY).toBeUndefined();
+  });
+
+  it('en producción exige la clave del correo', () => {
+    const production = {
+      NODE_ENV: 'production',
+      MONGODB_URI: 'mongodb+srv://usuario:clave@cluster.example.net/hearteats',
+    };
+    expect(() => loadConfig(production)).toThrow(/RESEND_API_KEY/);
+    expect(() =>
+      loadConfig({ ...production, RESEND_API_KEY: 're_clave' }),
+    ).not.toThrow();
   });
 
   it('lee el límite de envíos y la confianza en el proxy', () => {
@@ -46,6 +82,7 @@ describe('loadConfig', () => {
     expect(() => loadConfig({ NODE_ENV: 'production' })).toThrow(/MONGODB_URI/);
     const config = loadConfig({
       NODE_ENV: 'production',
+      RESEND_API_KEY: 're_clave',
       MONGODB_URI: 'mongodb+srv://usuario:clave@cluster.example.net/hearteats',
     });
     expect(config.MONGODB_URI).toContain('mongodb+srv://');
@@ -60,6 +97,7 @@ describe('loadConfig', () => {
   it('lee el puerto y separa los orígenes por comas', () => {
     const config = loadConfig({
       NODE_ENV: 'production',
+      RESEND_API_KEY: 're_clave',
       PORT: '10000',
       MONGODB_URI: 'mongodb://127.0.0.1:27017/hearteats',
       CORS_ORIGINS: 'https://hearteats.org, https://www.hearteats.org',

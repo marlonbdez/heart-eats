@@ -3,6 +3,10 @@ import { normalize } from '../text.js';
 
 const DEV_MONGODB_URI = 'mongodb://127.0.0.1:27017/hearteats';
 
+// Una variable vacía (`NOMBRE=` en el .env) cuenta como no puesta.
+const optional = <T extends z.ZodType>(type: T) =>
+  z.preprocess((value) => (value === '' ? undefined : value), type.optional());
+
 const schema = z
   .object({
     NODE_ENV: z
@@ -46,11 +50,32 @@ const schema = z
           .map((name) => normalize(name).replace(/\s+/g, ' '))
           .filter(Boolean),
       ),
+    // Dirección pública de la web: los enlaces de acceso del correo apuntan
+    // aquí (ADR 0007).
+    WEB_URL: z
+      .url()
+      .default('http://localhost:3000')
+      .transform((value) => value.replace(/\/+$/, '')),
+    // Correo del primer administrador. Se da de alta al arrancar, sin pasar
+    // por la invitación (ADR 0008). No va en el repo: se pone en el hosting.
+    ADMIN_EMAIL: optional(z.email().transform((value) => value.toLowerCase())),
+    // Resend envía los enlaces de acceso. Sin clave solo hay consola, y solo
+    // en desarrollo.
+    RESEND_API_KEY: optional(z.string().min(1)),
+    MAIL_FROM: z
+      .string()
+      .min(3)
+      .default('HeartEats <acceso@mail.hearteats.org>'),
+    MAIL_REPLY_TO: z.email().default('contact@hearteats.org'),
   })
   // En producción no hay valor por defecto: un servidor sin base de datos
   // configurada no debe arrancar apuntando a un Mongo local por descuido.
   .refine((env) => env.NODE_ENV !== 'production' || env.MONGODB_URI, {
     path: ['MONGODB_URI'],
+    message: 'es obligatoria en producción',
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || env.RESEND_API_KEY, {
+    path: ['RESEND_API_KEY'],
     message: 'es obligatoria en producción',
   })
   .transform((env) => ({

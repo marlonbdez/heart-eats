@@ -5,6 +5,7 @@ import type { Config } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errors.js';
 import { createRateLimiter } from './middleware/rate-limit.js';
 import { createApiRouter } from './routes/index.js';
+import { consoleMailer, type Mailer } from './services/mailer.js';
 
 const HOUR = 60 * 60 * 1000;
 
@@ -17,10 +18,20 @@ type AppConfig = Pick<Config, 'CORS_ORIGINS'> &
       | 'SUBMISSIONS_PER_HOUR'
       | 'SUBMISSIONS_PER_DAY'
       | 'KNOWN_CHAINS'
+      | 'NODE_ENV'
+      | 'WEB_URL'
     >
   >;
 
-export function createApp(config: AppConfig) {
+// Solicitudes de enlace de acceso por IP y hora. Moderan pocas personas, así
+// que el tope es bajo; el límite por persona está en la ruta.
+const LOGIN_LINKS_PER_HOUR = 20;
+
+interface AppDeps {
+  mailer?: Mailer;
+}
+
+export function createApp(config: AppConfig, { mailer }: AppDeps = {}) {
   const app = express();
 
   app.disable('x-powered-by');
@@ -33,7 +44,8 @@ export function createApp(config: AppConfig) {
       origin: config.CORS_ORIGINS,
       credentials: true, // la sesión de moderación va en una cookie (ADR 0007)
       methods: ['GET', 'POST', 'DELETE'],
-      allowedHeaders: ['Content-Type'],
+      // La cabecera propia la exigen las escrituras con sesión (ADR 0007).
+      allowedHeaders: ['Content-Type', 'X-Requested-With'],
       maxAge: 600,
     }),
   );
@@ -45,10 +57,18 @@ export function createApp(config: AppConfig) {
     { ms: HOUR, max: config.SUBMISSIONS_PER_HOUR ?? 0 },
     { ms: 24 * HOUR, max: config.SUBMISSIONS_PER_DAY ?? 0 },
   ]);
+  const loginLimiter = createRateLimiter([
+    { ms: HOUR, max: LOGIN_LINKS_PER_HOUR },
+  ]);
   app.use(
     '/api/v1',
     createApiRouter({
       submissionLimiter,
+      loginLimiter,
+      mailer: mailer ?? consoleMailer,
+      webUrl: config.WEB_URL ?? 'http://localhost:3000',
+      allowedOrigins: config.CORS_ORIGINS,
+      secureCookies: config.NODE_ENV === 'production',
       knownChains: config.KNOWN_CHAINS ?? [],
     }),
   );
