@@ -10,6 +10,7 @@ import { repliesRouter } from './replies.js';
 import { reportsRouter } from './reports.js';
 import { restaurantsRouter } from './restaurants.js';
 import { suggestionsRouter } from './suggestions.js';
+import { usersRouter } from './users.js';
 
 interface ApiOptions {
   submissionLimiter: RateLimiter;
@@ -60,5 +61,6 @@ export function createApiRouter({
     }),
   );
   api.use(auditRouter({ allowedOrigins }));
+  api.use(usersRouter({ allowedOrigins }));
   return api;
 }
