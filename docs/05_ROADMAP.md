@@ -52,7 +52,8 @@ Una PR por paso:
 - [x] Lectura: modelos, datos semilla (los de ejemplo de la web) y `GET /restaurants`
 - [ ] Envíos de F2, F3 y F4 y petición de retirada, con límite de envíos, honeypot y subida de fotos. Por partes:
   - [x] `POST /proposals` (F2): validación, honeypot, límite por IP y filtro automático
-  - [ ] `POST /corrections` (F4), `POST /teams` (F3) y `POST /removals`
+  - [x] `POST /corrections` (F4) y `POST /removals`
+  - [ ] `POST /teams` (F3): aparte, porque guarda historias y depende de cómo las revisa Moderación (`02_API_SPEC.md`, pregunta 1)
   - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
 - [ ] Moderación: enlace mágico, cola, decisiones, geocodificación y registro de auditoría
 - [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`

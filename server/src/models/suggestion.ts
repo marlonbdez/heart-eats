@@ -18,6 +18,8 @@ export interface SuggestionRecord {
   _id: Types.ObjectId;
   type: (typeof suggestionTypes)[number];
   status: (typeof suggestionStatuses)[number];
+  // Local al que apunta (correcciones, equipo y retiradas).
+  targetRestaurantId?: Types.ObjectId;
   payload: Record<string, unknown>;
   evidence: string[];
   contactEmail?: string; // privado: nunca sale por la lectura pública
@@ -36,6 +38,17 @@ const suggestionSchema = new Schema(
       enum: suggestionStatuses,
       required: true,
       default: 'pending',
+    },
+    // Obligatorio salvo en un local nuevo: lo corregido, su equipo o su retirada.
+    targetRestaurantId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Restaurant',
+      required: [
+        function (this: { type?: string }) {
+          return this.type !== 'new';
+        },
+        'targetRestaurantId es obligatorio si no es un local nuevo',
+      ],
     },
     // Lo que se propone, ya validado por la ruta que lo recibe.
     payload: { type: Schema.Types.Mixed, required: true },

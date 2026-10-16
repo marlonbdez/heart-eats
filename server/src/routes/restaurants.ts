@@ -14,6 +14,7 @@ import {
   buildFilter,
   encodeCursor,
   parseListQuery,
+  slugPattern,
   visibleFilter,
   type ListQuery,
 } from '../services/restaurant-query.js';
@@ -80,7 +81,7 @@ restaurantsRouter.get('/restaurants/geojson', async (req, res) => {
 
 // Ficha de un local, con su equipo ya filtrado por privacidad.
 restaurantsRouter.get('/restaurants/:slug', async (req, res) => {
-  const record = /^[a-z0-9-]{1,80}$/.test(req.params.slug)
+  const record = slugPattern.test(req.params.slug)
     ? await Restaurant.findOne({
         ...visibleFilter,
         slug: req.params.slug,

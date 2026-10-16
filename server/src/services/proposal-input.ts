@@ -1,17 +1,11 @@
 import { z } from 'zod';
 import { foodTags } from '../catalog.js';
+import { email, httpUrl, locale, text } from './input-fields.js';
 
 // Mismas reglas que el formulario de la web (ProposeForm), vistas desde el
 // servidor, que no se fía de lo que valida el navegador. Lo que no está aquí
 // se descarta: así los datos de personas del equipo nunca entran en una
 // propuesta de un tercero (docs/07_VERIFICACION.md).
-const text = (max: number) => z.string().trim().min(1).max(max);
-
-const httpUrl = z
-  .url({ protocol: /^https?$/ })
-  .max(500)
-  .refine((value) => !/\s/.test(value));
-
 const dishSchema = z.object({
   name: text(80),
   description: text(160).optional(),
@@ -31,12 +25,8 @@ export const proposalSchema = z.object({
   howKnown: text(1000).optional(),
   evidenceUrl: httpUrl.optional(),
   independent: z.boolean(),
-  contactEmail: z
-    .email()
-    .max(254)
-    .transform((email) => email.toLowerCase())
-    .optional(),
-  locale: z.enum(['es', 'en']).default('es'),
+  contactEmail: email.optional(),
+  locale,
 });
 
 export type ProposalInput = z.infer<typeof proposalSchema>;
