@@ -113,7 +113,13 @@ describe('acceso', () => {
       const s = await proposal({
         type,
         targetRestaurantId: restaurantId,
-        payload: { what: 'story' },
+        payload:
+          type === 'team'
+            ? {
+                level: 'minimal',
+                summary: { totalStaff: 4, staffWithDisability: 1 },
+              }
+            : { what: 'story' },
       });
       const denied = await decide(s._id, body, moderator);
       expect(denied.status).toBe(403);

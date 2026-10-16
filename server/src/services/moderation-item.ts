@@ -39,6 +39,16 @@ export interface ModerationItem {
   restaurantSlug?: string;
   correction?: { kind: string; before?: string; after: string };
   removal?: { what: string; details?: string };
+  // Solo en el equipo de un negocio. Nunca lleva nombres ni textos de
+  // historias: solo cuántas hay.
+  team?: {
+    level: string;
+    totalStaff: number;
+    staffWithDisability: number;
+    areas?: string[];
+    disabilityTypes?: string[];
+    stories: number;
+  };
 }
 
 // Lo que guardan las rutas de envío en `payload` (routes/proposals.ts y
@@ -55,6 +65,13 @@ interface ProposalPayload {
 interface CorrectionPayload {
   kind: string;
   details: string;
+}
+interface TeamPayload {
+  level: string;
+  summary: { totalStaff: number; staffWithDisability: number };
+  areas?: string[];
+  disabilityTypes?: string[];
+  stories?: unknown[];
 }
 interface RemovalPayload {
   what: string;
@@ -132,5 +149,17 @@ export function toModerationItem(
       removal: { what: p.what, details: p.details },
     };
   }
-  return { ...base, ...place };
+  const p = s.payload as unknown as TeamPayload;
+  return {
+    ...base,
+    ...place,
+    team: {
+      level: p.level,
+      totalStaff: p.summary.totalStaff,
+      staffWithDisability: p.summary.staffWithDisability,
+      areas: p.areas,
+      disabilityTypes: p.disabilityTypes,
+      stories: p.stories?.length ?? 0,
+    },
+  };
 }
