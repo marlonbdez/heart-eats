@@ -1,5 +1,6 @@
-import { test as base } from '@playwright/test';
+import { test as base, type Route } from '@playwright/test';
 import { foodTags, restaurants } from '../fixtures/restaurants';
+import { suggestions } from '../fixtures/moderation';
 
 export * from '@playwright/test';
 
@@ -9,42 +10,116 @@ export * from '@playwright/test';
 // simular una base vacía o un fallo (la última registrada manda).
 export const API = 'http://localhost:3001/api/v1';
 
-const cors = { 'access-control-allow-origin': '*' };
-
-// Lo que la web ha enviado a la API en esta prueba (envíos de la comunidad).
+// Lo que la web ha enviado a la API en esta prueba (envíos y decisiones).
 export interface Sent {
   path: string;
   body: Record<string, unknown>;
 }
 
-export const test = base.extend<{ sent: Sent[] }>({
+export type Staff = 'moderator' | 'admin' | null;
+
+// Quién tiene la sesión abierta en la API simulada. Una prueba de moderación
+// lo pone a `moderator` o `admin` antes de abrir la pantalla.
+export interface Session {
+  role: Staff;
+}
+
+export const test = base.extend<{ sent: Sent[]; session: Session }>({
   sent: async ({}, provide) => {
     await provide([]);
   },
-  page: async ({ page, sent }, provide) => {
-    await page.route(`${API}/**`, async (route) => {
-      const { pathname } = new URL(route.request().url());
-      const path = pathname.replace('/api/v1', '');
+  session: async ({}, provide) => {
+    await provide({ role: null });
+  },
+  page: async ({ page, sent, session }, provide) => {
+    // La cookie de sesión exige un origen concreto y credenciales permitidas.
+    const cors = (route: Route) => ({
+      'access-control-allow-origin': route.request().headers()['origin'] ?? '*',
+      'access-control-allow-credentials': 'true',
+    });
+    const me = () => ({
+      email: 'moderacion@ejemplo.org',
+      role: session.role,
+      moderationScope: [{ country: 'ES' }],
+    });
 
-      if (route.request().method() === 'OPTIONS') {
+    await page.route(`${API}/**`, async (route) => {
+      const request = route.request();
+      const { pathname, searchParams } = new URL(request.url());
+      const path = pathname.replace('/api/v1', '');
+      const method = request.method();
+      const headers = cors(route);
+
+      if (method === 'OPTIONS') {
         return route.fulfill({
           status: 204,
           headers: {
-            ...cors,
-            'access-control-allow-methods': 'GET, POST',
-            'access-control-allow-headers': 'content-type',
+            ...headers,
+            'access-control-allow-methods': 'GET, POST, DELETE',
+            'access-control-allow-headers': 'content-type, x-requested-with',
           },
         });
       }
-      if (route.request().method() === 'POST') {
-        sent.push({
-          path,
-          body: route.request().postDataJSON() as Record<string, unknown>,
-        });
+
+      if (method === 'POST') {
+        const body = (request.postDataJSON() ?? {}) as Record<string, unknown>;
+        sent.push({ path, body });
+        if (path === '/auth/session') {
+          if (body.token !== 'good') {
+            return route.fulfill({
+              status: 401,
+              headers,
+              json: { error: { code: 'invalid_token', message: 'Caducado' } },
+            });
+          }
+          session.role ??= 'moderator';
+          return route.fulfill({ headers, json: me() });
+        }
+        if (path === '/auth/logout') {
+          session.role = null;
+          return route.fulfill({ status: 204, headers });
+        }
+        if (/^\/suggestions\/[^/]+\/decision$/.test(path)) {
+          return route.fulfill({ headers, json: { status: 'ok' } });
+        }
         return route.fulfill({
           status: 202,
-          headers: cors,
+          headers,
           json: { id: '65f000000000000000000001', status: 'pending' },
+        });
+      }
+
+      if (path === '/auth/me') {
+        if (!session.role) {
+          return route.fulfill({
+            status: 401,
+            headers,
+            json: { error: { code: 'unauthorized', message: 'Sin sesión' } },
+          });
+        }
+        return route.fulfill({ headers, json: me() });
+      }
+      if (path === '/suggestions' || path.startsWith('/suggestions/')) {
+        if (!session.role) {
+          return route.fulfill({
+            status: 401,
+            headers,
+            json: { error: { code: 'unauthorized', message: 'Sin sesión' } },
+          });
+        }
+        const status = searchParams.get('status') ?? 'pending';
+        const wanted =
+          status === 'resolved' ? ['approved', 'rejected'] : [status];
+        const id = path.split('/')[2];
+        if (id) {
+          const found = suggestions.find((s) => s.id === id);
+          return found
+            ? route.fulfill({ headers, json: found })
+            : route.fulfill({ status: 404, headers, json: {} });
+        }
+        return route.fulfill({
+          headers,
+          json: { items: suggestions.filter((s) => wanted.includes(s.status)) },
         });
       }
 
@@ -54,17 +129,17 @@ export const test = base.extend<{ sent: Sent[] }>({
           void team;
           return rest;
         });
-        return route.fulfill({ headers: cors, json: { items } });
+        return route.fulfill({ headers, json: { items } });
       }
       if (path === '/meta/filters') {
-        return route.fulfill({ headers: cors, json: { foodTags } });
+        return route.fulfill({ headers, json: { foodTags } });
       }
       const slug = /^\/restaurants\/([^/]+)$/.exec(path)?.[1];
       const found = restaurants.find((r) => r.slug === slug);
-      if (found) return route.fulfill({ headers: cors, json: found });
+      if (found) return route.fulfill({ headers, json: found });
       return route.fulfill({
         status: 404,
-        headers: cors,
+        headers,
         json: { error: { code: 'not_found', message: 'No encontrado' } },
       });
     });

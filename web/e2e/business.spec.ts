@@ -150,11 +150,4 @@ test('el negocio puede añadir fotos de su local, con permiso, hasta moderación
   await page.getByLabel(/Soy responsable del negocio/).check();
   await page.getByRole('button', { name: 'Enviar a revisión' }).click();
   await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
-
-  await page.goto('/es/moderation');
-  await page.getByRole('button', { name: /Equipo.*La Masa Madre/s }).click();
-  await expect(
-    page.getByText(/1 \(este prototipo no las muestra\)/),
-  ).toBeVisible();
-  await expect(page.getByLabel(/Las fotos son del plato/)).toBeVisible();
 });

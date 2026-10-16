@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { ApiRequestError } from '@/lib/api';
 import type {
+  CorrectionChange,
   ModerationDecision,
   ModerationItem,
+  ModerationSession,
   RejectReason,
   VerificationLevel,
   VerificationMethod,
@@ -36,12 +39,51 @@ const REASONS: RejectReason[] = [
 
 interface Props {
   item: ModerationItem;
-  decision?: ModerationDecision; // si ya está resuelta
+  role: ModerationSession['role'];
+  decision?: ModerationDecision; // la que se acaba de tomar desde esta pantalla
   onBack: () => void;
   onDecide: (decision: ModerationDecision) => Promise<void>;
 }
 
-export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
+// Qué mensaje enseñar según lo que contestó el servidor.
+function errorKey(err: unknown) {
+  if (!(err instanceof ApiRequestError)) return 'save';
+  if (err.status === 403) return 'forbidden';
+  if (err.status === 501) return 'notImplemented';
+  switch (err.code) {
+    case 'conflict':
+    case 'already_resolved':
+      return 'conflict';
+    case 'geocoding_required':
+    case 'country_required':
+      return 'geocodingRequired';
+    case 'proposal_incomplete':
+      return 'incomplete';
+    case 'no_contact':
+      return 'noContact';
+    case 'info_already_requested':
+      return 'alreadyAsked';
+    case 'mail_failed':
+      return 'mailFailed';
+    case 'target_unavailable':
+      return 'targetGone';
+    case 'story_not_found':
+      return 'storyNotFound';
+    default:
+      return 'save';
+  }
+}
+
+const num = (value: string) => (value.trim() === '' ? NaN : Number(value));
+
+export function ModerationDetail({
+  item,
+  role,
+  decision,
+  onBack,
+  onDecide,
+}: Props) {
+  const locale = useLocale();
   const t = useTranslations('moderation');
   const tCard = useTranslations('card');
   const tFood = useTranslations('foodTags');
@@ -74,6 +116,15 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
   const [mode, setMode] = useState<'reject' | 'info' | null>(null);
   const [reason, setReason] = useState<RejectReason | null>(null);
   const [note, setNote] = useState('');
+  const [pin, setPin] = useState({ lat: '', lng: '' });
+  const [story, setStory] = useState('');
+  const [change, setChange] = useState({
+    name: '',
+    street: '',
+    postalCode: '',
+    city: '',
+    closed: false,
+  });
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -83,8 +134,40 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
     headingRef.current?.focus();
   }, []);
 
+  const isStoryRemoval = isRemoval && item.removal?.what === 'story';
+  const waiting = item.status === 'info_requested';
+  // Solo un administrador decide lo que toca a personas del equipo (ADR 0008).
+  const adminOnly = (isTeam || isRemoval) && role !== 'admin';
+  const outcome = decision
+    ? decision.action === 'approve'
+      ? 'approved'
+      : decision.action === 'reject'
+        ? 'rejected'
+        : 'info'
+    : item.status === 'approved'
+      ? 'approved'
+      : item.status === 'rejected'
+        ? 'rejected'
+        : undefined;
+
   const allChecked = checkKeys.every((k) => checks[k]);
   const ready = allChecked && (!isNew || (level !== null && method !== null));
+
+  // El cambio de una corrección, solo con lo que se haya rellenado.
+  function buildChange(): CorrectionChange {
+    const clean = (v: string) => v.trim() || undefined;
+    const address = {
+      street: clean(change.street),
+      postalCode: clean(change.postalCode),
+      city: clean(change.city),
+    };
+    const hasAddress = Object.values(address).some(Boolean);
+    return {
+      ...(clean(change.name) ? { name: clean(change.name) } : {}),
+      ...(hasAddress ? { address } : {}),
+      ...(change.closed ? { closed: true as const } : {}),
+    };
+  }
 
   async function submit(d: ModerationDecision) {
     setSaving(true);
@@ -94,8 +177,8 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
       setMode(null);
       // Tras guardar, el foco va al resultado para que se anuncie.
       setTimeout(() => resultRef.current?.focus(), 0);
-    } catch {
-      setError(t('errors.save'));
+    } catch (err) {
+      setError(t(`errors.${errorKey(err)}`));
     } finally {
       setSaving(false);
     }
@@ -106,10 +189,26 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
       setError(t('errors.notReady' + k));
     } else if (isNew && (!level || !method)) {
       setError(t('errors.needLevelMethod'));
+    } else if (isStoryRemoval && !story) {
+      setError(t('errors.needStory'));
+    } else if (!isNew && !isRemoval && !isTeam) {
+      const body = buildChange();
+      if (Object.keys(body).length === 0) {
+        return setError(t('errors.needChange'));
+      }
+      void submit({ action: 'approve', change: body });
     } else {
+      const lat = num(pin.lat);
+      const lng = num(pin.lng);
+      const hasPin = pin.lat.trim() !== '' || pin.lng.trim() !== '';
+      if (isNew && hasPin && !(Math.abs(lat) <= 90 && Math.abs(lng) <= 180)) {
+        return setError(t('errors.badPin'));
+      }
       void submit({
         action: 'approve',
         ...(isNew && level && method ? { level, method } : {}),
+        ...(isNew && hasPin ? { location: { lat, lng } } : {}),
+        ...(isStoryRemoval ? { storyIndex: Number(story) - 1 } : {}),
       });
     }
   }
@@ -149,9 +248,9 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
     });
   }
 
-  function resultText(d: ModerationDecision): string {
-    if (d.action === 'reject') return t('result.rejected');
-    if (d.action === 'ask_info') return t('result.info');
+  function resultText(o: 'approved' | 'rejected' | 'info'): string {
+    if (o === 'rejected') return t('result.rejected');
+    if (o === 'info') return t('result.info');
     return t('result.approved' + k);
   }
 
@@ -195,6 +294,34 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
             ))}
           </ul>
         </div>
+      )}
+
+      {(item.infoRequest || item.replies) && (
+        <section aria-labelledby="mod-info" className={form.step}>
+          <h3 id="mod-info">{t('infoTitle')}</h3>
+          {item.infoRequest && (
+            <>
+              <p>{item.infoRequest.note}</p>
+              <p className={styles.meta}>
+                {t('infoDeadline', {
+                  date: new Intl.DateTimeFormat(locale, {
+                    dateStyle: 'long',
+                  }).format(new Date(item.infoRequest.deadline)),
+                })}
+              </p>
+            </>
+          )}
+          {item.replies?.map((r) => (
+            <blockquote key={r.at} className={styles.reply}>
+              <p>{r.message}</p>
+              <footer className={styles.meta}>
+                {new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
+                  new Date(r.at),
+                )}
+              </footer>
+            </blockquote>
+          ))}
+        </section>
       )}
 
       {item.removal ? (
@@ -335,6 +462,14 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
               <dd>{item.howKnown || t('none')}</dd>
             </div>
             <div>
+              <dt>{t('pin')}</dt>
+              <dd>
+                {item.location
+                  ? `${item.location.lat.toFixed(5)}, ${item.location.lng.toFixed(5)}`
+                  : t('noPin')}
+              </dd>
+            </div>
+            <div>
               <dt>{t('evidence')}</dt>
               <dd>
                 {item.evidenceUrl ? (
@@ -354,14 +489,18 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
         </section>
       )}
 
-      {decision ? (
+      {outcome ? (
         <p
           ref={resultRef}
           tabIndex={-1}
           role="status"
           className={styles.result}
         >
-          {resultText(decision)}
+          {resultText(outcome)}
+        </p>
+      ) : adminOnly ? (
+        <p role="note" className={styles.warn}>
+          {t('adminOnly')}
         </p>
       ) : (
         <>
@@ -386,6 +525,72 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
             </div>
           </fieldset>
 
+          {mode === null && k === 'Edit' && (
+            <fieldset className={form.options}>
+              <legend>{t('changeLegend')}</legend>
+              <p className={styles.meta}>{t('changeHelp')}</p>
+              {(
+                [
+                  ['name', 'changeName'],
+                  ['street', 'changeStreet'],
+                  ['postalCode', 'changePostalCode'],
+                  ['city', 'changeCity'],
+                ] as const
+              ).map(([field, label]) => (
+                <div key={field} className={form.field}>
+                  <label className={form.label} htmlFor={`mod-${field}`}>
+                    {t(label)}
+                  </label>
+                  <input
+                    id={`mod-${field}`}
+                    className={form.input}
+                    value={change[field]}
+                    onChange={(e) => {
+                      setChange({ ...change, [field]: e.target.value });
+                      setError('');
+                    }}
+                  />
+                </div>
+              ))}
+              <label className={form.check}>
+                <input
+                  type="checkbox"
+                  checked={change.closed}
+                  onChange={(e) => {
+                    setChange({ ...change, closed: e.target.checked });
+                    setError('');
+                  }}
+                />
+                <span>{t('changeClosed')}</span>
+              </label>
+            </fieldset>
+          )}
+
+          {mode === null && isStoryRemoval && (
+            <div className={form.field}>
+              <label className={form.label} htmlFor="mod-story">
+                {t('storyLabel')}
+              </label>
+              <select
+                id="mod-story"
+                className={form.input}
+                value={story}
+                onChange={(e) => {
+                  setStory(e.target.value);
+                  setError('');
+                }}
+              >
+                <option value="">{t('storyChoose')}</option>
+                {[1, 2, 3].map((n) => (
+                  <option key={n} value={n}>
+                    {t('storyN', { n })}
+                  </option>
+                ))}
+              </select>
+              <p className={styles.meta}>{t('storyHelp')}</p>
+            </div>
+          )}
+
           {mode === null && isNew && (
             <>
               <fieldset className={form.options}>
@@ -405,6 +610,37 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
                   </label>
                 ))}
               </fieldset>
+              {!item.location && (
+                <div className={form.field}>
+                  <p className={styles.meta}>{t('pinHelp')}</p>
+                  <label className={form.label} htmlFor="mod-lat">
+                    {t('lat')}
+                  </label>
+                  <input
+                    id="mod-lat"
+                    className={form.input}
+                    inputMode="decimal"
+                    value={pin.lat}
+                    onChange={(e) => {
+                      setPin({ ...pin, lat: e.target.value });
+                      setError('');
+                    }}
+                  />
+                  <label className={form.label} htmlFor="mod-lng">
+                    {t('lng')}
+                  </label>
+                  <input
+                    id="mod-lng"
+                    className={form.input}
+                    inputMode="decimal"
+                    value={pin.lng}
+                    onChange={(e) => {
+                      setPin({ ...pin, lng: e.target.value });
+                      setError('');
+                    }}
+                  />
+                </div>
+              )}
               <fieldset className={form.options}>
                 <legend>{t('methodLegend')}</legend>
                 {METHODS.map((m) => (
@@ -481,13 +717,15 @@ export function ModerationDetail({ item, decision, onBack, onDecide }: Props) {
               >
                 {saving ? t('saving') : t('approve' + k)}
               </button>
-              <button
-                type="button"
-                className={`${form.btn} ${form.secondary}`}
-                onClick={() => chooseMode('info')}
-              >
-                {t('askInfo')}
-              </button>
+              {!waiting && (
+                <button
+                  type="button"
+                  className={`${form.btn} ${form.secondary}`}
+                  onClick={() => chooseMode('info')}
+                >
+                  {t('askInfo')}
+                </button>
+              )}
               <button
                 type="button"
                 className={`${form.btn} ${form.secondary}`}

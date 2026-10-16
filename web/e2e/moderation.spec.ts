@@ -1,122 +1,334 @@
 import { expect, test } from './support/test';
 
-test('moderación en móvil: lista, detalle y aprobar una corrección', async ({
+test('sin sesión pide el correo y el enlace no revela quién modera', async ({
   page,
+  sent,
 }) => {
-  await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/es/moderation');
   await expect(page.getByRole('heading', { name: 'Moderación' })).toBeVisible();
-  await expect(
-    page.getByRole('button', { name: 'Pendientes (4)' }),
-  ).toBeVisible();
-
-  // En el móvil, el detalle sustituye a la lista.
-  await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
-  await expect(
-    page.getByRole('heading', { name: '[DEMO] Café Paso a Paso' }),
-  ).toBeFocused();
-  await expect(page.getByRole('button', { name: /Pendientes/ })).toBeHidden();
-  await expect(page.getByText('9:00 – 21:00')).toBeVisible();
-  await expect(page.getByText('9:00 – 15:00')).toBeVisible();
-
-  // Sin la comprobación no se aprueba.
-  await page.getByRole('button', { name: 'Aprobar cambio' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText(
-    'Marca la comprobación',
+  await page.getByRole('button', { name: 'Enviarme el enlace' }).click();
+  await expect(page.locator('#contenido p[role=alert]')).toContainText(
+    'correo válido',
   );
-  await page.getByLabel('He comprobado que el cambio es correcto').check();
-  await page.getByRole('button', { name: 'Aprobar cambio' }).click();
-  await expect(page.getByRole('status')).toHaveText('Cambio aplicado');
-  await expect(page.getByText(/aprobó el cambio en/)).toBeVisible();
-
-  // Vuelve a la lista: ya queda una menos y está en «Resueltas».
-  await page.getByRole('button', { name: 'Volver a la lista' }).click();
-  await expect(
-    page.getByRole('button', { name: 'Pendientes (3)' }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Resueltas (1)' }).click();
-  await expect(
-    page.getByRole('button', { name: /Café Paso a Paso/ }),
-  ).toBeVisible();
+  await page.getByLabel('Tu correo').fill('quien@ejemplo.org');
+  await page.getByRole('button', { name: 'Enviarme el enlace' }).click();
+  await expect(page.getByRole('status')).toContainText('Caduca en 15 minutos');
+  expect(sent).toEqual([
+    {
+      path: '/auth/magic-link',
+      body: { email: 'quien@ejemplo.org', locale: 'es' },
+    },
+  ]);
 });
 
-test('moderación: un local nuevo exige comprobaciones, nivel y método', async ({
+test('el enlace del correo abre la sesión y quita el token de la dirección', async ({
+  page,
+  sent,
+}) => {
+  await page.goto('/es/moderation/login#token=good');
+  await expect(page).toHaveURL(/\/es\/moderation$/);
+  await expect(page.getByText(/Has entrado como/)).toBeVisible();
+  expect(sent).toEqual([{ path: '/auth/session', body: { token: 'good' } }]);
+  expect(page.url()).not.toContain('token');
+});
+
+test('un enlace caducado o sin token lo dice y deja pedir otro', async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.goto('/es/moderation');
-  await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
-  await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText(
-    'Faltan comprobaciones',
+  await page.goto('/es/moderation/login#token=viejo');
+  await expect(page.locator('#contenido p[role=alert]')).toContainText(
+    'no es válido o ha caducado',
   );
-  for (const name of [
-    'El local existe',
-    'Es un negocio independiente',
-    'Hay pruebas',
-    'El negocio ha confirmado',
-  ]) {
-    await page.getByLabel(name).check();
-  }
-  await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('Elige el nivel');
-  await page.getByLabel(/Confirmado · lo confirma/).check();
-  await page.getByLabel('Llamada al negocio').check();
-  await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
-  await expect(page.getByRole('status')).toHaveText('Aprobada y publicada');
-  await expect(page.getByText(/como Confirmado \(llamada\)/)).toBeVisible();
+  await expect(page.getByLabel('Tu correo')).toBeVisible();
+  await page.goto('/es/moderation/login');
+  await expect(page.locator('#contenido p[role=alert]')).toContainText(
+    'no es válido o ha caducado',
+  );
 });
 
-test('moderación: rechazar pide motivo y pedir información pide nota', async ({
+test.describe('con la sesión abierta', () => {
+  test.beforeEach(async ({ session }) => {
+    session.role = 'admin';
+  });
+
+  test('en móvil: lista, detalle y volver', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.goto('/es/moderation');
+    await expect(
+      page.getByRole('button', { name: 'Pendientes (5)' }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+    await expect(
+      page.getByRole('heading', { name: 'Cocina del Pilar' }),
+    ).toBeFocused();
+    await expect(page.getByRole('button', { name: /Pendientes/ })).toBeHidden();
+    await expect(page.getByText('40.40850, -3.70120')).toBeVisible();
+    await page.getByRole('button', { name: 'Volver a la lista' }).click();
+    await page.getByRole('button', { name: 'Resueltas (1)' }).click();
+    await expect(
+      page.getByRole('button', { name: /Horno Viejo/ }),
+    ).toBeVisible();
+  });
+
+  test('un local nuevo exige comprobaciones, nivel y método, y se envía con el sí del negocio', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'Faltan comprobaciones',
+    );
+    for (const name of [
+      'El local existe',
+      'Es un negocio independiente',
+      'Hay pruebas',
+      'El negocio ha confirmado',
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText('Elige el nivel');
+    await page.getByLabel(/Confirmado · lo confirma/).check();
+    await page.getByLabel('Llamada al negocio').check();
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.getByRole('status')).toHaveText('Aprobada y publicada');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s1/decision',
+        body: {
+          action: 'approve',
+          level: 'community',
+          method: 'call',
+          ownerConfirmed: true,
+        },
+      },
+    ]);
+    await page.getByRole('button', { name: 'Volver a la lista' }).click();
+    await expect(
+      page.getByRole('button', { name: 'Pendientes (4)' }),
+    ).toBeVisible();
+  });
+
+  test('sin pin se piden las coordenadas, y se envían', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Burger Mega Express/ }).click();
+    await expect(page.getByText(/Parece una cadena/)).toBeVisible();
+    for (const name of [
+      'El local existe',
+      'Es un negocio independiente',
+      'Hay pruebas',
+      'El negocio ha confirmado',
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page.getByLabel(/Verificado · lo he comprobado/).check();
+    await page.getByLabel('Visita presencial').check();
+    await page.getByLabel('Latitud').fill('abc');
+    await page.getByLabel('Longitud').fill('-3.7');
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText('no son válidas');
+    await page.getByLabel('Latitud').fill('40.41');
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.getByRole('status')).toHaveText('Aprobada y publicada');
+    expect(sent[0]?.body).toMatchObject({
+      location: { lat: 40.41, lng: -3.7 },
+    });
+  });
+
+  test('rechazar pide motivo y pedir información pide nota', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Burger Mega Express/ }).click();
+    await page.getByRole('button', { name: 'Pedir más información' }).click();
+    await page.getByRole('button', { name: 'Enviar petición' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText('Escribe qué');
+    await page.getByRole('button', { name: 'Cancelar' }).click();
+
+    await page.getByRole('button', { name: 'Rechazar' }).click();
+    await page.getByRole('button', { name: 'Confirmar rechazo' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'Elige un motivo',
+    );
+    await page.getByLabel('No es independiente').check();
+    await page.getByRole('button', { name: 'Confirmar rechazo' }).click();
+    await expect(page.getByRole('status')).toHaveText('Rechazada');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s2/decision',
+        body: { action: 'reject', reason: 'not_independent' },
+      },
+    ]);
+  });
+
+  test('una solicitud con información pedida muestra la nota y la respuesta', async ({
+    page,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Casa Lola/ }).click();
+    await expect(page.getByText('¿Tenéis web o redes?')).toBeVisible();
+    await expect(page.getByText('Sí, está en nuestro perfil.')).toBeVisible();
+    // Ya se pidió información: no se ofrece otra vez.
+    await expect(
+      page.getByRole('button', { name: 'Pedir más información' }),
+    ).toHaveCount(0);
+  });
+
+  test('una corrección se aplica con lo que escribe quien la aprueba', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'Marca la comprobación',
+    );
+    await page.getByLabel('He comprobado que el cambio es correcto').check();
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'Escribe qué cambia',
+    );
+    await page.getByLabel('Calle', { exact: true }).fill('Calle del Pez 9');
+    await page.getByRole('button', { name: 'Aprobar cambio' }).click();
+    await expect(page.getByRole('status')).toHaveText('Cambio aplicado');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s3/decision',
+        body: { action: 'approve', address: { street: 'Calle del Pez 9' } },
+      },
+    ]);
+  });
+
+  test('retirar una historia pide cuál, y confirma la identidad', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Retirada.*La Masa Madre/s })
+      .click();
+    await page.getByRole('button', { name: 'Retirar ahora' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'confirmar la identidad',
+    );
+    await page.getByLabel(/He confirmado, por el correo/).check();
+    await page.getByRole('button', { name: 'Retirar ahora' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText('qué historia');
+    await page.getByLabel('¿Qué historia se retira?').selectOption('2');
+    await page.getByRole('button', { name: 'Retirar ahora' }).click();
+    await expect(page.getByRole('status')).toContainText('Retirado');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s4/decision',
+        body: { action: 'approve', identityConfirmed: true, storyIndex: 1 },
+      },
+    ]);
+  });
+
+  test('si otra persona decidió antes, lo dice', async ({ page }) => {
+    await page.route('**/suggestions/s2/decision', (route) =>
+      route.fulfill({
+        status: 409,
+        headers: {
+          'access-control-allow-origin': 'http://localhost:4173',
+          'access-control-allow-credentials': 'true',
+        },
+        json: { error: { code: 'conflict', message: 'Cambió' } },
+      }),
+    );
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Burger Mega Express/ }).click();
+    await page.getByRole('button', { name: 'Rechazar' }).click();
+    await page.getByLabel('Otro', { exact: true }).check();
+    await page.getByRole('button', { name: 'Confirmar rechazo' }).click();
+    await expect(page.locator('p[role=alert]')).toContainText(
+      'acaba de decidir',
+    );
+  });
+
+  test('salir cierra la sesión y vuelve a pedir el correo', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: 'Salir' }).click();
+    await expect(page.getByLabel('Tu correo')).toBeVisible();
+    expect(sent.map((s) => s.path)).toEqual(['/auth/logout']);
+  });
+
+  test('en escritorio lista y detalle se ven a la vez', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/es/moderation');
+    await expect(page.getByText('Elige una solicitud')).toBeVisible();
+    await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+    await expect(
+      page.getByRole('button', { name: 'Pendientes (5)' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Cocina del Pilar' }),
+    ).toBeVisible();
+  });
+
+  test('existe en inglés', async ({ page }) => {
+    await page.goto('/en/moderation');
+    await expect(
+      page.getByRole('heading', { name: 'Moderation' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Pending (5)' }),
+    ).toBeVisible();
+  });
+});
+
+test('un moderador ve lo de equipo y retiradas pero no lo decide', async ({
   page,
+  session,
 }) => {
-  await page.setViewportSize({ width: 390, height: 800 });
+  session.role = 'moderator';
   await page.goto('/es/moderation');
-  await page.getByRole('button', { name: /Burger Mega Express/ }).click();
-  await expect(page.getByText(/Parece una cadena/)).toBeVisible();
-
-  await page.getByRole('button', { name: 'Pedir más información' }).click();
-  await page.getByRole('button', { name: 'Enviar petición' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('Escribe qué');
-  await page.getByRole('button', { name: 'Cancelar' }).click();
-
-  await page.getByRole('button', { name: 'Rechazar' }).click();
-  await page.getByRole('button', { name: 'Confirmar rechazo' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('Elige un motivo');
-  await page.getByLabel('No es independiente').check();
-  await page.getByRole('button', { name: 'Confirmar rechazo' }).click();
-  await expect(page.getByRole('status')).toHaveText('Rechazada');
+  await page.getByRole('button', { name: /Retirada.*La Masa Madre/s }).click();
+  await expect(page.getByText(/la decide un administrador/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Retirar ahora' })).toHaveCount(
+    0,
+  );
 });
 
-test('moderación en escritorio: lista y detalle se ven a la vez', async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('/es/moderation');
-  await expect(page.getByText('Elige una solicitud')).toBeVisible();
-  await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
-  await expect(
-    page.getByRole('button', { name: 'Pendientes (4)' }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: 'Cocina del Pilar' }),
-  ).toBeVisible();
-});
-
-test('moderación: existe en inglés', async ({ page }) => {
-  await page.goto('/en/moderation');
-  await expect(page.getByRole('heading', { name: 'Moderation' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Pending (4)' })).toBeVisible();
-});
-
-test('se llega a moderación desde el menú, en el móvil', async ({ page }) => {
+test('la moderación no está en el menú público', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/es');
   await page.locator('button[aria-haspopup="dialog"]').click();
-  await page
-    .getByRole('dialog')
-    .getByRole('link', { name: 'Moderar propuestas (demo)' })
-    .click();
-  await expect(page).toHaveURL(/\/es\/moderation$/);
-  await expect(page.getByRole('heading', { name: 'Moderación' })).toBeVisible();
+  await expect(
+    page.getByRole('dialog').getByRole('link', { name: /Moderar/ }),
+  ).toHaveCount(0);
+});
+
+test('en 320 px la entrada y la cola no se desbordan', async ({
+  page,
+  session,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  const overflow = () =>
+    page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+  await page.goto('/es/moderation');
+  await expect(page.getByLabel('Tu correo')).toBeVisible();
+  expect(await overflow()).toBeLessThanOrEqual(0);
+
+  session.role = 'admin';
+  await page.goto('/es/moderation');
+  await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Cocina del Pilar' }),
+  ).toBeVisible();
+  expect(await overflow()).toBeLessThanOrEqual(0);
 });

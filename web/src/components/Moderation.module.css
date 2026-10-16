@@ -262,3 +262,28 @@
     display: none;
   }
 }
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 16px;
+}
+.who {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.login {
+  max-width: 28rem;
+}
+.reply {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--line);
+}
+.reply p {
+  margin: 0 0 4px;
+}

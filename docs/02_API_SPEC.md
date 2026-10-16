@@ -88,7 +88,7 @@ El token es un HMAC firmado que identifica la solicitud y se invalida al usarlo 
 Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 
 - `POST /auth/magic-link` solo envía el enlace si el correo es de un `moderator` o `admin` sin baja, y como mucho 5 enlaces vivos por persona. Tope por IP: 20 solicitudes por hora (`429`).
-- El enlace es `<WEB_URL>/<idioma>/moderation/login#token=…` (la página de entrada llega con la integración de la web).
+- El enlace es `<WEB_URL>/<idioma>/moderation/login#token=…` (la página `/moderation/login` de la web cambia el token por la sesión y lo quita de la dirección).
 - `POST /auth/session`: `422` si el token no tiene la forma esperada; `401 invalid_token` si no existe, caducó, ya se usó o el usuario ya no puede moderar. Devuelve lo mismo que `/auth/me`.
 - Las respuestas de `/auth/*` llevan `Cache-Control: no-store`.
 - Toda escritura con sesión (de momento `POST /auth/logout`, luego las decisiones) exige el `Origin` de la web y la cabecera `X-Requested-With` (cualquier valor); si no, `403 forbidden`. Sin sesión válida, `401 unauthorized`.
@@ -127,7 +127,7 @@ Detalle de caducidades, cookie y protecciones: ADR 0007. En el servidor:
 - `ask_info`: exige `note` y que la solicitud tenga correo; si no, `409 no_contact`. La solicitud pasa a `info_requested`, con plazo de 30 días, y se envía el enlace de respuesta. Solo desde `pending` (`409 info_already_requested`). Si el correo no sale, `502 mail_failed` y la solicitud vuelve a `pending`.
 - Una solicitud ya resuelta no admite otra decisión (`409 already_resolved`). `reject` también cierra una solicitud en `info_requested`. Si otra persona decide en el mismo instante, `409 conflict`.
 - **Al rechazar o aprobar se borra `contactEmail`** y el enlace de respuesta deja de valer (requisito de `08_PRIVACIDAD_LEGAL.md`). La auditoría guarda el estado antes y después y el motivo, nunca el correo ni la nota.
-- El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la integración de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.
+- El enlace de respuesta es `<WEB_URL>/<idioma>/reply#token=…` (la página llega con la siguiente PR de la web). El token es un HMAC (`REPLY_TOKEN_SECRET`) que lleva la solicitud, el plazo y un `nonce` guardado en la solicitud; el correo incluye la nota de Moderación.
 - `team` y `removal` solo los decide un `admin` (ADR 0008); un `moderator` recibe `403`.
 - Una **retirada** aprobada oculta lo pedido al momento (la historia deja de servirse). El borrado de una historia retirada llega a los ❓ 21 días (ver «Conservación»); el de una ficha retirada queda pendiente.
 - Fuera del ámbito del usuario (`moderationScope`), `404`, igual que en el detalle: no se distingue de una solicitud que no existe.

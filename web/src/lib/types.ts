@@ -184,13 +184,23 @@ export type ModerationWarning =
   | { kind: 'chain' }
   | { kind: 'noEvidence' };
 
+export type ModerationStatus =
+  'pending' | 'info_requested' | 'approved' | 'rejected';
+
 export interface ModerationItem {
   id: string;
   kind: ModerationKind;
+  status: ModerationStatus;
   name: string;
   neighborhood: string;
   address: string;
   daysAgo: number;
+  // «Info pedida»: lo que se preguntó, hasta cuándo, y lo que contestó quien
+  // propuso (de la más antigua a la más reciente).
+  infoRequest?: { note: string; deadline: string };
+  replies?: { message: string; at: string }[];
+  // El pin que dejó el geocodificador, si lo encontró.
+  location?: { lat: number; lng: number };
   contactMasked?: string; // el correo de quien propone nunca se ve entero
   warnings: ModerationWarning[];
   // Solo en un local nuevo:
@@ -226,6 +236,27 @@ export type ModerationDecision =
       action: 'approve';
       level?: VerificationLevel; // solo en un local nuevo
       method?: VerificationMethod;
+      // Solo en un local nuevo sin pin geocodificado: el pin a mano.
+      location?: { lat: number; lng: number };
+      // Solo en una retirada de una historia: su posición en la ficha (0–2).
+      storyIndex?: number;
+      // Solo en una corrección: el cambio, ya comprobado, que se aplica.
+      change?: CorrectionChange;
     }
   | { action: 'reject'; reason: RejectReason; note?: string }
   | { action: 'ask_info'; note: string };
+
+// Lo que aplica quien aprueba una corrección (el texto libre de quien la envía
+// no se aplica solo).
+export interface CorrectionChange {
+  name?: string;
+  address?: { street?: string; city?: string; postalCode?: string };
+  closed?: true;
+}
+
+// Quién ha entrado en moderación (GET /auth/me).
+export interface ModerationSession {
+  email: string;
+  role: 'moderator' | 'admin';
+  moderationScope: { country: string; city?: string }[];
+}
