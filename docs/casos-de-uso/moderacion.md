@@ -22,6 +22,7 @@
 ## CU-21 · Revisar una corrección
 - **Quién:** Moderador/a. Especializa CU-19.
 - **Comprobación:** el cambio es correcto. Ve el dato «Antes» y «Después» (hoy, solo en la dirección) y puede abrir la ficha para contrastar.
+- **Qué aplica:** lo que quien aprueba escribe ya comprobado: nombre, dirección, pin (latitud y longitud), el horario completo de la semana (sustituye al de la ficha; un día en blanco es un día cerrado) o el cierre definitivo. Lo que se deja en blanco no se toca.
 
 ## CU-22 · Revisar el equipo de un negocio
 - **Quién:** Moderador/a. Especializa CU-19.
