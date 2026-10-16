@@ -75,6 +75,28 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
           session.role ??= 'moderator';
           return route.fulfill({ headers, json: me() });
         }
+        const replyToken = /^\/replies\/([^/]+)$/.exec(path)?.[1];
+        if (replyToken) {
+          if (replyToken === 'busy') {
+            return route.fulfill({
+              status: 429,
+              headers,
+              json: { error: { code: 'rate_limited', message: 'Muchas' } },
+            });
+          }
+          if (replyToken !== 'good') {
+            return route.fulfill({
+              status: 404,
+              headers,
+              json: { error: { code: 'not_found', message: 'Ya no vale' } },
+            });
+          }
+          return route.fulfill({
+            status: 201,
+            headers,
+            json: { status: 'received' },
+          });
+        }
         if (path === '/auth/logout') {
           session.role = null;
           return route.fulfill({ status: 204, headers });
@@ -89,6 +111,25 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         });
       }
 
+      const replyToken = /^\/replies\/([^/]+)$/.exec(path)?.[1];
+      if (replyToken) {
+        if (!['good', 'busy'].includes(replyToken)) {
+          return route.fulfill({
+            status: 404,
+            headers,
+            json: { error: { code: 'not_found', message: 'Ya no vale' } },
+          });
+        }
+        return route.fulfill({
+          headers,
+          json: {
+            name: '[DEMO] Café Nuevo',
+            note: '¿Puedes decirnos si el local tiene rampa en la entrada?',
+            deadline: '2026-11-20T10:00:00.000Z',
+            locale: 'es',
+          },
+        });
+      }
       if (path === '/auth/me') {
         if (!session.role) {
           return route.fulfill({

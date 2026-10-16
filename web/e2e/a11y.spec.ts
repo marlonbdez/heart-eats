@@ -15,6 +15,7 @@ const PAGES = [
   '/business',
   '/removal',
   '/moderation',
+  '/reply',
   '/about',
   '/verification',
   '/privacy',
@@ -204,6 +205,23 @@ for (const scheme of ['light', 'dark'] as const) {
       await page
         .getByRole('button', { name: /Retirada.*La Masa Madre/s })
         .click();
+      await expectNoViolations(page);
+    });
+
+    test('responder a Moderación: formulario, error y enviado', async ({
+      page,
+    }) => {
+      await page.goto('/es/reply#token=good');
+      await expect(page.getByLabel('Tu respuesta')).toBeVisible();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Enviar respuesta' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+      await page.getByLabel('Tu respuesta').fill('Sí, hay rampa.');
+      await page.getByRole('button', { name: 'Enviar respuesta' }).click();
+      await expect(
+        page.getByRole('heading', { name: '¡Gracias por responder!' }),
+      ).toBeVisible();
       await expectNoViolations(page);
     });
 

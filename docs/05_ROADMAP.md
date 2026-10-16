@@ -72,7 +72,7 @@ Una PR por paso:
   - [x] Envíos de propuestas, correcciones y retiradas a la API (con el idioma, y el aviso de «demasiados envíos»); `/privacy` actualizada (Resend, Nominatim, plazos); topes de envío del servidor subidos a 100/hora y 1000/día
   - [ ] Equipo del negocio (`POST /teams`) y fotos (`POST /uploads` + R2): hasta entonces el formulario del negocio sigue simulado y «Proponer un local» no pide fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
   - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Falta: horario y pin en la corrección, aprobar el equipo (`POST /teams`), retiradas de fotos y de datos
-  - [ ] Página `/reply` para responder a «Info pedida»
+  - [x] Página `/reply` para responder a «Info pedida» (lee el token del fragmento, muestra la nota y el plazo, y explica con calma el enlace ya usado o caducado); `/privacy` recoge la respuesta
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal
 

@@ -105,3 +105,4 @@ export async function submitRemoval(input: RemovalInput): Promise<void> {
 }
 
 export * from './moderation';
+export * from './replies';
