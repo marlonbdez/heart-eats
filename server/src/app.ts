@@ -6,6 +6,7 @@ import type { Config } from './config/env.js';
 import { errorHandler, notFound } from './middleware/errors.js';
 import { createRateLimiter } from './middleware/rate-limit.js';
 import { createApiRouter } from './routes/index.js';
+import type { Geocoder } from './services/geocoder.js';
 import { consoleMailer, type Mailer } from './services/mailer.js';
 
 const HOUR = 60 * 60 * 1000;
@@ -31,9 +32,14 @@ const LOGIN_LINKS_PER_HOUR = 20;
 
 interface AppDeps {
   mailer?: Mailer;
+  // Sin geocodificador (como en las pruebas), no se geocodifica.
+  geocoder?: Geocoder;
 }
 
-export function createApp(config: AppConfig, { mailer }: AppDeps = {}) {
+export function createApp(
+  config: AppConfig,
+  { mailer, geocoder }: AppDeps = {},
+) {
   const app = express();
 
   app.disable('x-powered-by');
@@ -72,6 +78,7 @@ export function createApp(config: AppConfig, { mailer }: AppDeps = {}) {
       allowedOrigins: config.CORS_ORIGINS,
       secureCookies: config.NODE_ENV === 'production',
       knownChains: config.KNOWN_CHAINS ?? [],
+      geocoder,
       // Sin secreto (desarrollo y pruebas), los enlaces solo valen hasta reiniciar.
       replyTokenSecret:
         config.REPLY_TOKEN_SECRET ?? randomBytes(32).toString('hex'),

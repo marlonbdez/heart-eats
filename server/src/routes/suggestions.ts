@@ -8,11 +8,13 @@ import { Restaurant } from '../models/restaurant.js';
 import { Suggestion, type SuggestionRecord } from '../models/suggestion.js';
 import type { ModerationScope } from '../models/user.js';
 import { decisionSchema } from '../services/decision-input.js';
+import type { Geocoder } from '../services/geocoder.js';
 import type { Mailer } from '../services/mailer.js';
 import {
   toModerationItem,
   type TargetRestaurant,
 } from '../services/moderation-item.js';
+import { ensureGeocode } from '../services/suggestion-geocode.js';
 import { REPLY_DAYS, signReplyToken } from '../services/reply-token.js';
 import {
   encodeQueueCursor,
@@ -30,6 +32,7 @@ interface SuggestionsOptions {
   // Base de los enlaces del correo (la web, no la API).
   webUrl: string;
   replyTokenSecret: string;
+  geocoder?: Geocoder;
 }
 
 // Lo que tocan a personas del equipo: lo decide un administrador (ADR 0008).
@@ -81,6 +84,7 @@ export function suggestionsRouter({
   mailer,
   webUrl,
   replyTokenSecret,
+  geocoder,
 }: SuggestionsOptions) {
   const router = Router();
   const auth = requireSession(allowedOrigins);
@@ -133,10 +137,12 @@ export function suggestionsRouter({
 
   // Una solicitud.
   router.get('/suggestions/:id', ...auth, async (req, res) => {
-    const record = await findVisible(
+    const found = await findVisible(
       String(req.params.id),
       authOf(res).moderationScope,
     );
+    // La primera apertura de un local nuevo geocodifica su dirección.
+    const record = await ensureGeocode(found, geocoder);
     const targets = await loadTargets([record]);
     res
       .set('Cache-Control', 'no-store')

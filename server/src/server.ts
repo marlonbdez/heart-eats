@@ -2,6 +2,7 @@ import { createApp } from './app.js';
 import { loadConfig } from './config/env.js';
 import { connectDb, disconnectDb } from './db.js';
 import { ensureAdmin } from './services/ensure-admin.js';
+import { nominatimGeocoder } from './services/geocoder.js';
 import { consoleMailer, resendMailer } from './services/mailer.js';
 
 const config = loadConfig();
@@ -26,7 +27,13 @@ const mailer = config.RESEND_API_KEY
     })
   : consoleMailer;
 
-const server = createApp(config, { mailer }).listen(config.PORT, () => {
+const server = createApp(config, {
+  mailer,
+  geocoder: nominatimGeocoder({
+    baseUrl: config.NOMINATIM_URL,
+    userAgent: config.GEOCODER_USER_AGENT,
+  }),
+}).listen(config.PORT, () => {
   console.log(`API escuchando en el puerto ${config.PORT}`);
 });
 

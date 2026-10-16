@@ -62,6 +62,15 @@ const schema = z
     // Resend envía los enlaces de acceso. Sin clave solo hay consola, y solo
     // en desarrollo.
     RESEND_API_KEY: optional(z.string().min(1)),
+    // Geocodificación de los locales propuestos (ADR 0006). Sin claves.
+    NOMINATIM_URL: z
+      .url()
+      .default('https://nominatim.openstreetmap.org')
+      .transform((value) => value.replace(/\/+$/, '')),
+    GEOCODER_USER_AGENT: z
+      .string()
+      .min(10)
+      .default('HeartEats (+https://hearteats.org; contact@hearteats.org)'),
     // Secreto con el que se firman los enlaces de «Info pedida» (ADR 0007).
     // Sin él, fuera de producción, cada arranque usa uno al azar.
     REPLY_TOKEN_SECRET: optional(z.string().min(32)),

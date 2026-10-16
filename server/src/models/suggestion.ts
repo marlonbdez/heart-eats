@@ -9,7 +9,8 @@ export const suggestionStatuses = [
 ] as const;
 
 export type SuggestionWarning =
-  | { kind: 'duplicate'; other: string }
+  // `meters` llega al geocodificar, si el otro local está cerca.
+  | { kind: 'duplicate'; other: string; meters?: number }
   | { kind: 'chain' }
   | { kind: 'noEvidence' };
 
@@ -27,6 +28,15 @@ export interface SuggestionRecord {
   warnings: SuggestionWarning[];
   // Ciudad del local propuesto sin acentos, para buscar duplicados.
   cityKey?: string;
+  // Resultado de geocodificar la dirección (ADR 0006). Sin `lat` y `lng`, el
+  // servicio no la encontró y el pin se coloca a mano.
+  geocode?: {
+    provider: string;
+    at: Date;
+    lat?: number;
+    lng?: number;
+    country?: string;
+  };
   // Por qué se rechazó y quién lo decidió.
   resolution?: {
     reason: string;
@@ -72,6 +82,18 @@ const suggestionSchema = new Schema(
     locale: { type: String, enum: ['es', 'en'], default: 'es' },
     warnings: { type: [Schema.Types.Mixed], default: [] },
     cityKey: String,
+    geocode: {
+      type: new Schema(
+        {
+          provider: { type: String, required: true },
+          at: { type: Date, required: true },
+          lat: { type: Number, min: -90, max: 90 },
+          lng: { type: Number, min: -180, max: 180 },
+          country: { type: String, match: /^[A-Z]{2}$/ },
+        },
+        { _id: false },
+      ),
+    },
     resolution: {
       type: new Schema(
         {

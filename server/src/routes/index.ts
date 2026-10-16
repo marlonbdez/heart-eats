@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import type { RateLimiter } from '../middleware/rate-limit.js';
+import type { Geocoder } from '../services/geocoder.js';
 import type { Mailer } from '../services/mailer.js';
 import { authRouter } from './auth.js';
 import { healthRouter } from './health.js';
@@ -17,6 +18,7 @@ interface ApiOptions {
   secureCookies: boolean;
   knownChains: readonly string[];
   replyTokenSecret: string;
+  geocoder?: Geocoder;
 }
 
 // Todo cuelga de /api/v1 (docs/02_API_SPEC.md).
@@ -29,6 +31,7 @@ export function createApiRouter({
   secureCookies,
   knownChains,
   replyTokenSecret,
+  geocoder,
 }: ApiOptions) {
   const api = Router();
   api.use(healthRouter);
@@ -45,7 +48,13 @@ export function createApiRouter({
     }),
   );
   api.use(
-    suggestionsRouter({ allowedOrigins, mailer, webUrl, replyTokenSecret }),
+    suggestionsRouter({
+      allowedOrigins,
+      mailer,
+      webUrl,
+      replyTokenSecret,
+      geocoder,
+    }),
   );
   return api;
 }

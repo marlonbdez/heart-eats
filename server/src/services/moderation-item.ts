@@ -27,6 +27,8 @@ export interface ModerationItem {
   warnings: SuggestionWarning[];
   evidenceUrl?: string;
   // Solo en un local nuevo:
+  // El pin que dejó el geocodificador; sin él, se coloca a mano.
+  location?: { lat: number; lng: number };
   foodTags?: string[];
   dishes?: string[];
   howKnown?: string;
@@ -84,6 +86,10 @@ export function toModerationItem(
       foodTags: p.foodTags,
       dishes: p.dishes.map((d) => d.name),
       howKnown: p.howKnown,
+      location:
+        s.geocode?.lat !== undefined && s.geocode.lng !== undefined
+          ? { lat: s.geocode.lat, lng: s.geocode.lng }
+          : undefined,
     };
   }
 

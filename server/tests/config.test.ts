@@ -15,9 +15,23 @@ describe('loadConfig', () => {
       SUBMISSIONS_PER_DAY: 200,
       KNOWN_CHAINS: [],
       WEB_URL: 'http://localhost:3000',
+      NOMINATIM_URL: 'https://nominatim.openstreetmap.org',
+      GEOCODER_USER_AGENT:
+        'HeartEats (+https://hearteats.org; contact@hearteats.org)',
       MAIL_FROM: 'HeartEats <acceso@mail.hearteats.org>',
       MAIL_REPLY_TO: 'contact@hearteats.org',
     });
+  });
+
+  it('lee el geocodificador y quita la barra final de la dirección', () => {
+    const config = loadConfig({
+      NOMINATIM_URL: 'https://nominatim.example.org/',
+      GEOCODER_USER_AGENT: 'HeartEats test (contact@hearteats.org)',
+    });
+    expect(config.NOMINATIM_URL).toBe('https://nominatim.example.org');
+    expect(() => loadConfig({ NOMINATIM_URL: 'no-es-una-url' })).toThrow(
+      /NOMINATIM_URL/,
+    );
   });
 
   it('lee el administrador, la web y el correo, y normaliza lo que toca', () => {
