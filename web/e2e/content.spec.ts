@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test('las páginas de contenido existen en español y en inglés', async ({
   page,

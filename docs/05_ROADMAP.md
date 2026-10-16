@@ -67,7 +67,12 @@ Una PR por paso:
   - [ ] Borrado definitivo de una ficha retirada y de su equipo (hoy solo se archiva; hace falta marcar cuándo se retiró) y de las fotos retiradas (cuando existan)
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
   - [ ] Altas y bajas de moderadores (`/users`) y consulta de la auditoría (`/audit`)
-- [ ] Sustituir las funciones de `web/src/lib/data/` por llamadas a la API, retirar el buzón de prueba y actualizar `/cookies` y `/privacy`
+- [ ] Conectar la web a la API, por partes:
+  - [x] Lecturas (inicio, lista, fichas y categorías) desde el navegador, sin datos fijos; las fichas se sirven con una reescritura y no se generan al compilar
+  - [ ] Envíos (propuestas, correcciones, equipo, retiradas) y retirar el buzón de prueba; actualizar `/privacy` (Resend y Nominatim)
+  - [ ] Moderación: entrada con enlace por correo, cola y decisiones; actualizar `/cookies` (`he_session`)
+  - [ ] Página `/reply` para responder a «Info pedida»
+  - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal
 
 ## Fase 4 · Antes de abrir al público

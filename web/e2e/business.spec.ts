@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test('soy de un negocio: solo cifras, en 4 pasos', async ({ page }) => {
   await page.goto('/es/business');

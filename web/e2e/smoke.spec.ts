@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
 
 // El estilo real vive en OpenFreeMap. En la prueba lo sustituimos por uno
 // propio para no depender de un servicio externo. Incluye una capa GeoJSON,

@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import type { Restaurant } from '@/lib/types';
+import { placeQuery, useDiscovery } from './DiscoveryContext';
 import { Distance } from './Distance';
 import { VerificationBadge } from './VerificationBadge';
 import styles from './RestaurantCard.module.css';
@@ -8,6 +9,7 @@ import styles from './RestaurantCard.module.css';
 // Tarjeta de local, reutilizable en mapa y lista. Lidera el plato estrella.
 export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const t = useTranslations('card');
+  const discovery = useDiscovery();
   const dish = restaurant.signatureDishes[0];
   const place = [restaurant.address.neighborhood, restaurant.address.city]
     .filter(Boolean)
@@ -41,7 +43,13 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>
         <VerificationBadge verification={restaurant.verification} />
-        <Link className={styles.more} href={`/place/${restaurant.slug}`}>
+        <Link
+          className={styles.more}
+          href={{
+            pathname: `/place/${restaurant.slug}`,
+            query: placeQuery(discovery),
+          }}
+        >
           {t('viewLocal')}
         </Link>
       </div>

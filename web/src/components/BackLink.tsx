@@ -1,10 +1,13 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useSyncExternalStore, type ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
-import { lastDiscovery } from '@/lib/back';
+import { discoveryFromSearch } from './DiscoveryContext';
 
-// "Volver" de la ficha: regresa al mapa o a la lista de donde se venía, con su búsqueda.
+const noop = () => () => {};
+
+// "Volver" de la ficha: regresa al mapa o a la lista de donde se venía, con su
+// búsqueda (que viaja en la dirección de la ficha).
 export function BackLink({
   className,
   children,
@@ -12,7 +15,12 @@ export function BackLink({
   className?: string;
   children: ReactNode;
 }) {
-  const { view, query } = lastDiscovery();
+  const search = useSyncExternalStore(
+    noop,
+    () => window.location.search,
+    () => '',
+  );
+  const { view, query } = discoveryFromSearch(search);
   return (
     <Link
       href={{ pathname: view === 'list' ? '/list' : '/', query }}

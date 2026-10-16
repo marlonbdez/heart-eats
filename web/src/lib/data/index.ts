@@ -9,25 +9,46 @@ import type {
   ProposalInput,
   RemovalInput,
   Restaurant,
-  RestaurantQuery,
 } from '../types';
-import { matchesQuery } from '../search';
+import { ApiRequestError, apiGet } from '../api';
 import { moderationQueue } from './mock-moderation';
-import { foodTags, restaurants } from './mock-restaurants';
 import { addToOutbox, clearOutbox, maskEmail, readOutbox } from './outbox';
 
-export async function getRestaurants(
-  query: RestaurantQuery = {},
-): Promise<Restaurant[]> {
-  return restaurants.filter((r) => matchesQuery(r, query));
+// Zona que se lee hoy. Al abrir otros países se amplía aquí.
+const COUNTRY = 'ES';
+const PAGE_SIZE = 100;
+// Tope de páginas por si la API no cerrara nunca el cursor.
+const MAX_PAGES = 100;
+
+// Todos los locales publicados de la zona, página a página. La búsqueda y los
+// filtros se aplican después en el navegador (lib/search.ts).
+export async function getRestaurants(): Promise<Restaurant[]> {
+  const all: Restaurant[] = [];
+  let cursor: string | undefined;
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const res = await apiGet<{ items: Restaurant[]; nextCursor?: string }>(
+      '/restaurants',
+      { country: COUNTRY, limit: PAGE_SIZE, cursor },
+    );
+    all.push(...res.items);
+    if (!res.nextCursor) break;
+    cursor = res.nextCursor;
+  }
+  return all;
 }
 
 export async function getRestaurant(slug: string): Promise<Restaurant | null> {
-  return restaurants.find((r) => r.slug === slug) ?? null;
+  try {
+    return await apiGet<Restaurant>(`/restaurants/${encodeURIComponent(slug)}`);
+  } catch (err) {
+    if (err instanceof ApiRequestError && err.status === 404) return null;
+    throw err;
+  }
 }
 
 export async function getFoodTags(): Promise<FoodTag[]> {
-  return foodTags;
+  const res = await apiGet<{ foodTags: FoodTag[] }>('/meta/filters');
+  return res.foodTags;
 }
 
 // Envío simulado: no hay backend todavía. Cuando exista, esto pasa a
@@ -56,7 +77,7 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
 export async function submitCorrection(input: CorrectionInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
-  const place = restaurants.find((r) => r.slug === input.restaurantSlug);
+  const place = await getRestaurant(input.restaurantSlug).catch(() => null);
   addToOutbox({
     kind: 'correction',
     name: place?.name ?? input.restaurantSlug,
@@ -82,7 +103,7 @@ export async function submitBusinessTeam(
 ): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
-  const place = restaurants.find((r) => r.slug === input.restaurantSlug);
+  const place = await getRestaurant(input.restaurantSlug).catch(() => null);
   addToOutbox({
     kind: 'team',
     name: place?.name ?? input.restaurantSlug,
@@ -110,7 +131,7 @@ export async function submitBusinessTeam(
 export async function submitRemoval(input: RemovalInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
   await new Promise((resolve) => setTimeout(resolve, 600));
-  const place = restaurants.find((r) => r.slug === input.restaurantSlug);
+  const place = await getRestaurant(input.restaurantSlug).catch(() => null);
   addToOutbox({
     kind: 'removal',
     name: place?.name ?? input.restaurantSlug,

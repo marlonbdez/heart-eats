@@ -1,0 +1,18 @@
+.note {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.retry {
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--accent-text);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--accent-text);
+  font: inherit;
+  cursor: pointer;
+}

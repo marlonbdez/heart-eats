@@ -1,6 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { Discover } from '@/components/Discover';
-import { getFoodTags, getRestaurants } from '@/lib/data';
+import { DiscoverLoader } from '@/components/DiscoverLoader';
 
 export default async function Home({
   params,
@@ -9,13 +8,9 @@ export default async function Home({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [restaurants, foodTags] = await Promise.all([
-    getRestaurants(),
-    getFoodTags(),
-  ]);
   return (
     <main id="contenido" tabIndex={-1}>
-      <Discover restaurants={restaurants} foodTags={foodTags} />
+      <DiscoverLoader />
     </main>
   );
 }

@@ -27,7 +27,7 @@ export default defineConfig({
     },
   },
   webServer: {
-    command: `npx serve out -l ${PORT} --no-clipboard`,
+    command: `npx serve out -l ${PORT} --no-clipboard -c ../serve.json`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

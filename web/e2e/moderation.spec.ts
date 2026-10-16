@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test('moderación en móvil: lista, detalle y aprobar una corrección', async ({
   page,

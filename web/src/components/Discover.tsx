@@ -3,10 +3,10 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
-import { rememberDiscovery } from '@/lib/back';
 import { sortByDistance } from '@/lib/geo';
 import { matchFoodTags, matchesQuery } from '@/lib/search';
 import type { FoodTag, Restaurant } from '@/lib/types';
+import { DiscoveryProvider } from './DiscoveryContext';
 import { FoodFilters } from './FoodFilters';
 import { useLocation } from './LocationProvider';
 import { MapLoader } from './MapLoader';
@@ -83,95 +83,97 @@ export function Discover({
   if (q.trim()) query.q = q.trim();
   if (food.length) query.food = food.join(',');
 
-  // Para que "Volver" en la ficha regrese aquí, con la misma búsqueda.
-  const queryKey = JSON.stringify(query);
-  useEffect(() => {
-    rememberDiscovery({ view, query: JSON.parse(queryKey) });
-  }, [view, queryKey]);
-
   const clearAll = () => {
     setQ('');
     setFood([]);
   };
 
   return (
-    <div className={styles.screen}>
-      <div className={styles.filters}>
-        <SearchBar value={q} onChange={setQ} />
-        {suggestions.length > 0 && (
-          <div className={styles.suggestions}>
-            {suggestions.slice(0, 3).map((tag) => (
-              <button
-                key={tag.key}
-                type="button"
-                className={styles.suggestion}
-                onClick={() => {
-                  toggleFood(tag.key);
-                  setQ('');
-                }}
-              >
-                <span aria-hidden="true">{tag.icon}</span>{' '}
-                {t('search.suggestFood', { food: tag.label })}
-              </button>
-            ))}
-          </div>
-        )}
-        <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
-      </div>
-
-      <div className={styles.area}>
-        {view === 'map' ? (
-          <>
-            <ViewSwitch view={view} query={query} />
-            <p role="status" className={styles.srOnly}>
-              {t('results.count', { count: visible.length })}
-            </p>
-            <MapLoader restaurants={visible} focus={hasFilters} />
-            <div className={styles.nearMe}>
-              <NearMeButton />
-            </div>
-            {status !== 'idle' && <NearMeNotice className={styles.mapNotice} />}
-          </>
-        ) : (
-          <div className={styles.listScroll}>
-            <div className={styles.listHeader}>
-              <ViewSwitch view={view} query={query} />
-              <NearMeButton />
-            </div>
-            <p role="status" className={styles.count}>
-              {t('results.count', { count: visible.length })}
-            </p>
-            {status !== 'idle' && (
-              <NearMeNotice className={styles.listNotice} />
-            )}
-            <ul className={styles.list} aria-label={t('results.listLabel')}>
-              {visible.map((r) => (
-                <li key={r.slug} className={styles.item}>
-                  <RestaurantCard restaurant={r} />
-                </li>
+    <DiscoveryProvider value={{ view, query }}>
+      <div className={styles.screen}>
+        <div className={styles.filters}>
+          <SearchBar value={q} onChange={setQ} />
+          {suggestions.length > 0 && (
+            <div className={styles.suggestions}>
+              {suggestions.slice(0, 3).map((tag) => (
+                <button
+                  key={tag.key}
+                  type="button"
+                  className={styles.suggestion}
+                  onClick={() => {
+                    toggleFood(tag.key);
+                    setQ('');
+                  }}
+                >
+                  <span aria-hidden="true">{tag.icon}</span>{' '}
+                  {t('search.suggestFood', { food: tag.label })}
+                </button>
               ))}
-            </ul>
-          </div>
-        )}
-        {visible.length === 0 && suggestions.length === 0 && (
-          <div className={styles.empty}>
-            <h2 className={styles.emptyTitle}>{t('results.emptyTitle')}</h2>
-            <p>{t('results.emptyBody')}</p>
-            <div className={styles.emptyActions}>
-              <button
-                type="button"
-                className={styles.secondary}
-                onClick={clearAll}
-              >
-                {t('results.clearFilters')}
-              </button>
-              <Link href="/propose" className={styles.primary}>
-                {t('results.propose')}
-              </Link>
             </div>
-          </div>
-        )}
+          )}
+          <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
+        </div>
+
+        <div className={styles.area}>
+          {view === 'map' ? (
+            <>
+              <ViewSwitch view={view} query={query} />
+              <p role="status" className={styles.srOnly}>
+                {t('results.count', { count: visible.length })}
+              </p>
+              <MapLoader restaurants={visible} focus={hasFilters} />
+              <div className={styles.nearMe}>
+                <NearMeButton />
+              </div>
+              {status !== 'idle' && (
+                <NearMeNotice className={styles.mapNotice} />
+              )}
+            </>
+          ) : (
+            <div className={styles.listScroll}>
+              <div className={styles.listHeader}>
+                <ViewSwitch view={view} query={query} />
+                <NearMeButton />
+              </div>
+              <p role="status" className={styles.count}>
+                {t('results.count', { count: visible.length })}
+              </p>
+              {status !== 'idle' && (
+                <NearMeNotice className={styles.listNotice} />
+              )}
+              <ul className={styles.list} aria-label={t('results.listLabel')}>
+                {visible.map((r) => (
+                  <li key={r.slug} className={styles.item}>
+                    <RestaurantCard restaurant={r} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {visible.length === 0 && suggestions.length === 0 && (
+            <div className={styles.empty}>
+              <h2 className={styles.emptyTitle}>
+                {t(hasFilters ? 'results.emptyTitle' : 'results.noneTitle')}
+              </h2>
+              <p>{t(hasFilters ? 'results.emptyBody' : 'results.noneBody')}</p>
+              <div className={styles.emptyActions}>
+                {hasFilters && (
+                  <button
+                    type="button"
+                    className={styles.secondary}
+                    onClick={clearAll}
+                  >
+                    {t('results.clearFilters')}
+                  </button>
+                )}
+                <Link href="/propose" className={styles.primary}>
+                  {t('results.propose')}
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </DiscoveryProvider>
   );
 }

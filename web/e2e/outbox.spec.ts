@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test.use({ viewport: { width: 375, height: 800 } });
 
@@ -49,7 +49,9 @@ test('lo que cuenta un negocio (F3) llega a moderación, sin su correo entero', 
 
   // Y se pueden borrar los envíos de prueba.
   await page.getByRole('button', { name: 'Volver a la lista' }).click();
-  await page.getByRole('button', { name: 'Borrar mis envíos de prueba' }).click();
+  await page
+    .getByRole('button', { name: 'Borrar mis envíos de prueba' })
+    .click();
   await expect(page.getByText('Tienes 1 envío de prueba')).toHaveCount(0);
   await page.reload();
   await expect(page.getByText('Tienes 1 envío de prueba')).toHaveCount(0);
@@ -69,7 +71,9 @@ test('una propuesta y una corrección también llegan a moderación', async ({
 
   await page.goto('/es/moderation');
   await expect(page.getByText('Tienes 1 envío de prueba')).toBeVisible();
-  await page.getByRole('button', { name: /Nuevo local.*Local de prueba/s }).click();
+  await page
+    .getByRole('button', { name: /Nuevo local.*Local de prueba/s })
+    .click();
   await expect(
     page.getByRole('heading', { name: 'Local de prueba' }),
   ).toBeVisible();
