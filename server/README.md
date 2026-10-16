@@ -25,19 +25,19 @@ npm start              # arranca dist/server.js
 
 Se validan al arrancar con Zod (`src/config/env.ts`); si alguna está mal, el servidor no arranca y dice cuál.
 
-| Variable                                       | Defecto                                                          | Para qué                                                                                                            |
-| ---------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `NODE_ENV`                                     | `development`                                                    | `development`, `test` o `production`                                                                                |
-| `PORT`                                         | `3001`                                                           | Puerto de escucha (el hosting lo fija en producción)                                                                |
-| `CORS_ORIGINS`                                 | `http://localhost:3000`                                          | Orígenes de la web autorizados, separados por comas                                                                 |
-| `MONGODB_URI`                                  | `mongodb://127.0.0.1:27017/hearteats` (solo fuera de producción) | Conexión a MongoDB; en producción es obligatoria (Atlas)                                                            |
-| `TRUST_PROXY`                                  | `0`                                                              | Saltos de proxy delante del servidor (Railway: `1`), para ver la IP real en el límite de envíos                     |
-| `SUBMISSIONS_PER_HOUR` / `SUBMISSIONS_PER_DAY` | `30` / `200`                                                     | Tope de envíos guardados por IP (propuesta, sin cerrar); `0` lo desactiva. En local el `.env.example` lo trae a `0` |
-| `WEB_URL`                                      | `http://localhost:3000`                                          | Dirección pública de la web: los enlaces de acceso del correo apuntan aquí                                          |
-| `ADMIN_EMAIL`                                  | vacío                                                            | Correo del primer administrador; se da de alta al arrancar (ADR 0008). No se escribe en el repo                     |
-| `RESEND_API_KEY`                               | vacío                                                            | Clave de Resend para enviar los enlaces de acceso; obligatoria en producción. Sin ella, en desarrollo se escriben en la consola |
-| `MAIL_FROM` / `MAIL_REPLY_TO`                  | `HeartEats <acceso@mail.hearteats.org>` / `contact@hearteats.org` | Remitente (subdominio propio, ADR 0007) y dirección a la que responden                                              |
-| `KNOWN_CHAINS`                                 | vacío                                                            | Nombres de grandes cadenas, separados por comas, para el aviso `chain`. Es configuración: no se escriben en el repo |
+| Variable                                       | Defecto                                                           | Para qué                                                                                                                        |
+| ---------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `NODE_ENV`                                     | `development`                                                     | `development`, `test` o `production`                                                                                            |
+| `PORT`                                         | `3001`                                                            | Puerto de escucha (el hosting lo fija en producción)                                                                            |
+| `CORS_ORIGINS`                                 | `http://localhost:3000`                                           | Orígenes de la web autorizados, separados por comas                                                                             |
+| `MONGODB_URI`                                  | `mongodb://127.0.0.1:27017/hearteats` (solo fuera de producción)  | Conexión a MongoDB; en producción es obligatoria (Atlas)                                                                        |
+| `TRUST_PROXY`                                  | `0`                                                               | Saltos de proxy delante del servidor (Railway: `1`), para ver la IP real en el límite de envíos                                 |
+| `SUBMISSIONS_PER_HOUR` / `SUBMISSIONS_PER_DAY` | `30` / `200`                                                      | Tope de envíos guardados por IP (propuesta, sin cerrar); `0` lo desactiva. En local el `.env.example` lo trae a `0`             |
+| `WEB_URL`                                      | `http://localhost:3000`                                           | Dirección pública de la web: los enlaces de acceso del correo apuntan aquí                                                      |
+| `ADMIN_EMAIL`                                  | vacío                                                             | Correo del primer administrador; se da de alta al arrancar (ADR 0008). No se escribe en el repo                                 |
+| `RESEND_API_KEY`                               | vacío                                                             | Clave de Resend para enviar los enlaces de acceso; obligatoria en producción. Sin ella, en desarrollo se escriben en la consola |
+| `MAIL_FROM` / `MAIL_REPLY_TO`                  | `HeartEats <acceso@mail.hearteats.org>` / `contact@hearteats.org` | Remitente (subdominio propio, ADR 0007) y dirección a la que responden                                                          |
+| `KNOWN_CHAINS`                                 | vacío                                                             | Nombres de grandes cadenas, separados por comas, para el aviso `chain`. Es configuración: no se escriben en el repo             |
 
 `.env` no se sube al repo.
 
