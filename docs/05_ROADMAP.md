@@ -53,7 +53,7 @@ Una PR por paso:
 - [ ] Envíos de F2, F3 y F4 y petición de retirada, con límite de envíos, honeypot y subida de fotos. Por partes:
   - [x] `POST /proposals` (F2): validación, honeypot, límite por IP y filtro automático
   - [x] `POST /corrections` (F4) y `POST /removals`
-  - [ ] `POST /teams` (F3): aparte, porque guarda historias y depende de cómo las revisa Moderación (`02_API_SPEC.md`, pregunta 1)
+  - [x] `POST /teams` (F3): nivel, cifras, áreas, tipos e historias (con el permiso de quien la cuenta); la cola muestra el equipo sin nombres ni textos. Aprobarlo queda para la siguiente PR (`02_API_SPEC.md`, pregunta 1)
   - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos

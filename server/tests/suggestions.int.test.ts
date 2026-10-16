@@ -219,6 +219,43 @@ describe('GET /api/v1/suggestions/:id', () => {
     });
   });
 
+  it('el equipo de un negocio sale sin nombres ni textos de historias', async () => {
+    const [s] = await seed({
+      type: 'team',
+      targetRestaurantId: madridId,
+      payload: {
+        level: 'full',
+        summary: { totalStaff: 8, staffWithDisability: 3 },
+        areas: ['kitchen'],
+        stories: [
+          {
+            displayName: 'Lucía',
+            role: 'Cocina',
+            storyText: 'Mi historia',
+            consentBy: 'self',
+          },
+        ],
+      },
+      contactEmail: 'ana@example.org',
+      createdAt: new Date('2026-10-01T00:00:00Z'),
+    });
+    const cookie = await signedInCookie({ role: 'admin' });
+    const res = await get(`/suggestions/${s!._id}`, cookie);
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({
+      type: 'team',
+      name: '[DEMO] Uno',
+      team: {
+        level: 'full',
+        totalStaff: 8,
+        staffWithDisability: 3,
+        areas: ['kitchen'],
+        stories: 1,
+      },
+    });
+    expect(JSON.stringify(res.body)).not.toMatch(/Lucía|Mi historia/);
+  });
+
   it('404 si no existe, el id no es válido o está fuera del ámbito', async () => {
     const [outside] = await seed(
       proposal('En París', 'Paris', '2026-10-01T00:00:00Z'),

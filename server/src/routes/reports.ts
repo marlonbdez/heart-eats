@@ -2,11 +2,12 @@ import { Router } from 'express';
 import type { RateLimiter } from '../middleware/rate-limit.js';
 import { correctionSchema } from '../services/correction-input.js';
 import { removalSchema } from '../services/removal-input.js';
+import { teamSchema } from '../services/team-input.js';
 import { findTargetRestaurant } from '../services/target-restaurant.js';
 import { submissionHandler } from './submission.js';
 
-// Envíos sobre un local que ya está publicado: sugerir una corrección (F4) y
-// pedir una retirada. Crean una solicitud `pending`; nada cambia en la ficha
+// Envíos sobre un local que ya está publicado: sugerir una corrección (F4),
+// contar el equipo (F3) y pedir una retirada. Crean una solicitud `pending`; nada cambia en la ficha
 // hasta que alguien lo revisa.
 export function reportsRouter({ limiter }: { limiter: RateLimiter }) {
   const router = Router();
@@ -24,6 +25,24 @@ export function reportsRouter({ limiter }: { limiter: RateLimiter }) {
         evidence: input.evidenceUrl ? [input.evidenceUrl] : [],
         contactEmail: input.contactEmail,
         locale: input.locale,
+        warnings: [],
+      }),
+    }),
+  );
+
+  router.post(
+    '/teams',
+    limiter.check,
+    submissionHandler({
+      limiter,
+      schema: teamSchema,
+      build: async ({ restaurantSlug, contactEmail, locale, ...team }) => ({
+        type: 'team',
+        targetRestaurantId: await findTargetRestaurant(restaurantSlug),
+        payload: team,
+        evidence: [],
+        contactEmail,
+        locale,
         warnings: [],
       }),
     }),
