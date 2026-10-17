@@ -25,6 +25,7 @@ npm run dev            # recarga al guardar; http://localhost:3001/api/v1/health
 npm run lint
 npm run typecheck
 npm run seed           # carga los 6 locales [DEMO] (borra y recrea solo los isDemo)
+npm run seed -- --clear  # quita los [DEMO] sin recrearlos (pide confirmación; --yes la salta)
 npm run test:unit      # pruebas sin base de datos (rápidas)
 npm test               # todas; las de base de datos usan MongoDB en memoria
 npm run build          # genera dist/
