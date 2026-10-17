@@ -1,0 +1,61 @@
+name: Copia de seguridad
+
+# Atlas M0 no hace copias (ADR 0005). Cada domingo se vuelca la base de datos,
+# se cifra con una clave pública y se sube a un bucket privado de R2. Las copias
+# de más de 4 semanas las borra una regla del bucket, no este flujo.
+# Cómo se configura y cómo se restaura: docs/13_COPIAS.md.
+
+on:
+  schedule:
+    - cron: "17 3 * * 0" # domingos, 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: mongodump cifrado a R2
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      AGE_RECIPIENT: ${{ secrets.BACKUP_AGE_RECIPIENT }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+    steps:
+      - name: Herramientas (mongodump y age)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          curl -fsSL -o tools.tgz \
+            https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.10.0.tgz
+          tar -xzf tools.tgz
+          echo "$PWD/mongodb-database-tools-ubuntu2204-x86_64-100.10.0/bin" >> "$GITHUB_PATH"
+
+      # Sin las sesiones ni los enlaces de acceso: caducan solos y, en una copia,
+      # solo serían un riesgo.
+      - name: Volcar y cifrar
+        run: |
+          set -euo pipefail
+          file="hearteats-$(date -u +%Y-%m-%d).archive.gz.age"
+          mongodump --uri "$MONGODB_URI" --gzip --archive \
+            --excludeCollection=sessions --excludeCollection=logintokens \
+            | age -r "$AGE_RECIPIENT" -o "$file"
+          # Una copia vacía o diminuta es una copia rota.
+          size=$(stat -c %s "$file")
+          echo "Copia: $file ($size bytes)"
+          test "$size" -gt 1024
+          echo "FILE=$file" >> "$GITHUB_ENV"
+
+      - name: Subir a R2
+        run: |
+          aws s3 cp "$FILE" "s3://$R2_BUCKET/backups/$FILE" --endpoint-url "$R2_ENDPOINT"
+          aws s3 ls "s3://$R2_BUCKET/backups/" --endpoint-url "$R2_ENDPOINT"
