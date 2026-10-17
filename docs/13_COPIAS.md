@@ -17,10 +17,10 @@
 
    ```bash
    brew install age
-   age-keygen -o heart-eats-backup.key
+   age-keygen -o hearteats-backup.key
    ```
 
-   Imprime una línea `Public key: age1…`: esa es la que va a GitHub. El archivo `heart-eats-backup.key` es la **clave privada**: guárdala en tu gestor de contraseñas y en un segundo sitio (si se pierde, las copias no se pueden abrir). No se sube a ningún sitio.
+   Imprime una línea `Public key: age1…`: esa es la que va a GitHub. El archivo `hearteats-backup.key` es la **clave privada**: guárdala en tu gestor de contraseñas y en un segundo sitio (si se pierde, las copias no se pueden abrir). No se sube a ningún sitio.
 
 2. **R2** (panel de Cloudflare):
    - *R2 → Create bucket*, privado, jurisdicción UE si la ofrece.
@@ -50,7 +50,7 @@ aws s3 cp s3://BUCKET/backups/hearteats-AAAA-MM-DD.archive.gz.age . \
   --endpoint-url https://CUENTA.r2.cloudflarestorage.com
 
 # 2. Descifrar con la clave privada
-age -d -i heart-eats-backup.key hearteats-AAAA-MM-DD.archive.gz.age > copia.archive.gz
+age -d -i hearteats-backup.key hearteats-AAAA-MM-DD.archive.gz.age > copia.archive.gz
 
 # 3. Restaurar en una base de pruebas
 mongorestore --uri "mongodb://127.0.0.1:27017" --gzip --archive=copia.archive.gz \
