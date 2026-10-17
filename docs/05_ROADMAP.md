@@ -78,7 +78,7 @@ Una PR por paso:
   - [x] Administración en la moderación (`/moderation`, solo si el rol es `admin`): «Usuarios» (invitar a un moderador con correo, país y ciudad; darlo de baja con confirmación; reponerlo invitándolo de nuevo) y «Registro» (la auditoría con filtro por tipo y «Cargar más»)
   - [x] Página `/reply` para responder a «Info pedida» (lee el token del fragmento, muestra la nota y el plazo, y explica con calma el enlace ya usado o caducado); `/privacy` recoge la respuesta
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
-- [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal. Hechos: Atlas, Railway, `api.hearteats.org` y Resend. Falta: R2 y poner en marcha la copia (`backup.yml`, `13_COPIAS.md`)
+- [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal. Hechos: Atlas, Railway (plan Hobby), `api.hearteats.org`, Resend, R2 y la copia semanal cifrada (`backup.yml`, `13_COPIAS.md`; primera copia comprobada el 2026-10-17). Falta: confirmar la región de Railway (UE), una restauración de prueba con `mongorestore` y anotar los servicios en `/privacy`
 
 ## Fase 4 · Antes de abrir al público
 

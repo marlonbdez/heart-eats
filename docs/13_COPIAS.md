@@ -61,6 +61,22 @@ Después se ve que están los locales (`db.restaurants.countDocuments()`). Anota
 
 Para restaurar en producción tras un desastre: se para la API (o se cambia `MONGODB_URI`), se restaura sobre una base nueva y se apunta la API a ella.
 
+## Comprobación rápida de que una copia se abre
+
+Sin restaurar nada: se descarga el `.age` desde el panel de R2 (el navegador le añade `backups_` al nombre) y se mira qué colecciones lleva.
+
+```bash
+age -d -i ~/hearteats-backup.key ~/Downloads/backups_hearteats-AAAA-MM-DD.archive.gz.age | gunzip | strings | grep -E "^(restaurants|users|suggestions|teams|auditlogs)$" | sort -u
+```
+
+Si no sale nada, la copia o la clave no valen.
+
+## Historial de comprobaciones
+
+| Fecha | Qué se hizo | Resultado |
+|---|---|---|
+| 2026-10-17 | Primera copia lanzada a mano; descifrada con la clave y revisadas las colecciones | Bien: `restaurants`, `users` y `auditlogs`, sin sesiones ni enlaces de acceso. Aún sin restaurar con `mongorestore` |
+
 ## Qué no cubre
 
 - Las fotos (cuando existan) viven en R2, no en la base de datos; se decidirá aparte si se copian.
