@@ -9,12 +9,12 @@
 | Sistema | Para qué | Dónde | Plan | Datos que guarda |
 |---|---|---|---|---|
 | **Web** (`web/`) | Pantallas estáticas. No guarda datos | Netlify, `hearteats.org` | Plan heredado, 0 € | Ninguno |
-| **API** (`server/`) | Lógica, validación, moderación, correo, mantenimiento | Railway, `api.hearteats.org` | Hobby, 5 $/mes de mínimo | Ninguno persistente (la IP del límite de envíos vive en memoria, horas) |
-| **Base de datos** | Locales, equipos, solicitudes, usuarios, auditoría, sesiones | MongoDB Atlas, clúster M0 | Gratuito (512 MB, sin copias) | **Todos** los datos, incluidos correos |
+| **API** (`server/`) | Lógica, validación, moderación, correo, mantenimiento | Railway, `api.hearteats.org`, región **Ámsterdam (UE)** | Hobby, 5 $/mes de mínimo | Ninguno persistente (la IP del límite de envíos vive en memoria, horas) |
+| **Base de datos** | Locales, equipos, solicitudes, usuarios, auditoría, sesiones | MongoDB Atlas, clúster M0, AWS **París (eu-west-3, UE)** | Gratuito (512 MB, sin copias) | **Todos** los datos, incluidos correos |
 | **Correo saliente** | Enlaces de acceso, «Info pedida», aviso de aprobación | Resend, dominio `mail.hearteats.org` | Gratuito (100/día, 3.000/mes) | Los correos enviados (registro de Resend) |
 | **Correo entrante** | `contact@hearteats.org` | ImprovMX | Gratuito | Reenvía a un correo personal del responsable |
 | **Copias** | `mongodump` semanal cifrado | GitHub Actions → Cloudflare R2 | Gratuito | Copia cifrada de toda la base de datos |
-| **Almacén de objetos** | Hoy solo las copias. Más adelante, las fotos | Cloudflare R2, bucket `hearteats-backups` | Gratuito | Copias cifradas (fotos: aún no) |
+| **Almacén de objetos** | Hoy solo las copias. Más adelante, las fotos | Cloudflare R2, bucket `hearteats-backups` (pista de ubicación «Western Europe», jurisdicción por defecto) | Gratuito | Copias cifradas (fotos: aún no) |
 | **Mapa** | Teselas y estilos | OpenFreeMap (público) | Gratuito, sin clave | Nada nuestro |
 | **Direcciones** | Coordenadas de un local nuevo | Nominatim público | Gratuito, 1 consulta/s | Nada nuestro (se consulta desde el servidor) |
 | **Código y CI** | Repositorio, pruebas, copias programadas | GitHub, `marlonbdez/heart-eats` | Gratuito | Código y secretos de las acciones |
@@ -256,13 +256,25 @@ Los plazos son **provisionales** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.
 - **Nominatim**: 1 consulta por segundo, con `User-Agent` identificado. La API lo respeta con una cola.
 - **Railway Hobby**: 5 $ de crédito al mes incluidos; hay que mirar la factura el primer mes. Conviene tener puesto un tope de uso en el panel.
 
-## 9. ❓ Pendiente de confirmar
+## 9. Regiones y pendientes
 
-1. **Región de Railway**: el panel mostraba «US East». El plan y `08_PRIVACIDAD_LEGAL.md` dicen UE. Cambiar la región o decirlo en `/privacy`.
-2. **Región de Atlas** (esperada: UE) y **jurisdicción de R2** (el bucket se creó en «Western Europe», que es una *pista de ubicación*, no una garantía de jurisdicción). Confirmar y reflejar en `/privacy`.
-3. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
-4. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
-5. **Si la base de producción tiene cargados los locales de ejemplo `[DEMO]`** (`npm run seed`): hay que borrarlos antes de abrir al público.
-6. **Restauración de prueba** de una copia con `mongorestore` (`13_COPIAS.md`).
-7. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
-8. **Segunda persona con acceso** a las cuentas (§5).
+### Regiones confirmadas (2026-10-18)
+| Sistema | Región | ¿UE? |
+|---|---|---|
+| Railway (API) | Ámsterdam (Europe West) | Sí |
+| MongoDB Atlas (base de datos) | AWS París (eu-west-3) | Sí |
+| Cloudflare R2 (copias) | Pista «Western Europe»; **jurisdicción por defecto** (no es la jurisdicción UE, que solo se elige al crear el bucket) | No garantizado. Las copias se cifran con `age` antes de salir de GitHub: Cloudflare solo guarda texto ilegible sin nuestra clave. Se deja así a la espera de la revisión legal; si pide jurisdicción UE, hace falta otro bucket y cambiar la dirección S3 (`<cuenta>.eu.r2.cloudflarestorage.com`) |
+| Netlify (web estática) | Red de distribución global | No guarda datos nuestros; registra la IP de quien visita |
+| Resend (correo) | ❓ Sin confirmar | ❓ |
+
+Las empresas proveedoras son de fuera de la UE (p. ej. de EE. UU.): que los datos estén en servidores europeos no sustituye a mirar las transferencias en la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
+
+### ❓ Pendiente de confirmar
+1. **Región de Resend** (Ireland, N. Virginia…) y reflejarla en `/privacy`.
+2. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
+3. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
+4. **Si la base de producción tiene cargados los locales de ejemplo `[DEMO]`** (`npm run seed`): hay que borrarlos antes de abrir al público.
+5. **Restauración de prueba** de una copia con `mongorestore` (`13_COPIAS.md`).
+6. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
+7. **Segunda persona con acceso** a las cuentas (§5).
+8. **Tope de uso** puesto en el panel de Railway.
