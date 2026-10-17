@@ -107,3 +107,22 @@ test('cookies y almacenamiento: dice qué cookie hay (solo moderación) y lista 
     page.getByText(/El borrador de «Proponer un local»/),
   ).toBeVisible();
 });
+
+test('la privacidad dice dónde se guardan los datos, en ES y EN', async ({
+  page,
+}) => {
+  await page.goto('/es/privacy');
+  await expect(
+    page.getByText(/Railway \(Ámsterdam, Países Bajos\)/),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/MongoDB Atlas \(París, Francia\)/),
+  ).toBeVisible();
+  await expect(page.getByText(/se cifra antes de salir/)).toBeVisible();
+  await page.goto('/en/privacy');
+  await expect(
+    page.getByText(/Railway \(Amsterdam, Netherlands\)/),
+  ).toBeVisible();
+  await expect(page.getByText(/MongoDB Atlas \(Paris, France\)/)).toBeVisible();
+  await expect(page.getByText(/encrypted before it leaves/)).toBeVisible();
+});
