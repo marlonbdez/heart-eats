@@ -16,14 +16,15 @@
 | [11_FLUJO_Y_DOMINIO](11_FLUJO_Y_DOMINIO.md) | Ciclo de una propuesta, estados de una solicitud y modelo de dominio |
 | [12_MAPA_DEL_FRONT](12_MAPA_DEL_FRONT.md) | Cómo ver la web, pantallas, recorrido de un envío y qué cambia con el backend |
 | [13_COPIAS](13_COPIAS.md) | Copia de seguridad semanal de la base de datos y cómo restaurarla |
+| [14_PRODUCCION](14_PRODUCCION.md) | Producción: sistemas, variables, secretos, flujos, operación y recuperación |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
 | [modelado/](modelado/) | Fuentes PlantUML y SVG de los diagramas |
 | [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo, 0005 hosting del backend, 0006 geocodificación, 0007 autenticación, 0008 moderación inicial) |
 
-## Estado (2026-10-13)
+## Estado (2026-10-17)
 
-La web completa funciona con datos de ejemplo y un backend simulado (`web/src/lib/data/`). Las decisiones de backend (P1, P4, P5, P9) están propuestas en los ADR 0005–0008, y la API, la arquitectura y los costes tienen su primer borrador. **La fuente del estado actual es [05_ROADMAP](05_ROADMAP.md)**; el handoff (`00_HANDOFF.md`) es el contexto original y en algunos puntos ya está superado (ver su aviso inicial). Las reglas de trabajo para sesiones nuevas están en [`CLAUDE.md`](../CLAUDE.md).
+La web y el servidor están **desplegados**: la web en Netlify (`hearteats.org`), la API en Railway (`api.hearteats.org`), la base de datos en Atlas, el correo con Resend y las copias semanales cifradas en R2. La web lee los locales de la API y envía a ella propuestas, correcciones, retiradas y equipos; la moderación y la administración (usuarios y registro) funcionan desde `/moderation`. **La fuente del estado actual es [05_ROADMAP](05_ROADMAP.md)**; **cómo está montado y cómo operarlo** está en [14_PRODUCCION](14_PRODUCCION.md). El handoff (`00_HANDOFF.md`) es el contexto original y en algunos puntos ya está superado (ver su aviso inicial). Las reglas de trabajo para sesiones nuevas están en [`CLAUDE.md`](../CLAUDE.md).
 
-Pendiente principal: construir el servidor (fase 3 del roadmap), revisión legal y revisión nativa del inglés.
+Pendiente principal: fotos (`POST /uploads` y R2), confirmar las regiones de los servicios, revisión legal y revisión nativa del inglés.
