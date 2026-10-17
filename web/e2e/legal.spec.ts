@@ -119,10 +119,12 @@ test('la privacidad dice dónde se guardan los datos, en ES y EN', async ({
     page.getByText(/MongoDB Atlas \(París, Francia\)/),
   ).toBeVisible();
   await expect(page.getByText(/se cifra antes de salir/)).toBeVisible();
+  await expect(page.getByText(/Resend \(servidores en Irlanda/)).toBeVisible();
   await page.goto('/en/privacy');
   await expect(
     page.getByText(/Railway \(Amsterdam, Netherlands\)/),
   ).toBeVisible();
   await expect(page.getByText(/MongoDB Atlas \(Paris, France\)/)).toBeVisible();
   await expect(page.getByText(/encrypted before it leaves/)).toBeVisible();
+  await expect(page.getByText(/Resend \(servers in Ireland/)).toBeVisible();
 });

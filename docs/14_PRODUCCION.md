@@ -11,7 +11,7 @@
 | **Web** (`web/`) | Pantallas estáticas. No guarda datos | Netlify, `hearteats.org` | Plan heredado, 0 € | Ninguno |
 | **API** (`server/`) | Lógica, validación, moderación, correo, mantenimiento | Railway, `api.hearteats.org`, región **Ámsterdam (UE)** | Hobby, 5 $/mes de mínimo | Ninguno persistente (la IP del límite de envíos vive en memoria, horas) |
 | **Base de datos** | Locales, equipos, solicitudes, usuarios, auditoría, sesiones | MongoDB Atlas, clúster M0, AWS **París (eu-west-3, UE)** | Gratuito (512 MB, sin copias) | **Todos** los datos, incluidos correos |
-| **Correo saliente** | Enlaces de acceso, «Info pedida», aviso de aprobación | Resend, dominio `mail.hearteats.org` | Gratuito (100/día, 3.000/mes) | Los correos enviados (registro de Resend) |
+| **Correo saliente** | Enlaces de acceso, «Info pedida», aviso de aprobación | Resend, dominio `mail.hearteats.org`, región **Irlanda (UE)** | Gratuito (100/día, 3.000/mes) | Los correos enviados (registro de Resend) |
 | **Correo entrante** | `contact@hearteats.org` | ImprovMX | Gratuito | Reenvía a un correo personal del responsable |
 | **Copias** | `mongodump` semanal cifrado | GitHub Actions → Cloudflare R2 | Gratuito | Copia cifrada de toda la base de datos |
 | **Almacén de objetos** | Hoy solo las copias. Más adelante, las fotos | Cloudflare R2, bucket `hearteats-backups` (pista de ubicación «Western Europe», jurisdicción por defecto) | Gratuito | Copias cifradas (fotos: aún no) |
@@ -276,16 +276,15 @@ Quita después la línea del `.env` o bórralo: una terminal con la cadena de pr
 | MongoDB Atlas (base de datos) | AWS París (eu-west-3) | Sí |
 | Cloudflare R2 (copias) | Pista «Western Europe»; **jurisdicción por defecto** (no es la jurisdicción UE, que solo se elige al crear el bucket) | No garantizado. Las copias se cifran con `age` antes de salir de GitHub: Cloudflare solo guarda texto ilegible sin nuestra clave. Se deja así a la espera de la revisión legal; si pide jurisdicción UE, hace falta otro bucket y cambiar la dirección S3 (`<cuenta>.eu.r2.cloudflarestorage.com`) |
 | Netlify (web estática) | Red de distribución global | No guarda datos nuestros; registra la IP de quien visita |
-| Resend (correo) | ❓ Sin confirmar | ❓ |
+| Resend (correo) | Irlanda (eu-west-1) | Sí |
 
 Las empresas proveedoras son de fuera de la UE (p. ej. de EE. UU.): que los datos estén en servidores europeos no sustituye a mirar las transferencias en la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
 
 ### ❓ Pendiente de confirmar
-1. **Región de Resend** (Ireland, N. Virginia…) y reflejarla en `/privacy`.
-2. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
-3. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
-4. **Locales de ejemplo `[DEMO]` en producción**: el 2026-10-18 había 6 (más un local real de la prueba completa). Hay que quitarlos antes de abrir al público con `npm run seed -- --clear` (§7).
-5. ~~Restauración de prueba~~ **Hecha el 2026-10-18** (`13_COPIAS.md`). Repetirla de vez en cuando, p. ej. cada trimestre.
-6. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
-7. **Segunda persona con acceso** a las cuentas (§5).
-8. **Tope de uso** puesto en el panel de Railway.
+1. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
+2. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
+3. **Locales de ejemplo `[DEMO]` en producción**: el 2026-10-18 había 6 (más un local real de la prueba completa). Hay que quitarlos antes de abrir al público con `npm run seed -- --clear` (§7).
+4. ~~Restauración de prueba~~ **Hecha el 2026-10-18** (`13_COPIAS.md`). Repetirla de vez en cuando, p. ej. cada trimestre.
+5. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
+6. **Segunda persona con acceso** a las cuentas (§5).
+7. **Tope de uso** puesto en el panel de Railway.

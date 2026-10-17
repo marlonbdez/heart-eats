@@ -582,7 +582,7 @@
         "items": [
           "Website hosting: Netlify. It records the IP address of whoever visits the site, like any server.",
           "Map: tiles and styles are served by OpenFreeMap. When you open the map, your browser requests them directly and they see your IP address. We send them nothing else.",
-          "Email: we use Resend to send moderation sign-in links and notices to people who left their email (for example, that their suggestion is now published). They see that address and the text of the notice.",
+          "Email: we use Resend (servers in Ireland, European Union) to send moderation sign-in links and notices to people who left their email (for example, that their suggestion is now published). They see that address and the text of the notice.",
           "Geocoding: to place a business on the map, our server sends its address (street, postal code and city) to Nominatim (OpenStreetMap). It does not send your email or anything about you.",
           "Server and database: the API runs on Railway (Amsterdam, Netherlands) and the database is on MongoDB Atlas (Paris, France), both inside the European Union. They hold the suggestions, contact emails, team stories and the accounts of the people who moderate.",
           "Backups: every week we keep a copy of the database on Cloudflare R2. The copy is encrypted before it leaves and only we hold the key, so Cloudflare cannot read it.",
