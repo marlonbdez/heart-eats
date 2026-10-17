@@ -231,6 +231,17 @@ Los plazos son **provisionales** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.
 - **Token de R2**: crear otro, actualizar los dos secretos de GitHub, revocar el viejo.
 - **Clave de cifrado**: generar otra pareja, actualizar `BACKUP_AGE_RECIPIENT`, **guardar la privada vieja** mientras haya copias hechas con ella.
 
+### Quitar los locales de ejemplo de producción
+Solo borra los marcados `isDemo`; no toca locales reales. Dice en qué base está y cuántos borrará, y pide escribir «borrar».
+
+```bash
+cd server
+# MONGODB_URI de producción en server/.env (que no se sube al repo), o en la línea de comandos
+npm run seed -- --clear
+```
+
+Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; **no lo ejecutes contra producción**.
+
 ### Cuando algo falla
 | Síntoma | Causa probable | Qué hacer |
 |---|---|---|
@@ -273,8 +284,8 @@ Las empresas proveedoras son de fuera de la UE (p. ej. de EE. UU.): que los dato
 1. **Región de Resend** (Ireland, N. Virginia…) y reflejarla en `/privacy`.
 2. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
 3. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
-4. **Si la base de producción tiene cargados los locales de ejemplo `[DEMO]`** (`npm run seed`): hay que borrarlos antes de abrir al público.
-5. **Restauración de prueba** de una copia con `mongorestore` (`13_COPIAS.md`).
+4. **Locales de ejemplo `[DEMO]` en producción**: el 2026-10-18 había 6 (más un local real de la prueba completa). Hay que quitarlos antes de abrir al público con `npm run seed -- --clear` (§7).
+5. ~~Restauración de prueba~~ **Hecha el 2026-10-18** (`13_COPIAS.md`). Repetirla de vez en cuando, p. ej. cada trimestre.
 6. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
 7. **Segunda persona con acceso** a las cuentas (§5).
 8. **Tope de uso** puesto en el panel de Railway.

@@ -42,7 +42,18 @@
 
 ## Restaurar (y comprobar que sirve)
 
-Hazlo una vez cuando haya copias, sobre una base **de pruebas**, nunca sobre producción por probar.
+Hazlo sobre una base **de pruebas**, nunca sobre producción por probar. Con Docker no hace falta instalar nada: el comando de abajo es el que se usó el 2026-10-18 (ver el historial).
+
+```bash
+docker run -d --rm --name he-restore-test mongo:8.0
+age -d -i ~/hearteats-backup.key ~/Downloads/backups_hearteats-AAAA-MM-DD.archive.gz.age \
+  | docker exec -i he-restore-test mongorestore --gzip --archive \
+      --nsFrom 'hearteats.*' --nsTo 'hearteats_prueba.*'
+docker exec he-restore-test mongosh --quiet hearteats_prueba --eval 'db.getCollectionNames().forEach(c => print(c, db[c].countDocuments()))'
+docker stop he-restore-test   # al pararlo se borra, con todos los datos
+```
+
+La versión con la CLI de S3 y `mongorestore` instalado es esta:
 
 ```bash
 # 1. Descargar (R2 es compatible con la CLI de S3)
@@ -75,7 +86,8 @@ Si no sale nada, la copia o la clave no valen.
 
 | Fecha | Qué se hizo | Resultado |
 |---|---|---|
-| 2026-10-17 | Primera copia lanzada a mano; descifrada con la clave y revisadas las colecciones | Bien: `restaurants`, `users` y `auditlogs`, sin sesiones ni enlaces de acceso. Aún sin restaurar con `mongorestore` |
+| 2026-10-17 | Primera copia lanzada a mano; descifrada con la clave y revisadas las colecciones | Bien: `restaurants`, `users` y `auditlogs`, sin sesiones ni enlaces de acceso |
+| 2026-10-18 | **Restauración completa** de esa copia en un MongoDB 8 local (Docker), renombrando la base a `hearteats_prueba` | Bien: 18 documentos restaurados, 0 fallos, con índices (7 locales, 5 equipos, 1 solicitud, 1 usuario, 4 líneas de auditoría). El contenedor se borró al acabar |
 
 ## Qué no cubre
 
