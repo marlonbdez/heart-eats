@@ -28,7 +28,8 @@
 
 - **La web no cambia de arquitectura:** sigue siendo estática y solo habla con el servidor a través de `web/src/lib/data/`, desde el navegador (`NEXT_PUBLIC_API_URL`, fijada al compilar). Las fichas (`/place/<slug>`) no se generan al compilar: una reescritura de Netlify (`netlify.toml`, y `web/serve.json` en las pruebas) sirve una sola página para cualquier slug y esta pide el local a la API. Por eso la ficha no lleva el nombre del local en el HTML inicial; el título se pone al cargar.
 - **La lectura pública** se hace desde el navegador, por zona del mapa o ciudad (ADR 0005), y no se recompila la web al publicar. No hay ningún dato de locales fijo en la web.
-- **El servidor** es el único que escribe en la base de datos, firma las subidas de fotos, envía correo y llama a Nominatim.
+- **El servidor** es el único que escribe en la base de datos, envía correo y llama a Nominatim. Cuando existan las fotos, también firmará las subidas.
+- Cómo está desplegado hoy, con sus variables, secretos y flujos, está en `14_PRODUCCION.md`.
 
 ## Componentes
 
@@ -37,7 +38,7 @@
 | Web | Netlify (`web/`) | Pantallas, formularios, validación en el navegador, reducción de fotos |
 | API | Railway (`server/`) | Validación, solicitudes, moderación, publicación, auditoría, límite de envíos |
 | Base de datos | MongoDB Atlas M0 | `Restaurant`, `Team`, `Suggestion`, `User`, `AuditLog`, sesiones y tokens |
-| Fotos | Cloudflare R2 | Cuarentena (`q/`) y público (`p/`); URLs firmadas por el servidor |
+| Copias y, más adelante, fotos | Cloudflare R2 | Hoy, copias cifradas (`backups/`). Previsto para las fotos: cuarentena (`q/`) y público (`p/`), con URLs firmadas por el servidor |
 | Correo saliente | Resend | Enlaces mágicos, «Info pedida», avisos de resolución |
 | Correo entrante | ImprovMX | `contact@hearteats.org` (solo recepción, `09_CORREO.md`) |
 | Mapa | OpenFreeMap | Teselas y estilos |
@@ -63,7 +64,7 @@ Los tipos de intercambio (`Restaurant`, `*Input`, `ModerationItem`, `ModerationD
 
 ## Flujo de una propuesta con servidor
 
-1. El formulario valida y reduce las fotos; pide URLs a `POST /uploads` y sube cada foto a la cuarentena.
+1. El formulario valida (y, cuando existan las fotos, las reduce, pide URLs a `POST /uploads` y las sube a la cuarentena).
 2. `POST /proposals`: honeypot, validación, límite por IP; se guarda la solicitud (`pending`) con sus avisos automáticos y se registra en la auditoría.
 3. Moderación entra con enlace mágico, abre la solicitud (primera vez: geocodificación) y revisa.
 4. Decide: aprobar publica la ficha y mueve las fotos; rechazar o pedir información avisan a quien propuso, si dejó correo.
@@ -88,7 +89,7 @@ Detalle y bases legales: `08_PRIVACIDAD_LEGAL.md`.
 
 ## CI
 
-La CI actual (`.github/workflows/ci.yml`) cubre `web/`. Se añade un trabajo para `server/` (lint, tipos, pruebas) cuando exista el esqueleto. El `mongodump` semanal es otro flujo programado (ADR 0005).
+La CI (`.github/workflows/ci.yml`) cubre `server/` (lint, tipos, pruebas con MongoDB en memoria, build) y `web/` (lint, tipos, build, prueba de humo). La copia semanal es otro flujo programado (`.github/workflows/backup.yml`, `13_COPIAS.md`).
 
 ## Preguntas abiertas
 

@@ -1,6 +1,16 @@
 # Servidor de HeartEats
 
-API en Node.js + Express + MongoDB (TypeScript). Hoy tiene la **lectura pública** (`GET /api/v1/restaurants`, `/restaurants/geojson`, `/restaurants/:slug`, `/meta/filters` y `/health`) y los envíos de la comunidad sin cuenta: **propuestas de locales nuevos** (`POST /api/v1/proposals`), **correcciones** (`/corrections`) y **retiradas** (`/removals`), y la **entrada de moderación** por enlace mágico (`/auth/magic-link`, `/auth/session`, `/auth/me`, `/auth/logout`) la **cola** de solicitudes (`GET /suggestions`, `/suggestions/:id`) y las decisiones de **rechazar**, **pedir información** y **aprobar un local nuevo** (`POST /suggestions/:id/decision`). El detalle de un local nuevo lo geocodifica con Nominatim la primera vez que se abre. El equipo (`/teams`), las fotos, aprobar lo demás y el despliegue llegan en las siguientes PRs (ver `docs/05_ROADMAP.md`, fase 3).
+API en Node.js + Express + MongoDB (TypeScript). Todo cuelga de `/api/v1`. Hace esto:
+
+- **Lectura pública:** `GET /restaurants`, `/restaurants/geojson`, `/restaurants/:slug`, `/meta/filters` y `/health`.
+- **Envíos de la comunidad, sin cuenta:** `POST /proposals`, `/corrections`, `/removals` y `/teams`, con honeypot y límite por IP.
+- **Entrada de moderación** por enlace mágico: `/auth/magic-link`, `/auth/session`, `/auth/me`, `/auth/logout`.
+- **Moderación:** la cola (`GET /suggestions`, `/suggestions/:id`) y las decisiones (`POST /suggestions/:id/decision`): rechazar, pedir información y aprobar un local nuevo, una corrección, una retirada o el equipo de un negocio. El detalle de un local nuevo lo geocodifica con Nominatim la primera vez que se abre.
+- **Respuesta a «Info pedida»:** `GET` y `POST /replies/:token`.
+- **Administración (solo `admin`):** `GET /audit` y `/users` (altas y bajas de moderadores).
+- **Mantenimiento automático** dentro del propio proceso, cada hora (plazos de conservación y cierre de solicitudes sin respuesta).
+
+Todavía no hay fotos (`POST /uploads`). Cómo está desplegado, qué variables y secretos usa y qué hacer si algo falla: [`docs/14_PRODUCCION.md`](../docs/14_PRODUCCION.md). El estado y lo que queda: `docs/05_ROADMAP.md`.
 
 Los endpoints previstos están en [`docs/02_API_SPEC.md`](../docs/02_API_SPEC.md) y la arquitectura en [`docs/03_ARQUITECTURA.md`](../docs/03_ARQUITECTURA.md).
 

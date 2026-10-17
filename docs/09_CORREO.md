@@ -17,9 +17,9 @@
 - **No** está activada la extensión «Email» de Netlify (es para enviar correos desde la web, no hace falta).
 - Probado el 2026-10-11 con un correo desde otra cuenta.
 
-## Correo que envía el servidor (pendiente de montar)
+## Correo que envía el servidor
 
-`contact@` solo recibe. Los enlaces de moderación y los avisos de «Info pedida» los enviará el servidor con Resend (ADR 0007), desde un **subdominio** (`mail.hearteats.org`) con sus propios registros SPF y DKIM, para no tocar los de ImprovMX de arriba. `Reply-To: contact@hearteats.org`. Los registros concretos los da Resend al verificar el dominio y se añaden en el DNS de Netlify; se anotarán aquí al hacerlo.
+`contact@` solo recibe. Los enlaces de moderación y los avisos de «Info pedida» los enviará el servidor con Resend (ADR 0007), desde un **subdominio** (`mail.hearteats.org`) con sus propios registros SPF y DKIM, para no tocar los de ImprovMX de arriba. `Reply-To: contact@hearteats.org`. Los registros concretos los da Resend al verificar el dominio y se añaden en el DNS de Netlify. A 2026-10-17 el dominio figura como verificado y el enlace de acceso llega; el mapa de registros está en `14_PRODUCCION.md` (§2). ❓ Falta anotar los nombres exactos que quedaron.
 
 ## Qué hay que saber
 
