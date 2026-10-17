@@ -15,6 +15,7 @@
 | [10_CASOS_DE_USO](10_CASOS_DE_USO.md) | Actores, paquetes y casos de uso (UML) |
 | [11_FLUJO_Y_DOMINIO](11_FLUJO_Y_DOMINIO.md) | Ciclo de una propuesta, estados de una solicitud y modelo de dominio |
 | [12_MAPA_DEL_FRONT](12_MAPA_DEL_FRONT.md) | Cómo ver la web, pantallas, recorrido de un envío y qué cambia con el backend |
+| [13_COPIAS](13_COPIAS.md) | Copia de seguridad semanal de la base de datos y cómo restaurarla |
 | [GUIA_RESTAURANTES](GUIA_RESTAURANTES.md) | Guía para negocios |
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
