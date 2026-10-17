@@ -584,7 +584,8 @@
           "Mapa: las teselas y estilos las sirve OpenFreeMap. Al abrir el mapa, tu navegador se las pide directamente y ellos ven tu dirección IP. No les enviamos nada más.",
           "Correo: usamos Resend para enviar los enlaces de acceso de moderación y los avisos a quien dejó su correo (por ejemplo, que su propuesta ya está publicada). Ven esa dirección y el texto del aviso.",
           "Geocodificación: para colocar un local en el mapa, nuestro servidor envía su dirección (calle, código postal y ciudad) a Nominatim (OpenStreetMap). No envía tu correo ni datos tuyos.",
-          "Servidor y base de datos: cuando exista, indicaremos aquí el proveedor y el país donde se guardan los datos.",
+          "Servidor y base de datos: la API funciona en Railway (Ámsterdam, Países Bajos) y la base de datos está en MongoDB Atlas (París, Francia), los dos dentro de la Unión Europea. Ahí se guardan las propuestas, los correos de contacto, las historias de los equipos y las cuentas de quienes moderan.",
+          "Copias de seguridad: cada semana guardamos una copia de la base de datos en Cloudflare R2. La copia se cifra antes de salir y solo nosotros tenemos la clave, así que Cloudflare no puede leerla.",
           "No vendemos ni cedemos datos a nadie."
         ]
       },
