@@ -217,6 +217,40 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('proponer un local: paso de platos con fotos y aviso de permiso', async ({
+      page,
+    }) => {
+      await page.goto('/es/propose');
+      await page.getByLabel('Nombre del local').fill('Local con foto');
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      const png = {
+        name: 'foto.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+          'base64',
+        ),
+      };
+      await page.locator('#d0p').setInputFiles(png);
+      await page.locator('#v-photo-new').setInputFiles(png);
+      await expect(
+        page.getByRole('img', { name: 'Foto 1 del local' }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
+    test('moderación: un local nuevo con fotos', async ({ page, session }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: /Casa Marta/ }).click();
+      await expect(
+        page.getByRole('heading', { name: 'Fotos enviadas' }),
+      ).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('moderación: sin sesión (entrada)', async ({ page }) => {
       await page.goto('/es/moderation');
       await expect(page.getByLabel('Tu correo')).toBeVisible();

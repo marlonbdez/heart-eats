@@ -55,7 +55,7 @@ test.describe('con la sesión abierta', () => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto('/es/moderation');
     await expect(
-      page.getByRole('button', { name: 'Pendientes (6)' }),
+      page.getByRole('button', { name: 'Pendientes (7)' }),
     ).toBeVisible();
     await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
     await expect(
@@ -107,8 +107,67 @@ test.describe('con la sesión abierta', () => {
     ]);
     await page.getByRole('button', { name: 'Volver a la lista' }).click();
     await expect(
-      page.getByRole('button', { name: 'Pendientes (5)' }),
+      page.getByRole('button', { name: 'Pendientes (6)' }),
     ).toBeVisible();
+  });
+
+  test('un local con fotos las enseña y deja no publicar alguna', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Casa Marta/ }).click();
+
+    await expect(
+      page.getByRole('heading', { name: 'Fotos enviadas' }),
+    ).toBeVisible();
+    const photos = page.getByRole('list').filter({
+      has: page.getByRole('link', { name: /Foto del local 1/ }),
+    });
+    await expect(photos.getByRole('listitem')).toHaveCount(2);
+    // Las imágenes cargan de verdad (la API las sirve a quien tiene sesión).
+    await expect
+      .poll(() =>
+        photos
+          .locator('img')
+          .first()
+          .evaluate((img: HTMLImageElement) => img.naturalWidth),
+      )
+      .toBeGreaterThan(0);
+    await expect(
+      page.getByRole('link', { name: /Foto del plato «Tortilla»/ }),
+    ).toHaveAttribute('target', '_blank');
+
+    // Con fotos, hay que comprobar también las fotos.
+    for (const name of [
+      'El local existe',
+      'Es un negocio independiente',
+      'Hay pruebas',
+      'El negocio ha confirmado',
+      'Las fotos que se publican',
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page.getByLabel(/Confirmado · lo confirma/).check();
+    await page.getByLabel('Visita presencial').check();
+    // La foto del plato no se publica.
+    await page
+      .getByLabel('Foto del plato «Tortilla»: No publicar esta foto')
+      .check();
+    await page.getByRole('button', { name: 'Aprobar y publicar' }).click();
+    await expect(page.getByRole('status')).toHaveText('Aprobada y publicada');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s8/decision',
+        body: {
+          action: 'approve',
+          level: 'community',
+          method: 'visit',
+          ownerConfirmed: true,
+          skipPhotos: ['q/0b8e3a52-5a43-4b8a-9d5e-000000000002.webp'],
+        },
+      },
+    ]);
   });
 
   test('sin pin se piden las coordenadas, y se envían', async ({
@@ -405,7 +464,7 @@ test.describe('con la sesión abierta', () => {
     await expect(page.getByText('Elige una solicitud')).toBeVisible();
     await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
     await expect(
-      page.getByRole('button', { name: 'Pendientes (6)' }),
+      page.getByRole('button', { name: 'Pendientes (7)' }),
     ).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Cocina del Pilar' }),
@@ -418,7 +477,7 @@ test.describe('con la sesión abierta', () => {
       page.getByRole('heading', { name: 'Moderation' }),
     ).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Pending (6)' }),
+      page.getByRole('button', { name: 'Pending (7)' }),
     ).toBeVisible();
   });
 });
@@ -482,6 +541,27 @@ test('en 320 px el horario de una corrección cabe, también con letra ancha', a
   await page.addStyleTag({ content: '* { font-family: Verdana !important; }' });
   await page.getByLabel('Cambiar el horario').check();
   await expect(page.getByRole('group', { name: 'domingo' })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    ),
+  ).toBeLessThanOrEqual(0);
+});
+
+test('en 320 px las fotos de una solicitud caben, también con letra ancha', async ({
+  page,
+  session,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  session.role = 'admin';
+  await page.goto('/es/moderation');
+  await page.getByRole('button', { name: /Casa Marta/ }).click();
+  await page.addStyleTag({ content: '* { font-family: Verdana !important; }' });
+  await expect(
+    page.getByRole('heading', { name: 'Fotos enviadas' }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
       () =>

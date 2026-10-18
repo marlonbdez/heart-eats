@@ -115,6 +115,35 @@ export const suggestions: ApiSuggestion[] = [
   },
   {
     ...base,
+    id: 's8',
+    type: 'new',
+    status: 'pending',
+    createdAt: daysAgo(1),
+    name: 'Casa Marta',
+    neighborhood: 'Madrid',
+    address: 'Calle Mayor 5, 28013, Madrid',
+    foodTags: ['tapas'],
+    dishes: ['Tortilla'],
+    location: { lat: 40.4153, lng: -3.7074 },
+    // Fotos en cuarentena: lo que devuelve la API mientras espera.
+    photos: [
+      {
+        key: 'q/0b8e3a52-5a43-4b8a-9d5e-000000000001.webp',
+        url: 'http://localhost:3001/api/v1/suggestions/s8/photos/0b8e3a52-5a43-4b8a-9d5e-000000000001.webp',
+        thumbUrl:
+          'http://localhost:3001/api/v1/suggestions/s8/photos/0b8e3a52-5a43-4b8a-9d5e-000000000001-thumb.webp',
+      },
+      {
+        key: 'q/0b8e3a52-5a43-4b8a-9d5e-000000000002.webp',
+        url: 'http://localhost:3001/api/v1/suggestions/s8/photos/0b8e3a52-5a43-4b8a-9d5e-000000000002.webp',
+        thumbUrl:
+          'http://localhost:3001/api/v1/suggestions/s8/photos/0b8e3a52-5a43-4b8a-9d5e-000000000002-thumb.webp',
+        dish: 'Tortilla',
+      },
+    ],
+  },
+  {
+    ...base,
     id: 's6',
     type: 'new',
     status: 'approved',

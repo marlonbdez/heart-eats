@@ -100,7 +100,7 @@ export function ModerationDetail({
   const isRemoval = item.kind === 'removal';
   const k = isNew ? 'New' : isTeam ? 'Team' : isRemoval ? 'Removal' : 'Edit';
   const checkKeys: readonly string[] = isNew
-    ? item.photoCount
+    ? item.photos?.length
       ? [...CHECKS_NEW, CHECK_PHOTOS]
       : CHECKS_NEW
     : isTeam
@@ -121,6 +121,8 @@ export function ModerationDetail({
   const [note, setNote] = useState('');
   const [pin, setPin] = useState({ lat: '', lng: '' });
   const [story, setStory] = useState('');
+  // Fotos de un local nuevo que no se publican.
+  const [skipped, setSkipped] = useState<string[]>([]);
   const [change, setChange] = useState({
     name: '',
     street: '',
@@ -227,6 +229,7 @@ export function ModerationDetail({
         action: 'approve',
         ...(isNew && level && method ? { level, method } : {}),
         ...(isNew && hasPin ? { location: { lat, lng } } : {}),
+        ...(isNew && skipped.length > 0 ? { skipPhotos: skipped } : {}),
         ...(isStoryRemoval ? { storyIndex: Number(story) - 1 } : {}),
       });
     }
@@ -490,12 +493,6 @@ export function ModerationDetail({
               <dt>{t('dishes')}</dt>
               <dd>{item.dishes?.join(' · ') || t('none')}</dd>
             </div>
-            {item.photoCount ? (
-              <div>
-                <dt>{t('photosCount')}</dt>
-                <dd>{t('photosNote', { count: item.photoCount })}</dd>
-              </div>
-            ) : null}
             <div>
               <dt>{t('howKnown')}</dt>
               <dd>{item.howKnown || t('none')}</dd>
@@ -525,6 +522,51 @@ export function ModerationDetail({
               </dd>
             </div>
           </dl>
+        </section>
+      )}
+
+      {isNew && item.photos && item.photos.length > 0 && !outcome && (
+        <section aria-labelledby="mod-photos" className={form.step}>
+          <h3 id="mod-photos">{t('photosTitle')}</h3>
+          <p className={form.note}>{t('photosHint')}</p>
+          <ul className={styles.photos}>
+            {item.photos.map((p, i) => {
+              const label = p.dish
+                ? t('photoOfDish', { dish: p.dish })
+                : t('photoOfPlace', {
+                    n: item.photos!.slice(0, i + 1).filter((x) => !x.dish)
+                      .length,
+                  });
+              return (
+                <li key={p.key}>
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${label}. ${t('photoOpen')}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.thumbUrl} alt="" loading="lazy" />
+                  </a>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={skipped.includes(p.key)}
+                      aria-label={`${label}: ${t('photoSkip')}`}
+                      onChange={(e) =>
+                        setSkipped(
+                          e.target.checked
+                            ? [...skipped, p.key]
+                            : skipped.filter((k) => k !== p.key),
+                        )
+                      }
+                    />
+                    {t('photoSkip')}
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 

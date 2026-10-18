@@ -26,11 +26,14 @@ async function request(
   {
     params = {},
     body,
+    file,
     session = false,
     signal,
   }: {
     params?: Params;
     body?: unknown;
+    // Una foto tal cual, en lugar de JSON (POST /uploads).
+    file?: Blob;
     // Para cancelar una lectura que ya no hace falta.
     signal?: AbortSignal;
     // Con sesión de moderación: lleva la cookie y, al escribir, la cabecera
@@ -44,12 +47,13 @@ async function request(
   }
   const headers: Record<string, string> = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (file) headers['Content-Type'] = file.type;
   if (session && method !== 'GET') headers['X-Requested-With'] = 'fetch';
 
   const res = await fetch(url, {
     method,
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: file ?? (body === undefined ? undefined : JSON.stringify(body)),
     credentials: session ? 'include' : 'omit',
     signal,
   });
@@ -78,6 +82,13 @@ export async function apiGet<T>(
 // Envío de la comunidad (sin cuenta ni cookies): JSON y, si va bien, 202.
 export async function apiPost(path: string, body: unknown) {
   await request('POST', path, { body });
+}
+
+// Sube una foto (o, con `thumbOf`, su miniatura) a la cuarentena. Devuelve la
+// clave que se manda en el envío.
+export async function apiUpload(file: Blob, params: Params = {}) {
+  const res = await request('POST', '/uploads', { file, params });
+  return ((await res.json()) as { key: string }).key;
 }
 
 // Moderación: con la cookie de sesión.

@@ -216,7 +216,11 @@
       "add": "+ Add another dish",
       "photo": "Photo",
       "photoAlt": "Photo of dish {n}",
-      "photoHint": "The photo is optional. It is resized on your device and stays hidden until we review it. Please show the dish rather than people: avoid photos in which someone can be recognised. It is not saved in the draft."
+      "photoHint": "The photo is optional. It is resized on your device and stays hidden until we review it. Please show the dish rather than people: avoid photos in which someone can be recognised. It is not saved in the draft.",
+      "venueTitle": "Photos of the place",
+      "venueHint": "Optional, up to 5: the atmosphere, the bar, the terrace… whatever makes you want to go. They are resized on your device and stay hidden until we review them. Please avoid photos in which someone can be recognised.",
+      "venuePhoto": "Photo of the place {n}",
+      "venueAlt": "Photo {n} of the place"
     },
     "s3": {
       "intro": "HeartEats brings together independent businesses whose team includes people with disabilities. Tell us what you know so we can check it.",
@@ -541,7 +545,7 @@
       {
         "heading": "This version is just starting",
         "paragraphs": [
-          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story is also really sent. Photo sending is not available yet: photos are not asked for for now. What follows describes how we handle data."
+          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story is also really sent. The photos of a new place are also really sent; team photos are not asked for yet. What follows describes how we handle data."
         ]
       },
       {
@@ -561,7 +565,7 @@
         "items": [
           "If you use the website: none of our own. The web server and the map server see your IP address when they serve you the page, like any server.",
           "If you tap Near me: your location is used only on your device, to sort places by distance. It is not sent or saved, and it is only requested when you tap the button.",
-          "If you suggest a place: the place details, how you know it, a link (optional), photos of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 9 months at the latest.",
+          "If you suggest a place: the place details, how you know it, a link (optional), photos of the place and of the dishes (optional, with your confirmation that they are yours or you have permission) and your email (optional). We use them to review the suggestion and, if it meets the criteria, publish it. Photos are resized on your device and wait in a private store that only moderators can see; only the ones a person approves one by one are published, and if the suggestion is rejected they are deleted. The suggestion is kept until it is resolved; your email is deleted when it is resolved or after 9 months at the latest.",
           "If you suggest a correction: what needs correcting, your explanation, a link (optional) and your email (optional). We use them to review the notice and, if it is right, update the listing. They are kept like a suggestion.",
           "If you reply to a request for information: the text you write (up to 2000 characters; please do not include health details or other people’s names). It is kept with the proposal to decide on it, and for as long as it. To write to you we use the email you left, and the reply link works only once.",
           "If you request a removal: what you want removed, your explanation (without health data or third-party names) and your email, which is required so we can confirm by email that you are the person or their representative before hiding anything. They are kept like a suggestion; your email is deleted when it is resolved or after 9 months at the latest.",
@@ -888,6 +892,12 @@
     "dishes": "Signature dishes",
     "photosCount": "Photos",
     "photosNote": "{count} (this prototype does not show them)",
+    "photosTitle": "Photos sent",
+    "photosHint": "Look at them before deciding. The ones you mark «Do not publish» are deleted on approval; the rest are published. If you reject the request, all of them are deleted.",
+    "photoOpen": "Open the photo full size (opens in a new tab)",
+    "photoOfDish": "Photo of the dish «{dish}»",
+    "photoOfPlace": "Photo {n} of the place",
+    "photoSkip": "Do not publish this photo",
     "howKnown": "How the sender knows the place",
     "evidence": "Link provided",
     "none": "Not given",
@@ -905,7 +915,7 @@
       "teamOwner": "I have confirmed through an official channel that the sender represents the business",
       "teamFigures": "The figures make sense (at least one person; not more with a disability than in total)",
       "teamConsents": "Each story comes with consent from the person or their legal representative",
-      "photos": "The photos show the dish or the place, with no recognisable faces or personal data, and there is permission to use them",
+      "photos": "The photos being published show the dish or the place, with no recognisable faces or personal data, and there is permission to use them",
       "removalIdentity": "I have confirmed by email that the requester is the person or their representative"
     },
     "decisionTitle": "Decision",

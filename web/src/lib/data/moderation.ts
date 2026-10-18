@@ -105,6 +105,7 @@ function decisionBody(item: ModerationItem, d: ModerationDecision) {
       method: d.method,
       location: d.location,
       ownerConfirmed: true,
+      skipPhotos: d.skipPhotos,
     };
   }
   if (item.kind === 'removal') {
