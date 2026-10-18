@@ -44,6 +44,8 @@
     "loadError": "Parece que el mapa no se puede mostrar en este dispositivo.",
     "markerLabel": "{name}, ver vista previa",
     "loadErrorLink": "Ver los locales en una lista",
+    "zoomIn": "Hay más locales aquí. Acerca el mapa para verlos todos.",
+    "areaEmpty": "No hay locales publicados en esta parte del mapa.",
     "you": "Tu ubicación"
   },
   "card": {

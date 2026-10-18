@@ -114,6 +114,21 @@
   max-width: 320px;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
 }
+.areaNotice {
+  position: absolute;
+  bottom: 28px;
+  left: 12px;
+  right: 12px;
+  z-index: 6;
+  max-width: 360px;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+}
 .listNotice {
   max-width: 696px;
   margin: 8px 12px 0;

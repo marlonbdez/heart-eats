@@ -3,13 +3,16 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
-import { sortByDistance } from '@/lib/geo';
+import { sortByDistance, type Position } from '@/lib/geo';
 import { matchFoodTags, matchesQuery } from '@/lib/search';
-import type { FoodTag, RegionCountry, Zone } from '@/lib/types';
+import type { Bbox, FoodTag, RegionCountry, Zone } from '@/lib/types';
+import { useAreaRestaurants } from '@/lib/use-area-restaurants';
 import { useZoneRestaurants } from '@/lib/use-zone-restaurants';
 import {
+  apiBbox,
   defaultZone,
   findCity,
+  nearestCity,
   sameZone,
   viewBounds,
   zoneFromSearch,
@@ -18,6 +21,7 @@ import { DiscoveryProvider } from './DiscoveryContext';
 import { FoodFilters } from './FoodFilters';
 import { useLocation } from './LocationProvider';
 import { MapLoader } from './MapLoader';
+import type { MapMove } from './MapView';
 import { NearMeButton, NearMeNotice } from './NearMe';
 import { Remote } from './Remote';
 import { RestaurantCard } from './RestaurantCard';
@@ -43,6 +47,16 @@ export function Discover({
   // La zona elegida (en la dirección o con el selector); sin elegir, la ciudad
   // con más locales.
   const [chosen, setChosen] = useState<Zone | null>(null);
+  // Cada vez que se pide ir a una zona, el mapa vuelve a ella aunque ya fuera
+  // la elegida.
+  const [recenter, setRecenter] = useState(0);
+  // Lo que ve el mapa tras moverlo la persona. Solo vale mientras no cambie la
+  // zona ni los filtros (`epoch`): entonces se vuelve a los locales de la zona.
+  const [moved, setMoved] = useState<{
+    epoch: string;
+    bbox: Bbox;
+    center: Position;
+  } | null>(null);
   const [ready, setReady] = useState(false);
   const hydrated = useRef(false);
   const { position, nearest, status } = useLocation();
@@ -66,8 +80,12 @@ export function Discover({
 
   // «Cerca de mí» lleva a la ciudad con locales más cercana.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (nearest) setChosen(nearest);
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (nearest) {
+      setChosen(nearest);
+      setRecenter((n) => n + 1);
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [nearest]);
 
   // Escribir la búsqueda en la URL sin recargar ni añadir historial.
@@ -94,6 +112,35 @@ export function Discover({
     return position ? sortByDistance(found, position) : found;
   }, [restaurants, q, food, position]);
   const hasFilters = q.trim() !== '' || food.length > 0;
+
+  // En el mapa y sin búsqueda, tras moverlo se piden los locales de lo que se ve
+  // (con búsqueda se sigue buscando en toda la zona).
+  const epoch = `${zone?.country}/${zone?.city}|${recenter}|${hasFilters}`;
+  const exploring =
+    view === 'map' && !hasFilters && moved?.epoch === epoch ? moved : null;
+  const area = useAreaRestaurants(exploring?.bbox ?? null);
+  const onMap = exploring && area.restaurants ? area.restaurants : visible;
+  // La zona que figura en el selector sigue al mapa: la ciudad más cercana.
+  const shownZone = exploring
+    ? (nearestCity(regions, exploring.center)?.zone ?? zone)
+    : zone;
+  const areaNote =
+    exploring && area.restaurants && !area.loading
+      ? area.truncated
+        ? t('map.zoomIn')
+        : area.restaurants.length === 0
+          ? t('map.areaEmpty')
+          : ''
+      : '';
+  const loading = data.loading || (!!exploring && area.loading);
+  const failed = data.failed || (!!exploring && area.failed);
+  const retry = data.failed ? data.retry : area.retry;
+  const selectZone = (next: Zone) => {
+    setChosen(next);
+    setRecenter((n) => n + 1);
+  };
+  const onUserMove = (move: MapMove) =>
+    setMoved({ epoch, bbox: apiBbox(move.bbox), center: move.center });
 
   // Etiquetas traducidas para sugerir una categoría al escribir ("piz" → Pizza).
   const labelled = useMemo(
@@ -143,8 +190,12 @@ export function Discover({
       <div className={styles.screen}>
         <div className={styles.filters}>
           <div className={styles.searchRow}>
-            {zone && (
-              <ZoneMenu regions={regions} zone={zone} onSelect={setChosen} />
+            {shownZone && (
+              <ZoneMenu
+                regions={regions}
+                zone={shownZone}
+                onSelect={selectZone}
+              />
             )}
             <SearchBar value={q} onChange={setQ} />
           </div>
@@ -170,18 +221,18 @@ export function Discover({
         </div>
 
         <div className={styles.area}>
-          {data.loading && (
+          {loading && (
             <p role="status" className={styles.srOnly}>
               {t('load.loading')}
             </p>
           )}
-          {data.failed && (
+          {failed && (
             <div role="alert" className={styles.zoneError}>
               <p>{t('load.error')}</p>
               <button
                 type="button"
                 className={styles.secondary}
-                onClick={data.retry}
+                onClick={retry}
               >
                 {t('load.retry')}
               </button>
@@ -191,13 +242,21 @@ export function Discover({
             <>
               <ViewSwitch view={view} query={query} />
               <p role="status" className={styles.srOnly}>
-                {t('results.count', { count: visible.length })}
+                {t('results.count', { count: onMap.length })}
+              </p>
+              <p
+                role="status"
+                className={areaNote ? styles.areaNotice : styles.srOnly}
+              >
+                {areaNote}
               </p>
               <MapLoader
-                restaurants={visible}
+                restaurants={onMap}
                 bounds={bounds}
+                recenter={recenter}
                 focus={hasFilters}
                 followUser={!!position && sameZone(zone, nearest)}
+                onUserMove={onUserMove}
               />
               <div className={styles.nearMe}>
                 <NearMeButton />
