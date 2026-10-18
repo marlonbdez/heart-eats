@@ -13,6 +13,34 @@
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.searchRow > form {
+  flex: 1;
+  min-width: 0;
+}
+/* Error al cambiar de zona: sobre el mapa, sin taparlo del todo. */
+.zoneError {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.zoneError p {
+  margin: 0;
+}
 .suggestions {
   display: flex;
   flex-wrap: wrap;

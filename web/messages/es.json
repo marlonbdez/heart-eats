@@ -149,14 +149,23 @@
       "delivery": "reparto"
     }
   },
+  "zone": {
+    "buttonLabel": "Zona: {zone}. Cambiar",
+    "title": "¿Dónde?",
+    "close": "Cerrar",
+    "searchLabel": "Buscar una ciudad o un país",
+    "searchPlaceholder": "Ciudad o país",
+    "none": "No hay locales en ninguna zona con ese nombre.",
+    "count": "{count, plural, one {# local} other {# locales}}"
+  },
   "nearMe": {
     "button": "Cerca de mí",
     "asking": "Buscando tu ubicación…",
     "privacy": "Solo se usa en tu navegador para calcular distancias; no se guarda ni se envía.",
     "active": "Ordenado por distancia desde tu ubicación.",
-    "denied": "No tenemos permiso para usar tu ubicación. Puedes activarlo en los ajustes del navegador; mientras tanto, seguimos en Madrid.",
-    "unavailable": "No hemos podido obtener tu ubicación. Seguimos en Madrid.",
-    "outside": "Aún no hay locales cerca de ti. Seguimos en Madrid.",
+    "denied": "No tenemos permiso para usar tu ubicación. Puedes activarlo en los ajustes del navegador; mientras tanto, seguimos donde estabas.",
+    "unavailable": "No hemos podido obtener tu ubicación. Seguimos donde estabas.",
+    "outside": "Aún no hay locales cerca de ti. Seguimos donde estabas.",
     "distanceLabel": "a {distance}"
   },
   "photo": {

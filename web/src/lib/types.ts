@@ -302,3 +302,34 @@ export interface AuditPage {
   items: AuditLine[];
   nextCursor?: string;
 }
+
+// Dónde hay locales publicados (GET /regions). `key` es la ciudad sin acentos
+// ni mayúsculas y sirve como `city` en /restaurants; `name` está como se guarda
+// (idioma local del sitio).
+export interface Bbox {
+  west: number;
+  south: number;
+  east: number;
+  north: number;
+}
+
+export interface RegionCity {
+  key: string;
+  name: string;
+  count: number;
+  bbox: Bbox;
+  center: { lat: number; lng: number };
+}
+
+export interface RegionCountry {
+  code: string;
+  count: number;
+  bbox: Bbox;
+  cities: RegionCity[];
+}
+
+// La zona que se mira: una ciudad de un país.
+export interface Zone {
+  country: string;
+  city: string;
+}

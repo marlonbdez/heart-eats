@@ -110,7 +110,7 @@ test('un marcador abre su vista previa y Esc la cierra', async ({ page }) => {
 
 test('el menú lateral abre, navega y se cierra', async ({ page }) => {
   await page.goto('/es');
-  await page.locator('button[aria-haspopup="dialog"]').click();
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
   const menu = page.getByRole('dialog');
   await expect(menu).toBeVisible();
 
@@ -231,10 +231,12 @@ test.describe('Cerca de mí', () => {
   });
 
   test('fuera de la zona avisa y no ordena', async ({ context, page }) => {
-    await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
+    // Sídney: ninguna zona con locales a menos de 60 km.
+    await context.setGeolocation({ latitude: -33.8688, longitude: 151.2093 });
     await page.goto('/es/list');
     await page.getByRole('button', { name: 'Cerca de mí' }).click();
     await expect(page.getByText(/Aún no hay locales cerca/)).toBeVisible();
+    await expect(page.getByText('La Masa Madre')).toBeVisible();
   });
 });
 

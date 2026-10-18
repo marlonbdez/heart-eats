@@ -3,7 +3,8 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { Link } from '@/i18n/navigation';
-import { getRestaurant, getRestaurants } from '@/lib/data';
+import { getRestaurant } from '@/lib/data';
+import { loadDefaultZoneRestaurants } from '@/lib/regions';
 import type { Restaurant } from '@/lib/types';
 import { useLoad } from '@/lib/use-load';
 import { useSlug } from '@/lib/use-slug';
@@ -85,13 +86,25 @@ export function toPlaceOptions(
     .sort((a, b) => a.name.localeCompare(b.name, locale));
 }
 
+// Desde la ficha (/business/<slug>) basta el propio local, esté donde esté;
+// sin local, se elige de la lista de la zona por defecto.
 export function BusinessLoader({ fromAddress }: { fromAddress?: boolean }) {
   const locale = useLocale();
   const slug = useSlug();
-  const state = useLoad(getRestaurants);
+  const state = useLoad(
+    (s: string | null) =>
+      fromAddress
+        ? s
+          ? getRestaurant(s).then((r) => (r ? [r] : []))
+          : Promise.resolve([])
+        : loadDefaultZoneRestaurants(),
+    slug,
+  );
   const initial = fromAddress ? slug : null;
   return (
-    <Remote state={state}>
+    <Remote
+      state={fromAddress && !slug ? ({ status: 'loading' } as const) : state}
+    >
       {(all) => {
         const places = toPlaceOptions(all, locale);
         if (fromAddress && !places.some((p) => p.slug === initial)) {
@@ -107,7 +120,7 @@ export function BusinessLoader({ fromAddress }: { fromAddress?: boolean }) {
 
 export function RemovalLoader() {
   const locale = useLocale();
-  const state = useLoad(getRestaurants);
+  const state = useLoad(loadDefaultZoneRestaurants);
   return (
     <Remote state={state}>
       {(all) => <RemovalForm places={toPlaceOptions(all, locale)} />}

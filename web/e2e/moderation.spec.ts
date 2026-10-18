@@ -439,7 +439,7 @@ test('un moderador ve lo de equipo y retiradas pero no lo decide', async ({
 test('la moderación no está en el menú público', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/es');
-  await page.locator('button[aria-haspopup="dialog"]').click();
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
   await expect(
     page.getByRole('dialog').getByRole('link', { name: /Moderar/ }),
   ).toHaveCount(0);
