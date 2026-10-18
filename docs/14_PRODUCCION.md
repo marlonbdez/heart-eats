@@ -242,6 +242,19 @@ npm run seed -- --clear
 
 Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; **no lo ejecutes contra producción**.
 
+### Datos de prueba por todo el mundo (fase de pruebas)
+Mientras se prueba, producción lleva cientos de locales ficticios repartidos por unas 35 ciudades (Madrid con más densidad), con nombres y calles en su idioma o escritura, descripciones solo en ES, solo en EN o ninguna, locales sin horario, archivados o pendientes (no deben verse) y algunos equipos con historia. Todos llevan `isDemo`, «[DEMO]» en el nombre y el slug `demo-stress-…`.
+
+```bash
+cd server
+# MONGODB_URI de producción en server/.env (que no se sube al repo)
+npm run seed:stress -- --per-city 15   # 630 locales; dice la base y pide escribir «cargar»
+```
+
+Se puede repetir: borra los suyos y los recrea igual (son deterministas). `npm run seed -- --clear` los quita junto con los 6 de ejemplo. Ocupan menos de 1 MB (el límite de Atlas M0 son 512 MB), así que lo que se mide es la rapidez de las lecturas, no el espacio.
+
+**Antes de abrir al público hay que borrar todo lo de prueba** (§9, pendiente 3), y la web sigue cerrada a buscadores hasta entonces («Abrir a buscadores»).
+
 ### Cuando algo falla
 | Síntoma | Causa probable | Qué hacer |
 |---|---|---|
@@ -292,7 +305,7 @@ Al abrir (tras borrar los datos de prueba y terminar el SEO): quitar los tres, p
 ### ❓ Pendiente de confirmar
 1. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
 2. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
-3. **Locales de ejemplo `[DEMO]` en producción**: el 2026-10-18 había 6 (más un local real de la prueba completa). Hay que quitarlos antes de abrir al público con `npm run seed -- --clear` (§7).
+3. **Datos de prueba en producción**: los 6 `[DEMO]`, los de «Datos de prueba por todo el mundo» (§7) y un local real de la prueba completa («El mesón de Lola»). Hay que quitarlos antes de abrir al público: `npm run seed -- --clear` para los marcados; el resto (solicitudes, equipos, registro de auditoría, usuarios de prueba) con un comando de reinicio con confirmación que aún no existe.
 4. ~~Restauración de prueba~~ **Hecha el 2026-10-18** (`13_COPIAS.md`). Repetirla de vez en cuando, p. ej. cada trimestre.
 5. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
 6. **Segunda persona con acceso** a las cuentas (§5).

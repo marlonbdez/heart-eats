@@ -26,6 +26,7 @@ npm run lint
 npm run typecheck
 npm run seed           # carga los 6 locales [DEMO] (borra y recrea solo los isDemo)
 npm run seed -- --clear  # quita los [DEMO] sin recrearlos (pide confirmación; --yes la salta)
+npm run seed:stress -- --per-city 15  # cientos de locales ficticios por el mundo, para probar la carga (se quitan con --clear)
 npm run test:unit      # pruebas sin base de datos (rápidas)
 npm test               # todas; las de base de datos usan MongoDB en memoria
 npm run build          # genera dist/
@@ -72,7 +73,7 @@ src/
 ├─ middleware/     # 404, gestor de errores, tope por IP (en memoria) y sesión de moderación
 └─ routes/         # una por área; todo cuelga de /api/v1 (submission.ts: flujo común de los envíos)
 tests/             # Vitest + Supertest; *.int.test.ts usan MongoDB en memoria
-seed/              # restaurants.json (6 locales [DEMO]) y el script que los carga
+seed/              # restaurants.json (6 locales [DEMO]), stress-data.ts (generador mundial) y los scripts que los cargan
 ```
 
 ## Reglas
