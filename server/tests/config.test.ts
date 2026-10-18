@@ -25,6 +25,24 @@ describe('loadConfig', () => {
     });
   });
 
+  it('en producción, con fotos, hace falta la dirección pública de la API', () => {
+    const production = {
+      NODE_ENV: 'production',
+      MONGODB_URI: 'mongodb://db/x',
+      RESEND_API_KEY: 're_x',
+      REPLY_TOKEN_SECRET: SECRET,
+      R2_ACCOUNT_ID: 'cuenta',
+      R2_ACCESS_KEY_ID: 'clave',
+      R2_SECRET_ACCESS_KEY: 'secreto',
+      R2_PHOTOS_BUCKET: 'fotos',
+    };
+    expect(() => loadConfig(production)).toThrow(/API_URL/);
+    expect(
+      loadConfig({ ...production, API_URL: 'https://api.hearteats.org/' })
+        .API_URL,
+    ).toBe('https://api.hearteats.org');
+  });
+
   it('el almacén de fotos necesita las cuatro claves o ninguna', () => {
     const r2 = {
       R2_ACCOUNT_ID: 'cuenta',

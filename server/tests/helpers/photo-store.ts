@@ -8,6 +8,13 @@ export function memoryPhotoStore() {
       objects.set(key, { body: Buffer.from(body), contentType });
       return Promise.resolve();
     },
+    get: (key) => Promise.resolve(objects.get(key) ?? null),
+    copy: (from, to) => {
+      const source = objects.get(from);
+      if (!source) return Promise.reject(new Error('R2 respondió 404 a PUT'));
+      objects.set(to, { ...source });
+      return Promise.resolve();
+    },
     remove: (key) => {
       objects.delete(key);
       return Promise.resolve();

@@ -1,9 +1,18 @@
 import { AwsClient } from 'aws4fetch';
 
+export interface StoredPhoto {
+  body: Buffer;
+  contentType: string;
+}
+
 // Dónde viven las fotos. Hoy es un bucket privado de R2: nada se sirve directo
 // desde allí.
 export interface PhotoStore {
   put(key: string, body: Uint8Array, contentType: string): Promise<void>;
+  // Sin la foto, `null`.
+  get(key: string): Promise<StoredPhoto | null>;
+  // Copia dentro del mismo almacén. Falla si el origen no existe.
+  copy(from: string, to: string): Promise<void>;
   // Borrar una foto que ya no está es correcto (no da error).
   remove(key: string): Promise<void>;
 }
@@ -30,23 +39,42 @@ export function r2PhotoStore({
     secretAccessKey,
     service: 's3',
     region: 'auto',
+    // Ante un fallo del servidor reintenta poco: hay una persona esperando.
+    retries: 2,
   });
   const host = jurisdiction
     ? `${accountId}.${jurisdiction}.r2.cloudflarestorage.com`
     : `${accountId}.r2.cloudflarestorage.com`;
 
+  const request = (method: string, key: string, init: RequestInit = {}) =>
+    client.fetch(`https://${host}/${bucket}/${key}`, { ...init, method });
+
+  // Solo el código: el cuerpo de R2 puede nombrar el bucket.
+  const fail = (res: Response, method: string) =>
+    new Error(`R2 respondió ${res.status} a ${method}`);
+
   async function send(method: string, key: string, init: RequestInit = {}) {
-    const res = await client.fetch(`https://${host}/${bucket}/${key}`, {
-      ...init,
-      method,
-    });
-    // Solo el código: el cuerpo de R2 puede nombrar el bucket.
-    if (!res.ok) throw new Error(`R2 respondió ${res.status} a ${method}`);
+    const res = await request(method, key, init);
+    if (!res.ok) throw fail(res, method);
   }
 
   return {
     put: (key, body, contentType) =>
       send('PUT', key, { body, headers: { 'Content-Type': contentType } }),
+    async get(key) {
+      const res = await request('GET', key);
+      if (res.status === 404) return null;
+      if (!res.ok) throw fail(res, 'GET');
+      return {
+        body: Buffer.from(await res.arrayBuffer()),
+        contentType:
+          res.headers.get('content-type') ?? 'application/octet-stream',
+      };
+    },
+    copy: (from, to) =>
+      send('PUT', to, {
+        headers: { 'x-amz-copy-source': `/${bucket}/${from}` },
+      }),
     remove: (key) => send('DELETE', key),
   };
 }

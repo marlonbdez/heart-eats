@@ -4,6 +4,7 @@ import type {
   SuggestionWarning,
 } from '../models/suggestion.js';
 import { maskEmail } from './mask-email.js';
+import { fileOf, quarantineKey, thumbOf } from './photo-keys.js';
 
 // Lo que necesita saber de un local al que apunta una solicitud.
 export type TargetRestaurant = Pick<
@@ -34,6 +35,9 @@ export interface ModerationItem {
   location?: { lat: number; lng: number };
   foodTags?: string[];
   dishes?: string[];
+  // Fotos en cuarentena, mientras la solicitud espera. `key` es lo que se manda
+  // en `skipPhotos` para dejar una fuera; `dish` dice de qué plato es.
+  photos?: { key: string; url: string; thumbUrl: string; dish?: string }[];
   howKnown?: string;
   // Solo en correcciones y retiradas:
   restaurantSlug?: string;
@@ -63,6 +67,8 @@ export interface TeamStory {
 export interface ItemOptions {
   // Incluye los nombres y textos de las historias de un equipo.
   withStories?: boolean;
+  // Origen de la API, para las direcciones de las fotos en cuarentena.
+  apiUrl?: string;
 }
 
 // Lo que guardan las rutas de envío en `payload` (routes/proposals.ts y
@@ -73,7 +79,8 @@ interface ProposalPayload {
   city: string;
   postalCode?: string;
   foodTags: string[];
-  dishes: { name: string }[];
+  dishes: { name: string; photoKey?: string }[];
+  photoKeys?: string[];
   howKnown?: string;
 }
 interface CorrectionPayload {
@@ -98,7 +105,7 @@ const join = (...parts: (string | undefined)[]) =>
 export function toModerationItem(
   s: SuggestionRecord,
   target?: TargetRestaurant,
-  { withStories = false }: ItemOptions = {},
+  { withStories = false, apiUrl = '' }: ItemOptions = {},
 ): ModerationItem {
   const base = {
     id: String(s._id),
@@ -120,6 +127,29 @@ export function toModerationItem(
 
   if (s.type === 'new') {
     const p = s.payload as unknown as ProposalPayload;
+    // Resuelta la solicitud, las fotos ya no están en la cuarentena.
+    const waiting = s.status === 'pending' || s.status === 'info_requested';
+    const photo = (key: string, dish?: string) => {
+      const file = fileOf(key);
+      const at = (name: string) =>
+        `${apiUrl}/api/v1/suggestions/${String(s._id)}/photos/${name}`;
+      return {
+        key,
+        url: at(file),
+        thumbUrl: at(thumbOf(file)),
+        ...(dish ? { dish } : {}),
+      };
+    };
+    const valid = (key: unknown): key is string =>
+      quarantineKey.safeParse(key).success;
+    const photos = waiting
+      ? [
+          ...(p.photoKeys ?? []).filter(valid).map((key) => photo(key)),
+          ...p.dishes.flatMap((d) =>
+            valid(d.photoKey) ? [photo(d.photoKey, d.name)] : [],
+          ),
+        ]
+      : [];
     return {
       ...base,
       name: p.name,
@@ -127,6 +157,7 @@ export function toModerationItem(
       address: join(p.street, p.postalCode, p.city),
       foodTags: p.foodTags,
       dishes: p.dishes.map((d) => d.name),
+      ...(photos.length > 0 ? { photos } : {}),
       howKnown: p.howKnown,
       location:
         s.geocode?.lat !== undefined && s.geocode.lng !== undefined

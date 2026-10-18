@@ -1,6 +1,7 @@
 import type { RestaurantRecord } from '../models/restaurant.js';
 import type { TeamRecord } from '../models/team.js';
 import type { PublicRestaurant } from '../types.js';
+import { photoUrls } from './photo-keys.js';
 import { publicTeam } from './team-privacy.js';
 
 // Una verificación de más de 12 meses pide revisión (calculado, no guardado).
@@ -13,11 +14,21 @@ export function needsReview(lastVerifiedAt: Date, now: Date = new Date()) {
 // De un local de la base de datos a lo que ve el público: sin identificadores
 // internos, sin estado de moderación y con el equipo ya filtrado por privacidad.
 // `team` solo se pasa en la ficha; en las listas no se manda.
+export interface PublicOptions {
+  // Origen de la API, para componer las direcciones de las fotos.
+  apiUrl?: string;
+  // Todas las fotos (ficha) o solo la portada (listas).
+  allPhotos?: boolean;
+}
+
 export function toPublicRestaurant(
   r: RestaurantRecord,
   team?: TeamRecord | null,
   now: Date = new Date(),
+  { apiUrl, allPhotos = false }: PublicOptions = {},
 ): PublicRestaurant {
+  const urls = photoUrls(apiUrl);
+  const photos = (allPhotos ? r.photos : r.photos?.slice(0, 1)) ?? [];
   const [lng, lat] = r.location.coordinates;
   const { level, method, lastVerifiedAt } = r.verification;
 
@@ -55,12 +66,26 @@ export function toPublicRestaurant(
       close,
     })),
     signatureDishes: r.signatureDishes.map(
-      ({ name, description, photoUrl }) => ({
+      ({ name, description, photoUrl, photo }) => ({
         name,
         ...(description ? { description } : {}),
-        ...(photoUrl ? { photoUrl } : {}),
+        // La foto subida a HeartEats manda sobre una dirección externa.
+        ...(photo
+          ? { photoUrl: urls.photo(photo), thumbUrl: urls.thumb(photo) }
+          : photoUrl
+            ? { photoUrl }
+            : {}),
       }),
     ),
+    ...(photos.length > 0
+      ? {
+          photos: photos.map(({ file, alt }) => ({
+            url: urls.photo(file),
+            thumbUrl: urls.thumb(file),
+            ...(alt ? { alt } : {}),
+          })),
+        }
+      : {}),
     ...(publicTeamData ? { team: publicTeamData } : {}),
     ...(r.ownerConfirmedAt
       ? { ownerConfirmedAt: r.ownerConfirmedAt.toISOString() }

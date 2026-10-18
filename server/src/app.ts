@@ -25,6 +25,7 @@ type AppConfig = Pick<Config, 'CORS_ORIGINS'> &
       | 'KNOWN_CHAINS'
       | 'NODE_ENV'
       | 'WEB_URL'
+      | 'API_URL'
       | 'REPLY_TOKEN_SECRET'
     >
   >;
@@ -90,6 +91,7 @@ export function createApp(
       knownChains: config.KNOWN_CHAINS ?? [],
       geocoder,
       photoStore,
+      apiUrl: config.API_URL,
       // Sin secreto (desarrollo y pruebas), los enlaces solo valen hasta reiniciar.
       replyTokenSecret:
         config.REPLY_TOKEN_SECRET ?? randomBytes(32).toString('hex'),
