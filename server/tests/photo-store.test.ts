@@ -53,6 +53,46 @@ describe('r2PhotoStore', () => {
     );
   });
 
+  it('copia una foto dentro del bucket sin descargarla', async () => {
+    stubFetch();
+    await r2PhotoStore(options).copy('q/uno.webp', 'p/uno.webp');
+
+    const request = sent();
+    expect(request.method).toBe('PUT');
+    expect(request.url).toBe(
+      'https://cuenta.r2.cloudflarestorage.com/fotos/p/uno.webp',
+    );
+    expect(request.headers.get('x-amz-copy-source')).toBe('/fotos/q/uno.webp');
+  });
+
+  it('lee una foto y devuelve su tipo', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(new Uint8Array([1, 2, 3]), {
+        headers: { 'Content-Type': 'image/webp' },
+      }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const photo = await r2PhotoStore(options).get('p/uno.webp');
+    expect(photo).toEqual({
+      body: Buffer.from([1, 2, 3]),
+      contentType: 'image/webp',
+    });
+    expect(sent().method).toBe('GET');
+  });
+
+  it('si la foto no está, get devuelve null', async () => {
+    stubFetch(404);
+    expect(await r2PhotoStore(options).get('p/nada.webp')).toBeNull();
+  });
+
+  it('si leer falla por otro motivo, get da error', async () => {
+    stubFetch(500);
+    await expect(r2PhotoStore(options).get('p/uno.webp')).rejects.toThrow(
+      'R2 respondió 500 a GET',
+    );
+  });
+
   it('falla con el código de R2 y sin más detalles', async () => {
     stubFetch(403);
     await expect(

@@ -36,7 +36,17 @@ export interface RestaurantRecord {
     instagram?: string;
   };
   openingHours: { day: number; open: string; close: string }[];
-  signatureDishes: { name: string; description?: string; photoUrl?: string }[];
+  signatureDishes: {
+    name: string;
+    description?: string;
+    photoUrl?: string;
+    // Foto subida a HeartEats (nombre del archivo en `p/`); `photoUrl` queda
+    // para imágenes externas, como las de los datos de prueba.
+    photo?: string;
+  }[];
+  // La primera es la portada. Solo se guarda el nombre del archivo; la
+  // dirección se compone al responder.
+  photos?: { file: string; alt?: Record<string, string> }[];
   isIndependent: boolean;
   status: (typeof restaurantStatuses)[number];
   verification: {
@@ -47,6 +57,9 @@ export interface RestaurantRecord {
   ownerConfirmedAt?: Date;
   isDemo?: boolean;
 }
+
+// Fotos del local en la ficha (portada incluida).
+export const MAX_PHOTOS = 12;
 
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -124,12 +137,27 @@ const restaurantSchema = new Schema(
             name: { type: String, required: true, maxlength: 80 },
             description: { type: String, maxlength: 160 },
             photoUrl: String,
+            photo: String,
           },
           { _id: false },
         ),
       ],
       default: [],
       validate: { validator: (v: unknown[]) => v.length <= 3 },
+    },
+    photos: {
+      type: [
+        new Schema(
+          {
+            file: { type: String, required: true },
+            // Texto alternativo por idioma: { es: '…', en: '…' }.
+            alt: { type: Schema.Types.Mixed },
+          },
+          { _id: false },
+        ),
+      ],
+      default: [],
+      validate: { validator: (v: unknown[]) => v.length <= MAX_PHOTOS },
     },
     isIndependent: { type: Boolean, required: true },
     status: {

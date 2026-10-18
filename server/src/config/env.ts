@@ -75,6 +75,9 @@ const schema = z
       .url()
       .default('http://localhost:3000')
       .transform((value) => value.replace(/\/+$/, '')),
+    // Dirección pública de la API (solo el origen): con ella se componen las
+    // direcciones de las fotos que ve la web. Sin ella salen como ruta.
+    API_URL: optional(z.url().transform((value) => value.replace(/\/+$/, ''))),
     // Correo del primer administrador. Se da de alta al arrancar, sin pasar
     // por la invitación (ADR 0008). No va en el repo: se pone en el hosting.
     ADMIN_EMAIL: optional(z.email().transform((value) => value.toLowerCase())),
@@ -121,6 +124,15 @@ const schema = z
     {
       path: ['R2_PHOTOS_BUCKET'],
       message: `el almacén de fotos necesita las cuatro: ${R2_KEYS.join(', ')}`,
+    },
+  )
+  // Con fotos en producción, sin esto las direcciones saldrían sin origen.
+  .refine(
+    (env) =>
+      env.NODE_ENV !== 'production' || !env.R2_PHOTOS_BUCKET || env.API_URL,
+    {
+      path: ['API_URL'],
+      message: 'es obligatoria en producción si hay almacén de fotos',
     },
   )
   .transform((env) => ({

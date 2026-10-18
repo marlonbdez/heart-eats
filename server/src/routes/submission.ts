@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 import type { z } from 'zod';
 import type { RateLimiter } from '../middleware/rate-limit.js';
 import { Suggestion, type SuggestionRecord } from '../models/suggestion.js';
+import { claimPhotos, releasePhotos } from '../services/uploads.js';
 import { parseOrThrow } from '../validation.js';
 
 // Lo que cada ruta decide de una solicitud; el estado y la fecha los pone el modelo.
@@ -17,6 +18,8 @@ interface SubmissionOptions<S extends z.ZodType> {
   // Construye la solicitud a partir de lo ya validado. Puede lanzar un ApiError
   // (por ejemplo, 404 si el local no existe).
   build: (input: z.infer<S>) => Promise<NewSuggestion>;
+  // Claves de las fotos ya subidas que lleva el envío: se reclaman con él.
+  photos?: (input: z.infer<S>) => string[];
 }
 
 // Trampa para bots: «website» viene vacío desde la web. Si trae algo se
@@ -28,11 +31,12 @@ function isHoneypot(body: unknown) {
 }
 
 // Flujo común de los envíos de la comunidad (sin cuenta): honeypot, validación,
-// tope por IP y solicitud `pending`. Nada se publica.
+// tope por IP, fotos reclamadas y solicitud `pending`. Nada se publica.
 export function submissionHandler<S extends z.ZodType>({
   limiter,
   schema,
   build,
+  photos,
 }: SubmissionOptions<S>): RequestHandler {
   return async (req, res) => {
     const body: unknown = req.body;
@@ -49,7 +53,16 @@ export function submissionHandler<S extends z.ZodType>({
     // espera: así una ráfaga de peticiones a la vez no se salta el tope.
     limiter.hit(req);
 
-    const suggestion = await Suggestion.create(await build(input));
+    // Las fotos se reclaman antes; si el envío no llega a guardarse, se sueltan.
+    const keys = photos?.(input) ?? [];
+    await claimPhotos(keys);
+    let suggestion;
+    try {
+      suggestion = await Suggestion.create(await build(input));
+    } catch (err) {
+      await releasePhotos(keys);
+      throw err;
+    }
     res.status(202).json({ id: suggestion.id, status: suggestion.status });
   };
 }

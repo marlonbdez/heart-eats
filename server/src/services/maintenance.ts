@@ -8,6 +8,7 @@ const HOUR = 60 * 60_000;
 type Task = (now: Date, store?: PhotoStore) => Promise<number>;
 
 const tasks: readonly (readonly [string, Task])[] = [
+  // Sin almacén no hay fotos en cuarentena que borrar al cerrarlas.
   ['Solicitudes cerradas sin respuesta', closeExpiredRequests],
   ['Historias retiradas vaciadas', purgeRevokedStories],
   ['Correos borrados por antigüedad', purgeOldContactEmails],

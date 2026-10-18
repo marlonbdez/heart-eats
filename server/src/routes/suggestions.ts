@@ -18,6 +18,13 @@ import {
   type TargetRestaurant,
 } from '../services/moderation-item.js';
 import {
+  contentTypeOf,
+  fileOf,
+  photoKeysIn,
+  thumbOf,
+} from '../services/photo-keys.js';
+import type { PhotoStore } from '../services/photo-store.js';
+import {
   IncompleteProposalError,
   publishProposal,
 } from '../services/publish-proposal.js';
@@ -36,6 +43,11 @@ import {
 } from '../services/suggestion-query.js';
 import { cityNamesFor } from '../services/city-names.js';
 import { ensureGeocode } from '../services/suggestion-geocode.js';
+import {
+  discardPhotos,
+  promotePhotos,
+  unpublishPhotos,
+} from '../services/uploads.js';
 import { parseOrThrow } from '../validation.js';
 import {
   approveCorrection,
@@ -50,6 +62,9 @@ interface SuggestionsOptions {
   webUrl: string;
   replyTokenSecret: string;
   geocoder?: Geocoder;
+  photoStore?: PhotoStore;
+  // Origen de la API, para las direcciones de las fotos en cuarentena.
+  apiUrl?: string;
 }
 
 // Lo que tocan a personas del equipo: lo decide un administrador (ADR 0008).
@@ -101,6 +116,8 @@ export function suggestionsRouter({
   webUrl,
   replyTokenSecret,
   geocoder,
+  photoStore,
+  apiUrl,
 }: SuggestionsOptions) {
   const router = Router();
   const auth = requireSession(allowedOrigins);
@@ -138,7 +155,9 @@ export function suggestionsRouter({
 
     res.set('Cache-Control', 'no-store').json({
       items: page.map((r) =>
-        toModerationItem(r, targets.get(String(r.targetRestaurantId))),
+        toModerationItem(r, targets.get(String(r.targetRestaurantId)), {
+          apiUrl,
+        }),
       ),
       ...(records.length > query.limit && last
         ? {
@@ -167,9 +186,34 @@ export function suggestionsRouter({
         toModerationItem(
           record,
           targets.get(String(record.targetRestaurantId)),
-          { withStories: user.role === 'admin' },
+          { withStories: user.role === 'admin', apiUrl },
         ),
       );
+  });
+
+  // Una foto en cuarentena, para que Moderación la vea antes de decidir. Solo
+  // las de esta solicitud y solo mientras está sin resolver: después se borran.
+  router.get('/suggestions/:id/photos/:file', ...auth, async (req, res) => {
+    const record = await findVisible(
+      String(req.params.id),
+      authOf(res).moderationScope,
+    );
+    const file = String(req.params.file);
+    const files = photoKeysIn(record.payload).flatMap((key) => [
+      fileOf(key),
+      thumbOf(fileOf(key)),
+    ]);
+    const open =
+      record.status === 'pending' || record.status === 'info_requested';
+    const photo =
+      photoStore && open && files.includes(file)
+        ? await photoStore.get(`q/${file}`)
+        : null;
+    if (!photo) throw new ApiError(404, 'not_found', 'Foto no encontrada');
+    res
+      .set('Content-Type', contentTypeOf(file))
+      .set('Cache-Control', 'private, no-store')
+      .send(photo.body);
   });
 
   // Aprobar un local nuevo: publica su ficha y cierra la solicitud. Primero se
@@ -205,6 +249,26 @@ export function suggestionsRouter({
       );
     }
 
+    // Las fotos que se publican pasan de la cuarentena al espacio público antes
+    // que la ficha, para que nunca apunte a una foto que no está.
+    const skipPhotos = new Set(approval.skipPhotos);
+    const allPhotos = photoKeysIn(record.payload);
+    const toPublish = allPhotos.filter((key) => !skipPhotos.has(key));
+    if (toPublish.length > 0) {
+      if (!photoStore) {
+        throw new ApiError(
+          503,
+          'uploads_unavailable',
+          'Por ahora no se pueden publicar fotos',
+        );
+      }
+      await promotePhotos(photoStore, toPublish);
+    }
+    const undoPhotos = () =>
+      photoStore && toPublish.length > 0
+        ? unpublishPhotos(photoStore, toPublish)
+        : Promise.resolve();
+
     let restaurant;
     try {
       restaurant = await publishProposal({
@@ -217,9 +281,11 @@ export function suggestionsRouter({
           String(record.payload.city),
           country,
         ),
+        skipPhotos,
         now,
       });
     } catch (err) {
+      await undoPhotos();
       if (err instanceof IncompleteProposalError) {
         throw new ApiError(
           422,
@@ -251,10 +317,12 @@ export function suggestionsRouter({
       ).lean<SuggestionRecord>();
     } catch (err) {
       await Restaurant.deleteOne({ _id: restaurant._id });
+      await undoPhotos();
       throw err;
     }
     if (!updated) {
       await Restaurant.deleteOne({ _id: restaurant._id });
+      await undoPhotos();
       throw requestChanged();
     }
 
@@ -280,9 +348,20 @@ export function suggestionsRouter({
           level: approval.level,
           method: approval.method,
           suggestionId: String(record._id),
+          // Cuántas fotos se publican y cuántas se dejan fuera.
+          ...(allPhotos.length > 0
+            ? {
+                photos: {
+                  published: toPublish.length,
+                  skipped: skipPhotos.size,
+                },
+              }
+            : {}),
         },
       },
     ]);
+    // Ya publicadas, las de la cuarentena sobran (también las dejadas fuera).
+    await discardPhotos(photoStore, allPhotos);
 
     // Aviso a quien propuso, si dejó correo. La ficha ya está publicada: si el
     // correo falla solo se anota, sin la dirección.
@@ -372,6 +451,8 @@ export function suggestionsRouter({
         { returnDocument: 'after' },
       ).lean<SuggestionRecord>();
       if (!updated) throw requestChanged();
+      // Lo rechazado no se publica y sus fotos no se guardan.
+      await discardPhotos(photoStore, photoKeysIn(record.payload));
       await audit('reject', {
         status: { from: record.status, to: 'rejected' },
         reason: decision.reason,
@@ -454,6 +535,7 @@ export function suggestionsRouter({
         toModerationItem(
           updated,
           targets.get(String(updated.targetRestaurantId)),
+          { apiUrl },
         ),
       );
   });

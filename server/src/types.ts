@@ -22,6 +22,12 @@ export interface PublicTeam {
   stories?: PublicTeamStory[];
 }
 
+export interface PublicPhoto {
+  url: string;
+  thumbUrl: string;
+  alt?: Record<string, string>;
+}
+
 export interface PublicRestaurant {
   slug: string;
   name: string;
@@ -45,7 +51,14 @@ export interface PublicRestaurant {
     instagram?: string;
   };
   openingHours: { day: number; open: string; close: string }[];
-  signatureDishes: { name: string; description?: string; photoUrl?: string }[];
+  signatureDishes: {
+    name: string;
+    description?: string;
+    photoUrl?: string;
+    thumbUrl?: string;
+  }[];
+  // La primera es la portada. En las listas solo viene esa.
+  photos?: PublicPhoto[];
   team?: PublicTeam;
   ownerConfirmedAt?: string;
   verification: {

@@ -99,6 +99,7 @@ El servidor valida todo al arrancar (`server/src/config/env.ts`). Si falta algo 
 | `SUBMISSIONS_PER_DAY` | No | (sin poner: 1000) | No | Tope de envíos por IP y día |
 | `UPLOADS_PER_HOUR` / `UPLOADS_PER_DAY` | No | (sin poner: 60 / 300) | No | Tope de fotos subidas por IP y hora o día |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PHOTOS_BUCKET` | No (**las cuatro o ninguna**) | Ver §3.3 | `R2_ACCESS_KEY_ID` y `R2_SECRET_ACCESS_KEY`, sí | Almacén de las fotos. Sin ellas el servidor arranca pero `POST /uploads` responde `503` y la web no pide fotos |
+| `API_URL` | Obligatoria si hay `R2_*` | `https://api.hearteats.org` | No | Origen público de la API, sin barra final. Con él se componen las direcciones de las fotos (`…/api/v1/photos/…`). Mal puesta, las fotos no cargan en la web |
 | `R2_JURISDICTION` | No | `eu` si el bucket se creó con jurisdicción UE | No | Cambia la dirección de R2 (`….eu.r2.cloudflarestorage.com`). Con el valor mal, `POST /uploads` da error |
 | `KNOWN_CHAINS` | No | Vacío | No | Nombres de grandes cadenas, separados por comas, para el aviso `chain`. Es configuración: no va al repo |
 | `MAIL_FROM` | No | (sin poner: `HeartEats <acceso@mail.hearteats.org>`) | No | Remitente. Tiene que ser de un dominio verificado en Resend |
@@ -123,8 +124,8 @@ Un bucket **privado**, distinto del de las copias (`hearteats-backups`): nada se
 
 1. *Cloudflare → R2 → Create bucket*: `hearteats-photos`. Para datos personales, **jurisdicción UE** (solo se elige al crear) y sin acceso público.
 2. *R2 → Manage API tokens → Create*: permiso *Object Read & Write* **solo sobre `hearteats-photos`**. La clave de acceso y el secreto se muestran una vez.
-3. En Railway: `R2_ACCOUNT_ID` (la parte inicial de la dirección S3), `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PHOTOS_BUCKET=hearteats-photos` y, si es de la UE, `R2_JURISDICTION=eu`.
-4. Tras el despliegue, `POST /api/v1/uploads` deja de dar `503`.
+3. En Railway: `API_URL=https://api.hearteats.org`, `R2_ACCOUNT_ID` (la parte inicial de la dirección S3), `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PHOTOS_BUCKET=hearteats-photos` y, si es de la UE, `R2_JURISDICTION=eu`.
+4. Tras el despliegue, `POST /api/v1/uploads` deja de dar `503`. Dentro del bucket hay dos carpetas: `q/` (cuarentena, hasta que Moderación decide) y `p/` (aprobadas, las que sirve `GET /api/v1/photos/…`).
 
 ### 3.4 Local y pruebas
 

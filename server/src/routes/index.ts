@@ -6,6 +6,7 @@ import type { PhotoStore } from '../services/photo-store.js';
 import { auditRouter } from './audit.js';
 import { authRouter } from './auth.js';
 import { healthRouter } from './health.js';
+import { photosRouter } from './photos.js';
 import { proposalsRouter } from './proposals.js';
 import { regionsRouter } from './regions.js';
 import { repliesRouter } from './replies.js';
@@ -27,6 +28,8 @@ interface ApiOptions {
   replyTokenSecret: string;
   geocoder?: Geocoder;
   photoStore?: PhotoStore;
+  // Origen público de la API, para las direcciones de las fotos.
+  apiUrl?: string;
 }
 
 // Todo cuelga de /api/v1 (docs/02_API_SPEC.md).
@@ -42,10 +45,12 @@ export function createApiRouter({
   replyTokenSecret,
   geocoder,
   photoStore,
+  apiUrl,
 }: ApiOptions) {
   const api = Router();
   api.use(healthRouter);
-  api.use(restaurantsRouter);
+  api.use(restaurantsRouter({ apiUrl }));
+  api.use(photosRouter({ store: photoStore }));
   api.use(regionsRouter);
   api.use(proposalsRouter({ limiter: submissionLimiter, chains: knownChains }));
   api.use(reportsRouter({ limiter: submissionLimiter }));
@@ -67,6 +72,8 @@ export function createApiRouter({
       webUrl,
       replyTokenSecret,
       geocoder,
+      photoStore,
+      apiUrl,
     }),
   );
   api.use(auditRouter({ allowedOrigins }));

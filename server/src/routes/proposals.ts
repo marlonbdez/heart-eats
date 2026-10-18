@@ -16,6 +16,7 @@ interface ProposalsOptions {
 // Lo que se guarda como contenido de la propuesta: nada de correo ni de idioma.
 function toPayload(input: ProposalInput) {
   const { name, street, city, postalCode, foodTags, dishes } = input;
+  const { photoKeys } = input;
   const { howKnown, independent } = input;
   return {
     name,
@@ -24,6 +25,7 @@ function toPayload(input: ProposalInput) {
     postalCode,
     foodTags,
     dishes,
+    photoKeys,
     howKnown,
     independent,
   };
@@ -39,6 +41,10 @@ export function proposalsRouter({ limiter, chains }: ProposalsOptions) {
     submissionHandler({
       limiter,
       schema: proposalSchema,
+      photos: (input) => [
+        ...input.photoKeys,
+        ...input.dishes.flatMap((d) => (d.photoKey ? [d.photoKey] : [])),
+      ],
       build: async (input) => {
         const cityKey = normalize(input.city);
         return {

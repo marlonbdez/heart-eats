@@ -1,6 +1,7 @@
 import { Restaurant, type RestaurantRecord } from '../models/restaurant.js';
 import { normalize } from '../text.js';
 import type { NewPlaceApproval } from './decision-input.js';
+import { fileOf } from './photo-keys.js';
 import { proposalSchema } from './proposal-input.js';
 
 // Lo que guarda una propuesta de un local nuevo (`toPayload` de las rutas).
@@ -11,6 +12,7 @@ const storedProposal = proposalSchema.pick({
   postalCode: true,
   foodTags: true,
   dishes: true,
+  photoKeys: true,
   independent: true,
 });
 
@@ -38,6 +40,8 @@ interface PublishInput {
   country: string;
   // El nombre de la ciudad en cada idioma, si se pudo obtener.
   cityNames?: Record<string, string>;
+  // Claves de cuarentena de las fotos que Moderación deja fuera.
+  skipPhotos?: ReadonlySet<string>;
   now: Date;
 }
 
@@ -57,6 +61,7 @@ export async function publishProposal({
   pin,
   country,
   cityNames,
+  skipPhotos = new Set(),
   now,
 }: PublishInput): Promise<RestaurantRecord> {
   const proposal = storedProposal.parse(payload);
@@ -64,6 +69,10 @@ export async function publishProposal({
   if (proposal.foodTags.length === 0) {
     throw new IncompleteProposalError('foodTags');
   }
+
+  // Solo lo que se publica: el nombre del archivo, ya sin el prefijo `q/`.
+  const kept = (key: string | undefined) =>
+    key && !skipPhotos.has(key) ? fileOf(key) : undefined;
 
   const base = slugify(`${proposal.name} ${proposal.city}`);
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -83,7 +92,14 @@ export async function publishProposal({
           country,
         },
         location: { type: 'Point', coordinates: [pin.lng, pin.lat] },
-        signatureDishes: proposal.dishes,
+        signatureDishes: proposal.dishes.map(({ photoKey, ...dish }) => {
+          const photo = kept(photoKey);
+          return photo ? { ...dish, photo } : dish;
+        }),
+        photos: proposal.photoKeys.flatMap((key) => {
+          const file = kept(key);
+          return file ? [{ file }] : [];
+        }),
         isIndependent: proposal.independent,
         status: 'published',
         verification: {

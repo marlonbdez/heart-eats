@@ -5,6 +5,7 @@ import {
   verificationMethods,
 } from '../catalog.js';
 import { text } from './input-fields.js';
+import { quarantineKey } from './photo-keys.js';
 
 export const rejectReasons = [
   'not_independent',
@@ -45,6 +46,9 @@ export const newPlaceApprovalSchema = z.object({
     error: 'el negocio tiene que haber confirmado que aparece',
   }),
   businessType: z.enum(businessTypes).default('restaurant'),
+  // Fotos de la propuesta que no se publican (por ejemplo, una donde se
+  // reconoce a alguien sin su permiso): se borran. El resto se publica.
+  skipPhotos: z.array(quarantineKey).max(20).default([]),
 });
 
 export type NewPlaceApproval = z.infer<typeof newPlaceApprovalSchema>;
