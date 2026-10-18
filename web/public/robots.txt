@@ -1,0 +1,4 @@
+# Cerrado a buscadores hasta el lanzamiento. Al abrir: sustituir por
+# "Allow: /" y la línea de Sitemap (docs/14_PRODUCCION.md, «Abrir a buscadores»).
+User-agent: *
+Disallow: /

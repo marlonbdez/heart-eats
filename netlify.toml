@@ -52,3 +52,6 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
+    # Cerrado a buscadores hasta el lanzamiento (junto a robots.txt y la
+    # etiqueta robots de app/[locale]/layout.tsx). Quitar los tres a la vez.
+    X-Robots-Tag = "noindex, nofollow"
