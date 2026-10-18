@@ -8,6 +8,7 @@ import { createRateLimiter } from './middleware/rate-limit.js';
 import { createApiRouter } from './routes/index.js';
 import type { Geocoder } from './services/geocoder.js';
 import { consoleMailer, type Mailer } from './services/mailer.js';
+import type { PhotoStore } from './services/photo-store.js';
 
 const HOUR = 60 * 60 * 1000;
 
@@ -19,6 +20,8 @@ type AppConfig = Pick<Config, 'CORS_ORIGINS'> &
       | 'TRUST_PROXY'
       | 'SUBMISSIONS_PER_HOUR'
       | 'SUBMISSIONS_PER_DAY'
+      | 'UPLOADS_PER_HOUR'
+      | 'UPLOADS_PER_DAY'
       | 'KNOWN_CHAINS'
       | 'NODE_ENV'
       | 'WEB_URL'
@@ -34,11 +37,13 @@ interface AppDeps {
   mailer?: Mailer;
   // Sin geocodificador (como en las pruebas), no se geocodifica.
   geocoder?: Geocoder;
+  // Sin almacén (como en desarrollo), no se pueden subir fotos.
+  photoStore?: PhotoStore;
 }
 
 export function createApp(
   config: AppConfig,
-  { mailer, geocoder }: AppDeps = {},
+  { mailer, geocoder, photoStore }: AppDeps = {},
 ) {
   const app = express();
 
@@ -65,6 +70,10 @@ export function createApp(
     { ms: HOUR, max: config.SUBMISSIONS_PER_HOUR ?? 0 },
     { ms: 24 * HOUR, max: config.SUBMISSIONS_PER_DAY ?? 0 },
   ]);
+  const uploadLimiter = createRateLimiter([
+    { ms: HOUR, max: config.UPLOADS_PER_HOUR ?? 0 },
+    { ms: 24 * HOUR, max: config.UPLOADS_PER_DAY ?? 0 },
+  ]);
   const loginLimiter = createRateLimiter([
     { ms: HOUR, max: LOGIN_LINKS_PER_HOUR },
   ]);
@@ -73,12 +82,14 @@ export function createApp(
     createApiRouter({
       submissionLimiter,
       loginLimiter,
+      uploadLimiter,
       mailer: mailer ?? consoleMailer,
       webUrl: config.WEB_URL ?? 'http://localhost:3000',
       allowedOrigins: config.CORS_ORIGINS,
       secureCookies: config.NODE_ENV === 'production',
       knownChains: config.KNOWN_CHAINS ?? [],
       geocoder,
+      photoStore,
       // Sin secreto (desarrollo y pruebas), los enlaces solo valen hasta reiniciar.
       replyTokenSecret:
         config.REPLY_TOKEN_SECRET ?? randomBytes(32).toString('hex'),

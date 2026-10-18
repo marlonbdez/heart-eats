@@ -13,6 +13,8 @@ describe('loadConfig', () => {
       TRUST_PROXY: 0,
       SUBMISSIONS_PER_HOUR: 100,
       SUBMISSIONS_PER_DAY: 1000,
+      UPLOADS_PER_HOUR: 60,
+      UPLOADS_PER_DAY: 300,
       KNOWN_CHAINS: [],
       WEB_URL: 'http://localhost:3000',
       NOMINATIM_URL: 'https://nominatim.openstreetmap.org',
@@ -21,6 +23,25 @@ describe('loadConfig', () => {
       MAIL_FROM: 'HeartEats <acceso@mail.hearteats.org>',
       MAIL_REPLY_TO: 'contact@hearteats.org',
     });
+  });
+
+  it('el almacén de fotos necesita las cuatro claves o ninguna', () => {
+    const r2 = {
+      R2_ACCOUNT_ID: 'cuenta',
+      R2_ACCESS_KEY_ID: 'clave',
+      R2_SECRET_ACCESS_KEY: 'secreto',
+      R2_PHOTOS_BUCKET: 'fotos',
+    };
+    expect(loadConfig(r2)).toMatchObject(r2);
+    expect(loadConfig({ ...r2, R2_JURISDICTION: 'eu' }).R2_JURISDICTION).toBe(
+      'eu',
+    );
+    expect(() => loadConfig({ R2_ACCOUNT_ID: 'cuenta' })).toThrow(
+      /R2_PHOTOS_BUCKET/,
+    );
+    expect(() => loadConfig({ ...r2, R2_JURISDICTION: 'us' })).toThrow(
+      /R2_JURISDICTION/,
+    );
   });
 
   it('lee el geocodificador y quita la barra final de la dirección', () => {

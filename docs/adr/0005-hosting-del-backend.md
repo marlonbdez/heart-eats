@@ -18,7 +18,7 @@ La web ya está completa con datos simulados (`web/src/lib/data/`). El servidor 
   - **Control del gasto:** se fija un límite de uso en el panel desde el primer día.
   - **Despliegue:** desde GitHub, con directorio raíz `server/` y el `Dockerfile` (destino `production`). El puerto lo fija Railway con `PORT`.
 - **Dominio de la API:** `api.hearteats.org`. Al ser del mismo sitio que la web (`hearteats.org`), la cookie de sesión de moderación puede ser `SameSite=Strict` (ver ADR 0007).
-- **Fotos:** Cloudflare R2, con subida por URL firmada que emite el propio servidor. Las fotos entran en un prefijo de cuarentena y solo se mueven al público cuando Moderación las aprueba.
+- **Fotos:** Cloudflare R2, en un bucket **privado**. Las fotos entran en un prefijo de cuarentena (`q/`) y solo pasan al público (`p/`) cuando Moderación las aprueba. El servidor las recibe y las sirve (ver «Cambio en las fotos»).
 - **Copias de seguridad:** M0 no incluye copias automáticas. Una acción programada de GitHub Actions hace `mongodump` semanal, cifrado, a un bucket privado de R2, y se conservan 4 semanas (los datos incluyen correos, ver `08_PRIVACIDAD_LEGAL.md`).
 
 ## Cómo llegan los datos a la web
@@ -43,6 +43,15 @@ Hoy la web es estática y genera las fichas al compilar. Con datos reales, una o
 ## Cambio de Render a Railway
 
 La primera propuesta era Render (Starter, ~7 $/mes). Al verlo en la práctica resultó caro para una API pequeña, y se cambió a Railway Hobby (5 $/mes de mínimo, con crédito de uso). El resto de la decisión (Node, Express, Atlas M0, R2, dominio, copias) no cambia. Se prefirió Railway a Fly.io porque se gestiona desde el panel web (el proyecto se mantiene mucho desde el móvil) y el coste es más previsible; la diferencia de precio con Fly.io es de 1–2 $/mes.
+
+## Cambio en las fotos
+
+La primera idea era subida por URL firmada y servir las fotos desde un dominio público de R2. Al llegar a hacerlo (2026-10-18) se cambió por dos motivos:
+
+- **El DNS de `hearteats.org` lo gestiona Netlify, no Cloudflare.** Un dominio propio para un bucket público de R2 exige que la zona esté en Cloudflare. La alternativa gratuita (`r2.dev`) tiene límites y no es para producción.
+- **Con una URL firmada el servidor no ve la foto.** Recibiéndola él mismo, comprueba que los bytes son WebP o JPEG y no solo lo que dice la cabecera. Con tope de 1 MB, pasar por Railway cuesta casi nada.
+
+Por eso el bucket es privado y **la API sirve las fotos públicas** (`/photos/…`, con caché larga e `immutable`, porque la clave es aleatoria). Retirar una foto es borrarla del almacén: deja de verse al instante. Si algún día el tráfico lo pide, se pone una CDN delante de la API (o se mueve el DNS a Cloudflare) sin cambiar nada de la web. Esto no cambia el presupuesto: R2 sigue en capa gratuita y la salida de Railway por fotos reducidas es de céntimos al principio.
 
 ## Alternativas descartadas
 

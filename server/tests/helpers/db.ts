@@ -6,6 +6,7 @@ import { Restaurant } from '../../src/models/restaurant.js';
 import { Session } from '../../src/models/session.js';
 import { Suggestion } from '../../src/models/suggestion.js';
 import { Team } from '../../src/models/team.js';
+import { Upload } from '../../src/models/upload.js';
 import { User } from '../../src/models/user.js';
 
 let mongo: MongoMemoryServer | undefined;
@@ -21,6 +22,7 @@ export async function startTestDb() {
   await User.init();
   await LoginToken.init();
   await Session.init();
+  await Upload.init();
 }
 
 export async function stopTestDb() {
@@ -36,4 +38,5 @@ export async function clearTestDb() {
   await LoginToken.deleteMany({});
   await Session.deleteMany({});
   await AuditLog.deleteMany({});
+  await Upload.deleteMany({});
 }

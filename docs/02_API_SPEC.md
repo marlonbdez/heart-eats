@@ -60,11 +60,12 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| POST | `/uploads` | `{ "contentType": "image/webp", "size": 183204 }` → `{ "key": "q/…", "uploadUrl": "…", "expiresAt": "…" }`. El navegador hace `PUT` de la foto a `uploadUrl` y manda `key` en el envío |
+| POST | `/uploads` | El cuerpo es la foto tal cual, con `Content-Type: image/webp` o `image/jpeg`. `201` con `{ "key": "q/….webp" }`; esa clave se manda en el envío (`photoKey`) |
 
-- Tipos permitidos: `image/webp`, `image/jpeg`. Tamaño máximo 1 MB (la web ya reduce a 1200 px por lado y quita metadatos).
-- Las fotos quedan en **cuarentena** (prefijo `q/`). Una foto no referenciada por ninguna solicitud en 24 h se borra. Solo pasan a público cuando Moderación aprueba la solicitud que las usa.
-- Límite de URLs firmadas por IP, aparte del de envíos.
+- El servidor recibe la foto (no hay URL firmada): así comprueba que **los bytes son de verdad WebP o JPEG** y no solo lo que dice la cabecera. Un archivo que no lo es da `422 invalid_image`; otro tipo o sin cuerpo, `415`; más de **1 MB**, `413` (la web ya reduce a 1200 px por lado y quita metadatos).
+- Sin almacén configurado (`R2_*`), `503 uploads_unavailable`.
+- Las fotos quedan en **cuarentena** (prefijo `q/` de un bucket privado). Una foto que ninguna solicitud reclama en **24 h** se borra (tarea de mantenimiento). Solo pasan a público cuando Moderación aprueba la solicitud que las usa.
+- Tope por IP, aparte del de envíos (`UPLOADS_PER_HOUR` 60 y `UPLOADS_PER_DAY` 300; `0` lo desactiva). Solo cuenta las fotos válidas. `429` con `Retry-After`.
 
 ### Responder a «Info pedida»
 

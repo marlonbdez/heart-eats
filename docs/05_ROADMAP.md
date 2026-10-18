@@ -54,7 +54,8 @@ Una PR por paso:
   - [x] `POST /proposals` (F2): validación, honeypot, límite por IP y filtro automático
   - [x] `POST /corrections` (F4) y `POST /removals`
   - [x] `POST /teams` (F3): nivel, cifras, áreas, tipos e historias (con el permiso de quien la cuenta); la cola muestra el equipo sin nombres ni textos
-  - [ ] Subida de fotos en cuarentena (`POST /uploads`) y `photoKey` en los envíos
+  - [x] Subida de fotos en cuarentena: `POST /uploads` (el servidor comprueba que es WebP o JPEG, máx. 1 MB; bucket privado de R2) y limpieza a las 24 h; sin las claves `R2_*` responde 503
+  - [ ] `photoKey` en los envíos y fotos publicadas: moverlas a público al aprobar, servirlas desde la API (`/photos/…`), fotos del local (portada y galería) que también puede subir Moderación, y activar `photoUploads` en la web
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos
   - [x] Cola: `GET /suggestions` y `/suggestions/:id`, con filtro por ámbito y correo enmascarado
