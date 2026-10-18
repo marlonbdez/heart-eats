@@ -12,8 +12,8 @@ HeartEats debe ser multipaís y multidioma desde el primer día (handoff §1). L
 
 - **Librería:** `next-intl` (compatible con exportación estática).
 - **Idioma en la URL:** `/es/...` y `/en/...`. Las rutas van en inglés en todos los idiomas (`/es/list`, `/en/list`, `/es/propose`; ver la revisión del final). Añadir un idioma es crear `web/messages/<código>.json` y añadir el código a `web/src/i18n/routing.ts`.
-- **Idioma por defecto:** `es` (lanzamiento en Madrid).
-- **La raíz `/`:** en Netlify, una regla de redirección envía a `/en` si el navegador está en inglés (`netlify.toml`); en cualquier otro caso la propia página raíz redirige a `/es`.
+- **Idioma por defecto:** `es` (lanzamiento en Madrid). Es el idioma de los contenidos de respaldo; el que ve una visita nueva lo decide la raíz (ver la revisión de 2026-10-18).
+- **La raíz `/`:** ver la revisión de 2026-10-18 (antes: una regla de Netlify enviaba a `/en` si el navegador estaba en inglés, y en otro caso la página raíz redirigía a `/es`).
 - **Textos de la interfaz:** solo en `messages/<idioma>.json`, nunca escritos en los componentes. Fechas y números con los formateadores de `next-intl` (según el idioma).
 - **Textos de los datos** (descripciones de los locales): `LocalizedText = { es: '…', en: '…' }`, como indica `01_ESPECIFICACION_DATOS`. Si falta un idioma, se usa el de lanzamiento. Nombres de locales y de platos no se traducen.
 - **Categorías de comida:** clave estable en inglés (`pizza`, `set_menu`…) y etiqueta traducida en `messages/<idioma>.json` (`foodTags.<clave>`).
@@ -37,3 +37,13 @@ La decisión original dejaba las rutas "iguales en todos los idiomas" pero en es
 **Decisión:** las URLs van en inglés en todos los idiomas, con el prefijo de idioma delante (`/es/propose`, `/en/propose`, `/es/place/<slug>`). El idioma se aplica a los textos, no a las rutas. Las carpetas de `web/src/app/[locale]/` son esas rutas tal cual: `list`, `propose`, `place/[slug]`, `correct`, `business`, `about`, `verification`, `privacy`, `contact`.
 
 Si en el futuro la web deja de ser estática (servidor Next), se podrán traducir con `pathnames` sin cambiar los textos ni la estructura de carpetas.
+
+## Revisión 2026-10-18 · Web internacional: idioma visible y de entrada
+
+La web debe servir a todo el mundo (`05_ROADMAP.md`, fase 3b), así que el español por defecto deja de ser el idioma de entrada.
+
+- **Idioma de entrada (la raíz `/`):** lo resuelve la propia página raíz en el navegador (`RootRedirect`), no Netlify, porque la elección guardada solo se conoce allí. Orden: 1) el idioma que la persona eligió con el selector, 2) el primer idioma del navegador que tengamos (`es-MX` cuenta como `es`), 3) **inglés**. Se retira la regla de Netlify. Sin JavaScript, la raíz muestra los dos enlaces.
+- **Idioma visible:** el selector está siempre en la cabecera (botón con el código del idioma y una lista con cada idioma en su propio nombre), no dentro del menú lateral.
+- **Se recuerda** solo lo que la persona elige, en `localStorage` (`hearteats:language`, `es` o `en`, sin caducidad). Mientras no elija, no se guarda nada. Una dirección con idioma (un enlace compartido, `/es/place/…`) siempre se respeta y no cambia lo guardado. Reflejado en `/cookies`.
+- **Contenido de respaldo:** `routing.defaultLocale` sigue siendo `es` porque los datos de lanzamiento (Madrid) están en español: si una descripción no existe en el idioma de la persona, se usa la del idioma de lanzamiento.
+- Quedan para después: nombres de ciudad por idioma y más idiomas (necesitan revisión nativa).

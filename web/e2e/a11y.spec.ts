@@ -108,6 +108,13 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('selector de idioma abierto', async ({ page }) => {
+      await page.goto('/es');
+      await page.getByRole('button', { name: /Idioma/ }).click();
+      await expect(page.getByRole('button', { name: 'English' })).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('ficha emergente de un local en el mapa', async ({ page }) => {
       await page.goto('/es');
       await page.locator('[data-marker]').first().click();

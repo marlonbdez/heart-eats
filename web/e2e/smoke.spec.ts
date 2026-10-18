@@ -119,11 +119,10 @@ test('el menú lateral abre, navega y se cierra', async ({ page }) => {
   await expect(menu).toBeHidden();
 });
 
-test('los idiomas funcionan: la raíz va a /es y /en carga en inglés', async ({
+test('los idiomas funcionan: /es y /en cargan en su idioma', async ({
   page,
 }) => {
-  await page.goto('/');
-  await expect(page).toHaveURL(/\/es\/?$/);
+  await page.goto('/es');
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 
   await page.goto('/en');
@@ -209,8 +208,8 @@ test('volver desde la ficha regresa a la lista con su búsqueda', async ({
 test('cambiar de idioma conserva la búsqueda', async ({ page }) => {
   await page.goto('/es?q=lavapies');
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
-  await page.getByRole('button', { name: /menú/i }).first().click();
-  await page.getByRole('link', { name: 'English' }).click();
+  await page.getByRole('button', { name: /Idioma/ }).click();
+  await page.getByRole('button', { name: 'English' }).click();
   await expect(page).toHaveURL(/\/en\?q=lavapies$/);
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
 });

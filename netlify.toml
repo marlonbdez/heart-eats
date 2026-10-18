@@ -9,14 +9,9 @@
   # La web lee los datos de la API desde el navegador.
   NEXT_PUBLIC_API_URL = "https://api.hearteats.org"
 
-# Idioma: la raíz (/) lleva a /en si el navegador está en inglés. En cualquier
-# otro caso, la página raíz redirige al idioma por defecto (es).
-[[redirects]]
-  from       = "/"
-  to         = "/en"
-  status     = 302
-  force      = true
-  conditions = { Language = ["en"] }
+# Idioma: la raíz (/) la resuelve la propia página en el navegador (el idioma
+# que la persona eligió, si no el del navegador, si no inglés), porque la
+# elección guardada solo se conoce allí.
 
 # Los locales se leen de la API en el navegador, no se generan al compilar: las
 # fichas (y sus formularios) comparten una sola página, la del slug «_», y
