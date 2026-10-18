@@ -15,6 +15,12 @@ export interface GeocodeResult {
 export interface Geocoder {
   // `null` si el servicio no encuentra la dirección; lanza si no responde.
   geocode(query: GeocodeQuery): Promise<GeocodeResult | null>;
+  // Cómo se llama una ciudad en cada idioma ({ es: 'Tokio', en: 'Tokyo' }).
+  // Solo salen los idiomas en que el servicio la encuentra; lanza si no responde.
+  cityNames(
+    query: { city: string; country: string },
+    locales: readonly string[],
+  ): Promise<Record<string, string>>;
 }
 
 interface NominatimOptions {
@@ -31,7 +37,13 @@ interface NominatimOptions {
 interface NominatimPlace {
   lat?: string;
   lon?: string;
-  address?: { country_code?: string };
+  address?: {
+    country_code?: string;
+    city?: string;
+    town?: string;
+    village?: string;
+    municipality?: string;
+  };
 }
 
 // Nominatim, la instancia pública de OpenStreetMap. Las peticiones salen de
@@ -47,30 +59,43 @@ export function nominatimGeocoder({
   let queue: Promise<unknown> = Promise.resolve();
   let lastRequestAt = 0;
 
-  async function search(query: GeocodeQuery): Promise<GeocodeResult | null> {
+  // Una petición a /search, respetando el ritmo. Solo el estado va al
+  // registro: ni lo buscado ni la respuesta.
+  async function fetchPlaces(
+    params: Record<string, string>,
+    language?: string,
+  ): Promise<NominatimPlace[]> {
     const wait = lastRequestAt + minIntervalMs - Date.now();
     if (wait > 0) await sleep(wait);
     lastRequestAt = Date.now();
 
-    const params = new URLSearchParams({
+    const url = `${baseUrl}/search?${new URLSearchParams({
+      format: 'jsonv2',
+      addressdetails: '1',
+      limit: '1',
+      ...params,
+    })}`;
+    const res = await fetchFn(url, {
+      headers: {
+        'User-Agent': userAgent,
+        Accept: 'application/json',
+        ...(language ? { 'Accept-Language': language } : {}),
+      },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!res.ok) throw new Error(`Nominatim respondió ${res.status}`);
+    return (await res.json()) as NominatimPlace[];
+  }
+
+  async function search(query: GeocodeQuery): Promise<GeocodeResult | null> {
+    const [place] = await fetchPlaces({
       q: [
         query.street,
         [query.postalCode, query.city].filter(Boolean).join(' '),
       ]
         .filter(Boolean)
         .join(', '),
-      format: 'jsonv2',
-      addressdetails: '1',
-      limit: '1',
     });
-    const res = await fetchFn(`${baseUrl}/search?${params}`, {
-      headers: { 'User-Agent': userAgent, Accept: 'application/json' },
-      signal: AbortSignal.timeout(timeoutMs),
-    });
-    // Solo el estado: ni la dirección buscada ni la respuesta van al registro.
-    if (!res.ok) throw new Error(`Nominatim respondió ${res.status}`);
-
-    const [place] = (await res.json()) as NominatimPlace[];
     const lat = Number(place?.lat);
     const lng = Number(place?.lon);
     if (
@@ -86,11 +111,32 @@ export function nominatimGeocoder({
     return { lat, lng, ...(country?.length === 2 ? { country } : {}) };
   }
 
+  async function names(
+    query: { city: string; country: string },
+    locales: readonly string[],
+  ): Promise<Record<string, string>> {
+    const result: Record<string, string> = {};
+    for (const locale of locales) {
+      const [place] = await fetchPlaces(
+        { city: query.city, countrycodes: query.country.toLowerCase() },
+        locale,
+      );
+      const { city, town, village, municipality } = place?.address ?? {};
+      const name = city ?? town ?? village ?? municipality;
+      if (name) result[locale] = name;
+    }
+    return result;
+  }
+
+  // Las peticiones salen de una en una; un fallo no frena la cola.
+  const enqueue = <T>(job: () => Promise<T>): Promise<T> => {
+    const result = queue.then(job);
+    queue = result.catch(() => undefined);
+    return result;
+  };
+
   return {
-    geocode(query) {
-      const result = queue.then(() => search(query));
-      queue = result.catch(() => undefined); // un fallo no frena la cola
-      return result;
-    },
+    geocode: (query) => enqueue(() => search(query)),
+    cityNames: (query, locales) => enqueue(() => names(query, locales)),
   };
 }

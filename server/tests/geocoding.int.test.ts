@@ -19,6 +19,9 @@ const geocoder: Geocoder = {
     calls.push(query);
     return behaviour();
   },
+  async cityNames() {
+    return {};
+  },
 };
 const app = createApp(
   { CORS_ORIGINS: ['https://hearteats.org'] },

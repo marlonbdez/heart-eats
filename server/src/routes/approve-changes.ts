@@ -11,6 +11,7 @@ import {
   teamApprovalSchema,
   type CorrectionApproval,
 } from '../services/decision-input.js';
+import { cityNamesFor } from '../services/city-names.js';
 import type { Geocoder } from '../services/geocoder.js';
 import type { TeamInput } from '../services/team-input.js';
 import { parseOrThrow } from '../validation.js';
@@ -206,6 +207,15 @@ export async function approveCorrection(
     changes,
     await pinFor(changes, current, geocoder),
   );
+  // Si cambia la ciudad, sus nombres en cada idioma dejan de valer.
+  if (changes.address?.city) {
+    const names = await cityNamesFor(
+      geocoder,
+      changes.address.city,
+      current.address.country,
+    );
+    entries.push(['address.cityNames', names ?? null]);
+  }
   return approveAndApply(record, user, now, id, async () => {
     const before = await setOnPublished(id, entries);
     return {

@@ -25,6 +25,8 @@ Quien propone un local escribe calle, código postal y ciudad; el mapa necesita 
 
 Si la instancia pública limita o cae, o el proyecto crece: Photon o el geocodificador de un proveedor con plan gratuito, o una instancia propia. El cambio queda en un único módulo del servidor.
 
+**Nombre de la ciudad por idioma (2026-10-18):** al publicar un local (o al corregir su ciudad), el servidor pregunta a Nominatim cómo se llama la ciudad en cada idioma de la web (una petición por idioma, por la misma cola de 1 por segundo) y lo guarda en `address.cityNames` (`{ es, en }`). Es un añadido: si falla o no la conoce, se publica igual y la web usa `address.city`, que va como se escribe allí. La ciudad escrita por quien propone sigue siendo la que forma la zona (`cityKey`), así que una misma ciudad escrita de dos maneras son dos zonas; se arregla corrigiendo la ficha.
+
 ## Consecuencias
 
 - La propuesta de un local nuevo no lleva coordenadas; las pone el servidor.

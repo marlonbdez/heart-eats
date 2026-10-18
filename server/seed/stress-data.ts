@@ -16,6 +16,8 @@ export const STRESS_SLUG_PREFIX = 'demo-stress-';
 interface City {
   key: string;
   name: string;
+  // Cómo se llama la ciudad en cada idioma de la web, si no es como `name`.
+  labels?: { es: string; en: string };
   country: string;
   lat: number;
   lng: number;
@@ -54,6 +56,7 @@ export const cities: City[] = [
   {
     key: 'sevilla',
     name: 'Sevilla',
+    labels: { es: 'Sevilla', en: 'Seville' },
     country: 'ES',
     lat: 37.3891,
     lng: -5.9845,
@@ -63,6 +66,7 @@ export const cities: City[] = [
   {
     key: 'lisboa',
     name: 'Lisboa',
+    labels: { es: 'Lisboa', en: 'Lisbon' },
     country: 'PT',
     lat: 38.7223,
     lng: -9.1393,
@@ -72,6 +76,7 @@ export const cities: City[] = [
   {
     key: 'paris',
     name: 'Paris',
+    labels: { es: 'París', en: 'Paris' },
     country: 'FR',
     lat: 48.8566,
     lng: 2.3522,
@@ -81,6 +86,7 @@ export const cities: City[] = [
   {
     key: 'londres',
     name: 'London',
+    labels: { es: 'Londres', en: 'London' },
     country: 'GB',
     lat: 51.5072,
     lng: -0.1276,
@@ -90,6 +96,7 @@ export const cities: City[] = [
   {
     key: 'berlin',
     name: 'Berlin',
+    labels: { es: 'Berlín', en: 'Berlin' },
     country: 'DE',
     lat: 52.52,
     lng: 13.405,
@@ -99,6 +106,7 @@ export const cities: City[] = [
   {
     key: 'roma',
     name: 'Roma',
+    labels: { es: 'Roma', en: 'Rome' },
     country: 'IT',
     lat: 41.9028,
     lng: 12.4964,
@@ -108,6 +116,7 @@ export const cities: City[] = [
   {
     key: 'estocolmo',
     name: 'Stockholm',
+    labels: { es: 'Estocolmo', en: 'Stockholm' },
     country: 'SE',
     lat: 59.3293,
     lng: 18.0686,
@@ -117,6 +126,7 @@ export const cities: City[] = [
   {
     key: 'atenas',
     name: 'Αθήνα',
+    labels: { es: 'Atenas', en: 'Athens' },
     country: 'GR',
     lat: 37.9838,
     lng: 23.7275,
@@ -126,6 +136,7 @@ export const cities: City[] = [
   {
     key: 'estambul',
     name: 'İstanbul',
+    labels: { es: 'Estambul', en: 'Istanbul' },
     country: 'TR',
     lat: 41.0082,
     lng: 28.9784,
@@ -135,6 +146,7 @@ export const cities: City[] = [
   {
     key: 'el-cairo',
     name: 'القاهرة',
+    labels: { es: 'El Cairo', en: 'Cairo' },
     country: 'EG',
     lat: 30.0444,
     lng: 31.2357,
@@ -171,6 +183,7 @@ export const cities: City[] = [
   {
     key: 'ciudad-del-cabo',
     name: 'Cape Town',
+    labels: { es: 'Ciudad del Cabo', en: 'Cape Town' },
     country: 'ZA',
     lat: -33.9249,
     lng: 18.4241,
@@ -180,6 +193,7 @@ export const cities: City[] = [
   {
     key: 'dubai',
     name: 'Dubai',
+    labels: { es: 'Dubái', en: 'Dubai' },
     country: 'AE',
     lat: 25.2048,
     lng: 55.2708,
@@ -189,6 +203,7 @@ export const cities: City[] = [
   {
     key: 'mumbai',
     name: 'Mumbai',
+    labels: { es: 'Bombay', en: 'Mumbai' },
     country: 'IN',
     lat: 19.076,
     lng: 72.8777,
@@ -198,6 +213,7 @@ export const cities: City[] = [
   {
     key: 'bangkok',
     name: 'กรุงเทพมหานคร',
+    labels: { es: 'Bangkok', en: 'Bangkok' },
     country: 'TH',
     lat: 13.7563,
     lng: 100.5018,
@@ -207,6 +223,7 @@ export const cities: City[] = [
   {
     key: 'singapur',
     name: 'Singapore',
+    labels: { es: 'Singapur', en: 'Singapore' },
     country: 'SG',
     lat: 1.3521,
     lng: 103.8198,
@@ -216,6 +233,7 @@ export const cities: City[] = [
   {
     key: 'tokio',
     name: '東京',
+    labels: { es: 'Tokio', en: 'Tokyo' },
     country: 'JP',
     lat: 35.6762,
     lng: 139.6503,
@@ -225,6 +243,7 @@ export const cities: City[] = [
   {
     key: 'seul',
     name: '서울',
+    labels: { es: 'Seúl', en: 'Seoul' },
     country: 'KR',
     lat: 37.5665,
     lng: 126.978,
@@ -234,6 +253,7 @@ export const cities: City[] = [
   {
     key: 'pekin',
     name: '北京',
+    labels: { es: 'Pekín', en: 'Beijing' },
     country: 'CN',
     lat: 39.9042,
     lng: 116.4074,
@@ -261,6 +281,7 @@ export const cities: City[] = [
   {
     key: 'nueva-york',
     name: 'New York',
+    labels: { es: 'Nueva York', en: 'New York' },
     country: 'US',
     lat: 40.7128,
     lng: -74.006,
@@ -288,6 +309,7 @@ export const cities: City[] = [
   {
     key: 'ciudad-de-mexico',
     name: 'Ciudad de México',
+    labels: { es: 'Ciudad de México', en: 'Mexico City' },
     country: 'MX',
     lat: 19.4326,
     lng: -99.1332,
@@ -498,6 +520,7 @@ export function generateStress(
           street: `${city.street} ${1 + Math.floor(rand() * 120)}`,
           postalCode: String(10000 + Math.floor(rand() * 89999)),
           city: city.name,
+          ...(city.labels && { cityNames: city.labels }),
           country: city.country,
         },
         location: {

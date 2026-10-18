@@ -22,6 +22,9 @@ export interface RestaurantRecord {
     postalCode?: string;
     neighborhood?: string;
     city: string;
+    // Nombre de la ciudad en cada idioma de la web ({ es, en }); si falta el
+    // idioma, se usa `city`, que va como se escribe allí.
+    cityNames?: Record<string, string>;
     region?: string;
     country: string;
   };
@@ -90,6 +93,7 @@ const restaurantSchema = new Schema(
       postalCode: String,
       neighborhood: String,
       city: { type: String, required: true },
+      cityNames: { type: Schema.Types.Mixed },
       region: String,
       country: { type: String, required: true, match: /^[A-Z]{2}$/ },
     },

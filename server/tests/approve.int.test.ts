@@ -27,9 +27,14 @@ const mailer: Mailer = {
   },
 };
 let found: typeof PIN | null;
+let namesDown = false;
 const geocoder: Geocoder = {
   async geocode() {
     return found;
+  },
+  async cityNames(query, locales) {
+    if (namesDown) throw new Error('caído');
+    return Object.fromEntries(locales.map((l) => [l, `${query.city}-${l}`]));
   },
 };
 const config = {
@@ -226,6 +231,31 @@ describe('aprobar un local nuevo', () => {
     const res = await request(app).get('/api/v1/restaurants/casa-nueva-madrid');
     expect(res.status).toBe(200);
     expect(res.body.name).toBe('Casa Nueva');
+  });
+});
+
+describe('el nombre de la ciudad', () => {
+  it('se guarda en cada idioma al publicar', async () => {
+    const s = await proposal();
+    await decide(s._id, approval(), await signedInCookie());
+    expect((await published())[0]?.address?.cityNames).toEqual({
+      es: 'Madrid-es',
+      en: 'Madrid-en',
+    });
+  });
+
+  it('si el servicio no responde, se publica igual sin nombres', async () => {
+    namesDown = true;
+    try {
+      const s = await proposal();
+      const res = await decide(s._id, approval(), await signedInCookie());
+      expect(res.status).toBe(200);
+      const [place] = await published();
+      expect(place?.address?.city).toBe('Madrid');
+      expect(place?.address?.cityNames).toBeUndefined();
+    } finally {
+      namesDown = false;
+    }
   });
 });
 

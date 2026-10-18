@@ -5,6 +5,8 @@ import { visibleFilter } from './restaurant-query.js';
 export interface RegionCity {
   key: string;
   name: string;
+  // El nombre en cada idioma de la web, si se conoce.
+  names?: Record<string, string>;
   count: number;
   bbox: Bbox;
   center: { lat: number; lng: number };
@@ -20,6 +22,7 @@ export interface RegionCountry {
 interface CityRow {
   _id: { country: string; cityKey: string };
   name: string;
+  names?: Record<string, string> | null;
   count: number;
   west: number;
   south: number;
@@ -32,8 +35,9 @@ interface CityRow {
 const round = (n: number) => Number(n.toFixed(5));
 
 // Dónde hay locales publicados: países y ciudades con su número y su
-// rectángulo, para que la web ofrezca solo zonas que no estén vacías. Los
-// nombres van como están guardados (en el idioma local de cada sitio).
+// rectángulo, para que la web ofrezca solo zonas que no estén vacías. `name`
+// va como está guardado (idioma local del sitio) y `names`, si se conoce, en
+// cada idioma de la web.
 // Un país que cruza el antimeridiano sale con un rectángulo que lo abarca todo.
 export async function summarizeRegions(): Promise<RegionCountry[]> {
   const rows = await Restaurant.aggregate<CityRow>([
@@ -42,6 +46,7 @@ export async function summarizeRegions(): Promise<RegionCountry[]> {
       $group: {
         _id: { country: '$address.country', cityKey: '$cityKey' },
         name: { $min: '$address.city' },
+        names: { $max: '$address.cityNames' },
         count: { $sum: 1 },
         west: { $min: { $arrayElemAt: ['$location.coordinates', 0] } },
         east: { $max: { $arrayElemAt: ['$location.coordinates', 0] } },
@@ -68,6 +73,7 @@ export function groupByCountry(rows: CityRow[]): RegionCountry[] {
     const city: RegionCity = {
       key: row._id.cityKey,
       name: row.name,
+      ...(row.names && { names: row.names }),
       count: row.count,
       bbox,
       center: { lat: round(row.lat), lng: round(row.lng) },
