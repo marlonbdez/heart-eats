@@ -10,7 +10,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "propose": "Suggest a place",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "language": "Language"
   },
   "menu": {
     "title": "Menu",
@@ -32,8 +33,7 @@
       "legal": "Legal notice",
       "contact": "Contact",
       "removal": "Ask for a removal"
-    },
-    "language": "Language"
+    }
   },
   "languages": {
     "es": "Español",
@@ -716,12 +716,13 @@
           "For people who visit the website, HeartEats does not use cookies. Only moderators receive one, needed to keep their session (see below).",
           "There is no analytics, advertising or tracking.",
           "That is why you will not see a cookie notice.",
-          "It only stores one thing in your browser, and only when you use a feature that needs it: the draft of Suggest a place."
+          "It only stores two things in your browser, and only when you use a feature that needs them: the language you choose and the draft of Suggest a place."
         ]
       },
       {
         "heading": "What is kept in your browser",
         "items": [
+          "Your language: if you change it with the selector in the header, it is remembered for your next visit. It is a two-letter code (es or en) with no expiry date; it is deleted with the site data.",
           "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over."
         ],
         "paragraphs": [
@@ -744,7 +745,7 @@
         "items": [
           "Your location: it is only used in memory if you press Near me, and is forgotten when you close the page.",
           "Your search and filters: they live in the page address.",
-          "The language: it is in the address (/es or /en).",
+          "The language, as long as you have not chosen one: it is worked out from your browser language on each visit and is not stored.",
           "The photos you choose: they are only held while you fill in the form."
         ]
       },

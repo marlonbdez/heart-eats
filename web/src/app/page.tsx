@@ -1,8 +1,19 @@
-import { redirect } from 'next/navigation';
-import { routing } from '@/i18n/routing';
+import type { Metadata } from 'next';
+import { RootRedirect } from '@/components/RootRedirect';
 
-// La raíz lleva al idioma por defecto. En Netlify, netlify.toml redirige
-// antes según el idioma del navegador.
+// Provisional: la web está cerrada a buscadores hasta el lanzamiento.
+export const metadata: Metadata = {
+  title: 'HeartEats',
+  robots: { index: false, follow: false },
+};
+
+// Fuera de un idioma no hay layout con <html>: lo pone esta página.
 export default function RootPage() {
-  redirect(`/${routing.defaultLocale}`);
+  return (
+    <html lang="en">
+      <body>
+        <RootRedirect />
+      </body>
+    </html>
+  );
 }

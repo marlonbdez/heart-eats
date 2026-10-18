@@ -174,33 +174,6 @@
   padding: 16px 8px 0;
   border-top: 1px solid var(--line);
 }
-.langLabel {
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.langList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  margin: 4px 0 12px;
-  padding: 0;
-  list-style: none;
-}
-.langCurrent,
-.langLink {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-}
-.langCurrent {
-  font-weight: 700;
-}
-.langLink {
-  color: var(--accent-text);
-}
 .tagline {
   margin: 0;
   color: var(--muted);

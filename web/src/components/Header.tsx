@@ -2,9 +2,9 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
-import { Link, usePathname, useRouter } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/navigation';
 import { navGroups } from '@/lib/nav';
+import { LanguageMenu } from './LanguageMenu';
 import { LogoMark } from './LogoMark';
 import styles from './Header.module.css';
 
@@ -18,7 +18,6 @@ export function Header() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const router = useRouter();
 
   const open = () => {
     dialogRef.current?.showModal();
@@ -55,6 +54,7 @@ export function Header() {
             Heart<span className={styles.eats}>Eats</span>
           </span>
         </Link>
+        <LanguageMenu />
         {/* En móvil solo se ve el icono; el nombre accesible es siempre el texto completo. */}
         <Link href="/propose" className={styles.cta}>
           <svg
@@ -120,36 +120,6 @@ export function Header() {
         </nav>
 
         <footer className={styles.drawerFoot}>
-          <p className={styles.langLabel}>{t('menu.language')}</p>
-          <ul className={styles.langList}>
-            {routing.locales.map((code) => (
-              <li key={code}>
-                {code === locale ? (
-                  <span className={styles.langCurrent} aria-current="true">
-                    {t(`languages.${code}`)}
-                  </span>
-                ) : (
-                  <Link
-                    href={pathname}
-                    locale={code}
-                    lang={code}
-                    hrefLang={code}
-                    className={styles.langLink}
-                    // Cambia de idioma sin perder la búsqueda (?q, ?food), que
-                    // solo se conoce en el navegador.
-                    onClick={(e) => {
-                      e.preventDefault();
-                      router.replace(`${pathname}${window.location.search}`, {
-                        locale: code,
-                      });
-                    }}
-                  >
-                    {t(`languages.${code}`)}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
           <p className={styles.tagline}>{t('app.tagline')}</p>
         </footer>
       </dialog>
