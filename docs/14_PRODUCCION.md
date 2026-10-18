@@ -280,6 +280,15 @@ Quita después la línea del `.env` o bórralo: una terminal con la cadena de pr
 
 Las empresas proveedoras son de fuera de la UE (p. ej. de EE. UU.): que los datos estén en servidores europeos no sustituye a mirar las transferencias en la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
 
+### Abrir a buscadores (al lanzar)
+Hasta el lanzamiento la web está **cerrada a buscadores** en tres sitios a la vez, para que los locales de prueba no se indexen:
+
+1. `web/public/robots.txt`: `Disallow: /`.
+2. `netlify.toml`: cabecera `X-Robots-Tag = "noindex, nofollow"`.
+3. `web/src/app/[locale]/layout.tsx`: `robots: { index: false, follow: false }` en `generateMetadata`.
+
+Al abrir (tras borrar los datos de prueba y terminar el SEO): quitar los tres, poner `Allow: /` y la línea `Sitemap:` en `robots.txt`, y actualizar `web/e2e/seo.spec.ts`. Si los buscadores llegaran a indexar algo antes de tiempo, no basta con borrarlo: hay que pedir la retirada en sus herramientas para propietarios.
+
 ### ❓ Pendiente de confirmar
 1. **Nombres exactos de los registros DNS** de Resend en Netlify (§2).
 2. **Si Railway usa el `Dockerfile` o Railpack** (§6.9).
