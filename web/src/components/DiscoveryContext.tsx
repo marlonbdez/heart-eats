@@ -21,7 +21,7 @@ export function placeQuery({ view, query }: Discovery) {
 export function discoveryFromSearch(search: string): Discovery {
   const params = new URLSearchParams(search);
   const query: Record<string, string> = {};
-  for (const key of ['q', 'food']) {
+  for (const key of ['q', 'food', 'country', 'city']) {
     const value = params.get(key);
     if (value) query[key] = value;
   }

@@ -149,14 +149,23 @@
       "delivery": "delivery"
     }
   },
+  "zone": {
+    "buttonLabel": "Area: {zone}. Change",
+    "title": "Where?",
+    "close": "Close",
+    "searchLabel": "Search for a city or a country",
+    "searchPlaceholder": "City or country",
+    "none": "There are no places in any area with that name.",
+    "count": "{count, plural, one {# place} other {# places}}"
+  },
   "nearMe": {
     "button": "Near me",
     "asking": "Finding your location…",
     "privacy": "It is only used in your browser to work out distances; it is not stored or sent.",
     "active": "Sorted by distance from your location.",
-    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; for now, we’ll keep showing Madrid.",
-    "unavailable": "We couldn’t get your location. We’ll keep showing Madrid.",
-    "outside": "There are no places near you yet. We’ll keep showing Madrid.",
+    "denied": "We don’t have permission to use your location. You can turn it on in your browser settings; for now, we’ll stay where you were.",
+    "unavailable": "We couldn’t get your location. We’ll stay where you were.",
+    "outside": "There are no places near you yet. We’ll stay where you were.",
     "distanceLabel": "{distance} away"
   },
   "photo": {

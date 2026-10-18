@@ -1,9 +1,60 @@
 import { test as base, type Route } from '@playwright/test';
 import { foodTags, restaurants } from '../fixtures/restaurants';
+import type { Restaurant } from '../../src/lib/types';
 import { suggestions } from '../fixtures/moderation';
 import { auditLines, staff, type ApiStaff } from '../fixtures/staff';
 
 export * from '@playwright/test';
+
+const normalize = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .trim();
+
+// GET /regions con los locales de e2e/fixtures: países y ciudades, por número
+// de locales.
+function regionsOf() {
+  const cities = new Map<string, Restaurant[]>();
+  for (const r of restaurants) {
+    const key = `${r.address.country}/${normalize(r.address.city)}`;
+    cities.set(key, [...(cities.get(key) ?? []), r]);
+  }
+  const box = (list: Restaurant[]) => ({
+    west: Math.min(...list.map((r) => r.location.lng)),
+    south: Math.min(...list.map((r) => r.location.lat)),
+    east: Math.max(...list.map((r) => r.location.lng)),
+    north: Math.max(...list.map((r) => r.location.lat)),
+  });
+  const countries = new Map<string, Restaurant[]>();
+  for (const r of restaurants) {
+    countries.set(r.address.country, [
+      ...(countries.get(r.address.country) ?? []),
+      r,
+    ]);
+  }
+  return [...countries]
+    .map(([code, list]) => ({
+      code,
+      count: list.length,
+      bbox: box(list),
+      cities: [...cities]
+        .filter(([key]) => key.startsWith(`${code}/`))
+        .map(([key, places]) => ({
+          key: key.slice(code.length + 1),
+          name: places[0]!.address.city,
+          count: places.length,
+          bbox: box(places),
+          center: {
+            lat: places.reduce((n, r) => n + r.location.lat, 0) / places.length,
+            lng: places.reduce((n, r) => n + r.location.lng, 0) / places.length,
+          },
+        }))
+        .sort((a, b) => b.count - a.count),
+    }))
+    .sort((a, b) => b.count - a.count);
+}
 
 // La web pide los datos a la API desde el navegador (por defecto, en
 // localhost:3001). En las pruebas no hay servidor: cada página responde con
@@ -230,12 +281,23 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         });
       }
 
+      if (path === '/regions') {
+        return route.fulfill({ headers, json: { countries: regionsOf() } });
+      }
       if (path === '/restaurants') {
-        // La lista no lleva el equipo (docs/02_API_SPEC.md).
-        const items = restaurants.map(({ team, ...rest }) => {
-          void team;
-          return rest;
-        });
+        // Como la API: por país y ciudad, sin el equipo (docs/02_API_SPEC.md).
+        const country = searchParams.get('country');
+        const city = searchParams.get('city');
+        const items = restaurants
+          .filter(
+            (r) =>
+              (!country || r.address.country === country) &&
+              (!city || normalize(r.address.city) === normalize(city)),
+          )
+          .map(({ team, ...rest }) => {
+            void team;
+            return rest;
+          });
         return route.fulfill({ headers, json: { items } });
       }
       if (path === '/meta/filters') {

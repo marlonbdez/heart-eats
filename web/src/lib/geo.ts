@@ -1,5 +1,3 @@
-import { coverage } from './map-config';
-
 export interface Position {
   lat: number;
   lng: number;
@@ -14,11 +12,6 @@ export function distanceMeters(a: Position, b: Position): number {
       Math.cos(rad(b.lat)) *
       Math.sin(rad(b.lng - a.lng) / 2) ** 2;
   return 2 * 6371000 * Math.asin(Math.sqrt(h));
-}
-
-export function isInCoverage(p: Position): boolean {
-  const [lng, lat] = coverage.center;
-  return distanceMeters(p, { lat, lng }) <= coverage.radiusKm * 1000;
 }
 
 export function sortByDistance<T extends { location: Position }>(

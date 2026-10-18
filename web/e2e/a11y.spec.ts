@@ -115,6 +115,13 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('selector de zona abierto', async ({ page }) => {
+      await page.goto('/es');
+      await page.getByRole('button', { name: /Zona: Madrid/ }).click();
+      await expect(page.getByRole('dialog', { name: '¿Dónde?' })).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('ficha emergente de un local en el mapa', async ({ page }) => {
       await page.goto('/es');
       await page.locator('[data-marker]').first().click();

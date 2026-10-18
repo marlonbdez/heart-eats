@@ -1,19 +1,21 @@
 'use client';
 
-import { getFoodTags, getRestaurants } from '@/lib/data';
+import { getFoodTags } from '@/lib/data';
+import { loadRegions } from '@/lib/regions';
 import { useLoad } from '@/lib/use-load';
 import { Discover } from './Discover';
 import { Remote } from './Remote';
 
-const loadAll = () => Promise.all([getRestaurants(), getFoodTags()]);
+const loadBase = () => Promise.all([loadRegions(), getFoodTags()]);
 
-// Inicio y lista: los locales y las categorías se piden a la API al abrir.
+// Inicio y lista: dónde hay locales y las categorías se piden a la API al
+// abrir; los locales de la zona los pide Discover.
 export function DiscoverLoader({ view }: { view?: 'map' | 'list' }) {
-  const state = useLoad(loadAll);
+  const state = useLoad(loadBase);
   return (
     <Remote state={state}>
-      {([restaurants, foodTags]) => (
-        <Discover view={view} restaurants={restaurants} foodTags={foodTags} />
+      {([regions, foodTags]) => (
+        <Discover view={view} regions={regions} foodTags={foodTags} />
       )}
     </Remote>
   );

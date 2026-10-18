@@ -5,26 +5,32 @@ import type {
   CorrectionInput,
   FoodTag,
   ProposalInput,
+  RegionCountry,
   RemovalInput,
   Restaurant,
+  Zone,
 } from '../types';
 import { ApiRequestError, apiGet, apiPost } from '../api';
 
-// Zona que se lee hoy. Al abrir otros países se amplía aquí.
-const COUNTRY = 'ES';
 const PAGE_SIZE = 100;
 // Tope de páginas por si la API no cerrara nunca el cursor.
 const MAX_PAGES = 100;
 
-// Todos los locales publicados de la zona, página a página. La búsqueda y los
-// filtros se aplican después en el navegador (lib/search.ts).
-export async function getRestaurants(): Promise<Restaurant[]> {
+// Dónde hay locales publicados: alimenta el selector de zona.
+export async function getRegions(): Promise<RegionCountry[]> {
+  const res = await apiGet<{ countries: RegionCountry[] }>('/regions');
+  return res.countries;
+}
+
+// Todos los locales publicados de una ciudad, página a página. La búsqueda y
+// los filtros se aplican después en el navegador (lib/search.ts).
+export async function getRestaurants(zone: Zone): Promise<Restaurant[]> {
   const all: Restaurant[] = [];
   let cursor: string | undefined;
   for (let page = 0; page < MAX_PAGES; page++) {
     const res = await apiGet<{ items: Restaurant[]; nextCursor?: string }>(
       '/restaurants',
-      { country: COUNTRY, limit: PAGE_SIZE, cursor },
+      { country: zone.country, city: zone.city, limit: PAGE_SIZE, cursor },
     );
     all.push(...res.items);
     if (!res.nextCursor) break;

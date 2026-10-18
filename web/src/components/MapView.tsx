@@ -5,7 +5,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
-import { defaultView, mapStyles } from '@/lib/map-config';
+import { mapStyles, worldView } from '@/lib/map-config';
 import type { Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
 import { RestaurantCard } from './RestaurantCard';
@@ -17,14 +17,30 @@ type MapLibre = typeof import('maplibre-gl');
 // Alto que tapa la tarjeta de vista previa, desde abajo.
 const CARD_CLEARANCE = 290;
 
-// `focus`: hay búsqueda o filtros activos, así que el mapa se encuadra sobre
-// los resultados; sin ellos, vuelve a la vista inicial.
+type Bounds = [[number, number], [number, number]];
+
+// Encuadre de una zona: deja libres los bordes donde van el conmutador (arriba;
+// el marcador sube 44 px desde su punto) y, abajo, «Cerca de mí» y la tarjeta.
+const ZONE_FIT = {
+  padding: { top: 120, bottom: 190, left: 50, right: 50 },
+  maxZoom: 14,
+} as const;
+
+// `bounds`: el rectángulo de la zona que se mira; el mapa se encuadra en él al
+// abrirse y cada vez que cambia. `focus`: hay búsqueda o filtros activos, así
+// que se encuadra sobre los resultados; sin ellos, vuelve a la zona.
 export function MapView({
   restaurants,
+  bounds = null,
   focus = false,
+  followUser = false,
 }: {
   restaurants: Restaurant[];
+  bounds?: Bounds | null;
   focus?: boolean;
+  // La zona es la de la persona (compartió su ubicación): el mapa se centra en
+  // ella en vez de encuadrar toda la zona.
+  followUser?: boolean;
 }) {
   const t = useTranslations();
   const { position } = useLocation();
@@ -37,6 +53,11 @@ export function MapView({
     new Map<string, { marker: Marker; el: HTMLButtonElement }>(),
   );
   const firstView = useRef(true);
+  // El rectángulo de la zona, para leerlo sin reiniciar el mapa al cambiar.
+  const boundsRef = useRef(bounds);
+  useEffect(() => {
+    boundsRef.current = bounds;
+  });
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
@@ -67,8 +88,9 @@ export function MapView({
         map = new lib.Map({
           container: containerRef.current,
           style: styleUrl(),
-          center: defaultView.center,
-          zoom: defaultView.zoom,
+          ...(boundsRef.current
+            ? { bounds: boundsRef.current, fitBoundsOptions: ZONE_FIT }
+            : { center: worldView.center, zoom: worldView.zoom }),
         });
       } catch {
         setFailed(true);
@@ -136,6 +158,46 @@ export function MapView({
     }
   }, [restaurants, t, ready]);
 
+  // Encuadrar los resultados cuando hay búsqueda; volver a la zona si no.
+  const resultKey = restaurants.map((r) => r.slug).join(',');
+  const boundsKey = bounds ? bounds.flat().join(',') : '';
+  useEffect(() => {
+    const map = mapRef.current;
+    const lib = libRef.current;
+    if (!ready || !map || !lib) return;
+    const isFirst = firstView.current;
+    firstView.current = false;
+    if (isFirst && !focus) return;
+
+    const duration =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches || isFirst
+        ? 0
+        : 600;
+    if (!focus) {
+      const zone = boundsRef.current;
+      if (zone) map.fitBounds(zone, { ...ZONE_FIT, duration });
+      else
+        map.easeTo({
+          center: worldView.center,
+          zoom: worldView.zoom,
+          duration,
+        });
+      return;
+    }
+    if (restaurants.length === 0) return;
+    const bounds = new lib.LngLatBounds();
+    for (const r of restaurants)
+      bounds.extend([r.location.lng, r.location.lat]);
+    map.fitBounds(bounds, {
+      padding: { top: 70, bottom: 190, left: 50, right: 50 },
+      maxZoom: 15,
+      duration,
+    });
+    // `restaurants` entra por resultKey y la zona por boundsKey: solo reencuadra
+    // si cambian los resultados o la zona.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultKey, boundsKey, focus, ready]);
+
   // Punto de "tu posición" y, al compartirla, centrar el mapa en ella.
   useEffect(() => {
     const map = mapRef.current;
@@ -151,6 +213,7 @@ export function MapView({
     youRef.current = new lib.Marker({ element: el })
       .setLngLat([position.lng, position.lat])
       .addTo(map);
+    if (!followUser) return;
     map.easeTo({
       center: [position.lng, position.lat],
       zoom: 14,
@@ -158,42 +221,9 @@ export function MapView({
         ? 0
         : 600,
     });
-  }, [position, ready, t]);
-
-  // Encuadrar los resultados cuando hay búsqueda; volver a la vista inicial si no.
-  const resultKey = restaurants.map((r) => r.slug).join(',');
-  useEffect(() => {
-    const map = mapRef.current;
-    const lib = libRef.current;
-    if (!ready || !map || !lib) return;
-    const isFirst = firstView.current;
-    firstView.current = false;
-    if (isFirst && !focus) return;
-
-    const duration =
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches || isFirst
-        ? 0
-        : 600;
-    if (!focus) {
-      map.easeTo({
-        center: defaultView.center,
-        zoom: defaultView.zoom,
-        duration,
-      });
-      return;
-    }
-    if (restaurants.length === 0) return;
-    const bounds = new lib.LngLatBounds();
-    for (const r of restaurants)
-      bounds.extend([r.location.lng, r.location.lat]);
-    map.fitBounds(bounds, {
-      padding: { top: 70, bottom: 190, left: 50, right: 50 },
-      maxZoom: 15,
-      duration,
-    });
-    // `restaurants` entra por resultKey: solo reencuadra si cambian los resultados.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultKey, focus, ready]);
+    // Va después del encuadre de la zona y depende de él: al cambiar de zona se
+    // vuelve a centrar en la persona.
+  }, [position, followUser, boundsKey, ready, t]);
 
   // Marcador seleccionado y foco en la tarjeta.
   useEffect(() => {

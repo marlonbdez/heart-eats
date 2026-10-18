@@ -1,0 +1,147 @@
+.button,
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  max-width: 45%;
+  margin: 0;
+  padding: 0 10px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--hover);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.button {
+  cursor: pointer;
+}
+.label {
+  border-color: transparent;
+  background: none;
+}
+.icon {
+  flex: none;
+  fill: var(--accent-text);
+}
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chevron {
+  flex: none;
+  font-size: 0.7rem;
+}
+
+.dialog {
+  width: min(92vw, 420px);
+  max-width: none;
+  max-height: min(80dvh, 640px);
+  margin: auto;
+  padding: 8px 12px 16px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+  overflow-y: auto;
+}
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--fg);
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.searchLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.search {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  font: inherit;
+  color: var(--fg);
+  background: var(--hover);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.none {
+  margin: 16px 4px;
+  color: var(--muted);
+}
+.groups {
+  margin-top: 8px;
+}
+.country {
+  margin: 12px 4px 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cities {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.city {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 8px;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.city:hover {
+  background: var(--hover);
+}
+.city[aria-current='true'] {
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--hover);
+}
+.count {
+  flex: none;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}
