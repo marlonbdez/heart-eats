@@ -38,6 +38,7 @@ test('escritorio: el conmutador va centrado arriba del mapa', async ({
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/es');
+  await expect(page.getByRole('navigation', { name: 'Vista' })).toBeVisible();
   const v = (await page
     .getByRole('navigation', { name: 'Vista' })
     .boundingBox())!;
@@ -54,6 +55,7 @@ test('con la ficha de un local abierta, el conmutador sigue arriba y visible', a
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/es');
   const view = page.getByRole('navigation', { name: 'Vista' });
+  await expect(view).toBeVisible();
   const before = (await view.boundingBox())!;
   await page.locator('[data-marker]').first().click();
   const card = page.getByRole('complementary');
@@ -73,6 +75,8 @@ for (const width of [320, 390]) {
     await page.goto('/es/list');
     const view = page.getByRole('navigation', { name: 'Vista' });
     const near = page.getByRole('button', { name: 'Cerca de mí' });
+    // Los locales llegan de la API: hasta entonces no hay pantalla.
+    await expect(view).toBeVisible();
     const v = (await view.boundingBox())!;
     const n = (await near.boundingBox())!;
     expect(v.x).toBeLessThanOrEqual(16);
