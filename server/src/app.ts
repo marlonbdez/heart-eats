@@ -57,7 +57,7 @@ export function createApp(
     cors({
       origin: config.CORS_ORIGINS,
       credentials: true, // la sesión de moderación va en una cookie (ADR 0007)
-      methods: ['GET', 'POST', 'DELETE'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
       // La cabecera propia la exigen las escrituras con sesión (ADR 0007).
       allowedHeaders: ['Content-Type', 'X-Requested-With'],
       maxAge: 600,
