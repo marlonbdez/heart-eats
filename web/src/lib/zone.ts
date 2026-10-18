@@ -68,3 +68,16 @@ export function viewBounds(bbox: Bbox): [[number, number], [number, number]] {
     [bbox.east + padLng, bbox.north + padLat],
   ];
 }
+
+// El rectángulo que ve el mapa, como lo pide la API: longitudes entre -180 y 180
+// (oeste mayor que este si cruza el antimeridiano) y latitudes entre -90 y 90.
+const wrapLng = (lng: number) => ((((lng + 180) % 360) + 360) % 360) - 180;
+const clampLat = (lat: number) => Math.min(90, Math.max(-90, lat));
+export function apiBbox(view: Bbox): Bbox {
+  const south = clampLat(view.south);
+  const north = clampLat(view.north);
+  if (view.east - view.west >= 360) {
+    return { west: -180, south, east: 180, north };
+  }
+  return { west: wrapLng(view.west), south, east: wrapLng(view.east), north };
+}

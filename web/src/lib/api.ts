@@ -27,9 +27,12 @@ async function request(
     params = {},
     body,
     session = false,
+    signal,
   }: {
     params?: Params;
     body?: unknown;
+    // Para cancelar una lectura que ya no hace falta.
+    signal?: AbortSignal;
     // Con sesión de moderación: lleva la cookie y, al escribir, la cabecera
     // que exige el servidor (ADR 0007).
     session?: boolean;
@@ -48,6 +51,7 @@ async function request(
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
     credentials: session ? 'include' : 'omit',
+    signal,
   });
   if (!res.ok) {
     const error = (await res.json().catch(() => null)) as {
@@ -63,8 +67,12 @@ async function request(
 }
 
 // Lectura pública (sin sesión ni cookies).
-export async function apiGet<T>(path: string, params: Params = {}) {
-  return (await (await request('GET', path, { params })).json()) as T;
+export async function apiGet<T>(
+  path: string,
+  params: Params = {},
+  signal?: AbortSignal,
+) {
+  return (await (await request('GET', path, { params, signal })).json()) as T;
 }
 
 // Envío de la comunidad (sin cuenta ni cookies): JSON y, si va bien, 202.

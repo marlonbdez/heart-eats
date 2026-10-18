@@ -122,6 +122,21 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('aviso de que hay más locales al alejar el mapa', async ({ page }) => {
+      await page.route(
+        'http://localhost:3001/api/v1/restaurants?*bbox=*',
+        (route) =>
+          route.fulfill({
+            headers: { 'access-control-allow-origin': '*' },
+            json: { items: [], nextCursor: 'mas' },
+          }),
+      );
+      await page.goto('/es');
+      await page.locator('.maplibregl-ctrl-zoom-out').click();
+      await expect(page.getByText(/Hay más locales aquí/)).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('ficha emergente de un local en el mapa', async ({ page }) => {
       await page.goto('/es');
       await page.locator('[data-marker]').first().click();

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
 import { mapStyles, worldView } from '@/lib/map-config';
-import type { Restaurant } from '@/lib/types';
+import type { Bbox, Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
 import { RestaurantCard } from './RestaurantCard';
 import { MARKER_SVG } from '@/lib/marker';
@@ -19,6 +19,15 @@ const CARD_CLEARANCE = 290;
 
 type Bounds = [[number, number], [number, number]];
 
+// Lo que se ve tras mover el mapa: el rectángulo y su centro.
+export interface MapMove {
+  bbox: Bbox;
+  center: { lat: number; lng: number };
+}
+
+// Pausa tras dejar de mover el mapa antes de pedir los locales de esa zona.
+const MOVE_DEBOUNCE_MS = 350;
+
 // Encuadre de una zona: deja libres los bordes donde van el conmutador (arriba;
 // el marcador sube 44 px desde su punto) y, abajo, «Cerca de mí» y la tarjeta.
 const ZONE_FIT = {
@@ -27,20 +36,26 @@ const ZONE_FIT = {
 } as const;
 
 // `bounds`: el rectángulo de la zona que se mira; el mapa se encuadra en él al
-// abrirse y cada vez que cambia. `focus`: hay búsqueda o filtros activos, así
-// que se encuadra sobre los resultados; sin ellos, vuelve a la zona.
+// abrirse y cada vez que cambia `bounds` o `recenter`. `focus`: hay búsqueda o
+// filtros activos, así que se encuadra sobre los resultados; sin ellos, vuelve
+// a la zona. `onUserMove`: la persona ha movido el mapa (no cuando lo encuadra
+// la web) y ha dejado de moverlo.
 export function MapView({
   restaurants,
   bounds = null,
+  recenter = 0,
   focus = false,
   followUser = false,
+  onUserMove,
 }: {
   restaurants: Restaurant[];
   bounds?: Bounds | null;
+  recenter?: number;
   focus?: boolean;
   // La zona es la de la persona (compartió su ubicación): el mapa se centra en
   // ella en vez de encuadrar toda la zona.
   followUser?: boolean;
+  onUserMove?: (move: MapMove) => void;
 }) {
   const t = useTranslations();
   const { position } = useLocation();
@@ -57,6 +72,10 @@ export function MapView({
   const boundsRef = useRef(bounds);
   useEffect(() => {
     boundsRef.current = bounds;
+  });
+  const onUserMoveRef = useRef(onUserMove);
+  useEffect(() => {
+    onUserMoveRef.current = onUserMove;
   });
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -124,6 +143,35 @@ export function MapView({
     };
   }, []);
 
+  // Avisar de lo que se ve cuando la persona mueve el mapa o cambia el zoom.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const onMoveEnd = (e: { originalEvent?: unknown }) => {
+      if (!e.originalEvent) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const b = map.getBounds();
+        const c = map.getCenter();
+        onUserMoveRef.current?.({
+          bbox: {
+            west: b.getWest(),
+            south: b.getSouth(),
+            east: b.getEast(),
+            north: b.getNorth(),
+          },
+          center: { lat: c.lat, lng: c.lng },
+        });
+      }, MOVE_DEBOUNCE_MS);
+    };
+    map.on('moveend', onMoveEnd);
+    return () => {
+      clearTimeout(timer);
+      map.off('moveend', onMoveEnd);
+    };
+  }, [ready]);
+
   // Mantener los marcadores al día con los resultados.
   useEffect(() => {
     const map = mapRef.current;
@@ -159,7 +207,8 @@ export function MapView({
   }, [restaurants, t, ready]);
 
   // Encuadrar los resultados cuando hay búsqueda; volver a la zona si no.
-  const resultKey = restaurants.map((r) => r.slug).join(',');
+  // Sin búsqueda, los resultados cambian al mover el mapa y no deben reencuadrar.
+  const resultKey = focus ? restaurants.map((r) => r.slug).join(',') : '';
   const boundsKey = bounds ? bounds.flat().join(',') : '';
   useEffect(() => {
     const map = mapRef.current;
@@ -196,7 +245,7 @@ export function MapView({
     // `restaurants` entra por resultKey y la zona por boundsKey: solo reencuadra
     // si cambian los resultados o la zona.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultKey, boundsKey, focus, ready]);
+  }, [resultKey, boundsKey, recenter, focus, ready]);
 
   // Punto de "tu posición" y, al compartirla, centrar el mapa en ella.
   useEffect(() => {
@@ -223,7 +272,7 @@ export function MapView({
     });
     // Va después del encuadre de la zona y depende de él: al cambiar de zona se
     // vuelve a centrar en la persona.
-  }, [position, followUser, boundsKey, ready, t]);
+  }, [position, followUser, boundsKey, recenter, ready, t]);
 
   // Marcador seleccionado y foco en la tarjeta.
   useEffect(() => {

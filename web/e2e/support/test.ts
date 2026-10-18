@@ -285,14 +285,33 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         return route.fulfill({ headers, json: { countries: regionsOf() } });
       }
       if (path === '/restaurants') {
-        // Como la API: por país y ciudad, sin el equipo (docs/02_API_SPEC.md).
+        // Como la API: por país y ciudad o por rectángulo, sin el equipo
+        // (docs/02_API_SPEC.md).
         const country = searchParams.get('country');
         const city = searchParams.get('city');
+        const box = searchParams.get('bbox')?.split(',').map(Number);
+        const inside = (r: Restaurant) => {
+          if (!box) return true;
+          const [west, south, east, north] = box as [
+            number,
+            number,
+            number,
+            number,
+          ];
+          return (
+            r.location.lat >= south &&
+            r.location.lat <= north &&
+            (west <= east
+              ? r.location.lng >= west && r.location.lng <= east
+              : r.location.lng >= west || r.location.lng <= east)
+          );
+        };
         const items = restaurants
           .filter(
             (r) =>
               (!country || r.address.country === country) &&
-              (!city || normalize(r.address.city) === normalize(city)),
+              (!city || normalize(r.address.city) === normalize(city)) &&
+              inside(r),
           )
           .map(({ team, ...rest }) => {
             void team;

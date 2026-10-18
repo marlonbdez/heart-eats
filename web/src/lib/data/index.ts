@@ -1,6 +1,7 @@
 // Capa de datos de la web: todo lo que sale o llega de la API (/api/v1) pasa por
 // aquí, y no hay datos fijos.
 import type {
+  Bbox,
   BusinessTeamInput,
   CorrectionInput,
   FoodTag,
@@ -15,6 +16,8 @@ import { ApiRequestError, apiGet, apiPost } from '../api';
 const PAGE_SIZE = 100;
 // Tope de páginas por si la API no cerrara nunca el cursor.
 const MAX_PAGES = 100;
+// Páginas que se piden de lo que se ve en el mapa (cada marcador es un botón).
+const AREA_PAGES = 3;
 
 // Dónde hay locales publicados: alimenta el selector de zona.
 export async function getRegions(): Promise<RegionCountry[]> {
@@ -37,6 +40,31 @@ export async function getRestaurants(zone: Zone): Promise<Restaurant[]> {
     cursor = res.nextCursor;
   }
   return all;
+}
+
+// Los locales que caen dentro de un rectángulo del mapa. Se piden hasta
+// AREA_PAGES páginas; si aún quedan más, `truncated` avisa de que hay que acercar.
+export async function getRestaurantsIn(
+  bbox: Bbox,
+  signal?: AbortSignal,
+): Promise<{ items: Restaurant[]; truncated: boolean }> {
+  const items: Restaurant[] = [];
+  let cursor: string | undefined;
+  for (let page = 0; page < AREA_PAGES; page++) {
+    const res = await apiGet<{ items: Restaurant[]; nextCursor?: string }>(
+      '/restaurants',
+      {
+        bbox: [bbox.west, bbox.south, bbox.east, bbox.north].join(','),
+        limit: PAGE_SIZE,
+        cursor,
+      },
+      signal,
+    );
+    items.push(...res.items);
+    if (!res.nextCursor) return { items, truncated: false };
+    cursor = res.nextCursor;
+  }
+  return { items, truncated: true };
 }
 
 export async function getRestaurant(slug: string): Promise<Restaurant | null> {

@@ -44,6 +44,8 @@
     "loadError": "It looks like the map can’t be shown on this device.",
     "markerLabel": "{name}, show preview",
     "loadErrorLink": "Browse places in a list",
+    "zoomIn": "There are more places here. Zoom in to see them all.",
+    "areaEmpty": "No published places in this part of the map.",
     "you": "Your location"
   },
   "card": {
