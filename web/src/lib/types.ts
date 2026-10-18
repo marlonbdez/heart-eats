@@ -316,6 +316,8 @@ export interface Bbox {
 export interface RegionCity {
   key: string;
   name: string;
+  // El nombre en cada idioma de la web, si se conoce.
+  names?: Record<string, string>;
   count: number;
   bbox: Bbox;
   center: { lat: number; lng: number };

@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useId, useMemo, useRef, useState } from 'react';
 import { normalize } from '@/lib/search';
 import type { RegionCountry, Zone } from '@/lib/types';
-import { findCity } from '@/lib/zone';
+import { cityLabel, cityNames, findCity } from '@/lib/zone';
 import styles from './ZoneMenu.module.css';
 
 // Pin (Material Icons, Apache-2.0).
@@ -43,7 +43,8 @@ export function ZoneMenu({
 
   const current = findCity(regions, zone);
   if (!current) return null;
-  const currentLabel = `${current.name}, ${countryName(zone.country)}`;
+  const currentCity = cityLabel(current, locale);
+  const currentLabel = `${currentCity}, ${countryName(zone.country)}`;
   const single = regions.length === 1 && regions[0]!.cities.length === 1;
 
   const icon = (
@@ -63,7 +64,7 @@ export function ZoneMenu({
     return (
       <p className={styles.label} title={currentLabel}>
         {icon}
-        <span className={styles.name}>{current.name}</span>
+        <span className={styles.name}>{currentCity}</span>
       </p>
     );
   }
@@ -80,7 +81,7 @@ export function ZoneMenu({
         cities: country.cities.filter(
           (city) =>
             countryMatches ||
-            normalize(city.name).includes(q) ||
+            cityNames(city).some((n) => normalize(n).includes(q)) ||
             city.key.includes(q),
         ),
       };
@@ -103,7 +104,7 @@ export function ZoneMenu({
         onClick={open}
       >
         {icon}
-        <span className={styles.name}>{current.name}</span>
+        <span className={styles.name}>{currentCity}</span>
         <span aria-hidden="true" className={styles.chevron}>
           ▾
         </span>
@@ -167,7 +168,7 @@ export function ZoneMenu({
                             close();
                           }}
                         >
-                          <span>{city.name}</span>
+                          <span>{cityLabel(city, locale)}</span>
                           <span className={styles.count}>
                             {t('count', { count: city.count })}
                           </span>

@@ -13,6 +13,11 @@ const normalize = (text: string) =>
     .toLowerCase()
     .trim();
 
+// Cómo se llaman en cada idioma las ciudades que no se escriben igual en todos.
+const cityNames: Record<string, { es: string; en: string }> = {
+  東京: { es: 'Tokio', en: 'Tokyo' },
+};
+
 // GET /regions con los locales de e2e/fixtures: países y ciudades, por número
 // de locales.
 function regionsOf() {
@@ -44,6 +49,9 @@ function regionsOf() {
         .map(([key, places]) => ({
           key: key.slice(code.length + 1),
           name: places[0]!.address.city,
+          ...(cityNames[places[0]!.address.city] && {
+            names: cityNames[places[0]!.address.city],
+          }),
           count: places.length,
           bbox: box(places),
           center: {
