@@ -365,6 +365,36 @@ describe('GET /regions', () => {
     });
   });
 
+  it('lleva el nombre de la ciudad en cada idioma, si se conoce', async () => {
+    await Restaurant.create([
+      restaurantData({
+        slug: 'demo-tokio',
+        address: {
+          street: 'Calle 1',
+          city: '東京',
+          cityNames: { es: 'Tokio', en: 'Tokyo' },
+          country: 'JP',
+        },
+        location: { type: 'Point', coordinates: [139.69, 35.68] },
+      }),
+      restaurantData({ slug: 'demo-madrid' }),
+    ]);
+    const res = await get('/regions');
+    const cities = res.body.countries.flatMap(
+      (c: { cities: object[] }) => c.cities,
+    );
+    expect(cities).toContainEqual(
+      expect.objectContaining({
+        key: '東京',
+        name: '東京',
+        names: { es: 'Tokio', en: 'Tokyo' },
+      }),
+    );
+    expect(
+      cities.find((c: { key: string }) => c.key === 'madrid'),
+    ).not.toHaveProperty('names');
+  });
+
   it('no cuenta lo que no se ve: sin publicar o sin verificar', async () => {
     await Restaurant.create([
       restaurantData(madrid),

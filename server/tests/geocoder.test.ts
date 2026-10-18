@@ -31,6 +31,48 @@ describe('nominatimGeocoder', () => {
     expect(init.headers).toMatchObject({ 'User-Agent': 'HeartEats test' });
   });
 
+  it('pide el nombre de la ciudad en cada idioma, de uno en uno', async () => {
+    const fetchFn = vi.fn(
+      async (_url: string | URL | Request, init?: RequestInit) => {
+        const language = (init?.headers as Record<string, string>)[
+          'Accept-Language'
+        ];
+        if (language === 'es') return reply([{ address: { city: 'Tokio' } }]);
+        if (language === 'en') return reply([{ address: { town: 'Tokyo' } }]);
+        return reply([]);
+      },
+    );
+    const geocoder = nominatimGeocoder({ ...base, fetchFn, minIntervalMs: 0 });
+
+    expect(
+      await geocoder.cityNames({ city: '東京', country: 'JP' }, ['es', 'en']),
+    ).toEqual({ es: 'Tokio', en: 'Tokyo' });
+    const params = new URL(String(fetchFn.mock.calls[0]![0])).searchParams;
+    expect(params.get('city')).toBe('東京');
+    expect(params.get('countrycodes')).toBe('jp');
+    expect(params.get('q')).toBeNull();
+  });
+
+  it('los idiomas en que no la encuentra no salen; si no responde, lanza', async () => {
+    const geocoder = nominatimGeocoder({
+      ...base,
+      minIntervalMs: 0,
+      fetchFn: async () => reply([]),
+    });
+    expect(
+      await geocoder.cityNames({ city: 'Nada', country: 'ES' }, ['es']),
+    ).toEqual({});
+
+    const down = nominatimGeocoder({
+      ...base,
+      minIntervalMs: 0,
+      fetchFn: async () => reply({}, 503),
+    });
+    await expect(
+      down.cityNames({ city: 'Madrid', country: 'ES' }, ['es']),
+    ).rejects.toThrow('Nominatim respondió 503');
+  });
+
   it.each([
     ['sin resultados', []],
     ['coordenadas que no son números', [{ lat: 'x', lon: 'y' }]],

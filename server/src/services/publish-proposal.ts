@@ -36,6 +36,8 @@ interface PublishInput {
   approval: NewPlaceApproval;
   pin: { lat: number; lng: number };
   country: string;
+  // El nombre de la ciudad en cada idioma, si se pudo obtener.
+  cityNames?: Record<string, string>;
   now: Date;
 }
 
@@ -54,6 +56,7 @@ export async function publishProposal({
   approval,
   pin,
   country,
+  cityNames,
   now,
 }: PublishInput): Promise<RestaurantRecord> {
   const proposal = storedProposal.parse(payload);
@@ -76,6 +79,7 @@ export async function publishProposal({
           street: proposal.street,
           postalCode: proposal.postalCode,
           city: proposal.city,
+          ...(cityNames && { cityNames }),
           country,
         },
         location: { type: 'Point', coordinates: [pin.lng, pin.lat] },

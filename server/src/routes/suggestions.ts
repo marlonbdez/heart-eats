@@ -34,6 +34,7 @@ import {
   scopeFilter,
   statusesOf,
 } from '../services/suggestion-query.js';
+import { cityNamesFor } from '../services/city-names.js';
 import { ensureGeocode } from '../services/suggestion-geocode.js';
 import { parseOrThrow } from '../validation.js';
 import {
@@ -211,6 +212,11 @@ export function suggestionsRouter({
         approval,
         pin: { lat, lng },
         country,
+        cityNames: await cityNamesFor(
+          geocoder,
+          String(record.payload.city),
+          country,
+        ),
         now,
       });
     } catch (err) {

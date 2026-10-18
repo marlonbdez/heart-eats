@@ -18,10 +18,14 @@ const NEW_PIN = { lat: 40.42, lng: -3.71, country: 'ES' };
 
 let found: typeof NEW_PIN | null;
 let geocoded: unknown[];
+let names: Record<string, string> = {};
 const geocoder: Geocoder = {
   async geocode(query) {
     geocoded.push(query);
     return found;
+  },
+  async cityNames() {
+    return names;
   },
 };
 const config = {
@@ -75,6 +79,7 @@ beforeAll(startTestDb);
 afterAll(stopTestDb);
 beforeEach(async () => {
   found = NEW_PIN;
+  names = {};
   geocoded = [];
   await clearTestDb();
   placeId = (await Restaurant.create(restaurantData()))._id;
@@ -119,6 +124,30 @@ describe('aprobar una corrección', () => {
       country: 'ES',
     });
     expect(doc?.location.coordinates).toEqual([NEW_PIN.lng, NEW_PIN.lat]);
+  });
+
+  it('si cambia la ciudad, guarda su nombre en cada idioma; si no, no lo toca', async () => {
+    const cookie = await signedInCookie();
+    names = { es: 'Sevilla', en: 'Seville' };
+    const moved = await correction();
+    await decide(
+      moved._id,
+      approve({ address: { street: 'Calle Nueva 3', city: 'Sevilla' } }),
+      cookie,
+    );
+    expect((await place())?.address?.cityNames).toEqual(names);
+
+    names = { es: 'Otra', en: 'Other' };
+    const same = await correction();
+    await decide(
+      same._id,
+      approve({ address: { street: 'Calle Nueva 4' } }),
+      cookie,
+    );
+    expect((await place())?.address?.cityNames).toEqual({
+      es: 'Sevilla',
+      en: 'Seville',
+    });
   });
 
   it('un pin a mano manda sobre la geocodificación', async () => {
