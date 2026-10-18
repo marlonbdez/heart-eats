@@ -22,7 +22,7 @@ test.describe('zona que se mira', () => {
     await expect(
       dialog.getByRole('button', { name: /Barcelona/ }),
     ).toBeVisible();
-    await expect(dialog.getByRole('button', { name: /東京/ })).toBeVisible();
+    await expect(dialog.getByRole('button', { name: /Tokio/ })).toBeVisible();
   });
 
   test('los países salen en el idioma de la interfaz', async ({ page }) => {
@@ -65,18 +65,43 @@ test.describe('zona que se mira', () => {
     });
 
     await search.fill('japon');
-    await expect(dialog.getByRole('button', { name: /東京/ })).toBeVisible();
+    await expect(dialog.getByRole('button', { name: /Tokio/ })).toBeVisible();
     await expect(dialog.getByRole('button', { name: /Madrid/ })).toBeHidden();
 
     await search.fill('barcel');
     await expect(
       dialog.getByRole('button', { name: /Barcelona/ }),
     ).toBeVisible();
-    await expect(dialog.getByRole('button', { name: /東京/ })).toBeHidden();
+    await expect(dialog.getByRole('button', { name: /Tokio/ })).toBeHidden();
 
     await search.fill('zzzz');
     await expect(
       dialog.getByText(/No hay locales en ninguna zona/),
+    ).toBeVisible();
+  });
+
+  test('las ciudades salen en el idioma de la interfaz y se buscan por cualquiera de sus nombres', async ({
+    page,
+  }) => {
+    await page.goto('/en');
+    await page.getByRole('button', { name: /Area: Madrid/ }).click();
+    const dialog = page.getByRole('dialog');
+    const search = dialog.getByRole('searchbox');
+    await expect(dialog.getByRole('button', { name: /Tokyo/ })).toBeVisible();
+    await expect(
+      dialog.getByRole('button', { name: /Tokio|東京/ }),
+    ).toHaveCount(0);
+
+    // Por el nombre de otro idioma o por el local, también.
+    for (const text of ['tokio', '東京', 'tokyo']) {
+      await search.fill(text);
+      await expect(dialog.getByRole('button', { name: /Tokyo/ })).toBeVisible();
+      await expect(dialog.getByRole('button', { name: /Madrid/ })).toBeHidden();
+    }
+
+    await dialog.getByRole('button', { name: /Tokyo/ }).click();
+    await expect(
+      page.getByRole('button', { name: /Area: Tokyo, Japan/ }),
     ).toBeVisible();
   });
 
@@ -86,7 +111,7 @@ test.describe('zona que se mira', () => {
     await page.goto('/es?country=JP&city=' + encodeURIComponent('東京'));
     await expect(markers(page)).toHaveCount(1);
     await expect(
-      page.getByRole('button', { name: /Zona: 東京, Japón/ }),
+      page.getByRole('button', { name: /Zona: Tokio, Japón/ }),
     ).toBeVisible();
 
     await page.goto('/es?country=FR&city=paris');

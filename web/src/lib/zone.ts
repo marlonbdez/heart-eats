@@ -16,6 +16,16 @@ export function findCity(
     ?.cities.find((c) => c.key === zone.city);
 }
 
+// La ciudad en el idioma de la interfaz; si no se conoce, como se escribe allí.
+export function cityLabel(city: RegionCity, locale: string): string {
+  return city.names?.[locale] ?? city.name;
+}
+
+// Todos los nombres con los que se puede buscar una ciudad.
+export function cityNames(city: RegionCity): string[] {
+  return [city.name, ...Object.values(city.names ?? {})];
+}
+
 // La ciudad con más locales (la API ya las ordena así).
 export function defaultZone(regions: RegionCountry[]): Zone | null {
   const country = regions[0];
