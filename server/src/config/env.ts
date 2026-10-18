@@ -3,6 +3,14 @@ import { normalize } from '../text.js';
 
 const DEV_MONGODB_URI = 'mongodb://127.0.0.1:27017/hearteats';
 
+// Las claves del almacén de fotos van juntas: o están todas o no hay fotos.
+const R2_KEYS = [
+  'R2_ACCOUNT_ID',
+  'R2_ACCESS_KEY_ID',
+  'R2_SECRET_ACCESS_KEY',
+  'R2_PHOTOS_BUCKET',
+] as const;
+
 // Una variable vacía (`NOMBRE=` en el .env) cuenta como no puesta.
 const optional = <T extends z.ZodType>(type: T) =>
   z.preprocess((value) => (value === '' ? undefined : value), type.optional());
@@ -39,6 +47,17 @@ const schema = z
     // personas (docs/02_API_SPEC.md). 0 lo desactiva.
     SUBMISSIONS_PER_HOUR: z.coerce.number().int().min(0).default(100),
     SUBMISSIONS_PER_DAY: z.coerce.number().int().min(0).default(1000),
+    // Subida de fotos por IP y hora o día: un tope contra inundaciones, aparte
+    // del de envíos (docs/02_API_SPEC.md). 0 lo desactiva.
+    UPLOADS_PER_HOUR: z.coerce.number().int().min(0).default(60),
+    UPLOADS_PER_DAY: z.coerce.number().int().min(0).default(300),
+    // Almacén de las fotos: un bucket privado de Cloudflare R2 (ADR 0005).
+    // `R2_JURISDICTION=eu` si el bucket se creó con la jurisdicción de la UE.
+    R2_ACCOUNT_ID: optional(z.string().min(1)),
+    R2_ACCESS_KEY_ID: optional(z.string().min(1)),
+    R2_SECRET_ACCESS_KEY: optional(z.string().min(1)),
+    R2_PHOTOS_BUCKET: optional(z.string().min(1)),
+    R2_JURISDICTION: optional(z.enum(['eu'])),
     // Nombres de grandes cadenas, separados por comas. Una propuesta que los
     // contiene recibe el aviso «chain». Es configuración, no vive en el repo.
     KNOWN_CHAINS: z
@@ -94,6 +113,16 @@ const schema = z
     path: ['REPLY_TOKEN_SECRET'],
     message: 'es obligatoria en producción',
   })
+  .refine(
+    (env) => {
+      const set = R2_KEYS.filter((key) => env[key]).length;
+      return set === 0 || set === R2_KEYS.length;
+    },
+    {
+      path: ['R2_PHOTOS_BUCKET'],
+      message: `el almacén de fotos necesita las cuatro: ${R2_KEYS.join(', ')}`,
+    },
+  )
   .transform((env) => ({
     ...env,
     MONGODB_URI: env.MONGODB_URI ?? DEV_MONGODB_URI,

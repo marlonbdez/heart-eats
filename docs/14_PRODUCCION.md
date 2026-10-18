@@ -14,7 +14,7 @@
 | **Correo saliente** | Enlaces de acceso, «Info pedida», aviso de aprobación | Resend, dominio `mail.hearteats.org`, región **Irlanda (UE)** | Gratuito (100/día, 3.000/mes) | Los correos enviados (registro de Resend) |
 | **Correo entrante** | `contact@hearteats.org` | ImprovMX | Gratuito | Reenvía a un correo personal del responsable |
 | **Copias** | `mongodump` semanal cifrado | GitHub Actions → Cloudflare R2 | Gratuito | Copia cifrada de toda la base de datos |
-| **Almacén de objetos** | Hoy solo las copias. Más adelante, las fotos | Cloudflare R2, bucket `hearteats-backups` (pista de ubicación «Western Europe», jurisdicción por defecto) | Gratuito | Copias cifradas (fotos: aún no) |
+| **Almacén de objetos** | Las copias y, con las claves `R2_*`, las fotos (bucket privado `hearteats-photos`, §3.3) | Cloudflare R2, bucket `hearteats-backups` (pista de ubicación «Western Europe», jurisdicción por defecto) | Gratuito | Copias cifradas; fotos en cuarentena y publicadas |
 | **Mapa** | Teselas y estilos | OpenFreeMap (público) | Gratuito, sin clave | Nada nuestro |
 | **Direcciones** | Coordenadas de un local nuevo | Nominatim público | Gratuito, 1 consulta/s | Nada nuestro (se consulta desde el servidor) |
 | **Código y CI** | Repositorio, pruebas, copias programadas | GitHub, `marlonbdez/heart-eats` | Gratuito | Código y secretos de las acciones |
@@ -97,6 +97,9 @@ El servidor valida todo al arrancar (`server/src/config/env.ts`). Si falta algo 
 | `TRUST_PROXY` | Sí | `1` | No | Hay un proxy de Railway delante. Sin él, el límite de envíos vería una única IP para todos |
 | `SUBMISSIONS_PER_HOUR` | No | (sin poner: 100) | No | Tope de envíos por IP y hora. `0` lo desactiva |
 | `SUBMISSIONS_PER_DAY` | No | (sin poner: 1000) | No | Tope de envíos por IP y día |
+| `UPLOADS_PER_HOUR` / `UPLOADS_PER_DAY` | No | (sin poner: 60 / 300) | No | Tope de fotos subidas por IP y hora o día |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PHOTOS_BUCKET` | No (**las cuatro o ninguna**) | Ver §3.3 | `R2_ACCESS_KEY_ID` y `R2_SECRET_ACCESS_KEY`, sí | Almacén de las fotos. Sin ellas el servidor arranca pero `POST /uploads` responde `503` y la web no pide fotos |
+| `R2_JURISDICTION` | No | `eu` si el bucket se creó con jurisdicción UE | No | Cambia la dirección de R2 (`….eu.r2.cloudflarestorage.com`). Con el valor mal, `POST /uploads` da error |
 | `KNOWN_CHAINS` | No | Vacío | No | Nombres de grandes cadenas, separados por comas, para el aviso `chain`. Es configuración: no va al repo |
 | `MAIL_FROM` | No | (sin poner: `HeartEats <acceso@mail.hearteats.org>`) | No | Remitente. Tiene que ser de un dominio verificado en Resend |
 | `MAIL_REPLY_TO` | No | (sin poner: `contact@hearteats.org`) | No | Dónde llegan las respuestas |
@@ -114,7 +117,16 @@ Railway añade además variables propias (las de `RAILWAY_…`); no las usa el c
 
 No hay secretos en la web: todo lo que lleva `NEXT_PUBLIC_` acaba en el navegador.
 
-### 3.3 Local y pruebas
+### 3.3 Almacén de fotos (R2)
+
+Un bucket **privado**, distinto del de las copias (`hearteats-backups`): nada se sirve directo desde R2, la API lo hace (ADR 0005).
+
+1. *Cloudflare → R2 → Create bucket*: `hearteats-photos`. Para datos personales, **jurisdicción UE** (solo se elige al crear) y sin acceso público.
+2. *R2 → Manage API tokens → Create*: permiso *Object Read & Write* **solo sobre `hearteats-photos`**. La clave de acceso y el secreto se muestran una vez.
+3. En Railway: `R2_ACCOUNT_ID` (la parte inicial de la dirección S3), `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PHOTOS_BUCKET=hearteats-photos` y, si es de la UE, `R2_JURISDICTION=eu`.
+4. Tras el despliegue, `POST /api/v1/uploads` deja de dar `503`.
+
+### 3.4 Local y pruebas
 
 `server/.env.example` es la plantilla; `.env` nunca se sube. En local, sin clave de Resend, el enlace de acceso se escribe en la consola del servidor. Las pruebas del servidor usan MongoDB en memoria; las e2e de la web, una API simulada (`web/e2e/support/test.ts`). `PW_CHROMIUM_PATH` y `CI` solo afectan a las pruebas.
 
