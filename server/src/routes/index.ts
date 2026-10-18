@@ -9,6 +9,7 @@ import { healthRouter } from './health.js';
 import { photosRouter } from './photos.js';
 import { proposalsRouter } from './proposals.js';
 import { regionsRouter } from './regions.js';
+import { restaurantPhotosRouter } from './restaurant-photos.js';
 import { repliesRouter } from './replies.js';
 import { reportsRouter } from './reports.js';
 import { restaurantsRouter } from './restaurants.js';
@@ -75,6 +76,9 @@ export function createApiRouter({
       photoStore,
       apiUrl,
     }),
+  );
+  api.use(
+    restaurantPhotosRouter({ allowedOrigins, store: photoStore, apiUrl }),
   );
   api.use(auditRouter({ allowedOrigins }));
   api.use(usersRouter({ allowedOrigins }));

@@ -56,7 +56,7 @@ Una PR por paso:
   - [x] `POST /teams` (F3): nivel, cifras, áreas, tipos e historias (con el permiso de quien la cuenta); la cola muestra el equipo sin nombres ni textos
   - [x] Subida de fotos en cuarentena: `POST /uploads` (el servidor comprueba que es WebP o JPEG, máx. 1 MB; bucket privado de R2) y limpieza a las 24 h; sin las claves `R2_*` responde 503
   - [x] Fotos en los envíos y publicadas: miniatura emparejada (`?thumbOf=`), `photoKeys` y `photoKey` por plato en `POST /proposals`, paso de `q/` a `p/` al aprobar (con `skipPhotos`), borrado al rechazar o cerrarse, `GET /photos/:file` y `photos` en la ficha pública
-  - [ ] Moderación sube y retira fotos de un local ya publicado (publicación directa, con auditoría) y texto alternativo
+  - [x] Moderación sube, ordena y retira fotos de un local ya publicado (publicación directa, con auditoría) y texto alternativo
   - [ ] Web: 1600 px + miniatura de 400 px, activar `photoUploads`, portada y galería
 - [ ] Moderación. Por partes:
   - [x] Entrada: enlace mágico, sesión, `/auth/*`, primer administrador y registro de auditoría de los accesos

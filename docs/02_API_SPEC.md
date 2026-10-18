@@ -70,6 +70,18 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 - `GET /suggestions/:id/photos/:file` (con sesión y dentro del ámbito) enseña a Moderación las fotos de una solicitud sin resolver; la solicitud las lista en `photos` (`key`, `url`, `thumbUrl` y, si es de un plato, `dish`).
 - Tope por IP, aparte del de envíos (`UPLOADS_PER_HOUR` 60 y `UPLOADS_PER_DAY` 300; `0` lo desactiva). Solo cuenta las fotos válidas. `429` con `Retry-After`.
 
+### Fotos de un local publicado (Moderación)
+
+Con sesión, dentro del ámbito de quien modera (fuera de él, `404`, como si no existiera). Lo que sube Moderación se publica directo, sin segunda revisión.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/restaurants/:slug/photos` | `{ photoKey, alt?, cover? }`: la clave y su miniatura ya subidas con `/uploads`. `alt` es `{ es?, en? }` (≤160 cada uno, al menos uno). `cover: true` la pone de portada. `201` con `{ url, thumbUrl, alt? }`. Máximo 12 fotos por ficha (`422 too_many_photos`); `503` sin almacén; `502` si falla al copiar |
+| PUT | `/restaurants/:slug/photos/:file` | `{ alt?, cover? }`: cambia el texto alternativo (`alt: null` lo borra) o la pasa a portada. `204` |
+| DELETE | `/restaurants/:slug/photos/:file` | Retira una foto de la galería o la de un plato (`file` = `<id>.webp`). Se borran del almacén foto y miniatura **antes** de tocar la ficha: si el almacén falla, nada cambia y se puede reintentar. `204` |
+
+La auditoría anota `add_photo`, `update_photo` y `remove_photo` con quién lo hizo y cuántas, nunca el nombre del archivo ni el texto alternativo. Retirar una foto por petición de una persona (`removal` con `what: photo`) sigue pendiente y usará este mismo borrado.
+
 ### Responder a «Info pedida»
 
 | Método | Ruta | Descripción |
