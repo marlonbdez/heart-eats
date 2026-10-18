@@ -80,6 +80,17 @@ Una PR por paso:
   - [ ] Aviso de recompilación o de caché al publicar un local; vistas previas de Netlify con acceso a la API (CORS)
 - [ ] Despliegue (Railway, Atlas, R2, Resend, DNS) y copia de seguridad semanal. Hechos: Atlas, Railway (plan Hobby), `api.hearteats.org`, Resend, R2 y la copia semanal cifrada (`backup.yml`, `13_COPIAS.md`; primera copia comprobada el 2026-10-17). Falta: confirmar la región de Railway (UE), una restauración de prueba con `mongorestore` y anotar los servicios en `/privacy`
 
+## Fase 3b · Web internacional (decidido el 2026-10-18)
+
+La web debe servir a cualquier lugar del mundo, en el idioma de cada persona, sin cargar el mundo entero. Hoy está fijada a `country=ES` (`web/src/lib/data/index.ts`) y el mapa arranca en Madrid. Orden acordado, en PRs pequeñas:
+
+- [ ] **1. `GET /regions`** (servidor): países y ciudades con locales publicados, con número y rectángulo. Alimenta el selector de zona.
+- [ ] **2. Idioma visible**: selector de idioma siempre a la vista en la cabecera (no escondido en el menú), con los idiomas escritos en su propio idioma. Por defecto, el del navegador si es ES; **inglés para el resto**. Lo que la persona elija se recuerda en el navegador (`localStorage`; actualizar `/cookies` en la misma PR) y manda sobre el del navegador. Se revisa ADR 0003 (hoy el idioma por defecto es el español).
+- [ ] **3. Selector «¿Dónde?»**: buscador de ciudades y países con locales (de `/regions`), independiente del idioma; la zona va en la dirección (`?city=…`). «Cerca de mí» lleva a tu zona o, si no hay locales cerca, ofrece la región activa más próxima. Con una sola región activa se queda en una etiqueta.
+- [ ] **4. Mapa por zona visible**: el mapa pide los locales de lo que se ve (`bbox`) al moverse y la lista se pagina; con el mapa muy alejado pide acercar (`truncated`). Sustituye a «todos los locales de un país».
+- [ ] **5. Nombres de ciudad por idioma**: hoy la ciudad se guarda en el idioma local («東京»); hace falta buscar y mostrar «Tokio»/«Tokyo» según el idioma.
+- [ ] Más idiomas además de ES/EN: la estructura lo permite (un `messages/xx.json` y revisión nativa por idioma), pero no se abre ninguno hasta que haya quien lo revise.
+
 ## Fase 4 · Antes de abrir al público
 
 - [ ] **Revisión legal** de privacidad y consentimientos (los plazos de conservación son provisionales)

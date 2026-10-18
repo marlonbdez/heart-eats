@@ -318,3 +318,64 @@ describe('GET /meta/filters', () => {
     expect(res.body.inclusionTypes).toContain('autism_spectrum');
   });
 });
+
+describe('GET /regions', () => {
+  it('sin locales, lista vacía', async () => {
+    const res = await get('/regions');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ countries: [] });
+    expect(res.headers['cache-control']).toBe('public, max-age=60');
+  });
+
+  it('agrupa por país y ciudad, con número y rectángulo', async () => {
+    await seed3();
+    await Restaurant.create(
+      restaurantData({
+        slug: 'demo-madrid-2',
+        name: '[DEMO] Otro',
+        location: { type: 'Point', coordinates: [-3.6, 40.5] },
+      }),
+    );
+    const res = await get('/regions');
+    expect(res.body.countries.map((c: { code: string }) => c.code)).toEqual([
+      'ES',
+      'PT',
+    ]);
+    const [es, pt] = res.body.countries;
+    expect(es.count).toBe(3);
+    expect(es.cities.map((c: { key: string }) => c.key)).toEqual([
+      'madrid',
+      'barcelona',
+    ]);
+    expect(es.cities[0]).toMatchObject({
+      name: 'Madrid',
+      count: 2,
+      bbox: { west: -3.7012, south: 40.4085, east: -3.6, north: 40.5 },
+    });
+    expect(es.bbox).toEqual({
+      west: -3.7012,
+      south: 40.4085,
+      east: 2.1734,
+      north: 41.3851,
+    });
+    expect(pt.cities[0]).toMatchObject({
+      key: 'lisboa',
+      count: 1,
+      center: { lat: 38.7223, lng: -9.1393 },
+    });
+  });
+
+  it('no cuenta lo que no se ve: sin publicar o sin verificar', async () => {
+    await Restaurant.create([
+      restaurantData(madrid),
+      restaurantData({ slug: 'demo-borrador', status: 'pending' }),
+      restaurantData({
+        slug: 'demo-sin-verificar',
+        verification: { level: 'unverified' },
+      }),
+    ]);
+    const res = await get('/regions');
+    expect(res.body.countries).toHaveLength(1);
+    expect(res.body.countries[0].count).toBe(1);
+  });
+});

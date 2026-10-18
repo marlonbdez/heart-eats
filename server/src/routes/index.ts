@@ -6,6 +6,7 @@ import { auditRouter } from './audit.js';
 import { authRouter } from './auth.js';
 import { healthRouter } from './health.js';
 import { proposalsRouter } from './proposals.js';
+import { regionsRouter } from './regions.js';
 import { repliesRouter } from './replies.js';
 import { reportsRouter } from './reports.js';
 import { restaurantsRouter } from './restaurants.js';
@@ -39,6 +40,7 @@ export function createApiRouter({
   const api = Router();
   api.use(healthRouter);
   api.use(restaurantsRouter);
+  api.use(regionsRouter);
   api.use(proposalsRouter({ limiter: submissionLimiter, chains: knownChains }));
   api.use(reportsRouter({ limiter: submissionLimiter }));
   api.use(
