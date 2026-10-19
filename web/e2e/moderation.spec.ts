@@ -111,6 +111,36 @@ test.describe('con la sesión abierta', () => {
     ).toBeVisible();
   });
 
+  test('al abrir un local nuevo se pide el detalle, que trae el pin', async ({
+    page,
+  }) => {
+    await page.goto('/es/moderation');
+    // La cola no trae el pin: llega con el detalle.
+    const detail = page.waitForRequest((r) =>
+      r.url().endsWith('/api/v1/suggestions/s8'),
+    );
+    await page.getByRole('button', { name: /Casa Marta/ }).click();
+    await detail;
+    await expect(page.getByText('40.41530, -3.70740')).toBeVisible();
+    await expect(page.getByLabel('Latitud')).toHaveCount(0);
+  });
+
+  test('si el detalle falla, se puede poner el pin a mano', async ({
+    page,
+  }) => {
+    await page.route('**/api/v1/suggestions/s8', (route) =>
+      route.fulfill({
+        status: 500,
+        headers: { 'access-control-allow-origin': '*' },
+        json: { error: { code: 'internal_error', message: 'Error' } },
+      }),
+    );
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Casa Marta/ }).click();
+    await expect(page.getByText(/No se ha encontrado/)).toBeVisible();
+    await expect(page.getByLabel('Latitud')).toBeVisible();
+  });
+
   test('un local nuevo dice su país y de dónde viene el pin', async ({
     page,
   }) => {

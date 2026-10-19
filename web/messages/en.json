@@ -1054,6 +1054,7 @@
       "proposer": "placed by the person who suggested it",
       "address": "comes from the address"
     },
+    "pinLoading": "Looking for it…",
     "noPin": "Not found; it has to be set by hand",
     "pinHelp": "If there is no pin, type the place coordinates (for example, 40.4168 and -3.7038).",
     "lat": "Latitude",

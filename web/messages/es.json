@@ -1054,6 +1054,7 @@
       "proposer": "lo colocó quien propone",
       "address": "sale de la dirección"
     },
+    "pinLoading": "Buscándolo…",
     "noPin": "No se ha encontrado; hay que ponerlo a mano",
     "pinHelp": "Si no hay pin, escribe las coordenadas del local (por ejemplo, 40.4168 y -3.7038).",
     "lat": "Latitud",
