@@ -1,10 +1,11 @@
 import { expect, test } from './support/test';
+import { restaurants } from './fixtures/restaurants';
 
 const PLACE = '/es/place/demo-la-masa-madre';
 const NAME = '[DEMO] La Masa Madre';
 
-const viewer = (page: import('@playwright/test').Page) =>
-  page.getByRole('dialog', { name: `Fotos de ${NAME}` });
+const viewer = (page: import('@playwright/test').Page, name = NAME) =>
+  page.getByRole('dialog', { name: `Fotos de ${name}` });
 const openButton = (page: import('@playwright/test').Page) =>
   page.getByRole('button', { name: `Abrir las fotos de ${NAME}` }).first();
 
@@ -195,4 +196,66 @@ test('en 320 px la ficha con fotos y el visor caben, también con letra ancha', 
   await expect(
     viewer(page).getByRole('button', { name: 'Cerrar las fotos' }),
   ).toBeInViewport();
+});
+
+test('en el móvil las flechas están a media altura, a la vista, y se pueden tocar', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 700 });
+  await page.goto('/es/place/demo-la-masa-madre');
+  await page.getByRole('button', { name: 'Ver las 5 fotos' }).click();
+  const next = viewer(page).getByRole('button', { name: 'Foto siguiente' });
+  const previous = viewer(page).getByRole('button', {
+    name: 'Foto anterior',
+  });
+  await expect(next).toBeInViewport({ ratio: 1 });
+  // A media altura: lejos del borde de abajo, que la barra del navegador tapa.
+  const box = (await next.boundingBox())!;
+  expect(box.y + box.height / 2).toBeGreaterThan(250);
+  expect(box.y + box.height / 2).toBeLessThan(450);
+
+  await next.tap();
+  await expect(viewer(page).getByText('2 / 5')).toBeVisible();
+  await previous.tap();
+  await expect(viewer(page).getByText('1 / 5')).toBeVisible();
+});
+
+test('con dos fotos se pasa de una a otra con las flechas, también con fotos grandes', async ({
+  page,
+}) => {
+  const big = (color: string) =>
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1067" height="1600"><rect width="1067" height="1600" fill="${color}"/></svg>`;
+  await page.route('**/api/v1/photos/*', (route) =>
+    route.fulfill({
+      headers: { 'access-control-allow-origin': '*' },
+      contentType: 'image/svg+xml',
+      body: big('#2980b9'),
+    }),
+  );
+  await page.route('**/api/v1/restaurants/demo-cafe-paso-a-paso', (route) =>
+    route.fulfill({
+      headers: { 'access-control-allow-origin': '*' },
+      json: {
+        ...restaurants.find((r) => r.slug === 'demo-cafe-paso-a-paso'),
+        photos: [1, 2].map((n) => ({
+          url: `http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-00000000020${n}.webp`,
+          thumbUrl: `http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-00000000020${n}-thumb.webp`,
+        })),
+      },
+    }),
+  );
+  await page.goto('/es/place/demo-cafe-paso-a-paso');
+  await page.getByRole('button', { name: 'Ver las 2 fotos' }).click();
+  const dialog = viewer(page, '[DEMO] Café Paso a Paso');
+  await expect(dialog.getByText('1 / 2')).toBeVisible();
+  await expect(
+    dialog.getByRole('button', { name: 'Foto anterior' }),
+  ).toBeDisabled();
+  await dialog.getByRole('button', { name: 'Foto siguiente' }).tap();
+  await expect(dialog.getByText('2 / 2')).toBeVisible();
+  await expect(
+    dialog.getByRole('button', { name: 'Foto siguiente' }),
+  ).toBeDisabled();
+  await dialog.getByRole('button', { name: 'Foto anterior' }).tap();
+  await expect(dialog.getByText('1 / 2')).toBeVisible();
 });
