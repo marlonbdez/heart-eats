@@ -1,4 +1,5 @@
 import { expect, test, type Page } from './support/test';
+import { fillPlace } from './support/propose';
 
 test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
   page,
@@ -7,9 +8,11 @@ test('proponer un local: valida el nombre y recorre los 4 pasos', async ({
 
   // Sin nombre no se avanza.
   await page.getByRole('button', { name: 'Continuar' }).click();
-  await expect(page.locator('p[role=alert]')).toContainText('nombre del local');
+  await expect(page.locator('p[role=alert]').first()).toContainText(
+    'nombre del local',
+  );
 
-  await page.getByLabel('Nombre del local').fill('Local de prueba');
+  await fillPlace(page, 'Local de prueba');
   await page.getByRole('button', { name: /Pizza/ }).click();
   await page.getByRole('button', { name: 'Continuar' }).click();
 
@@ -46,7 +49,7 @@ const PIXEL = Buffer.from(
 
 async function toStepTwo(page: Page, name: string) {
   await page.goto('/es/propose');
-  await page.getByLabel('Nombre del local').fill(name);
+  await fillPlace(page, name);
   await page.getByRole('button', { name: 'Continuar' }).click();
   await page.getByLabel('Nombre del plato').fill('Tarta de la casa');
 }

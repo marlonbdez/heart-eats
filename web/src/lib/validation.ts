@@ -9,3 +9,8 @@ export const isHttpUrl = (v: string) => {
 };
 
 export const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+// Un texto que parece una calle o una ciudad: algo más que un par de signos,
+// con al menos una letra.
+export const isPlaceText = (v: string, min: number) =>
+  v.trim().length >= min && /\p{L}/u.test(v);
