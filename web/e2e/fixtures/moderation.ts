@@ -27,7 +27,9 @@ export const suggestions: ApiSuggestion[] = [
     foodTags: ['tapas'],
     dishes: ['Croquetas de la casa'],
     howKnown: 'Lo conozco del barrio.',
+    country: 'ES',
     location: { lat: 40.4085, lng: -3.7012 },
+    locationBy: 'address',
   },
   {
     ...base,
@@ -124,7 +126,9 @@ export const suggestions: ApiSuggestion[] = [
     address: 'Calle Mayor 5, 28013, Madrid',
     foodTags: ['tapas'],
     dishes: ['Tortilla'],
+    country: 'ES',
     location: { lat: 40.4153, lng: -3.7074 },
+    locationBy: 'proposer',
     // Fotos en cuarentena: lo que devuelve la API mientras espera.
     photos: [
       {

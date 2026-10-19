@@ -111,6 +111,24 @@ test.describe('con la sesión abierta', () => {
     ).toBeVisible();
   });
 
+  test('un local nuevo dice su país y de dónde viene el pin', async ({
+    page,
+  }) => {
+    await page.goto('/es/moderation');
+    await page.getByRole('button', { name: /Cocina del Pilar/ }).click();
+    await expect(page.getByText('sale de la dirección')).toBeVisible();
+    await expect(page.getByText('España', { exact: true })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Volver a la lista' }).click();
+    await page.getByRole('button', { name: /Casa Marta/ }).click();
+    await expect(page.getByText('lo colocó quien propone')).toBeVisible();
+
+    // Una propuesta anterior a pedir el país no lo enseña.
+    await page.getByRole('button', { name: 'Volver a la lista' }).click();
+    await page.getByRole('button', { name: /Burger Mega Express/ }).click();
+    await expect(page.getByText('País', { exact: true })).toHaveCount(0);
+  });
+
   test('un local con fotos las enseña y deja no publicar alguna', async ({
     page,
     sent,

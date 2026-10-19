@@ -1048,7 +1048,12 @@
     "adminOnly": "Esta solicitud la decide un administrador. Puedes verla, pero no decidirla.",
     "infoTitle": "Información pedida",
     "infoDeadline": "Plazo de respuesta: hasta el {date}",
+    "country": "País",
     "pin": "Pin en el mapa",
+    "pinBy": {
+      "proposer": "lo colocó quien propone",
+      "address": "sale de la dirección"
+    },
     "noPin": "No se ha encontrado; hay que ponerlo a mano",
     "pinHelp": "Si no hay pin, escribe las coordenadas del local (por ejemplo, 40.4168 y -3.7038).",
     "lat": "Latitud",

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { ApiRequestError } from '@/lib/api';
+import { countryName } from '@/lib/countries';
 import type {
   CorrectionChange,
   ModerationDecision,
@@ -483,6 +484,12 @@ export function ModerationDetail({
         <section aria-labelledby="mod-proposed" className={form.step}>
           <h3 id="mod-proposed">{t('proposed')}</h3>
           <dl className={styles.facts}>
+            {item.country && (
+              <div>
+                <dt>{t('country')}</dt>
+                <dd>{countryName(item.country, locale)}</dd>
+              </div>
+            )}
             <div>
               <dt>{t('food')}</dt>
               <dd>
@@ -503,6 +510,12 @@ export function ModerationDetail({
                 {item.location
                   ? `${item.location.lat.toFixed(5)}, ${item.location.lng.toFixed(5)}`
                   : t('noPin')}
+                {item.location && item.locationBy && (
+                  <span className={styles.meta}>
+                    {' · '}
+                    {t(`pinBy.${item.locationBy}`)}
+                  </span>
+                )}
               </dd>
             </div>
             <div>

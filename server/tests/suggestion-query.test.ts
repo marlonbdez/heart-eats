@@ -157,6 +157,21 @@ describe('toModerationItem', () => {
     expect(JSON.stringify(item)).not.toContain('ana@example.org');
   });
 
+  it('un local nuevo con país lo da aparte de la dirección', () => {
+    const item = toModerationItem({
+      ...base,
+      type: 'new',
+      payload: {
+        name: 'Casa Lola',
+        city: 'Holguín',
+        country: 'CU',
+        foodTags: [],
+        dishes: [],
+      },
+    } as unknown as SuggestionRecord);
+    expect(item).toMatchObject({ address: 'Holguín', country: 'CU' });
+  });
+
   it('una corrección de dirección enseña el dato anterior', () => {
     const item = toModerationItem(
       {
