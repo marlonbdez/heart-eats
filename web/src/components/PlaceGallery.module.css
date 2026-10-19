@@ -83,6 +83,14 @@
   display: flex;
   flex-direction: column;
 }
+/* En el móvil, la barra del navegador puede tapar el borde de abajo: el visor
+   mide lo que se ve de verdad. */
+@supports (height: 100dvh) {
+  .viewer {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
 .viewer::backdrop {
   background: #000;
 }
@@ -147,28 +155,25 @@
   max-height: 100%;
   object-fit: contain;
 }
-/* Flechas: son la alternativa a deslizar. Abajo en el móvil; a los lados en
-   pantallas anchas. */
+/* Flechas: son la alternativa a deslizar. Van a los lados, a media altura, en
+   todas las pantallas: abajo del todo el móvil las puede tapar con su barra. */
 .arrows {
-  flex: none;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  left: 8px;
   display: flex;
-  gap: 24px;
-  justify-content: center;
-  padding: 12px;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+.arrows button {
+  pointer-events: auto;
 }
 @media (min-width: 640px) {
   .arrows {
-    position: absolute;
-    top: 50%;
     right: 16px;
     left: 16px;
-    justify-content: space-between;
-    padding: 0;
-    pointer-events: none;
-    transform: translateY(-50%);
-  }
-  .arrows button {
-    pointer-events: auto;
   }
 }
 .srOnly {
