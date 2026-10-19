@@ -16,14 +16,17 @@ import type {
 } from '@/lib/types';
 import { AuditAdmin } from './AuditAdmin';
 import { ModerationDetail } from './ModerationDetail';
+import { PlacePhotosAdmin } from './PlacePhotosAdmin';
 import { Remote } from './Remote';
 import { StaffAdmin } from './StaffAdmin';
 import form from './Form.module.css';
 import styles from './Moderation.module.css';
 
 type Tab = 'pending' | 'resolved';
-type Section = 'queue' | 'staff' | 'audit';
-const sections: Section[] = ['queue', 'staff', 'audit'];
+type Section = 'queue' | 'photos' | 'staff' | 'audit';
+// Usuarios y registro son solo de administración.
+const sectionsFor = (isAdmin: boolean): Section[] =>
+  isAdmin ? ['queue', 'photos', 'staff', 'audit'] : ['queue', 'photos'];
 
 // Las tres listas de la cola: lo pendiente, lo que espera respuesta de quien
 // propuso y lo ya resuelto.
@@ -65,28 +68,33 @@ export function ModerationPanel({
           {t('signOut')}
         </button>
       </div>
-      {isAdmin && (
-        <div
-          className={styles.sections}
-          role="group"
-          aria-label={t('sections.label')}
-        >
-          {sections.map((s) => (
-            <button
-              key={s}
-              type="button"
-              className={styles.tab}
-              aria-pressed={section === s}
-              onClick={() => setSection(s)}
-            >
-              {t(`sections.${s}`)}
-            </button>
-          ))}
-        </div>
-      )}
-      {section === 'queue' || !isAdmin ? (
+      <div
+        className={styles.sections}
+        role="group"
+        aria-label={t('sections.label')}
+      >
+        {sectionsFor(isAdmin).map((s) => (
+          <button
+            key={s}
+            type="button"
+            className={styles.tab}
+            aria-pressed={section === s}
+            onClick={() => setSection(s)}
+          >
+            {t(`sections.${s}`)}
+          </button>
+        ))}
+      </div>
+      {section === 'queue' ? (
         <QueueSection role={session.role} />
-      ) : section === 'staff' ? (
+      ) : section === 'photos' ? (
+        <PlacePhotosAdmin
+          defaultCountry={
+            session.moderationScope.find((s) => /^[A-Z]{2}$/.test(s.country))
+              ?.country
+          }
+        />
+      ) : !isAdmin ? null : section === 'staff' ? (
         <StaffAdmin />
       ) : (
         <AuditAdmin />

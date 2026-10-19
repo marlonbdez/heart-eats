@@ -126,6 +126,10 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
 
     let uploads = 0; // para dar una clave distinta a cada foto subida
 
+    // Los locales de la prueba: sus fotos cambian con lo que haga Moderación.
+    const places: Restaurant[] = structuredClone(restaurants);
+    const photoRoute = /^\/restaurants\/([^/]+)\/photos(?:\/([^/]+))?$/;
+
     // Quién modera cambia con las altas y bajas de la propia prueba.
     const team: ApiStaff[] = structuredClone(staff);
     const denied = (route: Route) =>
@@ -151,6 +155,52 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
             'access-control-allow-headers': 'content-type, x-requested-with',
           },
         });
+      }
+
+      // Fotos de un local publicado (moderación).
+      const photoCall = photoRoute.exec(path);
+      if (photoCall && method !== 'GET') {
+        const [, slug, file] = photoCall;
+        const body = (request.postDataJSON() ?? {}) as Record<string, unknown>;
+        sent.push({ path, body });
+        if (!session.role) {
+          return route.fulfill({
+            status: 401,
+            headers,
+            json: { error: { code: 'unauthorized', message: 'Sin sesión' } },
+          });
+        }
+        const place = places.find((r) => r.slug === slug);
+        if (!place) return route.fulfill({ status: 404, headers, json: {} });
+        const photos = (place.photos ??= []);
+        const at = photos.findIndex((p) => p.url.endsWith(`/${file}`));
+        if (method === 'POST') {
+          if (photos.length >= 12) {
+            return route.fulfill({
+              status: 422,
+              headers,
+              json: { error: { code: 'too_many_photos', message: 'Muchas' } },
+            });
+          }
+          const id = String(body.photoKey).replace(/^q\/|\.webp$/g, '');
+          const photo = {
+            url: `${API}/photos/${id}.webp`,
+            thumbUrl: `${API}/photos/${id}-thumb.webp`,
+            ...(body.alt ? { alt: body.alt as Record<string, string> } : {}),
+          };
+          if (body.cover) photos.unshift(photo);
+          else photos.push(photo);
+          return route.fulfill({ status: 201, headers, json: photo });
+        }
+        if (at === -1) return route.fulfill({ status: 404, headers, json: {} });
+        if (method === 'DELETE') photos.splice(at, 1);
+        else {
+          if (body.alt === null) delete photos[at]!.alt;
+          else if (body.alt)
+            photos[at]!.alt = body.alt as Record<string, string>;
+          if (body.cover) photos.unshift(...photos.splice(at, 1));
+        }
+        return route.fulfill({ status: 204, headers });
       }
 
       if (method === 'DELETE') {
@@ -360,6 +410,7 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         // (docs/02_API_SPEC.md).
         const country = searchParams.get('country');
         const city = searchParams.get('city');
+        const q = normalize(searchParams.get('q') ?? '');
         const box = searchParams.get('bbox')?.split(',').map(Number);
         const inside = (r: Restaurant) => {
           if (!box) return true;
@@ -377,10 +428,11 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
               : r.location.lng >= west || r.location.lng <= east)
           );
         };
-        const items = restaurants
+        const items = places
           .filter(
             (r) =>
               (!country || r.address.country === country) &&
+              (!q || normalize(r.name).includes(q)) &&
               (!city || normalize(r.address.city) === normalize(city)) &&
               inside(r),
           )
@@ -394,7 +446,7 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         return route.fulfill({ headers, json: { foodTags } });
       }
       const slug = /^\/restaurants\/([^/]+)$/.exec(path)?.[1];
-      const found = restaurants.find((r) => r.slug === slug);
+      const found = places.find((r) => r.slug === slug);
       if (found) return route.fulfill({ headers, json: found });
       return route.fulfill({
         status: 404,

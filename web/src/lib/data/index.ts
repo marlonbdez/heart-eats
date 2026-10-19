@@ -5,14 +5,14 @@ import type {
   BusinessTeamInput,
   CorrectionInput,
   FoodTag,
-  PhotoBlobs,
   ProposalInput,
   RegionCountry,
   RemovalInput,
   Restaurant,
   Zone,
 } from '../types';
-import { ApiRequestError, apiGet, apiPost, apiUpload } from '../api';
+import { ApiRequestError, apiGet, apiPost } from '../api';
+import { uploadPhoto } from './uploads';
 
 const PAGE_SIZE = 100;
 // Tope de páginas por si la API no cerrara nunca el cursor.
@@ -80,16 +80,6 @@ export async function getRestaurant(slug: string): Promise<Restaurant | null> {
 export async function getFoodTags(): Promise<FoodTag[]> {
   const res = await apiGet<{ foodTags: FoodTag[] }>('/meta/filters');
   return res.foodTags;
-}
-
-// Sube una foto a la cuarentena y, después, su miniatura (que cuelga de la
-// foto). Devuelve la clave que se manda en el envío.
-async function uploadPhoto({ blob, thumb }: PhotoBlobs): Promise<string> {
-  const key = await apiUpload(blob);
-  const id = /^q\/([^.]+)\./.exec(key)?.[1];
-  if (!id) throw new Error('Clave de foto inesperada');
-  await apiUpload(thumb, { thumbOf: id });
-  return key;
 }
 
 // Propuesta de un local nuevo (POST /api/v1/proposals). Entra en moderación.
@@ -178,5 +168,6 @@ export async function submitRemoval(input: RemovalInput): Promise<void> {
 }
 
 export * from './moderation';
+export * from './photos';
 export * from './staff';
 export * from './replies';
