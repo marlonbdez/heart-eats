@@ -339,9 +339,16 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
             ? route.fulfill({ headers, json: found })
             : route.fulfill({ status: 404, headers, json: {} });
         }
+        // Como la API: la cola no geocodifica, así que no trae el pin; el
+        // detalle sí (pin, de dónde viene y avisos de duplicado).
         return route.fulfill({
           headers,
-          json: { items: suggestions.filter((s) => wanted.includes(s.status)) },
+          json: {
+            items: suggestions
+              .filter((s) => wanted.includes(s.status))
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              .map(({ location, locationBy, ...item }) => item),
+          },
         });
       }
 

@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { decideModeration, endSession, getModerationQueue } from '@/lib/data';
+import {
+  decideModeration,
+  endSession,
+  getModerationItem,
+  getModerationQueue,
+} from '@/lib/data';
 import { useLoad } from '@/lib/use-load';
 import type {
   ModerationDecision,
@@ -114,6 +119,11 @@ function Queue({
     Record<string, ModerationDecision>
   >({});
 
+  // El detalle de lo abierto: el servidor geocodifica y avisa de duplicados al
+  // abrir un local nuevo, y la cola no lo trae.
+  const [details, setDetails] = useState<Record<string, ModerationItem>>({});
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabRef = useRef<HTMLButtonElement>(null);
   const lastId = useRef<string | null>(null);
@@ -126,7 +136,9 @@ function Queue({
   const pending = items.filter((i) => !isResolved(i));
   const resolved = items.filter(isResolved);
   const shown = tab === 'pending' ? pending : resolved;
-  const selected = items.find((i) => i.id === selectedId) ?? null;
+  const selected =
+    (selectedId && details[selectedId]) ||
+    (items.find((i) => i.id === selectedId) ?? null);
 
   // Al volver a la lista, el foco vuelve a la solicitud que se estaba
   // viendo (o a las pestañas si ya no está en esta lista).
@@ -139,6 +151,16 @@ function Queue({
   function open(id: string) {
     lastId.current = id;
     setSelectedId(id);
+    const item = items.find((i) => i.id === id);
+    if (!item || details[id] || isResolved(item)) return;
+    // Si falla, se queda lo que trae la cola: el pin se puede poner a mano.
+    setLoadingId(id);
+    getModerationItem(id)
+      .then((detail) => setDetails((d) => ({ ...d, [id]: detail })))
+      .catch(() => undefined)
+      .finally(() =>
+        setLoadingId((current) => (current === id ? null : current)),
+      );
   }
 
   async function decide(item: ModerationItem, decision: ModerationDecision) {
@@ -239,6 +261,7 @@ function Queue({
               item={selected}
               role={role}
               decision={decisions[selected.id]}
+              loading={loadingId === selected.id}
               onBack={() => setSelectedId(null)}
               onDecide={(d) => decide(selected, d)}
             />

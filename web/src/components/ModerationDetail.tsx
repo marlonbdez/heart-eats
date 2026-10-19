@@ -43,6 +43,8 @@ interface Props {
   item: ModerationItem;
   role: ModerationSession['role'];
   decision?: ModerationDecision; // la que se acaba de tomar desde esta pantalla
+  // Se está pidiendo el detalle (pin y avisos), que el servidor calcula al abrirla.
+  loading?: boolean;
   onBack: () => void;
   onDecide: (decision: ModerationDecision) => Promise<void>;
 }
@@ -84,6 +86,7 @@ export function ModerationDetail({
   item,
   role,
   decision,
+  loading = false,
   onBack,
   onDecide,
 }: Props) {
@@ -509,7 +512,9 @@ export function ModerationDetail({
               <dd>
                 {item.location
                   ? `${item.location.lat.toFixed(5)}, ${item.location.lng.toFixed(5)}`
-                  : t('noPin')}
+                  : loading
+                    ? t('pinLoading')
+                    : t('noPin')}
                 {item.location && item.locationBy && (
                   <span className={styles.meta}>
                     {' · '}
@@ -747,7 +752,7 @@ export function ModerationDetail({
                   </label>
                 ))}
               </fieldset>
-              {!item.location && (
+              {!item.location && !loading && (
                 <div className={form.field}>
                   <p className={styles.meta}>{t('pinHelp')}</p>
                   <label className={form.label} htmlFor="mod-lat">
