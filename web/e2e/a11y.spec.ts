@@ -251,6 +251,13 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('ficha: visor de fotos abierto', async ({ page }) => {
+      await page.goto('/es/place/demo-la-masa-madre');
+      await page.getByRole('button', { name: 'Ver las 5 fotos' }).click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('moderación: sin sesión (entrada)', async ({ page }) => {
       await page.goto('/es/moderation');
       await expect(page.getByLabel('Tu correo')).toBeVisible();

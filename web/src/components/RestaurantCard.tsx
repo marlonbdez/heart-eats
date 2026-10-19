@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { coverThumb } from '@/lib/gallery';
 import type { Restaurant } from '@/lib/types';
 import { placeQuery, useDiscovery } from './DiscoveryContext';
 import { Distance } from './Distance';
@@ -11,6 +12,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const t = useTranslations('card');
   const discovery = useDiscovery();
   const dish = restaurant.signatureDishes[0];
+  const cover = coverThumb(restaurant);
   const place = [restaurant.address.neighborhood, restaurant.address.city]
     .filter(Boolean)
     .join(', ');
@@ -18,9 +20,14 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   return (
     <div className={styles.card}>
       <div className={styles.photo}>
-        {dish?.photoUrl ? (
+        {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={dish.photoUrl} alt={dish.name} />
+          <img
+            src={cover.src}
+            alt={cover.alt}
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <span role="img" aria-label={t('noPhoto')}>
             🍽️

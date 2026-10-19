@@ -1,11 +1,13 @@
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
+import { galleryOf } from '@/lib/gallery';
 import { effectiveTeamLevel } from '@/lib/team';
 import type { Restaurant } from '@/lib/types';
 import { BackLink } from './BackLink';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
+import { PlaceGallery } from './PlaceGallery';
 import { TeamBlock } from './TeamBlock';
 import styles from './RestaurantDetail.module.css';
 
@@ -18,7 +20,7 @@ export function RestaurantDetail({
   const tc = useTranslations('card');
   const format = useFormatter();
   const locale = useLocale();
-  const photo = r.signatureDishes.find((d) => d.photoUrl)?.photoUrl;
+  const photos = galleryOf(r, locale);
   const description =
     r.description?.[locale] ?? r.description?.[routing.defaultLocale];
   const address = [r.address.street, r.address.city].filter(Boolean).join(', ');
@@ -48,10 +50,9 @@ export function RestaurantDetail({
 
   return (
     <article className={styles.page}>
-      <div className={styles.hero}>
-        {photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={photo} alt="" />
+      <div className={photos.length ? styles.heroPhotos : styles.hero}>
+        {photos.length ? (
+          <PlaceGallery name={r.name} photos={photos} />
         ) : (
           <span role="img" aria-label={tc('noPhoto')}>
             🍽️
@@ -84,7 +85,7 @@ export function RestaurantDetail({
                   <div className={styles.dishPhoto}>
                     {d.photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={d.photoUrl} alt="" />
+                      <img src={d.thumbUrl ?? d.photoUrl} alt="" />
                     ) : (
                       <span aria-hidden="true">🍽️</span>
                     )}

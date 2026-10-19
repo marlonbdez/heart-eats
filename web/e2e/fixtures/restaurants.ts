@@ -20,6 +20,14 @@ const week = (open: string, close: string, days: number[]) =>
     close,
   }));
 
+// Una foto publicada: la API la sirve en /photos/<archivo> (la prueba responde
+// con una imagen cualquiera).
+const photo = (n: number, alt?: Record<string, string>) => ({
+  url: `http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-00000000010${n}.webp`,
+  thumbUrl: `http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-00000000010${n}-thumb.webp`,
+  ...(alt && { alt }),
+});
+
 // Datos ficticios. Nada de esto es un negocio real.
 export const restaurants: Restaurant[] = [
   {
@@ -43,8 +51,22 @@ export const restaurants: Restaurant[] = [
       {
         name: 'Margarita de la casa',
         description: 'Tomate, mozzarella fresca y albahaca.',
+        photoUrl:
+          'http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-000000000106.webp',
+        thumbUrl:
+          'http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-000000000106-thumb.webp',
       },
       { name: 'Focaccia de romero' },
+    ],
+    photos: [
+      photo(1, {
+        es: 'La barra con taburetes de madera',
+        en: 'The wooden bar',
+      }),
+      photo(2),
+      photo(3, { es: 'Una mesa con pizzas recién hechas' }),
+      photo(4),
+      photo(5),
     ],
     ownerConfirmedAt: '2026-09-01T00:00:00Z',
     team: {
@@ -79,6 +101,7 @@ export const restaurants: Restaurant[] = [
     contact: { instagram: '@ejemplo' },
     openingHours: week('08:00', '20:00', [1, 2, 3, 4, 5, 6]),
     signatureDishes: [], // un café puede no tener plato estrella
+    photos: [photo(7)], // una sola foto: sin mosaico ni flechas
     team: {
       level: 'minimal',
       summary: { totalStaff: 6, staffWithDisability: 2 },
