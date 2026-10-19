@@ -104,6 +104,17 @@
   },
   "_view": "View place →",
   "detail": {
+    "gallery": {
+      "open": "Open the photos of {name}",
+      "seeAll": "{count, plural, one {See the photo} other {See all # photos}}",
+      "label": "Photos of {name}",
+      "close": "Close the photos",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "counter": "{n} / {total}",
+      "slide": "{n} of {total}",
+      "photoOf": "Photo {n} of {name}"
+    },
     "back": "Back",
     "seal": "Business with an inclusive team",
     "dishes": "Dishes we recommend",

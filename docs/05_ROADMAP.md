@@ -78,7 +78,7 @@ Una PR por paso:
   - [x] Equipo del negocio: el formulario envía a `POST /teams` (con el idioma y el aviso de «demasiados envíos»); moderación lo aprueba desde la web y el admin lee las historias; `/privacy` actualizada
   - [x] Fotos al proponer un local: 1600 px + miniatura de 400 px (WebP, JPEG de reserva), hasta 5 del local y una por plato, subidas al enviar; Moderación las ve y puede dejar fuera alguna (`photoUploads` activo)
   - [ ] Fotos del equipo y del formulario del negocio: el servidor aún no las acepta en `POST /teams` (`teamPhotoUploads` apagado); retirar entonces el buzón de prueba
-  - [ ] Portada y galería a pantalla completa en la ficha y miniatura en la tarjeta
+  - [x] Portada y galería a pantalla completa en la ficha (mosaico en pantallas anchas, visor en un `<dialog>` nativo con `#photos` en la dirección, deslizar, flechas, teclado y contador) y miniatura en la tarjeta
   - [ ] Pantalla de Moderación para subir, ordenar y retirar fotos de un local publicado
   - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Una corrección también cambia el pin (latitud y longitud) y el horario completo de la semana. Falta: retiradas de fotos y de datos
   - [x] Administración en la moderación (`/moderation`, solo si el rol es `admin`): «Usuarios» (invitar a un moderador con correo, país y ciudad; darlo de baja con confirmación; reponerlo invitándolo de nuevo) y «Registro» (la auditoría con filtro por tipo y «Cargar más»)

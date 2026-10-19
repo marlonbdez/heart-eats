@@ -16,6 +16,10 @@
   height: 100%;
   object-fit: cover;
 }
+/* Con fotos, la portada manda la altura: el mosaico de PlaceGallery. */
+.heroPhotos {
+  position: relative;
+}
 .back {
   position: absolute;
   top: 12px;

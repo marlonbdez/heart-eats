@@ -104,6 +104,17 @@
   },
   "_view": "Ver local →",
   "detail": {
+    "gallery": {
+      "open": "Abrir las fotos de {name}",
+      "seeAll": "{count, plural, one {Ver la foto} other {Ver las # fotos}}",
+      "label": "Fotos de {name}",
+      "close": "Cerrar las fotos",
+      "previous": "Foto anterior",
+      "next": "Foto siguiente",
+      "counter": "{n} / {total}",
+      "slide": "{n} de {total}",
+      "photoOf": "Foto {n} de {name}"
+    },
     "back": "Volver",
     "seal": "Negocio con equipo inclusivo",
     "dishes": "Lo que te recomendamos probar",

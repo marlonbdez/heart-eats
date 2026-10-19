@@ -17,6 +17,16 @@ export interface SignatureDish {
   name: string;
   description?: string;
   photoUrl?: string;
+  // La miniatura (400 px), si la foto se subió a HeartEats.
+  thumbUrl?: string;
+}
+
+// Una foto del local: la grande para verla, la miniatura para listas y tarjetas.
+// El texto alternativo va por idioma, como las descripciones.
+export interface PlacePhoto {
+  url: string;
+  thumbUrl: string;
+  alt?: LocalizedText;
 }
 
 // Áreas de trabajo y tipos de discapacidad se cuentan por separado, sin
@@ -76,6 +86,8 @@ export interface Restaurant {
   };
   openingHours: OpeningHours[];
   signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
+  // La primera es la portada. En las listas solo viene esa.
+  photos?: PlacePhoto[];
   team?: Team;
   // El negocio sabe que aparece y ha dado el visto bueno. Sin esto, el equipo
   // no se muestra con detalle (ver lib/team.ts).
