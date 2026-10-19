@@ -2,6 +2,7 @@ import type { RequestHandler, Response } from 'express';
 import { ApiError } from '../errors.js';
 import { Session, SESSION_IDLE_SECONDS } from '../models/session.js';
 import {
+  ANY_COUNTRY,
   User,
   moderationRoles,
   type ModerationScope,
@@ -18,6 +19,11 @@ export interface AuthUser {
   role: UserRole;
   moderationScope: ModerationScope[];
 }
+
+// Ámbito con el que se filtra: un administrador ve todas las regiones; el resto,
+// lo que tenga asignado (ADR 0008).
+export const scopeOf = (user: AuthUser): ModerationScope[] =>
+  user.role === 'admin' ? [{ country: ANY_COUNTRY }] : user.moderationScope;
 
 // Del documento de Mongo a datos planos (el ámbito sin ids ni nulos).
 export const toAuthUser = (user: {

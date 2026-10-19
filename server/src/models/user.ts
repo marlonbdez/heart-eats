@@ -6,6 +6,9 @@ export type UserRole = (typeof userRoles)[number];
 // Roles que pueden entrar a moderar (ADR 0008).
 export const moderationRoles = ['moderator', 'admin'] as const;
 
+// Ámbito de quien ve todas las regiones (el administrador). No se guarda.
+export const ANY_COUNTRY = '*';
+
 export interface ModerationScope {
   country: string; // ISO 3166-1 alfa-2
   city?: string;

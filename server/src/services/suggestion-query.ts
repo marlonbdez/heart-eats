@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ApiError } from '../errors.js';
-import type { ModerationScope } from '../models/user.js';
+import { ANY_COUNTRY, type ModerationScope } from '../models/user.js';
 import { suggestionTypes } from '../models/suggestion.js';
 import { normalize } from '../text.js';
 import { parseOrThrow } from '../validation.js';
@@ -102,7 +102,7 @@ export function scopeFilter(
 // Condición de los locales que entran en el ámbito, para buscar sus ids.
 export const restaurantScopeFilter = (scope: readonly ModerationScope[]) => ({
   $or: scope.map((s) => ({
-    'address.country': s.country,
+    ...(s.country === ANY_COUNTRY ? {} : { 'address.country': s.country }),
     ...(s.city ? { cityKey: normalize(s.city) } : {}),
   })),
 });

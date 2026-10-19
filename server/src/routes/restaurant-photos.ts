@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Types } from 'mongoose';
 import { z } from 'zod';
 import { ApiError } from '../errors.js';
-import { authOf, requireSession } from '../middleware/session.js';
+import { authOf, requireSession, scopeOf } from '../middleware/session.js';
 import { AuditLog } from '../models/audit-log.js';
 import {
   MAX_PHOTOS,
@@ -101,10 +101,7 @@ export function restaurantPhotosRouter({
   // Añadir una foto ya subida con `POST /uploads` (y su miniatura).
   router.post('/restaurants/:slug/photos', ...auth, async (req, res) => {
     const user = authOf(res);
-    const place = await findInScope(
-      String(req.params.slug),
-      user.moderationScope,
-    );
+    const place = await findInScope(String(req.params.slug), scopeOf(user));
     const input = parseOrThrow(addSchema, req.body);
     if (!store) {
       throw new ApiError(
@@ -165,10 +162,7 @@ export function restaurantPhotosRouter({
   // Cambiar el texto alternativo de una foto o ponerla de portada.
   router.put('/restaurants/:slug/photos/:file', ...auth, async (req, res) => {
     const user = authOf(res);
-    const place = await findInScope(
-      String(req.params.slug),
-      user.moderationScope,
-    );
+    const place = await findInScope(String(req.params.slug), scopeOf(user));
     const file = String(req.params.file);
     const change = parseOrThrow(changeSchema, req.body);
     const current = place.photos ?? [];
@@ -200,10 +194,7 @@ export function restaurantPhotosRouter({
     ...auth,
     async (req, res) => {
       const user = authOf(res);
-      const place = await findInScope(
-        String(req.params.slug),
-        user.moderationScope,
-      );
+      const place = await findInScope(String(req.params.slug), scopeOf(user));
       const file = String(req.params.file);
       if (!publicFilePattern.test(file) || file.includes('-thumb')) {
         throw photoNotFound();
