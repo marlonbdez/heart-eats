@@ -263,3 +263,22 @@ test.describe('el pin en el mapa', () => {
     ).toBeLessThanOrEqual(0);
   });
 });
+
+test('las listas desplegables se dibujan como el resto de campos', async ({
+  page,
+}) => {
+  await page.goto('/es/propose');
+  const select = page.getByLabel('País');
+  const input = page.getByLabel('Nombre del local');
+  const style = (l: typeof select) =>
+    l.evaluate((el) => {
+      const c = getComputedStyle(el);
+      return {
+        height: c.height,
+        radius: c.borderTopLeftRadius,
+        border: c.borderTopWidth,
+      };
+    });
+  expect(await style(select)).toEqual(await style(input));
+  await expect(select).toHaveCSS('appearance', 'none');
+});
