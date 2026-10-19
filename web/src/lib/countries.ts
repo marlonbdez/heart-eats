@@ -16,6 +16,15 @@ export function countryOptions(locale: string) {
     .sort((a, b) => a.name.localeCompare(b.name, locale));
 }
 
+// El nombre de un país en el idioma de la web; si no lo conoce, el código.
+export function countryName(code: string, locale: string) {
+  try {
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
 // Cómo se escribe el código postal en los países más habituales. En el resto se
 // acepta cualquier código razonable: el servidor y Moderación lo comprueban.
 const POSTAL: Record<string, RegExp> = {

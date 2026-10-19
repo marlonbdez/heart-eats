@@ -228,8 +228,12 @@ export interface ModerationItem {
   // propuso (de la más antigua a la más reciente).
   infoRequest?: { note: string; deadline: string };
   replies?: { message: string; at: string }[];
-  // El pin que dejó el geocodificador, si lo encontró.
+  // El pin que dejó el geocodificador o quien propone, si lo hay, y de dónde
+  // viene: `proposer` si lo colocó quien propone en el mapa.
   location?: { lat: number; lng: number };
+  locationBy?: 'proposer' | 'address';
+  // País del local propuesto (código ISO), si quien propone lo dio.
+  country?: string;
   contactMasked?: string; // el correo de quien propone nunca se ve entero
   warnings: ModerationWarning[];
   // Solo en un local nuevo:

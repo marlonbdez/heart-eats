@@ -1048,7 +1048,12 @@
     "adminOnly": "An administrator decides this request. You can see it, but not decide it.",
     "infoTitle": "Information requested",
     "infoDeadline": "Reply by {date}",
+    "country": "Country",
     "pin": "Pin on the map",
+    "pinBy": {
+      "proposer": "placed by the person who suggested it",
+      "address": "comes from the address"
+    },
     "noPin": "Not found; it has to be set by hand",
     "pinHelp": "If there is no pin, type the place coordinates (for example, 40.4168 and -3.7038).",
     "lat": "Latitude",

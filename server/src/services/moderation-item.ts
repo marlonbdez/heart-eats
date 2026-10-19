@@ -31,6 +31,8 @@ export interface ModerationItem {
   infoRequest?: { note: string; deadline: string };
   replies?: { message: string; at: string }[];
   // Solo en un local nuevo:
+  // País que dio quien propone (ISO 3166-1 alfa-2); las antiguas no lo llevan.
+  country?: string;
   // El pin que dejó el geocodificador o quien propone; sin él, se coloca a mano.
   location?: { lat: number; lng: number };
   // De dónde viene el pin: `proposer` si lo colocó quien propone en el mapa.
@@ -157,7 +159,8 @@ export function toModerationItem(
       ...base,
       name: p.name,
       neighborhood: p.city,
-      address: join(p.street, p.postalCode, p.city, p.country),
+      address: join(p.street, p.postalCode, p.city),
+      ...(p.country ? { country: p.country } : {}),
       foodTags: p.foodTags,
       dishes: p.dishes.map((d) => d.name),
       ...(photos.length > 0 ? { photos } : {}),
