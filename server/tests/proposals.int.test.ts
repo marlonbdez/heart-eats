@@ -66,6 +66,29 @@ describe('POST /api/v1/proposals', () => {
     });
   });
 
+  it('guarda el país y el pin que puso quien propone', async () => {
+    const res = await post({
+      ...proposal,
+      country: 'cu',
+      location: { lat: 20.8872, lng: -76.2631 },
+    });
+    expect(res.status).toBe(202);
+    const saved = await Suggestion.findById(res.body.id).lean();
+    expect(saved?.country).toBe('CU');
+    expect(saved?.payload).toMatchObject({
+      country: 'CU',
+      location: { lat: 20.8872, lng: -76.2631 },
+    });
+  });
+
+  it('rechaza un país que no es un código de dos letras o un pin fuera del mundo', async () => {
+    expect((await post({ ...proposal, country: 'España' })).status).toBe(422);
+    expect(
+      (await post({ ...proposal, location: { lat: 95, lng: 0 } })).status,
+    ).toBe(422);
+    expect(await Suggestion.countDocuments()).toBe(0);
+  });
+
   it('no mete el correo, el idioma ni el honeypot en el contenido', async () => {
     const res = await post(proposal);
     const saved = await Suggestion.findById(res.body.id).lean();

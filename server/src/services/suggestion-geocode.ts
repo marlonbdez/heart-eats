@@ -13,6 +13,9 @@ interface ProposedAddress {
   street?: string;
   postalCode?: string;
   city: string;
+  country?: string;
+  // Pin que colocó quien propone en el mapa.
+  location?: { lat: number; lng: number };
 }
 
 // Locales cercanos al pin, del más próximo al más lejano.
@@ -49,38 +52,50 @@ export function withDistances(
   return result;
 }
 
-// La primera vez que Moderación abre un local nuevo se geocodifica su
-// dirección y se guarda en la solicitud (ADR 0006); no se vuelve a pedir. Sin
-// calle no se geocodifica: sería el centro de la ciudad, no el local. Si el
-// servicio falla, la solicitud sigue siendo revisable sin pin y se reintenta
-// en la próxima apertura.
+// La primera vez que Moderación abre un local nuevo se coloca su pin y se
+// guarda en la solicitud (ADR 0006); no se vuelve a pedir. Si quien propone lo
+// puso en el mapa, ese es el pin y no se consulta nada. Si no, se geocodifica
+// la dirección, dentro de su país si lo dio. Sin calle no se geocodifica:
+// sería el centro de la ciudad, no el local. Si el servicio falla, la
+// solicitud sigue siendo revisable sin pin y se reintenta en la próxima
+// apertura.
 export async function ensureGeocode(
   record: SuggestionRecord,
   geocoder: Geocoder | undefined,
 ): Promise<SuggestionRecord> {
-  if (!geocoder || record.type !== 'new' || record.geocode) return record;
+  if (record.type !== 'new' || record.geocode) return record;
   if (record.status !== 'pending' && record.status !== 'info_requested') {
     return record;
   }
   const address = record.payload as unknown as ProposedAddress;
-  if (!address.street) return record;
 
   let result;
-  try {
-    result = await geocoder.geocode({
-      street: address.street,
-      postalCode: address.postalCode,
-      city: address.city,
-    });
-  } catch (err) {
-    console.error(
-      'No se pudo geocodificar:',
-      err instanceof Error ? err.message : err,
-    );
-    return record;
+  let provider = 'nominatim';
+  if (address.location) {
+    provider = 'proposer';
+    result = {
+      ...address.location,
+      ...(address.country ? { country: address.country } : {}),
+    };
+  } else {
+    if (!geocoder || !address.street) return record;
+    try {
+      result = await geocoder.geocode({
+        street: address.street,
+        postalCode: address.postalCode,
+        city: address.city,
+        country: address.country,
+      });
+    } catch (err) {
+      console.error(
+        'No se pudo geocodificar:',
+        err instanceof Error ? err.message : err,
+      );
+      return record;
+    }
   }
 
-  const geocode = { provider: 'nominatim', at: new Date(), ...result };
+  const geocode = { provider, at: new Date(), ...result };
   const warnings = result
     ? withDistances(record.warnings, await nearbyPlaces(result.lat, result.lng))
     : record.warnings;

@@ -4,6 +4,8 @@ export interface GeocodeQuery {
   street: string;
   postalCode?: string;
   city: string;
+  // Limita la búsqueda a ese país (ISO 3166-1 alfa-2).
+  country?: string;
 }
 
 export interface GeocodeResult {
@@ -95,6 +97,7 @@ export function nominatimGeocoder({
       ]
         .filter(Boolean)
         .join(', '),
+      ...(query.country ? { countrycodes: query.country.toLowerCase() } : {}),
     });
     const lat = Number(place?.lat);
     const lng = Number(place?.lon);

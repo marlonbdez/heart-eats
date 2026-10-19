@@ -15,6 +15,8 @@ Quien propone un local escribe calle, código postal y ciudad; el mapa necesita 
 - **Condiciones de uso:** una petición por segundo como máximo (cola en el servidor), `User-Agent` que identifica el proyecto y un contacto, resultados guardados (no se repite la misma consulta) y atribución a OpenStreetMap, que el mapa ya muestra.
 - **Fallo:** si Nominatim no responde, la solicitud sigue siendo revisable sin pin y la decisión «aprobar» pide colocarlo a mano.
 
+**Pin de quien propone (2026-10-19):** la propuesta lleva país y, si la persona lo coloca en un mapa, también el pin. Ese pin sustituye a la geocodificación (ya no hace falta consultar a Nominatim ni tener calle); sin él, la dirección se busca dentro del país. Moderación sigue pudiendo moverlo. El mapa no consulta ningún servicio de direcciones: sigue sin haber autocompletado.
+
 ## Motivos
 
 - Cero coste y cero cuentas.

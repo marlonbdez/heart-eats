@@ -67,7 +67,11 @@ describe('ámbito', () => {
   it('una ciudad: propuestas de esa ciudad y solicitudes de sus locales', () => {
     expect(scopeFilter([madrid], ['x'])).toEqual({
       $or: [
-        { type: 'new', cityKey: { $in: ['madrid'] } },
+        {
+          type: 'new',
+          $or: [{ country: 'ES' }, { country: { $exists: false } }],
+          cityKey: 'madrid',
+        },
         { type: { $ne: 'new' }, targetRestaurantId: { $in: ['x'] } },
       ],
     });
@@ -77,7 +81,13 @@ describe('ámbito', () => {
   });
   it('un país sin ciudad: todas las propuestas', () => {
     expect(scopeFilter([{ country: 'ES' }], [])).toMatchObject({
-      $or: [{ type: 'new' }, expect.anything()],
+      $or: [
+        {
+          type: 'new',
+          $or: [{ country: 'ES' }, { country: { $exists: false } }],
+        },
+        expect.anything(),
+      ],
     });
     expect(restaurantScopeFilter([{ country: 'ES' }])).toEqual({
       $or: [{ 'address.country': 'ES' }],
@@ -88,6 +98,9 @@ describe('ámbito', () => {
     expect(scopeFilter([{ country: '*' }], [])).toMatchObject({
       $or: [{ type: 'new' }, expect.anything()],
     });
+    expect(scopeFilter([{ country: '*' }], []).$or as unknown[]).toContainEqual(
+      { type: 'new' },
+    );
   });
   it('sin ámbito no ve nada', () => {
     expect(scopeFilter([], [])).toEqual({ _id: { $in: [] } });

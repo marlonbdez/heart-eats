@@ -31,8 +31,10 @@ export interface ModerationItem {
   infoRequest?: { note: string; deadline: string };
   replies?: { message: string; at: string }[];
   // Solo en un local nuevo:
-  // El pin que dejó el geocodificador; sin él, se coloca a mano.
+  // El pin que dejó el geocodificador o quien propone; sin él, se coloca a mano.
   location?: { lat: number; lng: number };
+  // De dónde viene el pin: `proposer` si lo colocó quien propone en el mapa.
+  locationBy?: 'proposer' | 'address';
   foodTags?: string[];
   dishes?: string[];
   // Fotos en cuarentena, mientras la solicitud espera. `key` es lo que se manda
@@ -77,6 +79,7 @@ interface ProposalPayload {
   name: string;
   street?: string;
   city: string;
+  country?: string;
   postalCode?: string;
   foodTags: string[];
   dishes: { name: string; photoKey?: string }[];
@@ -154,7 +157,7 @@ export function toModerationItem(
       ...base,
       name: p.name,
       neighborhood: p.city,
-      address: join(p.street, p.postalCode, p.city),
+      address: join(p.street, p.postalCode, p.city, p.country),
       foodTags: p.foodTags,
       dishes: p.dishes.map((d) => d.name),
       ...(photos.length > 0 ? { photos } : {}),
@@ -163,6 +166,12 @@ export function toModerationItem(
         s.geocode?.lat !== undefined && s.geocode.lng !== undefined
           ? { lat: s.geocode.lat, lng: s.geocode.lng }
           : undefined,
+      locationBy:
+        s.geocode?.lat === undefined
+          ? undefined
+          : s.geocode.provider === 'proposer'
+            ? 'proposer'
+            : 'address',
     };
   }
 
