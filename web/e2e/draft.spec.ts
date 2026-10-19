@@ -1,4 +1,5 @@
 import { expect, test } from './support/test';
+import { fillPlace } from './support/propose';
 
 test.use({ viewport: { width: 375, height: 800 } });
 
@@ -8,7 +9,7 @@ test('proponer un local: el borrador se recupera tras recargar, sin el correo', 
   page,
 }) => {
   await page.goto('/es/propose');
-  await page.getByLabel('Nombre del local').fill('Local a medias');
+  await fillPlace(page, 'Local a medias');
   await page.getByRole('button', { name: /Pizza/ }).click();
   await page.getByRole('button', { name: 'Continuar' }).click();
   await page.getByLabel('Nombre del plato').fill('Lasaña');
@@ -57,7 +58,7 @@ test('proponer un local: al enviar, el borrador desaparece', async ({
   page,
 }) => {
   await page.goto('/es/propose');
-  await page.getByLabel('Nombre del local').fill('Se enviará');
+  await fillPlace(page, 'Se enviará');
   await expect
     .poll(() => page.evaluate((k) => window.localStorage.getItem(k), KEY))
     .toContain('Se enviará');

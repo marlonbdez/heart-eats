@@ -1,4 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
+import { fillPlace } from './support/propose';
 import { API, expect, test } from './support/test';
 
 // Revisión automática de accesibilidad (WCAG 2.2 AA) en todas las pantallas,
@@ -147,13 +148,13 @@ for (const scheme of ['light', 'dark'] as const) {
     test('formulario con errores de validación', async ({ page }) => {
       await page.goto('/es/propose');
       await page.getByRole('button', { name: 'Continuar' }).click();
-      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expect(page.locator('p[role=alert]').first()).toBeVisible();
       await expectNoViolations(page);
     });
 
     test('proponer un local con el borrador recuperado', async ({ page }) => {
       await page.goto('/es/propose');
-      await page.getByLabel('Nombre del local').fill('Local a medias');
+      await fillPlace(page, 'Local a medias');
       await expect
         .poll(() =>
           page.evaluate(() =>
@@ -166,9 +167,38 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('proponer un local: mapa abierto con el pin colocado', async ({
+      page,
+    }) => {
+      await page.route('https://tiles.openfreemap.org/**', (route) =>
+        route.fulfill({
+          contentType: 'application/json',
+          json: {
+            version: 8,
+            sources: {},
+            layers: [
+              {
+                id: 'bg',
+                type: 'background',
+                paint: { 'background-color': '#eeeeee' },
+              },
+            ],
+          },
+        }),
+      );
+      await page.goto('/es/propose');
+      await fillPlace(page, 'Local con mapa');
+      await page.getByRole('button', { name: 'Abrir el mapa' }).click();
+      await page
+        .getByRole('button', { name: 'Poner el pin en el centro del mapa' })
+        .click();
+      await expect(page.getByText(/Pin colocado \(/)).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('proponer un local: paso de platos', async ({ page }) => {
       await page.goto('/es/propose');
-      await page.getByLabel('Nombre del local').fill('Local con platos');
+      await fillPlace(page, 'Local con platos');
       await page.getByRole('button', { name: 'Continuar' }).click();
       await expect(page.getByLabel('Nombre del plato')).toBeVisible();
       await expectNoViolations(page);
@@ -221,7 +251,7 @@ for (const scheme of ['light', 'dark'] as const) {
       page,
     }) => {
       await page.goto('/es/propose');
-      await page.getByLabel('Nombre del local').fill('Local con foto');
+      await fillPlace(page, 'Local con foto');
       await page.getByRole('button', { name: 'Continuar' }).click();
       const png = {
         name: 'foto.png',

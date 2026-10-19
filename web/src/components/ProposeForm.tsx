@@ -1,17 +1,19 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { isRateLimited } from '@/lib/api';
 import { photoUploads } from '@/lib/features';
 import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
-import type { FoodTag } from '@/lib/types';
+import { countryOptions, isPostalCode } from '@/lib/countries';
+import type { FoodTag, LatLng } from '@/lib/types';
 import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
 import type { PreparedPhoto } from '@/lib/image';
-import { isEmail, isHttpUrl } from '@/lib/validation';
+import { isEmail, isHttpUrl, isPlaceText } from '@/lib/validation';
 import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
+import { PinPickerLoader } from './PinPickerLoader';
 import s from './Form.module.css';
 
 const MAX_DISHES = 3;
@@ -29,6 +31,8 @@ interface FormState {
   name: string;
   street: string;
   city: string;
+  country: string; // código ISO; vacío hasta que se elige
+  location: LatLng | null; // el pin que coloca en el mapa
   postalCode: string;
   foods: string[];
   dishes: Dish[];
@@ -45,7 +49,9 @@ interface FormState {
 const initial: FormState = {
   name: '',
   street: '',
-  city: 'Madrid',
+  city: '',
+  country: '',
+  location: null,
   postalCode: '',
   foods: [],
   dishes: [{ name: '', description: '' }],
@@ -79,6 +85,16 @@ const isPristine = (f: FormState) =>
     photoConsent: false,
   }) === JSON.stringify(initial);
 
+const validPin = (v: unknown): LatLng | null => {
+  const { lat, lng } = (v ?? {}) as Partial<LatLng>;
+  return typeof lat === 'number' &&
+    typeof lng === 'number' &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180
+    ? { lat, lng }
+    : null;
+};
+
 // Un borrador viejo o a medias no debe romper el formulario.
 function sanitizeDraft(d: Draft | null): Draft | null {
   if (!d || typeof d !== 'object' || !d.form) return null;
@@ -98,7 +114,9 @@ function sanitizeDraft(d: Draft | null): Draft | null {
     form: {
       name: str(f.name),
       street: str(f.street),
-      city: str(f.city, 'Madrid'),
+      city: str(f.city),
+      country: /^[A-Z]{2}$/.test(str(f.country)) ? str(f.country) : '',
+      location: validPin(f.location),
       postalCode: str(f.postalCode),
       foods: Array.isArray(f.foods)
         ? f.foods.filter((k) => typeof k === 'string')
@@ -123,6 +141,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     'idle' | 'sending' | 'error' | 'limited' | 'done'
   >('idle');
   const [sentName, setSentName] = useState('');
+  const [mapOpen, setMapOpen] = useState(false);
+  const countryRef = useRef<HTMLSelectElement>(null);
   // Aviso de la última foto que no se pudo usar, por plato (y 'venue', las del local).
   const [photoErrors, setPhotoErrors] = useState<Record<string, string>>({});
   const isDone = status === 'done';
@@ -130,6 +150,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const [loaded, setLoaded] = useState(false);
   const [restored, setRestored] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const countries = useMemo(() => countryOptions(locale), [locale]);
   const first = useRef(true);
 
   // Recuperar el borrador guardado, una vez, ya en el navegador.
@@ -203,7 +224,16 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
 
   const validate = (): boolean => {
     const next: Record<string, boolean> = {};
-    if (step === 1 && !form.name.trim()) next.name = true;
+    if (step === 1) {
+      if (!form.name.trim()) next.name = true;
+      if (!form.country) next.country = true;
+      if (!isPlaceText(form.city, 2)) next.city = true;
+      if (!isPlaceText(form.street, 3)) next.street = true;
+      const code = form.postalCode.trim();
+      if (code && form.country && !isPostalCode(code, form.country)) {
+        next.postalCode = true;
+      }
+    }
     if (step === 2 && hasPhotos && !form.photoConsent) next.photoConsent = true;
     if (step === 3) {
       const url = form.evidenceUrl.trim();
@@ -224,7 +254,9 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       await submitProposal({
         name: form.name.trim(),
         street: clean(form.street),
-        city: clean(form.city) ?? 'Madrid',
+        city: form.city.trim(),
+        country: form.country,
+        location: form.location ?? undefined,
         postalCode: clean(form.postalCode),
         foodTags: form.foods,
         dishes: form.dishes
@@ -265,6 +297,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     releasePhotos();
     setPhotoErrors({});
     setForm(initial);
+    setMapOpen(false);
     setErrors({});
     setStep(1);
     setRestored(false);
@@ -274,6 +307,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     releasePhotos();
     setPhotoErrors({});
     setForm(initial);
+    setMapOpen(false);
     setErrors({});
     setStep(1);
     setStatus('idle');
@@ -313,6 +347,13 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     .map((k) => foodOptions.find((o) => o.key === k)?.plain)
     .filter(Boolean)
     .join(' · ');
+  const placeSummary = [
+    form.street.trim(),
+    form.city.trim(),
+    countries.find((c) => c.code === form.country)?.name,
+  ]
+    .filter(Boolean)
+    .join(', ');
   const lastStep = step === 4;
   const sending = status === 'sending';
 
@@ -378,45 +419,137 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               )}
             </div>
             <div className={s.field}>
+              <label htmlFor="f-pais" className={s.label}>
+                {t('s1.country')}
+              </label>
+              <select
+                id="f-pais"
+                ref={countryRef}
+                className={`${s.input} ${errors.country ? s.invalid : ''}`}
+                value={form.country}
+                onChange={(e) => {
+                  // Otro país: el pin de antes ya no vale.
+                  setForm((f) => ({
+                    ...f,
+                    country: e.target.value,
+                    location: null,
+                  }));
+                  setErrors((er) => ({ ...er, country: false }));
+                }}
+                aria-invalid={errors.country || undefined}
+                aria-describedby={errors.country ? 'e-pais' : undefined}
+                autoComplete="country"
+              >
+                <option value="">{t('s1.countryChoose')}</option>
+                {countries.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              {errors.country && (
+                <p id="e-pais" role="alert" className={s.error}>
+                  {t('s1.countryError')}
+                </p>
+              )}
+            </div>
+            <div className={s.field}>
               <label htmlFor="f-dir" className={s.label}>
                 {t('s1.street')}
               </label>
               <input
                 id="f-dir"
-                className={s.input}
+                className={`${s.input} ${errors.street ? s.invalid : ''}`}
                 placeholder={t('s1.streetHint')}
                 value={form.street}
                 onChange={(e) => set('street', e.target.value)}
+                aria-invalid={errors.street || undefined}
+                aria-describedby={errors.street ? 'e-dir' : undefined}
                 autoComplete="off"
               />
+              {errors.street && (
+                <p id="e-dir" role="alert" className={s.error}>
+                  {t('s1.streetError')}
+                </p>
+              )}
             </div>
-            <div className={s.grid}>
-              <div className={s.field}>
-                <label htmlFor="f-ciudad" className={s.label}>
-                  {t('s1.city')}
-                </label>
-                <input
-                  id="f-ciudad"
-                  className={s.input}
-                  value={form.city}
-                  onChange={(e) => set('city', e.target.value)}
-                />
+            <div className={s.field}>
+              <label htmlFor="f-ciudad" className={s.label}>
+                {t('s1.city')}
+              </label>
+              <input
+                id="f-ciudad"
+                className={`${s.input} ${errors.city ? s.invalid : ''}`}
+                value={form.city}
+                onChange={(e) => set('city', e.target.value)}
+                aria-invalid={errors.city || undefined}
+                aria-describedby={errors.city ? 'e-ciudad' : undefined}
+                autoComplete="off"
+              />
+              {errors.city && (
+                <p id="e-ciudad" role="alert" className={s.error}>
+                  {t('s1.cityError')}
+                </p>
+              )}
+            </div>
+            <div className={s.field}>
+              <label htmlFor="f-cp" className={s.label}>
+                {t('s1.postalCode')}{' '}
+                <span className={s.optional}>{t('s2.optional')}</span>
+              </label>
+              <input
+                id="f-cp"
+                className={`${s.input} ${errors.postalCode ? s.invalid : ''}`}
+                maxLength={10}
+                value={form.postalCode}
+                onChange={(e) => set('postalCode', e.target.value)}
+                aria-invalid={errors.postalCode || undefined}
+                aria-describedby={errors.postalCode ? 'e-cp' : undefined}
+                autoComplete="postal-code"
+              />
+              {errors.postalCode && (
+                <p id="e-cp" role="alert" className={s.error}>
+                  {t('s1.postalCodeError')}
+                </p>
+              )}
+            </div>
+            <div className={s.field}>
+              <div className={s.label}>
+                {t('s1.pin.title')}{' '}
+                <span className={s.optional}>{t('s2.optional')}</span>
               </div>
-              <div className={s.field}>
-                <label htmlFor="f-cp" className={s.label}>
-                  {t('s1.postalCode')}
-                </label>
-                <input
-                  id="f-cp"
-                  className={s.input}
-                  inputMode="numeric"
-                  maxLength={5}
-                  value={form.postalCode}
-                  onChange={(e) =>
-                    set('postalCode', e.target.value.replace(/\D/g, ''))
-                  }
+              <p className={s.small}>{t('s1.pin.hint')}</p>
+              {mapOpen ? (
+                <PinPickerLoader
+                  country={form.country}
+                  value={form.location}
+                  onChange={(location) => set('location', location)}
                 />
-              </div>
+              ) : (
+                <>
+                  {form.location && (
+                    <p role="status" className={s.small}>
+                      {t('s1.pin.placedShort')}
+                    </p>
+                  )}
+                  <div>
+                    <button
+                      type="button"
+                      className={`${s.btn} ${s.secondary}`}
+                      onClick={() => {
+                        if (!form.country) {
+                          setErrors((e) => ({ ...e, country: true }));
+                          countryRef.current?.focus();
+                          return;
+                        }
+                        setMapOpen(true);
+                      }}
+                    >
+                      {form.location ? t('s1.pin.edit') : t('s1.pin.open')}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
             <div className={s.field}>
               <div className={s.label}>
@@ -632,6 +765,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
               <p className={s.label}>{t('s4.summary')}</p>
               <p className={s.summary}>
                 {form.name.trim() || t('s4.summaryFallback')}
+                <br />
+                <span>{placeSummary}</span>
                 <br />
                 <span>{foodSummary || t('s4.noFood')}</span>
                 {hasPhotos && (

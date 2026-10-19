@@ -112,6 +112,12 @@ export interface RestaurantQuery {
   food?: string[]; // foodTags (OR)
 }
 
+// Un punto del mapa.
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
 // Una foto ya reducida en el navegador, con su miniatura. Todavía no se ha
 // subido: eso lo hace el envío.
 export interface PhotoBlobs {
@@ -131,6 +137,8 @@ export interface ProposalInput {
   name: string;
   street?: string;
   city: string;
+  country: string; // ISO 3166-1 alfa-2
+  location?: LatLng; // el pin que coloca quien propone en el mapa
   postalCode?: string;
   foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
   dishes: ProposalDish[]; // 0-3, solo con nombre

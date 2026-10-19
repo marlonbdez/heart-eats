@@ -1,4 +1,5 @@
 import { expect, test } from './support/test';
+import { fillPlace } from './support/propose';
 
 test.use({ viewport: { width: 375, height: 800 } });
 
@@ -8,6 +9,9 @@ test('una propuesta se envía a la API con su idioma y sin fotos', async ({
 }) => {
   await page.goto('/en/propose');
   await page.getByLabel('Name of the place').fill('Local de prueba');
+  await page.getByLabel('Country').selectOption('ES');
+  await page.getByLabel('Address').fill('Calle Mayor 5');
+  await page.getByLabel('City').fill('Madrid');
   await page.getByRole('button', { name: /Pizza/ }).click();
   for (let i = 0; i < 3; i++) {
     await page.getByRole('button', { name: 'Continue' }).click();
@@ -20,7 +24,9 @@ test('una propuesta se envía a la API con su idioma y sin fotos', async ({
     path: '/proposals',
     body: {
       name: 'Local de prueba',
+      street: 'Calle Mayor 5',
       city: 'Madrid',
+      country: 'ES',
       foodTags: ['pizza'],
       locale: 'en',
     },
@@ -46,7 +52,7 @@ test('si hay demasiados envíos desde la conexión, lo dice sin alarmar', async 
       : route.fallback(),
   );
   await page.goto('/es/propose');
-  await page.getByLabel('Nombre del local').fill('Local de prueba');
+  await fillPlace(page, 'Local de prueba');
   await page.getByRole('button', { name: /Pizza/ }).click();
   for (let i = 0; i < 3; i++) {
     await page.getByRole('button', { name: 'Continuar' }).click();
