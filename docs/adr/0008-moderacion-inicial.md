@@ -11,7 +11,7 @@ Nada se publica sin revisión humana y sin el sí del negocio (`07_VERIFICACION.
 ## Decisión
 
 - **Al inicio modera una sola persona:** Marlon, con rol `admin` y ámbito Madrid.
-- **Roles** (`User.role`): `moderator` (decide solicitudes de su ámbito) y `admin` (además, da de alta y de baja a moderadores y ve el registro de auditoría completo). Ámbito (`moderationScope`): lista de `{country, city?}`.
+- **Roles** (`User.role`): `moderator` (decide solicitudes de su ámbito) y `admin` (ve y decide en todas las regiones, y además da de alta y de baja a moderadores y ve el registro de auditoría completo). Ámbito (`moderationScope`): lista de `{country, city?}`.
 - **Alta:** solo la crea un `admin`, por invitación: escribe el correo y el ámbito, y la persona entra por enlace mágico (ADR 0007). No hay autoalta.
 - **Qué decide un moderador:** locales nuevos y correcciones. **Equipo y retiradas** (los que tocan a personas) los decide un `admin` hasta pasar la revisión legal y fijar cómo se revisan las historias (`casos-de-uso/moderacion.md`, CU-22).
 - **Criterio de ascenso (propuesta):** se invita a quien haya revisado junto a un admin un puñado de solicitudes (en torno a 10), conozca la guía de verificación (`07_VERIFICACION.md`) y acepte por escrito la confidencialidad de los correos. En expansión a otras ciudades, la invitación pasa primero por asociaciones locales.

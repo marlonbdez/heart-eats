@@ -189,6 +189,26 @@ describe('GET /api/v1/suggestions', () => {
     ]);
   });
 
+  it('un administrador ve todas las regiones, tenga el ámbito que tenga', async () => {
+    await seed([
+      proposal('En Madrid', 'Madrid', '2026-10-01T00:00:00Z'),
+      proposal('En Holguín', 'Holguín', '2026-10-02T00:00:00Z'),
+      {
+        type: 'edit',
+        targetRestaurantId: parisId,
+        payload: { kind: 'hours', details: 'x' },
+        createdAt: new Date('2026-10-03T00:00:00Z'),
+      },
+    ]);
+    const admin = await signedInCookie({ role: 'admin', moderationScope: [] });
+    const res = await get('/suggestions', admin);
+    expect(res.body.items).toHaveLength(3);
+
+    const moderator = await signedInCookie({ email: 'mod@example.org' });
+    const seen = await get('/suggestions', moderator);
+    expect(seen.body.items).toHaveLength(1);
+  });
+
   it('un ámbito vacío no ve nada', async () => {
     await seed(proposal('A', 'Madrid', '2026-10-01T00:00:00Z'));
     const cookie = await signedInCookie({ moderationScope: [] });

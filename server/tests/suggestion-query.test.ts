@@ -83,6 +83,12 @@ describe('ámbito', () => {
       $or: [{ 'address.country': 'ES' }],
     });
   });
+  it('todas las regiones: sin límite de país ni de ciudad', () => {
+    expect(restaurantScopeFilter([{ country: '*' }])).toEqual({ $or: [{}] });
+    expect(scopeFilter([{ country: '*' }], [])).toMatchObject({
+      $or: [{ type: 'new' }, expect.anything()],
+    });
+  });
   it('sin ámbito no ve nada', () => {
     expect(scopeFilter([], [])).toEqual({ _id: { $in: [] } });
   });

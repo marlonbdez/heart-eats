@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { Router } from 'express';
 import { Types } from 'mongoose';
 import { ApiError, requestChanged } from '../errors.js';
-import { authOf, requireSession } from '../middleware/session.js';
+import { authOf, requireSession, scopeOf } from '../middleware/session.js';
 import { AuditLog } from '../models/audit-log.js';
 import { Restaurant } from '../models/restaurant.js';
 import { Suggestion, type SuggestionRecord } from '../models/suggestion.js';
@@ -130,7 +130,7 @@ export function suggestionsRouter({
     const op = direction === 1 ? '$gt' : '$lt';
 
     const conditions: Record<string, unknown>[] = [
-      await inScope(authOf(res).moderationScope),
+      await inScope(scopeOf(authOf(res))),
       { status: { $in: statusesOf(query.status) } },
     ];
     if (query.type) conditions.push({ type: query.type });
@@ -173,10 +173,7 @@ export function suggestionsRouter({
   // Una solicitud.
   router.get('/suggestions/:id', ...auth, async (req, res) => {
     const user = authOf(res);
-    const found = await findVisible(
-      String(req.params.id),
-      user.moderationScope,
-    );
+    const found = await findVisible(String(req.params.id), scopeOf(user));
     // La primera apertura de un local nuevo geocodifica su dirección.
     const record = await ensureGeocode(found, geocoder);
     const targets = await loadTargets([record]);
@@ -196,7 +193,7 @@ export function suggestionsRouter({
   router.get('/suggestions/:id/photos/:file', ...auth, async (req, res) => {
     const record = await findVisible(
       String(req.params.id),
-      authOf(res).moderationScope,
+      scopeOf(authOf(res)),
     );
     const file = String(req.params.file);
     const files = photoKeysIn(record.payload).flatMap((key) => [
@@ -386,10 +383,7 @@ export function suggestionsRouter({
   // Aprobar, rechazar o pedir información.
   router.post('/suggestions/:id/decision', ...auth, async (req, res) => {
     const user = authOf(res);
-    const record = await findVisible(
-      String(req.params.id),
-      user.moderationScope,
-    );
+    const record = await findVisible(String(req.params.id), scopeOf(user));
     if (adminOnlyTypes.has(record.type) && user.role !== 'admin') {
       throw new ApiError(
         403,

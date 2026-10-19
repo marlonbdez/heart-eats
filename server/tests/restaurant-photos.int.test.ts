@@ -124,6 +124,13 @@ describe('añadir una foto a un local publicado', () => {
     });
     await add({ photoKey: key }, noScope).expect(404);
     expect((await stored())?.photos).toEqual([]);
+
+    const admin = await signedInCookie({
+      email: 'admin@example.org',
+      role: 'admin',
+      moderationScope: [{ country: 'FR', city: 'Paris' }],
+    });
+    await add({ photoKey: key }, admin).expect(201);
   });
 
   it('un local que no existe o no está publicado da 404', async () => {
