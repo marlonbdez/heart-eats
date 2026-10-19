@@ -15,6 +15,7 @@ import { PhotoPicker } from './PhotoPicker';
 import s from './Form.module.css';
 
 const MAX_DISHES = 3;
+const MAX_PHOTOS = 5;
 const OTHER = 'other';
 const DRAFT_KEY = 'hearteats:draft-propose';
 
@@ -31,6 +32,8 @@ interface FormState {
   postalCode: string;
   foods: string[];
   dishes: Dish[];
+  // Fotos del local, ya reducidas. No se guardan en el borrador.
+  photos: PreparedPhoto[];
   howKnown: string;
   evidenceUrl: string;
   independent: boolean;
@@ -46,6 +49,7 @@ const initial: FormState = {
   postalCode: '',
   foods: [],
   dishes: [{ name: '', description: '' }],
+  photos: [],
   howKnown: '',
   evidenceUrl: '',
   independent: false,
@@ -58,7 +62,7 @@ const initial: FormState = {
 // fotos (ni el permiso, que va con ellas).
 type DraftForm = Omit<
   FormState,
-  'email' | 'website' | 'photoConsent' | 'dishes'
+  'email' | 'website' | 'photoConsent' | 'dishes' | 'photos'
 > & { dishes: { name: string; description: string }[] };
 interface Draft {
   form: DraftForm;
@@ -66,8 +70,14 @@ interface Draft {
 }
 
 const isPristine = (f: FormState) =>
-  JSON.stringify({ ...f, email: '', website: '', photoConsent: false }) ===
-  JSON.stringify(initial);
+  JSON.stringify({
+    ...f,
+    dishes: f.dishes.map(({ name, description }) => ({ name, description })),
+    photos: [],
+    email: '',
+    website: '',
+    photoConsent: false,
+  }) === JSON.stringify(initial);
 
 // Un borrador viejo o a medias no debe romper el formulario.
 function sanitizeDraft(d: Draft | null): Draft | null {
@@ -113,8 +123,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     'idle' | 'sending' | 'error' | 'limited' | 'done'
   >('idle');
   const [sentName, setSentName] = useState('');
-  // Aviso de la última foto que no se pudo usar, por plato.
-  const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
+  // Aviso de la última foto que no se pudo usar, por plato (y 'venue', las del local).
+  const [photoErrors, setPhotoErrors] = useState<Record<string, string>>({});
   const isDone = status === 'done';
   // «loaded» evita guardar el formulario vacío antes de leer el borrador.
   const [loaded, setLoaded] = useState(false);
@@ -143,10 +153,11 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       return;
     }
     const timer = setTimeout(() => {
-      const { email, website, photoConsent, dishes, ...rest } = form;
+      const { email, website, photoConsent, dishes, photos, ...rest } = form;
       void email;
       void website;
       void photoConsent;
+      void photos;
       saveDraft<Draft>(DRAFT_KEY, {
         form: {
           ...rest,
@@ -179,7 +190,9 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       'dishes',
       form.dishes.map((d, j) => (j === i ? { ...d, ...patch } : d)),
     );
-  const hasPhotos = form.dishes.some((d) => d.photo);
+  const photoCount =
+    form.dishes.filter((d) => d.photo).length + form.photos.length;
+  const hasPhotos = photoCount > 0;
   const toggleFood = (key: string) =>
     set(
       'foods',
@@ -219,8 +232,9 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
           .map((d) => ({
             name: d.name.trim(),
             description: clean(d.description),
-            photo: d.photo?.blob,
+            photo: d.photo,
           })),
+        photos: form.photos,
         howKnown: clean(form.howKnown),
         evidenceUrl: clean(form.evidenceUrl),
         independent: form.independent,
@@ -241,8 +255,10 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
     else setStep(step + 1);
   };
 
-  const releasePhotos = () =>
+  const releasePhotos = () => {
     form.dishes.forEach((d) => d.photo && URL.revokeObjectURL(d.photo.url));
+    form.photos.forEach((p) => URL.revokeObjectURL(p.url));
+  };
 
   const discardDraft = () => {
     clearDraft(DRAFT_KEY);
@@ -486,6 +502,45 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 {t('s2.photoHint')}
               </p>
             )}
+            {photoUploads && (
+              <div className={s.card}>
+                <h2 className={s.cardTitle}>{t('s2.venueTitle')}</h2>
+                <p id="s2-venue-hint" className={s.small}>
+                  {t('s2.venueHint')}
+                </p>
+                {form.photos.map((photo, i) => (
+                  <PhotoPicker
+                    key={photo.url}
+                    id={`v-photo-${i}`}
+                    label={t('s2.venuePhoto', { n: i + 1 })}
+                    alt={t('s2.venueAlt', { n: i + 1 })}
+                    photo={photo}
+                    onChange={() =>
+                      set(
+                        'photos',
+                        form.photos.filter((_, j) => j !== i),
+                      )
+                    }
+                    onError={() => undefined}
+                  />
+                ))}
+                {form.photos.length < MAX_PHOTOS && (
+                  <PhotoPicker
+                    id="v-photo-new"
+                    label={t('s2.venuePhoto', { n: form.photos.length + 1 })}
+                    alt=""
+                    error={photoErrors.venue}
+                    describedBy="s2-venue-hint"
+                    onChange={(photo) =>
+                      photo && set('photos', [...form.photos, photo])
+                    }
+                    onError={(e) =>
+                      setPhotoErrors((all) => ({ ...all, venue: e }))
+                    }
+                  />
+                )}
+              </div>
+            )}
             {hasPhotos && (
               <PhotoConsent
                 id="s2-photo-consent"
@@ -582,11 +637,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 {hasPhotos && (
                   <>
                     <br />
-                    <span>
-                      {t('s4.photos', {
-                        count: form.dishes.filter((d) => d.photo).length,
-                      })}
-                    </span>
+                    <span>{t('s4.photos', { count: photoCount })}</span>
                   </>
                 )}
               </p>

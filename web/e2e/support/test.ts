@@ -84,6 +84,27 @@ export interface Session {
   role: Staff;
 }
 
+// Ancho y alto de un WebP con pérdida (lo que codifica el navegador), para
+// comprobar que la web reduce las fotos al tamaño acordado.
+function webpSize(bytes: Buffer | null) {
+  if (!bytes || bytes.toString('latin1', 8, 12) !== 'WEBP') return {};
+  const chunk = bytes.toString('latin1', 12, 16);
+  if (chunk === 'VP8X') {
+    return {
+      width: bytes.readUIntLE(24, 3) + 1,
+      height: bytes.readUIntLE(27, 3) + 1,
+    };
+  }
+  if (chunk !== 'VP8 ') return {};
+  return {
+    width: bytes.readUInt16LE(26) & 0x3fff,
+    height: bytes.readUInt16LE(28) & 0x3fff,
+  };
+}
+
+const PHOTO_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="#e9d8c8"/></svg>';
+
 export const test = base.extend<{ sent: Sent[]; session: Session }>({
   sent: async ({}, provide) => {
     await provide([]);
@@ -102,6 +123,8 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
       role: session.role,
       moderationScope: [{ country: 'ES' }],
     });
+
+    let uploads = 0; // para dar una clave distinta a cada foto subida
 
     // Quién modera cambia con las altas y bajas de la propia prueba.
     const team: ApiStaff[] = structuredClone(staff);
@@ -124,7 +147,7 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
           status: 204,
           headers: {
             ...headers,
-            'access-control-allow-methods': 'GET, POST, DELETE',
+            'access-control-allow-methods': 'GET, POST, PUT, DELETE',
             'access-control-allow-headers': 'content-type, x-requested-with',
           },
         });
@@ -137,6 +160,39 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
         if (!member) return route.fulfill({ status: 404, headers, json: {} });
         member.disabledAt ??= new Date().toISOString();
         return route.fulfill({ status: 204, headers });
+      }
+
+      if (method === 'POST' && path === '/uploads') {
+        // La foto llega tal cual (no es JSON): se anota su tipo y su tamaño.
+        const thumbOf = searchParams.get('thumbOf');
+        sent.push({
+          path: thumbOf ? `/uploads?thumbOf=${thumbOf}` : '/uploads',
+          body: {
+            type: request.headers()['content-type'],
+            size: request.postDataBuffer()?.length ?? 0,
+            ...webpSize(request.postDataBuffer()),
+          },
+        });
+        const id =
+          thumbOf ??
+          `0b8e3a52-5a43-4b8a-9d5e-${String(++uploads).padStart(12, '0')}`;
+        return route.fulfill({
+          status: 201,
+          headers,
+          json: { key: `q/${id}${thumbOf ? '-thumb' : ''}.webp` },
+        });
+      }
+
+      // Las fotos en cuarentena y las publicadas: una imagen cualquiera.
+      if (
+        method === 'GET' &&
+        /^(\/suggestions\/[^/]+)?\/photos\/[^/]+$/.test(path)
+      ) {
+        return route.fulfill({
+          headers,
+          contentType: 'image/svg+xml',
+          body: PHOTO_SVG,
+        });
       }
 
       if (method === 'POST') {

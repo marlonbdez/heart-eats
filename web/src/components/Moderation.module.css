@@ -178,6 +178,32 @@
 .facts a {
   color: var(--accent-text);
 }
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.photos img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--hover);
+}
+.photos a {
+  display: block;
+}
+.photos label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
 .diff {
   display: grid;
   gap: 10px;

@@ -216,7 +216,11 @@
       "add": "+ Añadir otro plato",
       "photo": "Foto",
       "photoAlt": "Foto del plato {n}",
-      "photoHint": "La foto es opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien. No se guarda en el borrador."
+      "photoHint": "La foto es opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien. No se guarda en el borrador.",
+      "venueTitle": "Fotos del local",
+      "venueHint": "Opcional, hasta 5: el ambiente, la barra, la terraza… Lo que haga que dé ganas de ir. Se reducen en tu dispositivo y no se ven hasta que las revisemos. Evita fotos donde se reconozca a alguien.",
+      "venuePhoto": "Foto del local {n}",
+      "venueAlt": "Foto {n} del local"
     },
     "s3": {
       "intro": "HeartEats reúne negocios independientes cuyo equipo incluye a personas con discapacidad. Cuéntanos lo que sepas para que podamos comprobarlo.",
@@ -541,7 +545,7 @@
       {
         "heading": "Esta versión está empezando",
         "paragraphs": [
-          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo también se envía de verdad. El envío de fotos todavía no está disponible: por ahora no se piden. Lo que sigue describe cómo tratamos los datos."
+          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo también se envía de verdad. Las fotos de un local nuevo también se envían de verdad; las del equipo todavía no se piden. Lo que sigue describe cómo tratamos los datos."
         ]
       },
       {
@@ -561,7 +565,7 @@
         "items": [
           "Si usas la web: ninguno nuestro. El servidor de la web y el del mapa ven tu dirección IP al servirte la página, como cualquier servidor.",
           "Si pulsas «Cerca de mí»: tu ubicación se usa solo en tu dispositivo, para ordenar los locales por distancia. No se envía ni se guarda, y solo se pide cuando pulsas el botón.",
-          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 9 meses.",
+          "Si propones un local: los datos del local, cómo lo conoces, un enlace (opcional), fotos del local y de los platos (opcional, con tu confirmación de que son tuyas o tienes permiso) y tu correo (opcional). Los usamos para revisar la propuesta y, si cumple el criterio, publicarla. Las fotos se reducen en tu dispositivo, esperan en un almacén privado que solo ve quien modera, y solo se publican las que una persona aprueba una a una; si se rechaza la propuesta, se borran. La propuesta se conserva hasta resolverla; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si sugieres una corrección: qué hay que corregir, tu explicación, un enlace (opcional) y tu correo (opcional). Los usamos para revisar el aviso y, si es correcto, actualizar la ficha. Se conservan igual que una propuesta.",
           "Si respondes a una petición de información: el texto que escribas (hasta 2000 caracteres; te pedimos que no incluyas datos de salud ni nombres de otras personas). Se guarda con la propuesta para decidir sobre ella y se conserva como ella. Para escribirte usamos el correo que dejaste, y el enlace de respuesta sirve una sola vez.",
           "Si pides una retirada: qué quieres retirar, tu explicación (sin datos de salud ni nombres de terceros) y tu correo, que es obligatorio para confirmar por correo que eres la persona o su representante antes de ocultar nada. Se conservan igual que una propuesta; el correo se borra al resolverla o, como máximo, a los 9 meses.",
@@ -888,6 +892,12 @@
     "dishes": "Platos estrella",
     "photosCount": "Fotos",
     "photosNote": "{count} (este prototipo no las muestra)",
+    "photosTitle": "Fotos enviadas",
+    "photosHint": "Míralas antes de decidir. Las que marques como «No publicar» se borran al aprobar; el resto se publica. Si rechazas la solicitud, se borran todas.",
+    "photoOpen": "Abrir la foto en grande (se abre en una pestaña nueva)",
+    "photoOfDish": "Foto del plato «{dish}»",
+    "photoOfPlace": "Foto del local {n}",
+    "photoSkip": "No publicar esta foto",
     "howKnown": "Cómo lo conoce quien propone",
     "evidence": "Enlace aportado",
     "none": "Sin indicar",
@@ -905,7 +915,7 @@
       "teamOwner": "He confirmado con el negocio, por un canal oficial, que quien envía lo representa",
       "teamFigures": "Las cifras son coherentes (al menos una persona; no más con discapacidad que en total)",
       "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal",
-      "photos": "Las fotos son del plato o del local, sin caras reconocibles ni datos personales, y hay permiso para usarlas",
+      "photos": "Las fotos que se publican son del plato o del local, sin caras reconocibles ni datos personales, y hay permiso para usarlas",
       "removalIdentity": "He confirmado, por el correo, que quien lo pide es la persona o su representante"
     },
     "decisionTitle": "Decisión",

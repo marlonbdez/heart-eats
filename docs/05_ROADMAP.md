@@ -76,7 +76,10 @@ Una PR por paso:
   - [x] Lecturas (inicio, lista, fichas y categorías) desde el navegador, sin datos fijos; las fichas se sirven con una reescritura y no se generan al compilar
   - [x] Envíos de propuestas, correcciones y retiradas a la API (con el idioma, y el aviso de «demasiados envíos»); `/privacy` actualizada (Resend, Nominatim, plazos); topes de envío del servidor subidos a 100/hora y 1000/día
   - [x] Equipo del negocio: el formulario envía a `POST /teams` (con el idioma y el aviso de «demasiados envíos»); moderación lo aprueba desde la web y el admin lee las historias; `/privacy` actualizada
-  - [ ] Fotos (`POST /uploads` + R2): hasta entonces ni «Proponer un local» ni el formulario del negocio piden fotos (`photoUploads` en `web/src/lib/features.ts`; al activarlo, recuperar las pruebas de fotos de la PR anterior); retirar entonces el buzón de prueba
+  - [x] Fotos al proponer un local: 1600 px + miniatura de 400 px (WebP, JPEG de reserva), hasta 5 del local y una por plato, subidas al enviar; Moderación las ve y puede dejar fuera alguna (`photoUploads` activo)
+  - [ ] Fotos del equipo y del formulario del negocio: el servidor aún no las acepta en `POST /teams` (`teamPhotoUploads` apagado); retirar entonces el buzón de prueba
+  - [ ] Portada y galería a pantalla completa en la ficha y miniatura en la tarjeta
+  - [ ] Pantalla de Moderación para subir, ordenar y retirar fotos de un local publicado
   - [x] Moderación: entrada con enlace por correo (`/moderation/login`), cola, detalle y decisiones (rechazar, pedir información, aprobar un local nuevo, una corrección o una retirada); `/cookies` actualizada (`he_session`). Una corrección también cambia el pin (latitud y longitud) y el horario completo de la semana. Falta: retiradas de fotos y de datos
   - [x] Administración en la moderación (`/moderation`, solo si el rol es `admin`): «Usuarios» (invitar a un moderador con correo, país y ciudad; darlo de baja con confirmación; reponerlo invitándolo de nuevo) y «Registro» (la auditoría con filtro por tipo y «Cargar más»)
   - [x] Página `/reply` para responder a «Info pedida» (lee el token del fragmento, muestra la nota y el plazo, y explica con calma el enlace ya usado o caducado); `/privacy` recoge la respuesta

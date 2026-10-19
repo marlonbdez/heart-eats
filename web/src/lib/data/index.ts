@@ -5,13 +5,14 @@ import type {
   BusinessTeamInput,
   CorrectionInput,
   FoodTag,
+  PhotoBlobs,
   ProposalInput,
   RegionCountry,
   RemovalInput,
   Restaurant,
   Zone,
 } from '../types';
-import { ApiRequestError, apiGet, apiPost } from '../api';
+import { ApiRequestError, apiGet, apiPost, apiUpload } from '../api';
 
 const PAGE_SIZE = 100;
 // Tope de páginas por si la API no cerrara nunca el cursor.
@@ -81,20 +82,39 @@ export async function getFoodTags(): Promise<FoodTag[]> {
   return res.foodTags;
 }
 
+// Sube una foto a la cuarentena y, después, su miniatura (que cuelga de la
+// foto). Devuelve la clave que se manda en el envío.
+async function uploadPhoto({ blob, thumb }: PhotoBlobs): Promise<string> {
+  const key = await apiUpload(blob);
+  const id = /^q\/([^.]+)\./.exec(key)?.[1];
+  if (!id) throw new Error('Clave de foto inesperada');
+  await apiUpload(thumb, { thumbOf: id });
+  return key;
+}
+
 // Propuesta de un local nuevo (POST /api/v1/proposals). Entra en moderación.
-// Las fotos de los platos no se envían todavía (falta POST /uploads).
+// Primero suben las fotos (si las hay) y el envío lleva sus claves; si una
+// subida falla, no se envía nada y las ya subidas caducan solas a las 24 h.
 export async function submitProposal(input: ProposalInput): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
+  const dishKeys = await Promise.all(
+    input.dishes.map(({ photo }) => photo && uploadPhoto(photo)),
+  );
+  const photoKeys = await Promise.all(
+    (input.photos ?? []).map((photo) => uploadPhoto(photo)),
+  );
   await apiPost('/proposals', {
     name: input.name,
     street: input.street,
     city: input.city,
     postalCode: input.postalCode,
     foodTags: input.foodTags,
-    dishes: input.dishes.map(({ name, description }) => ({
+    dishes: input.dishes.map(({ name, description }, i) => ({
       name,
       description,
+      photoKey: dishKeys[i],
     })),
+    photoKeys,
     howKnown: input.howKnown,
     evidenceUrl: input.evidenceUrl,
     independent: input.independent,

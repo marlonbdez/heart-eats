@@ -100,9 +100,16 @@ export interface RestaurantQuery {
   food?: string[]; // foodTags (OR)
 }
 
+// Una foto ya reducida en el navegador, con su miniatura. Todavía no se ha
+// subido: eso lo hace el envío.
+export interface PhotoBlobs {
+  blob: Blob;
+  thumb: Blob;
+}
+
 // Plato de una propuesta: la foto, si la hay, ya viene reducida y sin subir.
 export interface ProposalDish extends SignatureDish {
-  photo?: Blob;
+  photo?: PhotoBlobs;
 }
 
 // Propuesta de un nuevo local (F2). Entra siempre en moderación; nunca se
@@ -115,6 +122,7 @@ export interface ProposalInput {
   postalCode?: string;
   foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
   dishes: ProposalDish[]; // 0-3, solo con nombre
+  photos?: PhotoBlobs[]; // 0-5, del local
   howKnown?: string;
   evidenceUrl?: string;
   independent: boolean;
@@ -209,6 +217,9 @@ export interface ModerationItem {
   dishes?: string[];
   // Cuántas fotos se adjuntaron; la imagen no se guarda en el buzón de prueba.
   photoCount?: number;
+  // Las fotos de un local nuevo, en cuarentena hasta que se decide. `key` es lo
+  // que se manda en `skipPhotos` para no publicar una.
+  photos?: ModerationPhoto[];
   howKnown?: string;
   evidenceUrl?: string;
   // Solo en una corrección:
@@ -230,6 +241,13 @@ export interface ModerationItem {
   };
 }
 
+export interface ModerationPhoto {
+  key: string;
+  url: string;
+  thumbUrl: string;
+  dish?: string; // el plato, si es la foto de uno
+}
+
 export type RejectReason =
   'not_independent' | 'no_evidence' | 'duplicate' | 'out_of_zone' | 'other';
 
@@ -240,6 +258,9 @@ export type ModerationDecision =
       method?: VerificationMethod;
       // Solo en un local nuevo sin pin geocodificado: el pin a mano.
       location?: { lat: number; lng: number };
+      // Solo en un local nuevo: las fotos (`ModerationPhoto.key`) que no se
+      // publican. Se borran.
+      skipPhotos?: string[];
       // Solo en una retirada de una historia: su posición en la ficha (0–2).
       storyIndex?: number;
       // Solo en una corrección: el cambio, ya comprobado, que se aplica.

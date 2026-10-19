@@ -1,4 +1,7 @@
 // Funciones del servidor que la web todavía no puede usar.
-// Las fotos se reducen en el navegador, pero no hay dónde subirlas hasta que
-// exista POST /uploads (almacenamiento R2): sin eso, no se piden.
-export const photoUploads = false;
+// Fotos de un local nuevo (al proponerlo): ya se suben a la cuarentena y las
+// revisa Moderación.
+export const photoUploads = true;
+// Fotos del equipo y del formulario del negocio: el servidor aún no las acepta
+// en POST /teams. Se piden cuando lo haga.
+export const teamPhotoUploads = false;

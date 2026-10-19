@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { isRateLimited } from '@/lib/api';
 import { submitBusinessTeam } from '@/lib/data';
-import { photoUploads } from '@/lib/features';
+import { teamPhotoUploads } from '@/lib/features';
 import { Link } from '@/i18n/navigation';
 import type { PreparedPhoto } from '@/lib/image';
 import { isSmallTeam } from '@/lib/team';
@@ -576,7 +576,7 @@ export function BusinessForm({
                 <p className={s.small}>{t('s3.consentNote')}</p>
               </>
             )}
-            {photoUploads && (
+            {teamPhotoUploads && (
               <div className={s.card}>
                 <h2 className={s.cardTitle}>{t('s3.photosTitle')}</h2>
                 <p id="b-photo-hint" className={s.small}>
