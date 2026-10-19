@@ -14,8 +14,8 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function stubFetch(status = 200) {
-  fetchMock.mockResolvedValue(new Response(null, { status }));
+function stubFetch(status = 200, body: string | null = null) {
+  fetchMock.mockResolvedValue(new Response(body, { status }));
   vi.stubGlobal('fetch', fetchMock);
 }
 
@@ -102,5 +102,19 @@ describe('r2PhotoStore', () => {
         'image/webp',
       ),
     ).rejects.toThrow('R2 respondió 403 a PUT');
+  });
+
+  it('añade el código de error que da R2, sin el resto de la respuesta', async () => {
+    stubFetch(
+      403,
+      '<Error><Code>AccessDenied</Code><Message>Bucket fotos secreto</Message></Error>',
+    );
+    const error = await r2PhotoStore(options)
+      .put('q/uno.webp', new Uint8Array([1]), 'image/webp')
+      .catch((err: Error) => err);
+    expect((error as Error).message).toBe(
+      'R2 respondió 403 (AccessDenied) a PUT',
+    );
+    expect((error as Error).message).not.toContain('fotos');
   });
 });

@@ -49,13 +49,19 @@ export function r2PhotoStore({
   const request = (method: string, key: string, init: RequestInit = {}) =>
     client.fetch(`https://${host}/${bucket}/${key}`, { ...init, method });
 
-  // Solo el código: el cuerpo de R2 puede nombrar el bucket.
-  const fail = (res: Response, method: string) =>
-    new Error(`R2 respondió ${res.status} a ${method}`);
+  // Solo el estado y el código de error de R2 (por ejemplo `AccessDenied`): el
+  // resto del cuerpo puede nombrar el bucket.
+  async function fail(res: Response, method: string) {
+    const body = await res.text().catch(() => '');
+    const code = /<Code>([A-Za-z]{1,64})<\/Code>/.exec(body)?.[1];
+    return new Error(
+      `R2 respondió ${res.status}${code ? ` (${code})` : ''} a ${method}`,
+    );
+  }
 
   async function send(method: string, key: string, init: RequestInit = {}) {
     const res = await request(method, key, init);
-    if (!res.ok) throw fail(res, method);
+    if (!res.ok) throw await fail(res, method);
   }
 
   return {
@@ -64,7 +70,7 @@ export function r2PhotoStore({
     async get(key) {
       const res = await request('GET', key);
       if (res.status === 404) return null;
-      if (!res.ok) throw fail(res, 'GET');
+      if (!res.ok) throw await fail(res, 'GET');
       return {
         body: Buffer.from(await res.arrayBuffer()),
         contentType:
