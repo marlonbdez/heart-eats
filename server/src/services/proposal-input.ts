@@ -1,6 +1,13 @@
 import { z } from 'zod';
 import { foodTags } from '../catalog.js';
-import { email, httpUrl, locale, text } from './input-fields.js';
+import {
+  countryCode,
+  email,
+  httpUrl,
+  latLng,
+  locale,
+  text,
+} from './input-fields.js';
 import { quarantineKey } from './photo-keys.js';
 
 // Mismas reglas que el formulario de la web (ProposeForm), vistas desde el
@@ -18,6 +25,10 @@ export const proposalSchema = z.object({
   name: z.string().trim().min(2).max(120),
   street: text(200).optional(),
   city: text(100),
+  // Opcionales mientras la web antigua siga en circulación; la nueva los manda.
+  country: countryCode.optional(),
+  // Dónde colocó el local quien propone, en el mapa. Moderación lo comprueba.
+  location: latLng.optional(),
   postalCode: text(10).optional(),
   // 'other' es la categoría «Otra» de la web.
   foodTags: z

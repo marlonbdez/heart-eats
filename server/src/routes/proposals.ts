@@ -16,12 +16,15 @@ interface ProposalsOptions {
 // Lo que se guarda como contenido de la propuesta: nada de correo ni de idioma.
 function toPayload(input: ProposalInput) {
   const { name, street, city, postalCode, foodTags, dishes } = input;
+  const { country, location } = input;
   const { photoKeys } = input;
   const { howKnown, independent } = input;
   return {
     name,
     street,
     city,
+    country,
+    location,
     postalCode,
     foodTags,
     dishes,
@@ -61,6 +64,7 @@ export function proposalsRouter({ limiter, chains }: ProposalsOptions) {
             chains,
           }),
           cityKey,
+          country: input.country,
         };
       },
     }),

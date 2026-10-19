@@ -16,6 +16,18 @@ export const email = z
   .max(254)
   .transform((value) => value.toLowerCase());
 
+// País (ISO 3166-1 alfa-2) y punto del mapa, tal como los manda la web.
+export const countryCode = z
+  .string()
+  .trim()
+  .regex(/^[A-Za-z]{2}$/)
+  .transform((value) => value.toUpperCase());
+
+export const latLng = z.object({
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+});
+
 export const locale = z.enum(['es', 'en']).default('es');
 
 // Slug de un local publicado, para correcciones y retiradas.

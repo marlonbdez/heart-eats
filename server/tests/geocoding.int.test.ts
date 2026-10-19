@@ -73,6 +73,64 @@ describe('GET /api/v1/suggestions/:id geocodifica un local nuevo', () => {
     expect(doc?.geocode).toMatchObject({ ...PIN, provider: 'nominatim' });
   });
 
+  it('busca la dirección dentro de su país, si la propuesta lo da', async () => {
+    const s = await proposal({
+      payload: {
+        name: 'Casa Nueva',
+        street: 'Calle Mayor 5',
+        city: 'Madrid',
+        country: 'ES',
+        foodTags: ['tapas'],
+        dishes: [],
+      },
+      country: 'ES',
+    });
+    await open(s._id, await signedInCookie());
+    expect(calls).toEqual([
+      { street: 'Calle Mayor 5', city: 'Madrid', country: 'ES' },
+    ]);
+  });
+
+  it('el pin que colocó quien propone vale: no se consulta nada, ni hace falta calle', async () => {
+    const s = await proposal({
+      payload: {
+        name: 'Casa Nueva',
+        city: 'Holguín',
+        country: 'CU',
+        location: { lat: 20.8872, lng: -76.2631 },
+        foodTags: ['tapas'],
+        dishes: [],
+      },
+      country: 'CU',
+      cityKey: 'holguin',
+    });
+    const cookie = await signedInCookie({ role: 'admin' });
+    const res = await open(s._id, cookie, plainApp);
+    expect(res.status).toBe(200);
+    expect(res.body.location).toEqual({ lat: 20.8872, lng: -76.2631 });
+    expect(res.body.locationBy).toBe('proposer');
+    expect(calls).toEqual([]);
+    const doc = await Suggestion.findById(s._id).lean();
+    expect(doc?.geocode).toMatchObject({ provider: 'proposer', country: 'CU' });
+  });
+
+  it('el pin de quien propone también avisa de un local a menos de 50 m', async () => {
+    await Restaurant.create(restaurantData({ name: 'Casa Cercana' }));
+    const s = await proposal({
+      payload: {
+        name: 'Casa Nueva',
+        city: 'Madrid',
+        location: { lat: PIN.lat, lng: PIN.lng },
+        foodTags: ['tapas'],
+        dishes: [],
+      },
+    });
+    const res = await open(s._id, await signedInCookie(), plainApp);
+    expect(res.body.warnings).toContainEqual(
+      expect.objectContaining({ kind: 'duplicate', other: 'Casa Cercana' }),
+    );
+  });
+
   it('no se vuelve a pedir en la segunda apertura', async () => {
     const s = await proposal();
     const cookie = await signedInCookie();

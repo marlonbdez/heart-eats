@@ -75,22 +75,25 @@ export const statusesOf = (status: QueueQuery['status']) =>
 // Filtro de Mongo con lo que puede ver quien modera (ADR 0008). Los locales
 // nuevos se ubican por ciudad; las demás solicitudes, por el local al que
 // apuntan. `scopedRestaurantIds` son los locales que caen en su ámbito.
-// Hoy una propuesta no lleva país, así que un ámbito de solo país ve todas
-// las propuestas.
+// Una propuesta con país solo la ve quien lo tenga en su ámbito; las que no lo
+// llevan (anteriores a pedirlo) se reparten solo por ciudad.
 export function scopeFilter(
   scope: readonly ModerationScope[],
   scopedRestaurantIds: readonly unknown[],
 ): Record<string, unknown> {
   if (scope.length === 0) return { _id: { $in: [] } }; // nada
 
-  const cities = scope.map((s) => (s.city ? normalize(s.city) : null));
-  const newOnes = cities.includes(null)
-    ? { type: 'new' }
-    : { type: 'new', cityKey: { $in: cities } };
+  const newOnes = scope.map((s) => ({
+    type: 'new',
+    ...(s.country === ANY_COUNTRY
+      ? {}
+      : { $or: [{ country: s.country }, { country: { $exists: false } }] }),
+    ...(s.city ? { cityKey: normalize(s.city) } : {}),
+  }));
 
   return {
     $or: [
-      newOnes,
+      ...newOnes,
       {
         type: { $ne: 'new' },
         targetRestaurantId: { $in: scopedRestaurantIds },

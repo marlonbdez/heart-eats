@@ -303,6 +303,24 @@ describe('el pin', () => {
     expect((await published())[0]?.address?.country).toBe('ES');
   });
 
+  it('sin país geocodificado, vale el que dio quien propone', async () => {
+    found = null;
+    const s = await proposal({ country: 'PT', cityKey: 'lisboa' });
+    const cookie = await signedInCookie({
+      moderationScope: [
+        { country: 'ES', city: 'Madrid' },
+        { country: 'PT', city: 'Lisboa' },
+      ],
+    });
+    const res = await decide(
+      s._id,
+      approval({ location: { lat: 38.72, lng: -9.14 } }),
+      cookie,
+    );
+    expect(res.status).toBe(200);
+    expect((await published())[0]?.address?.country).toBe('PT');
+  });
+
   it('con un ámbito de varios países y sin país geocodificado, 422 country_required', async () => {
     found = null;
     const s = await proposal();

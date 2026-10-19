@@ -237,7 +237,9 @@ export function suggestionsRouter({
       );
     }
     const country =
-      record.geocode?.country ?? scopeCountry(user.moderationScope);
+      record.geocode?.country ??
+      record.country ??
+      scopeCountry(user.moderationScope);
     if (!country) {
       throw new ApiError(
         422,

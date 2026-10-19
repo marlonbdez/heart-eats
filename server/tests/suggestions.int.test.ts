@@ -209,6 +209,26 @@ describe('GET /api/v1/suggestions', () => {
     expect(seen.body.items).toHaveLength(1);
   });
 
+  it('una propuesta con país solo la ve quien lo tenga en su ámbito; las antiguas, por ciudad', async () => {
+    await seed([
+      { ...proposal('Sin país', 'Madrid', '2026-10-01T00:00:00Z') },
+      {
+        ...proposal('Madrid ES', 'Madrid', '2026-10-02T00:00:00Z'),
+        country: 'ES',
+      },
+      {
+        ...proposal('Madrid CU', 'Madrid', '2026-10-03T00:00:00Z'),
+        country: 'CU',
+      },
+    ]);
+    const cookie = await signedInCookie();
+    const res = await get('/suggestions', cookie);
+    expect(res.body.items.map((i: { name: string }) => i.name)).toEqual([
+      'Sin país',
+      'Madrid ES',
+    ]);
+  });
+
   it('un ámbito vacío no ve nada', async () => {
     await seed(proposal('A', 'Madrid', '2026-10-01T00:00:00Z'));
     const cookie = await signedInCookie({ moderationScope: [] });

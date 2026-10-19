@@ -28,6 +28,8 @@ export interface SuggestionRecord {
   warnings: SuggestionWarning[];
   // Ciudad del local propuesto sin acentos, para buscar duplicados.
   cityKey?: string;
+  // País del local propuesto (ISO 3166-1 alfa-2). Las propuestas antiguas no lo llevan.
+  country?: string;
   // Resultado de geocodificar la dirección (ADR 0006). Sin `lat` y `lng`, el
   // servicio no la encontró y el pin se coloca a mano.
   geocode?: {
@@ -88,6 +90,7 @@ const suggestionSchema = new Schema(
     locale: { type: String, enum: ['es', 'en'], default: 'es' },
     warnings: { type: [Schema.Types.Mixed], default: [] },
     cityKey: String,
+    country: { type: String, match: /^[A-Z]{2}$/ },
     geocode: {
       type: new Schema(
         {
