@@ -21,7 +21,7 @@ export class ApiRequestError extends Error {
 type Params = Record<string, string | number | undefined>;
 
 async function request(
-  method: 'GET' | 'POST' | 'DELETE',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   path: string,
   {
     params = {},
@@ -100,6 +100,10 @@ export async function sessionGet<T>(path: string, params: Params = {}) {
 export async function sessionPost<T = void>(path: string, body?: unknown) {
   const res = await request('POST', path, { body, session: true });
   return (res.status === 204 ? undefined : await res.json()) as T;
+}
+
+export async function sessionPut(path: string, body: unknown) {
+  await request('PUT', path, { body, session: true });
 }
 
 export async function sessionDelete(path: string) {

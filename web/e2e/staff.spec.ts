@@ -1,13 +1,17 @@
 import { expect, test } from './support/test';
 
-test('quien solo modera no ve las secciones de administración', async ({
+test('quien solo modera ve solicitudes y fotos, no las secciones de administración', async ({
   page,
   session,
 }) => {
   session.role = 'moderator';
   await page.goto('/es/moderation');
   await expect(page.getByRole('button', { name: /Pendientes/ })).toBeVisible();
-  await expect(page.getByRole('group', { name: 'Secciones' })).toBeHidden();
+  const sections = page.getByRole('group', { name: 'Secciones' });
+  await expect(sections.getByRole('button')).toHaveText([
+    'Solicitudes',
+    'Fotos',
+  ]);
   await expect(page.getByRole('button', { name: 'Usuarios' })).toBeHidden();
   await expect(page.getByRole('button', { name: 'Registro' })).toBeHidden();
 });

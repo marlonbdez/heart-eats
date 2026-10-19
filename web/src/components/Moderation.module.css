@@ -246,6 +246,10 @@
   background: var(--hover);
   border-radius: 12px;
 }
+.result:empty {
+  padding: 0;
+  background: none;
+}
 .log {
   display: grid;
   gap: 6px;
@@ -379,4 +383,27 @@
 .person .confirmRow p,
 .person .confirmRow [role='alert'] {
   grid-column: 1 / -1;
+}
+
+/* Fotos de un local publicado. */
+.photoThumb {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--hover);
+}
+.photoActions {
+  display: grid;
+  gap: 10px;
+}
+@media (min-width: 520px) {
+  .photoActions {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+.backButton {
+  align-self: flex-start;
 }

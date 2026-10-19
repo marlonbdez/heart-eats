@@ -357,6 +357,27 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('moderación: fotos de un local publicado', async ({
+      page,
+      session,
+    }) => {
+      session.role = 'moderator';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: 'Fotos', exact: true }).click();
+      await expect(page.getByLabel('Nombre del local')).toBeVisible();
+      await expectNoViolations(page);
+      await page.getByLabel('Nombre del local').fill('masa');
+      await page.getByRole('button', { name: 'Buscar' }).click();
+      await page.getByRole('button', { name: /La Masa Madre/ }).click();
+      await expect(page.getByText('Foto 5')).toBeVisible();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Retirar la foto 2' }).click();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Añadir foto' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('moderación: registro', async ({ page, session }) => {
       session.role = 'admin';
       await page.goto('/es/moderation');
