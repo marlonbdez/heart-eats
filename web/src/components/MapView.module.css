@@ -52,7 +52,7 @@
   bottom: 64px; /* encima de la atribución del mapa */
   z-index: 5;
   max-width: 420px;
-  padding: 14px 40px 14px 14px;
+  overflow: hidden;
   color: var(--fg);
   background: var(--bg);
   border: 1px solid var(--line);
@@ -63,6 +63,7 @@
   position: absolute;
   top: 2px;
   right: 2px;
+  z-index: 1; /* por encima del enlace estirado de la tarjeta */
   display: grid;
   place-items: center;
   width: 44px;

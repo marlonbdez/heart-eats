@@ -4,7 +4,7 @@
 
 ## CU-01 · Explorar el mapa
 - **Quién:** Visitante; Servicio de mapas.
-- **Pasos:** abre `/` → ve un marcador por local → toca uno y aparece su tarjeta → «Ver local →» lleva a CU-06.
+- **Pasos:** abre `/` → ve un marcador por local → toca uno y aparece su tarjeta → toda la tarjeta (foto, plato y nombre) lleva a CU-06.
 - **Si no:** si el mapa no carga, se ofrece la lista (CU-02). Sin resultados, aparece «Quitar filtros» y «Proponer un local».
 - **Reglas:** pin igual para todos (la verificación va en la tarjeta); marcadores operables con teclado; la ubicación no se pide al cargar.
 - **Observación:** no se agrupan marcadores (clustering); habrá que decidirlo con cientos de locales.

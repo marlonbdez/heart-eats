@@ -8,8 +8,8 @@ import { Distance } from './Distance';
 import { VerificationBadge } from './VerificationBadge';
 import styles from './RestaurantCard.module.css';
 
-// Tarjeta de local. En la lista (`list`) la foto va arriba y toda la tarjeta
-// lleva a la ficha; en la vista previa del mapa (`preview`) es compacta.
+// Tarjeta de local; toda ella lleva a la ficha. En la lista (`list`) la foto
+// va arriba; en la vista previa del mapa (`preview`) va a un lado y es compacta.
 export const RestaurantCard = memo(function RestaurantCard({
   restaurant,
   variant = 'preview',
@@ -48,23 +48,17 @@ export const RestaurantCard = memo(function RestaurantCard({
         )}
       </div>
       <div className={styles.body}>
-        {isList ? (
-          <h2 className={styles.name}>
-            <Link className={styles.nameLink} href={href}>
-              {restaurant.name}
-            </Link>
-          </h2>
-        ) : (
+        {!isList && dish && (
           <>
-            {dish && (
-              <>
-                <p className={styles.dishLabel}>{t('signatureDish')}</p>
-                <p className={styles.dish}>{dish.name}</p>
-              </>
-            )}
-            <h2 className={styles.name}>{restaurant.name}</h2>
+            <p className={styles.dishLabel}>{t('signatureDish')}</p>
+            <p className={styles.dish}>{dish.name}</p>
           </>
         )}
+        <h2 className={styles.name}>
+          <Link className={styles.nameLink} href={href}>
+            {restaurant.name}
+          </Link>
+        </h2>
         <p className={styles.place}>
           {place}
           <Distance location={restaurant.location} />
@@ -79,11 +73,6 @@ export const RestaurantCard = memo(function RestaurantCard({
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>
         <VerificationBadge verification={restaurant.verification} />
-        {!isList && (
-          <Link className={styles.more} href={href}>
-            {t('viewLocal')}
-          </Link>
-        )}
       </div>
     </div>
   );

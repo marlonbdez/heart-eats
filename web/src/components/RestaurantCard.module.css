@@ -1,25 +1,30 @@
+/* Vista previa del mapa: la foto ocupa todo el alto, a la izquierda, y la
+   tarjeta entera es un enlace (el del nombre, estirado). */
 .card {
+  position: relative;
   display: flex;
-  gap: 12px;
 }
 .photo {
+  position: relative;
   flex: none;
   display: grid;
   place-items: center;
-  width: 84px;
-  height: 84px;
+  width: 112px;
+  min-height: 112px;
   overflow: hidden;
   font-size: 2rem;
   background: var(--hover);
-  border-radius: 12px;
 }
 .photo img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 .body {
   min-width: 0;
+  padding: 12px 48px 12px 12px;
 }
 .body p,
 .body h2 {
@@ -51,14 +56,6 @@
   font-weight: 600;
   color: var(--accent-text);
 }
-.more {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--accent-text);
-}
 
 /* Lista: la foto manda, ocupa todo el ancho de la tarjeta y la tarjeta entera
    es un enlace (el del nombre, estirado). */
@@ -70,10 +67,12 @@
 }
 .listCard .photo {
   width: 100%;
-  height: auto;
+  min-height: 0;
   aspect-ratio: 4 / 3;
   font-size: 3rem;
-  border-radius: 0;
+}
+.listCard .photo img {
+  position: static;
 }
 /* Una tarjeta ancha (la lista junto al mapa) no se vuelve altísima. */
 @container (min-width: 460px) {
@@ -108,6 +107,7 @@
   outline: 3px solid var(--accent-text);
   outline-offset: -3px;
 }
+.card:hover .nameLink,
 .listCard:hover .nameLink {
   text-decoration: underline;
 }
