@@ -21,6 +21,7 @@ for (const path of ['/es', '/es/list']) {
     await page.goto(path);
     await expect(markers(page)).toHaveCount(6);
     await expect(cards(page)).toHaveCount(6);
+    const listBox = (await list(page).boundingBox())!;
     const mapBox = (await page
       .getByRole('region', { name: 'Mapa de locales' })
       .boundingBox())!;
