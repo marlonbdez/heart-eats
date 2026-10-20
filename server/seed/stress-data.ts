@@ -10,6 +10,7 @@ import {
   foodTags,
   teamAreas,
 } from '../src/catalog.js';
+import { photoRef, photosFor } from './demo-photos.js';
 
 export const STRESS_SLUG_PREFIX = 'demo-stress-';
 
@@ -537,6 +538,7 @@ export function generateStress(
           (dish, index, all) =>
             all.findIndex((d) => d.name === dish.name) === index,
         ),
+        photos: [photoRef(pick(photosFor(tags)))],
         isIndependent: true,
         status,
         verification: verified

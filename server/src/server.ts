@@ -5,7 +5,7 @@ import { ensureAdmin } from './services/ensure-admin.js';
 import { nominatimGeocoder } from './services/geocoder.js';
 import { startMaintenanceJob } from './services/maintenance.js';
 import { consoleMailer, resendMailer } from './services/mailer.js';
-import { r2PhotoStore } from './services/photo-store.js';
+import { photoStoreFromConfig } from './services/photo-store.js';
 
 const config = loadConfig();
 try {
@@ -29,20 +29,7 @@ const mailer = config.RESEND_API_KEY
     })
   : consoleMailer;
 
-// Sin las claves de R2 no hay dónde guardar fotos y la subida responde 503.
-const photoStore =
-  config.R2_ACCOUNT_ID &&
-  config.R2_ACCESS_KEY_ID &&
-  config.R2_SECRET_ACCESS_KEY &&
-  config.R2_PHOTOS_BUCKET
-    ? r2PhotoStore({
-        accountId: config.R2_ACCOUNT_ID,
-        accessKeyId: config.R2_ACCESS_KEY_ID,
-        secretAccessKey: config.R2_SECRET_ACCESS_KEY,
-        bucket: config.R2_PHOTOS_BUCKET,
-        jurisdiction: config.R2_JURISDICTION,
-      })
-    : undefined;
+const photoStore = photoStoreFromConfig(config);
 
 const server = createApp(config, {
   mailer,

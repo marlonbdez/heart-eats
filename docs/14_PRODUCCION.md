@@ -253,7 +253,7 @@ cd server
 npm run seed -- --clear
 ```
 
-Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; **no lo ejecutes contra producción**.
+Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Si hay claves de R2 en el entorno, también borra del almacén las fotos de ejemplo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; en producción solo se hace para renovar los de ejemplo (§ siguiente).
 
 ### Datos de prueba por todo el mundo (fase de pruebas)
 Mientras se prueba, producción lleva cientos de locales ficticios repartidos por unas 35 ciudades (Madrid con más densidad), con nombres y calles en su idioma o escritura, descripciones solo en ES, solo en EN o ninguna, locales sin horario, archivados o pendientes (no deben verse) y algunos equipos con historia. Todos llevan `isDemo`, «[DEMO]» en el nombre y el slug `demo-stress-…`.
@@ -265,6 +265,19 @@ npm run seed:stress -- --per-city 15   # 630 locales; dice la base y pide escrib
 ```
 
 Se puede repetir: borra los suyos y los recrea igual (son deterministas). `npm run seed -- --clear` los quita junto con los 6 de ejemplo. Ocupan menos de 1 MB (el límite de Atlas M0 son 512 MB), así que lo que se mide es la rapidez de las lecturas, no el espacio.
+
+### Fotos de los locales de ejemplo
+Los 6 `[DEMO]` y los de prueba llevan foto, para que la lista y las tarjetas se vean como serán. Son 16 imágenes de dominio público (`server/seed/photos/`, autoría y licencia en `LICENCIAS.md`), ya reducidas y con su miniatura. Cada local de prueba recibe una que pega con su tipo de comida.
+
+Para cargarlas hacen falta las claves del almacén en el entorno: las cuatro `R2_*` (y `R2_JURISDICTION=eu`) además de `MONGODB_URI`, en `server/.env` (que no se sube al repo) y **solo mientras dura la carga**. El orden importa, porque `seed` borra todos los `isDemo`, también los de prueba:
+
+```bash
+cd server
+npm run seed                          # los 6 [DEMO] y sus fotos; dice la base y cuántos borra
+npm run seed:stress -- --per-city 15  # los de prueba; vuelve a subir las fotos
+```
+
+Sin las claves de R2 los locales se cargan igual, pero sin foto, y lo avisa. `npm run seed -- --clear` borra los locales y las fotos de ejemplo del almacén.
 
 **Antes de abrir al público hay que borrar todo lo de prueba** (§9, pendiente 3), y la web sigue cerrada a buscadores hasta entonces («Abrir a buscadores»).
 

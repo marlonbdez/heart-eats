@@ -1,6 +1,7 @@
 // Carga locales ficticios por todo el mundo (seed/stress-data.ts) para probar
 // la carga, el cambio de región y de idioma. Todos llevan isDemo: se quitan con
-// `npm run seed -- --clear`.
+// `npm run seed -- --clear`. Cada local lleva una foto de ejemplo (la sube al
+// almacén si hay claves de R2; si no, los carga sin foto).
 //
 // Uso: npm run seed:stress -- --per-city 15
 // Es idempotente: antes de cargar borra los suyos (slug demo-stress-…). Dice en
@@ -10,6 +11,8 @@ import { loadConfig } from '../src/config/env.js';
 import { connectDb, disconnectDb } from '../src/db.js';
 import { Restaurant } from '../src/models/restaurant.js';
 import { Team } from '../src/models/team.js';
+import { photoStoreFromConfig } from '../src/services/photo-store.js';
+import { publishDemoPhotos } from './demo-photos.js';
 import { generateStress, STRESS_SLUG_PREFIX } from './stress-data.js';
 
 const flag = process.argv.indexOf('--per-city');
@@ -21,6 +24,7 @@ if (!Number.isInteger(perCity) || perCity < 1 || perCity > 200) {
 
 const places = generateStress(perCity);
 const config = loadConfig();
+const photoStore = photoStoreFromConfig(config);
 const db = new URL(config.MONGODB_URI.replace(/^mongodb(\+srv)?:/, 'http:'));
 const previous = { slug: { $regex: `^${STRESS_SLUG_PREFIX}` } };
 
@@ -48,11 +52,18 @@ const oldIds = await Restaurant.find(previous).distinct('_id');
 await Team.deleteMany({ restaurantId: { $in: oldIds } });
 await Restaurant.deleteMany(previous);
 
+if (photoStore) await publishDemoPhotos(photoStore);
+else console.log('Sin claves de R2: los locales se cargan sin fotos.');
+
 const started = Date.now();
 const BATCH = 200;
 for (let i = 0; i < places.length; i += BATCH) {
   const chunk = places.slice(i, i + BATCH);
-  const created = await Restaurant.insertMany(chunk.map((p) => p.restaurant));
+  const created = await Restaurant.insertMany(
+    chunk.map(({ restaurant }) =>
+      photoStore ? restaurant : { ...restaurant, photos: [] },
+    ),
+  );
   const teams = chunk.flatMap((p, index) =>
     p.team ? [{ ...p.team, restaurantId: created[index]!._id }] : [],
   );

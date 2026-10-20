@@ -54,10 +54,12 @@
     "signatureDishes": [
       {
         "name": "Margarita de la casa",
-        "description": "Tomate, mozzarella fresca y albahaca."
+        "description": "Tomate, mozzarella fresca y albahaca.",
+        "demoPhoto": "pizza"
       },
       {
-        "name": "Focaccia de romero"
+        "name": "Focaccia de romero",
+        "demoPhoto": "focaccia"
       }
     ],
     "ownerConfirmedAt": "2026-09-01T00:00:00Z",
@@ -81,7 +83,8 @@
       },
       "areas": ["kitchen", "dining"],
       "disabilityTypes": ["hearing_impairment", "intellectual_disability"]
-    }
+    },
+    "demoPhotos": ["pizza", "focaccia"]
   },
   {
     "slug": "demo-cafe-paso-a-paso",
@@ -153,7 +156,8 @@
         "totalStaff": 6,
         "staffWithDisability": 2
       }
-    }
+    },
+    "demoPhotos": ["breakfast", "latte"]
   },
   {
     "slug": "demo-taberna-la-vereda",
@@ -213,7 +217,8 @@
     ],
     "signatureDishes": [
       {
-        "name": "Croquetas de jamón"
+        "name": "Croquetas de jamón",
+        "demoPhoto": "croquetas"
       },
       {
         "name": "Menú del día",
@@ -250,7 +255,8 @@
           "consentBy": "self"
         }
       ]
-    }
+    },
+    "demoPhotos": ["tapas", "croquetas"]
   },
   {
     "slug": "demo-verde-que-te-quiero",
@@ -300,7 +306,8 @@
     ],
     "signatureDishes": [
       {
-        "name": "Bol de legumbres y verduras asadas"
+        "name": "Bol de legumbres y verduras asadas",
+        "demoPhoto": "chickpeas"
       }
     ],
     "location": {
@@ -321,7 +328,8 @@
         "totalStaff": 8,
         "staffWithDisability": 3
       }
-    }
+    },
+    "demoPhotos": ["chickpeas", "hummus"]
   },
   {
     "slug": "demo-panaderia-el-horno",
@@ -371,7 +379,8 @@
     ],
     "signatureDishes": [
       {
-        "name": "Pan de masa madre"
+        "name": "Pan de masa madre",
+        "demoPhoto": "bread"
       }
     ],
     "location": {
@@ -385,7 +394,8 @@
       "method": "visit",
       "lastVerifiedAt": "2026-08-10T00:00:00Z"
     },
-    "isDemo": true
+    "isDemo": true,
+    "demoPhotos": ["bread", "loaf"]
   },
   {
     "slug": "demo-burger-del-barrio",
@@ -443,7 +453,8 @@
     "signatureDishes": [
       {
         "name": "Hamburguesa clásica",
-        "description": "Carne de ternera y cheddar."
+        "description": "Carne de ternera y cheddar.",
+        "demoPhoto": "burger"
       }
     ],
     "location": {
@@ -464,6 +475,7 @@
         "totalStaff": 14,
         "staffWithDisability": 5
       }
-    }
+    },
+    "demoPhotos": ["burger"]
   }
 ]

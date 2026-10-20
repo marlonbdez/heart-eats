@@ -1,4 +1,5 @@
 import { AwsClient } from 'aws4fetch';
+import type { Config } from '../config/env.js';
 
 export interface StoredPhoto {
   body: Buffer;
@@ -83,4 +84,30 @@ export function r2PhotoStore({
       }),
     remove: (key) => send('DELETE', key),
   };
+}
+
+// Sin las claves de R2 no hay dónde guardar fotos.
+export function photoStoreFromConfig(config: Config): PhotoStore | undefined {
+  const {
+    R2_ACCOUNT_ID,
+    R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY,
+    R2_PHOTOS_BUCKET,
+    R2_JURISDICTION,
+  } = config;
+  if (
+    !R2_ACCOUNT_ID ||
+    !R2_ACCESS_KEY_ID ||
+    !R2_SECRET_ACCESS_KEY ||
+    !R2_PHOTOS_BUCKET
+  ) {
+    return undefined;
+  }
+  return r2PhotoStore({
+    accountId: R2_ACCOUNT_ID,
+    accessKeyId: R2_ACCESS_KEY_ID,
+    secretAccessKey: R2_SECRET_ACCESS_KEY,
+    bucket: R2_PHOTOS_BUCKET,
+    jurisdiction: R2_JURISDICTION,
+  });
 }

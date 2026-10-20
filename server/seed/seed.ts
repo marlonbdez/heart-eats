@@ -2,15 +2,24 @@
 // Es idempotente: borra solo lo marcado isDemo y lo vuelve a crear, sin tocar
 // datos reales. Uso: npm run seed
 //
+// Si hay claves de R2 en el entorno, sube también sus fotos (seed/photos) al
+// almacén; sin ellas los locales quedan sin foto y lo avisa.
+//
 // Para quitar los de ejemplo sin volver a crearlos (p. ej. en producción, antes
 // de abrir al público): npm run seed -- --clear. Dice en qué base está y cuántos
-// borrará, y pide confirmación (--yes la salta).
+// borrará (y borra también sus fotos), y pide confirmación (--yes la salta).
 import { readFileSync } from 'node:fs';
 import { createInterface } from 'node:readline/promises';
 import { loadConfig } from '../src/config/env.js';
 import { connectDb, disconnectDb } from '../src/db.js';
 import { Restaurant } from '../src/models/restaurant.js';
 import { Team } from '../src/models/team.js';
+import { photoStoreFromConfig } from '../src/services/photo-store.js';
+import {
+  publishDemoPhotos,
+  removeDemoPhotos,
+  withDemoPhotos,
+} from './demo-photos.js';
 
 type SeedEntry = Record<string, unknown> & { team?: Record<string, unknown> };
 
@@ -19,6 +28,7 @@ const entries = JSON.parse(
 ) as SeedEntry[];
 
 const config = loadConfig();
+const photoStore = photoStoreFromConfig(config);
 await connectDb(config.MONGODB_URI);
 await Restaurant.init();
 await Team.init();
@@ -46,6 +56,10 @@ if (process.argv.includes('--clear')) {
   await Team.deleteMany({ restaurantId: { $in: demoIds } });
   const { deletedCount } = await Restaurant.deleteMany({ isDemo: true });
   console.log(`${deletedCount} locales de ejemplo borrados`);
+  if (photoStore) {
+    await removeDemoPhotos(photoStore);
+    console.log('Fotos de ejemplo borradas del almacén');
+  }
   await disconnectDb();
   process.exit(0);
 }
@@ -53,8 +67,13 @@ if (process.argv.includes('--clear')) {
 await Team.deleteMany({ restaurantId: { $in: demoIds } });
 await Restaurant.deleteMany({ isDemo: true });
 
+if (photoStore) await publishDemoPhotos(photoStore);
+else console.log('Sin claves de R2: los locales se cargan sin fotos.');
+
 for (const { team, ...data } of entries) {
-  const restaurant = await Restaurant.create(data);
+  const restaurant = await Restaurant.create(
+    withDemoPhotos(data, photoStore !== undefined),
+  );
   if (team) await Team.create({ ...team, restaurantId: restaurant._id });
 }
 
