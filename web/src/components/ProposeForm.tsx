@@ -14,6 +14,8 @@ import { isEmail, isHttpUrl, isPlaceText } from '@/lib/validation';
 import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
 import { PinPickerLoader } from './PinPickerLoader';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 const MAX_DISHES = 3;
@@ -815,10 +817,13 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
             type="submit"
             className={`${s.btn} ${s.primary}`}
             disabled={sending}
+            aria-busy={sending}
           >
+            {sending && <Spinner />}
             {sending ? t('sending') : lastStep ? t('send') : t('next')}
           </button>
         </div>
+        <SlowNotice active={sending} kind="send" className={s.small} />
       </form>
     </main>
   );

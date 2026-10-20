@@ -1267,6 +1267,8 @@
     "loading": "Cargando…",
     "error": "No hemos podido cargar los datos. Inténtalo de nuevo en un momento.",
     "retry": "Reintentar",
+    "slow": "La conexión va lenta. Seguimos cargando, gracias por tu paciencia.",
+    "slowSending": "Seguimos enviando. Con poca cobertura puede tardar un poco; no cierres la página.",
     "missingTitle": "No encontramos este local",
     "missingBody": "Puede que ya no esté publicado o que la dirección no sea correcta.",
     "missingBack": "Volver al mapa"

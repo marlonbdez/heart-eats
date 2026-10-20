@@ -84,6 +84,15 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('carga lenta: esqueleto y aviso de paciencia', async ({ page }) => {
+      await page.clock.install();
+      await page.route(`${API}/restaurants?**`, () => {});
+      await page.goto('/es');
+      await page.clock.fastForward(5000);
+      await expect(page.getByText(/La conexión va lenta/)).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('error al cargar los datos', async ({ page }) => {
       await page.route(`${API}/restaurants?**`, (route) =>
         route.fulfill({ status: 503, body: '' }),

@@ -8,6 +8,8 @@ import { Link } from '@/i18n/navigation';
 import type { RemovalWhat } from '@/lib/types';
 import { isEmail } from '@/lib/validation';
 import type { PlaceOption } from './BusinessForm';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 const STEPS = 3;
@@ -309,10 +311,13 @@ export function RemovalForm({ places }: { places: PlaceOption[] }) {
             type="submit"
             className={`${s.btn} ${s.primary}`}
             disabled={sending}
+            aria-busy={sending}
           >
+            {sending && <Spinner />}
             {sending ? t('sending') : lastStep ? t('send') : t('next')}
           </button>
         </div>
+        <SlowNotice active={sending} kind="send" className={s.small} />
       </form>
     </main>
   );

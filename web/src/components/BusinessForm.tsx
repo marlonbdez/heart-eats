@@ -19,6 +19,8 @@ import { isEmail } from '@/lib/validation';
 import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
 import { TeamBlock } from './TeamBlock';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 const STEPS = 4;
@@ -711,7 +713,9 @@ export function BusinessForm({
             type="submit"
             className={`${s.btn} ${s.primary}`}
             disabled={sending}
+            aria-busy={sending}
           >
+            {sending && <Spinner />}
             {sending
               ? t('sending')
               : lastStep
@@ -721,6 +725,7 @@ export function BusinessForm({
                   : t('next')}
           </button>
         </div>
+        <SlowNotice active={sending} kind="send" className={s.small} />
       </form>
     </main>
   );

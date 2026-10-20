@@ -33,3 +33,8 @@
 .icon {
   font-size: 1.15rem;
 }
+
+/* La categoría activa no depende solo del color: lleva una marca. */
+.chip[aria-pressed='true']::before {
+  content: '✓' / '';
+}

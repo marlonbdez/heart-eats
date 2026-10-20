@@ -64,3 +64,15 @@
   outline: 3px solid var(--accent-text);
   outline-offset: 3px;
 }
+
+.item:active {
+  box-shadow: inset 0 0 0 999px var(--press);
+}
+/* Sobre fondo oscuro, el velo es del color del fondo claro. */
+.item:not([aria-current='page']):active,
+.mapButton:active {
+  box-shadow: inset 0 0 0 999px color-mix(in srgb, var(--bg) 24%, transparent);
+}
+.mapButton:active {
+  transform: translateX(-50%) scale(0.97);
+}
