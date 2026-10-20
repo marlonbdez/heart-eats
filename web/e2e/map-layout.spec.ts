@@ -8,7 +8,7 @@ for (const width of [320, 390]) {
     page,
   }) => {
     await page.setViewportSize({ width, height: 700 });
-    await page.goto('/es');
+    await page.goto('/es/map');
     const attribution = page.locator('.maplibregl-ctrl-attrib');
     await expect(attribution).toBeVisible();
     const attr = (await attribution.boundingBox())!;
@@ -36,7 +36,7 @@ for (const width of [320, 390]) {
 test('tableta: el conmutador va centrado arriba del mapa', async ({ page }) => {
   // Desde 900 px se ven lista y mapa a la vez y no hay conmutador.
   await page.setViewportSize({ width: 800, height: 800 });
-  await page.goto('/es');
+  await page.goto('/es/map');
   await expect(page.getByRole('navigation', { name: 'Vista' })).toBeVisible();
   const v = (await page
     .getByRole('navigation', { name: 'Vista' })
@@ -52,7 +52,7 @@ test('con la ficha de un local abierta, el conmutador sigue arriba y visible', a
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 800 });
-  await page.goto('/es');
+  await page.goto('/es/map');
   const view = page.getByRole('navigation', { name: 'Vista' });
   await expect(view).toBeVisible();
   const before = (await view.boundingBox())!;
@@ -67,34 +67,40 @@ test('con la ficha de un local abierta, el conmutador sigue arriba y visible', a
 });
 
 for (const width of [320, 390]) {
-  test(`lista ${width}px: el conmutador está arriba junto a «Cerca de mí» y se queda al desplazar`, async ({
+  test(`lista ${width}px: el botón «Mapa» flota abajo, no tapa la última tarjeta y se queda al desplazar`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 700 });
-    await page.goto('/es/list');
-    const view = page.getByRole('navigation', { name: 'Vista' });
+    await page.goto('/es');
+    await page.addStyleTag({
+      content: '* { font-family: Verdana !important; }',
+    });
+    const button = page.getByRole('link', { name: 'Mapa' });
     const near = page.getByRole('button', { name: 'Cerca de mí' });
     // Los locales llegan de la API: hasta entonces no hay pantalla.
-    await expect(view).toBeVisible();
-    const v = (await view.boundingBox())!;
+    await expect(button).toBeVisible();
+    const b = (await button.boundingBox())!;
+    expect(b.height).toBeGreaterThanOrEqual(44);
+    expect(Math.abs(b.x + b.width / 2 - width / 2)).toBeLessThan(2);
+    expect(b.y + b.height).toBeLessThanOrEqual(700);
+    // «Cerca de mí» sigue arriba, a la derecha.
     const n = (await near.boundingBox())!;
-    expect(v.x).toBeLessThanOrEqual(16);
-    expect(Math.abs(v.y + v.height / 2 - (n.y + n.height / 2))).toBeLessThan(8);
-    expect(v.x + v.width).toBeLessThan(n.x);
     expect(n.x + n.width).toBeLessThanOrEqual(width);
 
-    // Al bajar por la lista, el conmutador no se va.
+    // Al bajar por la lista, el botón no se va y la última tarjeta queda
+    // entera por encima.
     const last = page
       .getByRole('list', { name: 'Lista de locales' })
-      .getByRole('link')
+      .getByRole('listitem')
       .last();
     await last.evaluate((el) => {
       let p = el.parentElement;
       while (p && p.scrollHeight <= p.clientHeight) p = p.parentElement;
       p?.scrollTo(0, p.scrollHeight);
     });
-    const after = (await view.boundingBox())!;
-    expect(Math.abs(after.y - v.y)).toBeLessThan(2);
-    await expect(last).toBeInViewport();
+    const after = (await button.boundingBox())!;
+    expect(Math.abs(after.y - b.y)).toBeLessThan(2);
+    const l = (await last.boundingBox())!;
+    expect(l.y + l.height).toBeLessThanOrEqual(after.y);
   });
 }

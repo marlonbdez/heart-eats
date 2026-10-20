@@ -45,7 +45,7 @@ test('desde 900 px se parte la pantalla; por debajo, una vista cada vez', async 
   page,
 }) => {
   await page.setViewportSize({ width: 899, height: 800 });
-  await page.goto('/es');
+  await page.goto('/es/map');
   await expect(markers(page)).toHaveCount(6);
   await expect(list(page)).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Vista' })).toBeVisible();

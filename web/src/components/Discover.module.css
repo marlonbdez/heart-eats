@@ -62,15 +62,19 @@
   flex: 1;
   min-height: 0;
 }
-/* Recuento: en la lista se ve (arriba); en el mapa solo se anuncia. */
-.count {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 8px 16px 0;
-  font-size: 0.9rem;
+/* La frase que explica qué es esto, arriba de la lista. */
+.tagline {
+  margin: 0;
+  padding: 12px 12px 0;
+  font-size: 0.95rem;
   color: var(--muted);
 }
-/* Conmutador y «Cerca de mí» en la fila de arriba; se quedan al desplazar. */
+@media (min-width: 744px) {
+  .tagline {
+    padding-inline: max(12px, calc((100% - 1080px) / 2 + 12px));
+  }
+}
+/* Recuento y «Cerca de mí» en la fila de arriba; se quedan al desplazar. */
 .listHeader {
   position: sticky;
   top: 0;
@@ -158,7 +162,8 @@
   gap: 16px;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 12px 12px 24px;
+  /* Abajo, sitio para el botón flotante «Mapa». */
+  padding: 12px 12px 84px;
   list-style: none;
 }
 .item {
@@ -260,6 +265,10 @@
 .area[data-split='true'] .list {
   max-width: none;
   margin: 0;
+  padding-bottom: 24px;
+}
+.area[data-split='true'] .tagline {
+  padding-inline: 12px;
 }
 .area[data-split='true'] .empty {
   position: static;

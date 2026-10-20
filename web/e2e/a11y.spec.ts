@@ -9,6 +9,7 @@ import { API, expect, test } from './support/test';
 const PAGES = [
   '',
   '/list',
+  '/map',
   '/place/demo-la-masa-madre',
   '/place/demo-cafe-paso-a-paso',
   '/propose',
@@ -132,14 +133,14 @@ for (const scheme of ['light', 'dark'] as const) {
             json: { items: [], nextCursor: 'mas' },
           }),
       );
-      await page.goto('/es');
+      await page.goto('/es/map');
       await page.locator('.maplibregl-ctrl-zoom-out').click();
       await expect(page.getByText(/Hay más locales aquí/)).toBeVisible();
       await expectNoViolations(page);
     });
 
     test('ficha emergente de un local en el mapa', async ({ page }) => {
-      await page.goto('/es');
+      await page.goto('/es/map');
       await page.locator('[data-marker]').first().click();
       await expect(page.getByRole('complementary')).toBeVisible();
       await expectNoViolations(page);
