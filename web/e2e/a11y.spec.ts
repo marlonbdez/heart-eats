@@ -119,6 +119,17 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('menú lateral con el tema elegido a mano', async ({ page }) => {
+      await page.goto('/es');
+      await page.getByRole('button', { name: /menú/i }).first().click();
+      // Lo contrario de lo que pide el dispositivo.
+      await page
+        .getByRole('dialog')
+        .getByText(scheme === 'dark' ? 'Claro' : 'Oscuro', { exact: true })
+        .click();
+      await expectNoViolations(page);
+    });
+
     test('selector de idioma abierto', async ({ page }) => {
       await page.goto('/es');
       await page.getByRole('button', { name: /Idioma/ }).click();

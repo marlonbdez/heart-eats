@@ -15,6 +15,12 @@
   },
   "menu": {
     "title": "Menú",
+    "theme": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "label": "Tema"
+    },
     "groups": {
       "navigate": "Navegar",
       "collaborate": "Colaborar",
@@ -89,7 +95,6 @@
   "results": {
     "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",
     "countArea": "{count, plural, =0 {Ningún local en esta zona del mapa} one {# local en esta zona del mapa} other {# locales en esta zona del mapa}}",
-    "tagline": "Descubre sitios donde comer que dan trabajo a personas con discapacidad.",
     "emptyTitle": "No hemos encontrado locales con esa búsqueda",
     "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
     "clearFilters": "Quitar filtros",
@@ -763,13 +768,14 @@
           "Para quien visita la web, HeartEats no usa cookies. Solo las personas que moderan reciben una, necesaria para mantener su sesión (más abajo).",
           "No hay analítica, publicidad ni seguimiento.",
           "Por eso no verás ningún aviso de cookies.",
-          "Solo guarda dos cosas en tu navegador, y únicamente cuando usas una función que las necesita: el idioma que eliges y el borrador de «Proponer un local»."
+          "Solo guarda tres cosas en tu navegador, y únicamente cuando usas una función que las necesita: el idioma y el tema (claro u oscuro) que eliges, y el borrador de «Proponer un local»."
         ]
       },
       {
         "heading": "Lo que se guarda en tu navegador",
         "items": [
           "Tu idioma: si lo cambias con el selector de la cabecera, se recuerda para tu próxima visita. Es un código de dos letras (es o en), sin fecha de caducidad; se borra con los datos del sitio.",
+          "Tu tema: si eliges claro u oscuro en el menú lateral, se recuerda para tu próxima visita. Es una sola palabra (light o dark), sin fecha de caducidad; al volver a «Sistema» se borra. También se borra con los datos del sitio.",
           "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 7 días como máximo y se borra al enviar o al pulsar «Empezar de cero»."
         ],
         "paragraphs": [
@@ -792,7 +798,7 @@
         "items": [
           "Tu ubicación: solo se usa en memoria si pulsas «Cerca de mí», y se olvida al cerrar la página.",
           "Tu búsqueda y los filtros: viven en la dirección de la página.",
-          "El idioma, mientras no lo elijas tú: se deduce del idioma de tu navegador en cada visita y no se guarda.",
+          "El idioma y el tema, mientras no los elijas tú: se deducen del navegador y del dispositivo en cada visita y no se guardan.",
           "Las fotos que eliges: solo se mantienen mientras rellenas el formulario."
         ]
       },

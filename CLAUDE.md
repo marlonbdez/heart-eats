@@ -42,7 +42,7 @@ Desde `web/`: `npm run dev`, `npm run lint`, `npm run typecheck`, `npm run build
 ## Privacidad y legal
 
 - **Nunca escribas el correo personal de Marlon** en el repo. Solo existe `contact@hearteats.org`, que reenvía a él (`docs/09_CORREO.md`). Es solo de recepción.
-- `localStorage` se usa en dos sitios: el borrador de «Proponer un local» (`draft.ts`, 7 días, sin email ni web) y el idioma que la persona elige con el selector de la cabecera (`language.ts`, código de dos letras). La única cookie es `he_session` (moderación, httpOnly, la fija el servidor). Todo está reflejado en `/cookies`; si se guarda algo más en el navegador o se añade una cookie o analítica, se actualiza esa página en la misma PR.
+- `localStorage` se usa en tres sitios: el borrador de «Proponer un local» (`draft.ts`, 7 días, sin email ni web), el idioma que la persona elige con el selector de la cabecera (`language.ts`, código de dos letras) y el tema claro u oscuro que elige en el menú lateral (`theme.ts`, una palabra). La única cookie es `he_session` (moderación, httpOnly, la fija el servidor). Todo está reflejado en `/cookies`; si se guarda algo más en el navegador o se añade una cookie o analítica, se actualiza esa página en la misma PR.
 - Los textos de consentimiento y los plazos de conservación son **provisionales** hasta la revisión legal (`docs/08_PRIVACIDAD_LEGAL.md`). Cualquier recogida de datos nueva debe anotarse allí.
 - El negocio siempre da el último sí antes de publicar su ficha o la historia de su equipo.
 

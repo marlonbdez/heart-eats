@@ -341,7 +341,7 @@ export function Discover({
           {showList && (
             <div key="list" className={styles.listPane}>
               <div className={styles.listScroll} ref={listRef}>
-                <p className={styles.tagline}>{t('results.tagline')}</p>
+                <p className={styles.tagline}>{t('app.tagline')}</p>
                 <div className={styles.listHeader}>
                   <p role="status" className={styles.countInline}>
                     {t(

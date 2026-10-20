@@ -15,6 +15,12 @@
   },
   "menu": {
     "title": "Menu",
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark",
+      "label": "Theme"
+    },
     "groups": {
       "navigate": "Browse",
       "collaborate": "Contribute",
@@ -89,7 +95,6 @@
   "results": {
     "count": "{count, plural, =0 {No places} one {# place} other {# places}}",
     "countArea": "{count, plural, =0 {No places in this map area} one {# place in this map area} other {# places in this map area}}",
-    "tagline": "Find places to eat that give jobs to people with disabilities.",
     "emptyTitle": "We couldn’t find any places matching your search",
     "emptyBody": "Try widening your search or removing a filter. If you know a place that should be here, you can suggest it.",
     "clearFilters": "Clear filters",
@@ -763,13 +768,14 @@
           "For people who visit the website, HeartEats does not use cookies. Only moderators receive one, needed to keep their session (see below).",
           "There is no analytics, advertising or tracking.",
           "That is why you will not see a cookie notice.",
-          "It only stores two things in your browser, and only when you use a feature that needs them: the language you choose and the draft of Suggest a place."
+          "It only stores three things in your browser, and only when you use a feature that needs them: the language and the theme (light or dark) you choose, and the draft of Suggest a place."
         ]
       },
       {
         "heading": "What is kept in your browser",
         "items": [
           "Your language: if you change it with the selector in the header, it is remembered for your next visit. It is a two-letter code (es or en) with no expiry date; it is deleted with the site data.",
+          "Your theme: if you choose light or dark in the side menu, it is remembered for your next visit. It is a single word (light or dark) with no expiry date; going back to System deletes it. It is also deleted with the site data.",
           "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over."
         ],
         "paragraphs": [
@@ -792,7 +798,7 @@
         "items": [
           "Your location: it is only used in memory if you press Near me, and is forgotten when you close the page.",
           "Your search and filters: they live in the page address.",
-          "The language, as long as you have not chosen one: it is worked out from your browser language on each visit and is not stored.",
+          "The language and the theme, as long as you have not chosen them: they are worked out from your browser and device on each visit and are not stored.",
           "The photos you choose: they are only held while you fill in the form."
         ]
       },

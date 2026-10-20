@@ -11,8 +11,25 @@
   color-scheme: light dark;
 }
 
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* Oscuro: lo elige la persona (data-theme) o lo pide el dispositivo, salvo que
+   haya fijado el claro. Mantener las dos listas iguales. */
+:root[data-theme='dark'] {
+  --bg: #1f1815;
+  --fg: #f3e9dc;
+  --accent: #e0805f;
+  --on-accent: #1f1815;
+  --accent-text: #f0a58a;
+  --muted: #b9a999;
+  --line: #3a2f29;
+  --hover: #2e2420;
+  color-scheme: dark;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #1f1815;
     --fg: #f3e9dc;
     --accent: #e0805f;
