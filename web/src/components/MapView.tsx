@@ -30,22 +30,31 @@ const MOVE_DEBOUNCE_MS = 350;
 
 // Encuadre de una zona: deja libres los bordes donde van el conmutador (arriba;
 // el marcador sube 44 px desde su punto) y, abajo, «Cerca de mí» y la tarjeta.
-const ZONE_FIT = {
-  padding: { top: 120, bottom: 190, left: 50, right: 50 },
-  maxZoom: 14,
-} as const;
+// Con la lista al lado (`split`) no hay nada flotando: solo el margen del pin.
+const zoneFit = (split: boolean) =>
+  ({
+    padding: split
+      ? { top: 80, bottom: 40, left: 40, right: 40 }
+      : { top: 120, bottom: 190, left: 50, right: 50 },
+    maxZoom: 14,
+  }) as const;
 
 // `bounds`: el rectángulo de la zona que se mira; el mapa se encuadra en él al
 // abrirse y cada vez que cambia `bounds` o `recenter`. `focus`: hay búsqueda o
 // filtros activos, así que se encuadra sobre los resultados; sin ellos, vuelve
 // a la zona. `onUserMove`: la persona ha movido el mapa (no cuando lo encuadra
-// la web) y ha dejado de moverlo.
+// la web) y ha dejado de moverlo. `selected` es el local marcado (lo manda
+// quien lo usa); sin `split`, al marcarlo se abre su vista previa, y con la
+// lista al lado la tarjeta ya está en ella.
 export function MapView({
   restaurants,
   bounds = null,
   recenter = 0,
   focus = false,
   followUser = false,
+  split = false,
+  selected,
+  onSelect,
   onUserMove,
 }: {
   restaurants: Restaurant[];
@@ -55,6 +64,9 @@ export function MapView({
   // La zona es la de la persona (compartió su ubicación): el mapa se centra en
   // ella en vez de encuadrar toda la zona.
   followUser?: boolean;
+  split?: boolean;
+  selected: string | null;
+  onSelect: (slug: string | null) => void;
   onUserMove?: (move: MapMove) => void;
 }) {
   const t = useTranslations();
@@ -74,17 +86,15 @@ export function MapView({
     boundsRef.current = bounds;
   });
   const onUserMoveRef = useRef(onUserMove);
+  const onSelectRef = useRef(onSelect);
+  const splitRef = useRef(split);
   useEffect(() => {
     onUserMoveRef.current = onUserMove;
+    onSelectRef.current = onSelect;
+    splitRef.current = split;
   });
   const [ready, setReady] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
-
-  // Si el local seleccionado deja de estar entre los resultados, se cierra su tarjeta.
-  if (selected && !restaurants.some((r) => r.slug === selected)) {
-    setSelected(null);
-  }
 
   // Crear el mapa una sola vez.
   useEffect(() => {
@@ -108,7 +118,10 @@ export function MapView({
           container: containerRef.current,
           style: styleUrl(),
           ...(boundsRef.current
-            ? { bounds: boundsRef.current, fitBoundsOptions: ZONE_FIT }
+            ? {
+                bounds: boundsRef.current,
+                fitBoundsOptions: zoneFit(splitRef.current),
+              }
             : { center: worldView.center, zoom: worldView.zoom }),
         });
       } catch {
@@ -125,7 +138,7 @@ export function MapView({
       map.on('click', (e) => {
         const target = e.originalEvent.target as HTMLElement | null;
         if (target?.closest('[data-marker]')) return;
-        setSelected(null);
+        onSelectRef.current(null);
       });
 
       mapRef.current = map;
@@ -198,7 +211,7 @@ export function MapView({
       el.dataset.marker = r.slug;
       el.setAttribute('aria-label', label);
       el.innerHTML = MARKER_SVG;
-      el.addEventListener('click', () => setSelected(r.slug));
+      el.addEventListener('click', () => onSelectRef.current(r.slug));
       const marker = new lib.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([r.location.lng, r.location.lat])
         .addTo(map);
@@ -224,7 +237,7 @@ export function MapView({
         : 600;
     if (!focus) {
       const zone = boundsRef.current;
-      if (zone) map.fitBounds(zone, { ...ZONE_FIT, duration });
+      if (zone) map.fitBounds(zone, { ...zoneFit(splitRef.current), duration });
       else
         map.easeTo({
           center: worldView.center,
@@ -238,7 +251,9 @@ export function MapView({
     for (const r of restaurants)
       bounds.extend([r.location.lng, r.location.lat]);
     map.fitBounds(bounds, {
-      padding: { top: 70, bottom: 190, left: 50, right: 50 },
+      padding: splitRef.current
+        ? { top: 80, bottom: 40, left: 40, right: 40 }
+        : { top: 70, bottom: 190, left: 50, right: 50 },
       maxZoom: 15,
       duration,
     });
@@ -274,12 +289,21 @@ export function MapView({
     // vuelve a centrar en la persona.
   }, [position, followUser, boundsKey, recenter, ready, t]);
 
-  // Marcador seleccionado y foco en la tarjeta.
+  // Al cambiar el ancho de la zona del mapa (la lista aparece o desaparece).
+  useEffect(() => {
+    mapRef.current?.resize();
+  }, [split, ready]);
+
+  // El marcador del local seleccionado.
   useEffect(() => {
     markers.current.forEach(({ el }, slug) => {
       el.classList.toggle(styles.selected, slug === selected);
     });
-    if (!selected) return;
+  }, [selected, restaurants, ready]);
+
+  // Foco en la vista previa.
+  useEffect(() => {
+    if (!selected || split) return;
     cardRef.current?.focus();
 
     // La tarjeta ocupa la parte baja: si el corazón queda tapado (o fuera de
@@ -300,15 +324,17 @@ export function MapView({
           : 300,
       });
     }
-  }, [selected]);
+  }, [selected, split]);
 
   const close = () => {
     const slug = selected;
-    setSelected(null);
+    onSelect(null);
     if (slug) markers.current.get(slug)?.el.focus();
   };
 
-  const current = restaurants.find((r) => r.slug === selected);
+  const current = split
+    ? undefined
+    : restaurants.find((r) => r.slug === selected);
 
   return (
     <div className={styles.wrap}>

@@ -162,6 +162,8 @@
   list-style: none;
 }
 .item {
+  /* Al llevar una tarjeta a la vista, que no quede bajo la cabecera pegada. */
+  scroll-margin-top: 72px;
   overflow: hidden;
   background: var(--bg);
   border: 1px solid var(--line);
@@ -214,4 +216,58 @@
   color: var(--fg);
   background: none;
   border: 1px solid var(--line);
+}
+
+/* Pantallas anchas (≥ 900 px): las tarjetas a la izquierda, con su propio
+   desplazamiento, y el mapa a la derecha, a la altura de la pantalla. */
+.mapPane {
+  position: absolute;
+  inset: 0;
+}
+.listPane {
+  position: absolute;
+  inset: 0;
+}
+.area[data-split='true'] {
+  display: grid;
+  grid-template-columns: clamp(380px, 46%, 760px) minmax(0, 1fr);
+}
+.area[data-split='true'] .listPane {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+.area[data-split='true'] .mapPane {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  border-left: 1px solid var(--line);
+}
+.area[data-split='true'] .listHeader {
+  padding: 12px;
+}
+.countInline {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.area[data-split='true'] .listNotice {
+  max-width: none;
+  margin: 0 12px 8px;
+}
+.area[data-split='true'] .list {
+  max-width: none;
+  margin: 0;
+}
+.area[data-split='true'] .empty {
+  position: static;
+  max-width: none;
+  margin: 0 12px 24px;
+  box-shadow: none;
+}
+.item[data-selected='true'] {
+  border-color: var(--accent-text);
+  box-shadow: 0 0 0 2px var(--accent-text);
 }
