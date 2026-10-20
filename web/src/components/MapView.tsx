@@ -15,7 +15,7 @@ import styles from './MapView.module.css';
 type MapLibre = typeof import('maplibre-gl');
 
 // Alto que tapa la tarjeta de vista previa, desde abajo.
-const CARD_CLEARANCE = 290;
+const CARD_CLEARANCE = 265;
 
 type Bounds = [[number, number], [number, number]];
 

@@ -63,8 +63,7 @@
       "call": "llamada",
       "documentation": "documentación",
       "owner_confirmed": "confirmado por el negocio"
-    },
-    "viewLocal": "Ver local →"
+    }
   },
   "foodTags": {
     "pizza": "Pizza",

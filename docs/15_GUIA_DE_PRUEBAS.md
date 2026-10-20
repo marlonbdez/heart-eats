@@ -17,7 +17,7 @@
 | A1 | Abre `https://hearteats.org` en una ventana privada | Entra solo en español si tu navegador está en español; en inglés en cualquier otro caso. Se ve un mapa con marcadores y arriba: ☰, el logo, el idioma (ES/EN) y «Proponer un local» |
 | A2 | Mira la etiqueta de la zona (a la izquierda del buscador) | Pone una ciudad con locales (la que más tiene). El mapa está encuadrado en ella |
 | A3 | Toca un marcador | Sale una tarjeta con el local; la × la cierra; tocar el mapa vacío también |
-| A4 | En la tarjeta, «Ver local →» | Abre la ficha: platos, equipo, horario, verificación, «Cómo llegar». «Volver» te devuelve al mapa en la misma zona |
+| A4 | Toca la tarjeta del pin (foto o texto) | Abre la ficha: platos, equipo, horario, verificación, «Cómo llegar». «Volver» te devuelve al mapa en la misma zona |
 | A5 | Cambia a «Lista» y vuelve a «Mapa» | Misma zona y misma búsqueda en las dos |
 
 ## B · Idioma
