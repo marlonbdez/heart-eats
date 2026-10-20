@@ -1,4 +1,4 @@
-import { test as base, type Route } from '@playwright/test';
+import { test as base, type Page, type Route } from '@playwright/test';
 import { foodTags, restaurants } from '../fixtures/restaurants';
 import type { Restaurant } from '../../src/lib/types';
 import { suggestions } from '../fixtures/moderation';
@@ -104,6 +104,15 @@ function webpSize(bytes: Buffer | null) {
 
 const PHOTO_SVG =
   '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="#e9d8c8"/></svg>';
+
+// «Cerca de mí» desde el selector de lugar (también en la lista, sin mapa).
+export async function chooseNearMe(page: Page) {
+  await page.getByRole('button', { name: /Zona:/ }).click();
+  await page
+    .getByRole('dialog', { name: '¿Dónde?' })
+    .getByRole('button', { name: 'Cerca de mí' })
+    .click();
+}
 
 export const test = base.extend<{ sent: Sent[]; session: Session }>({
   sent: async ({}, provide) => {

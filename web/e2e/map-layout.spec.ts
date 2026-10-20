@@ -1,10 +1,11 @@
 import { expect, test } from './support/test';
 
-// El conmutador Mapa / Lista va arriba, en la misma fila que «Cerca de mí»:
-// a la izquierda en el móvil y centrado en pantallas anchas. Abajo solo queda
-// la atribución del mapa, que es obligatoria y no puede taparse.
+// El conmutador Mapa / Lista va arriba a la izquierda en el móvil y centrado en
+// pantallas anchas; la mirilla de «Cerca de mí» vive en el propio mapa, debajo
+// del zoom. Abajo solo queda la atribución del mapa, que es obligatoria y no
+// puede taparse.
 for (const width of [320, 390]) {
-  test(`móvil ${width}px: el conmutador va arriba a la izquierda, junto a «Cerca de mí»`, async ({
+  test(`móvil ${width}px: el conmutador va arriba a la izquierda y la mirilla bajo el zoom`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 700 });
@@ -16,20 +17,24 @@ for (const width of [320, 390]) {
     const v = (await page
       .getByRole('navigation', { name: 'Vista' })
       .boundingBox())!;
-    const n = (await page
+    const locate = (await page
       .getByRole('button', { name: 'Cerca de mí' })
       .boundingBox())!;
+    const zoomOut = (await page
+      .getByRole('button', { name: /Alejar|Zoom out/ })
+      .boundingBox())!;
 
-    // Del mismo alto que «Cerca de mí».
-    expect(Math.abs(v.height - n.height)).toBeLessThanOrEqual(1);
-    // Arriba a la izquierda y en la misma fila que «Cerca de mí», sin pisarse.
+    // Arriba a la izquierda, sin salirse.
     expect(v.x).toBeLessThanOrEqual(16);
     expect(v.y).toBeLessThan(attr.y / 2);
-    expect(Math.abs(v.y + v.height / 2 - (n.y + n.height / 2))).toBeLessThan(8);
-    expect(v.x + v.width).toBeLessThan(n.x);
-    expect(n.x + n.width).toBeLessThanOrEqual(width);
-    // La atribución queda libre abajo.
+    // La mirilla, debajo del zoom, en el borde derecho y a la vista.
+    expect(locate.y).toBeGreaterThanOrEqual(zoomOut.y + zoomOut.height - 1);
+    expect(locate.x + locate.width).toBeLessThanOrEqual(width);
+    expect(locate.width).toBeGreaterThanOrEqual(29);
+    // El conmutador no se pisa con los controles y la atribución queda libre.
+    expect(v.x + v.width).toBeLessThan(locate.x);
     expect(v.y + v.height).toBeLessThan(attr.y);
+    expect(locate.y + locate.height).toBeLessThan(attr.y);
   });
 }
 
@@ -41,11 +46,7 @@ test('tableta: el conmutador va centrado arriba del mapa', async ({ page }) => {
   const v = (await page
     .getByRole('navigation', { name: 'Vista' })
     .boundingBox())!;
-  const n = (await page
-    .getByRole('button', { name: 'Cerca de mí' })
-    .boundingBox())!;
   expect(Math.abs(v.x + v.width / 2 - 800 / 2)).toBeLessThan(2);
-  expect(Math.abs(v.y + v.height / 2 - (n.y + n.height / 2))).toBeLessThan(8);
 });
 
 test('con la ficha de un local abierta, el conmutador sigue arriba y visible', async ({
@@ -76,16 +77,16 @@ for (const width of [320, 390]) {
       content: '* { font-family: Verdana !important; }',
     });
     const button = page.getByRole('link', { name: 'Mapa' });
-    const near = page.getByRole('button', { name: 'Cerca de mí' });
     // Los locales llegan de la API: hasta entonces no hay pantalla.
     await expect(button).toBeVisible();
     const b = (await button.boundingBox())!;
     expect(b.height).toBeGreaterThanOrEqual(44);
     expect(Math.abs(b.x + b.width / 2 - width / 2)).toBeLessThan(2);
     expect(b.y + b.height).toBeLessThanOrEqual(700);
-    // «Cerca de mí» sigue arriba, a la derecha.
-    const n = (await near.boundingBox())!;
-    expect(n.x + n.width).toBeLessThanOrEqual(width);
+    // En la lista ya no hay botón suelto de «Cerca de mí»: va en el selector.
+    await expect(page.getByRole('button', { name: 'Cerca de mí' })).toHaveCount(
+      0,
+    );
 
     // Al bajar por la lista, el botón no se va y la última tarjeta queda
     // entera por encima.

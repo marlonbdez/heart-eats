@@ -15,6 +15,10 @@ import styles from './MapView.module.css';
 
 type MapLibre = typeof import('maplibre-gl');
 
+// Mirilla de «Cerca de mí» (la misma del selector de lugar).
+const LOCATE_SVG =
+  '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>';
+
 // Alto que tapa la tarjeta de vista previa, desde abajo.
 const CARD_CLEARANCE = 265;
 
@@ -77,7 +81,9 @@ export function MapView({
   onUserMove?: (move: MapMove) => void;
 }) {
   const t = useTranslations();
-  const { position } = useLocation();
+  const { position, status, request } = useLocation();
+  const locateRef = useRef<HTMLButtonElement | null>(null);
+  const onLocateRef = useRef(() => {});
   const youRef = useRef<Marker | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLElement>(null);
@@ -138,6 +144,20 @@ export function MapView({
       }
       map.addControl(
         new lib.NavigationControl({ showCompass: false }),
+        'top-right',
+      );
+      // La mirilla («Cerca de mí»), justo debajo del zoom.
+      const locate = document.createElement('div');
+      locate.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+      const locateButton = document.createElement('button');
+      locateButton.type = 'button';
+      locateButton.className = styles.locate;
+      locateButton.innerHTML = LOCATE_SVG;
+      locateButton.addEventListener('click', () => onLocateRef.current());
+      locate.append(locateButton);
+      locateRef.current = locateButton;
+      map.addControl(
+        { onAdd: () => locate, onRemove: () => locate.remove() },
         'top-right',
       );
       stopWatching = watchTheme(onSchemeChange);
@@ -304,6 +324,36 @@ export function MapView({
     // Va después del encuadre de la zona y depende de él: al cambiar de zona se
     // vuelve a centrar en la persona.
   }, [position, followUser, boundsKey, recenter, ready, t]);
+
+  // La mirilla: con la ubicación ya compartida, vuelve a centrar el mapa en
+  // la persona; si no, la pide.
+  useEffect(() => {
+    onLocateRef.current = () => {
+      const map = mapRef.current;
+      if (status === 'granted' && position && map) {
+        map.easeTo({
+          center: [position.lng, position.lat],
+          zoom: Math.max(map.getZoom(), 14),
+          duration: window.matchMedia('(prefers-reduced-motion: reduce)')
+            .matches
+            ? 0
+            : 600,
+        });
+      } else {
+        request();
+      }
+    };
+  }, [status, position, request]);
+  useEffect(() => {
+    const button = locateRef.current;
+    if (!ready || !button) return;
+    const label = t('nearMe.button');
+    button.setAttribute('aria-label', label);
+    button.title = label;
+    button.setAttribute('aria-pressed', String(status === 'granted'));
+    button.setAttribute('aria-busy', String(status === 'asking'));
+    button.disabled = status === 'asking';
+  }, [status, ready, t]);
 
   // Al cambiar el ancho de la zona del mapa (la lista aparece o desaparece).
   useEffect(() => {

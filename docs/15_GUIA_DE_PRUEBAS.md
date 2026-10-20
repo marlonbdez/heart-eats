@@ -57,8 +57,9 @@
 
 | # | Haz | Debería pasar |
 |---|---|---|
-| E1 | Pulsa «Cerca de mí» y concede el permiso | Si hay una ciudad con locales a menos de 60 km, te lleva a ella y la lista sale ordenada por distancia. Si no: «Aún no hay locales cerca de ti. Seguimos donde estabas.» |
+| E1 | Abre el selector «¿Dónde?» y elige **«Cerca de mí»** (la primera opción), o pulsa la **mirilla** del mapa, y concede el permiso | Si hay una ciudad con locales a menos de 60 km, te lleva a ella y la lista sale ordenada por distancia. Si no: «Aún no hay locales cerca de ti. Seguimos donde estabas.» |
 | E2 | Repite y **deniega** el permiso | Mensaje explicando cómo activarlo; la web sigue donde estaba |
+| E2b | Con la ubicación compartida, vuelve a pulsar la mirilla tras mover el mapa; luego elige una ciudad en el selector | La mirilla trae el mapa de vuelta a ti; al elegir una ciudad se deja de lado tu ubicación y desaparece el orden por distancia |
 | E3 | Mira qué se guarda | Nada: «Solo se usa en tu navegador… no se guarda ni se envía.» |
 
 ## F · Proponer, corregir, retirar, contar el equipo (los envíos)

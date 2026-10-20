@@ -1,4 +1,4 @@
-import { API, expect, test, type Page } from './support/test';
+import { API, chooseNearMe, expect, test, type Page } from './support/test';
 
 // Con poca cobertura la API tarda. Estas pruebas la retienen a propósito para
 // comprobar que la web lo dice: indicador de carga, esqueleto, aviso de
@@ -79,8 +79,7 @@ test('cambiar de zona con la pantalla ya dibujada: aviso de carga sin quitar la 
   await page.getByRole('button', { name: /Zona:/ }).click();
   await page
     .getByRole('dialog', { name: '¿Dónde?' })
-    .getByRole('button')
-    .nth(2)
+    .getByRole('button', { name: /Barcelona/ })
     .click();
   await expect(page.getByText('Cargando…')).toBeVisible();
   release();
@@ -118,7 +117,7 @@ test('enviar una respuesta: el botón muestra que trabaja y avisa si tarda', asy
   expect(sent).toHaveLength(1);
 });
 
-test('«Cerca de mí»: mientras se busca la ubicación, el botón está ocupado', async ({
+test('«Cerca de mí»: mientras se busca la ubicación, el selector está ocupado', async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -126,11 +125,23 @@ test('«Cerca de mí»: mientras se busca la ubicación, el botón está ocupado
     navigator.geolocation.getCurrentPosition = () => {};
   });
   await page.goto('/es/list');
-  const button = page.getByRole('button', { name: 'Cerca de mí' });
-  await button.click();
-  await expect(button).toHaveAttribute('aria-busy', 'true');
-  await expect(button).toBeDisabled();
+  await chooseNearMe(page);
+  const zone = page.getByRole('button', { name: /Zona:/ });
+  await expect(zone).toHaveAttribute('aria-busy', 'true');
   await expect(page.getByText(/Buscando tu ubicación/)).toBeVisible();
+});
+
+test('«Cerca de mí»: la mirilla del mapa se ocupa mientras busca', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    navigator.geolocation.getCurrentPosition = () => {};
+  });
+  await page.goto('/es/map');
+  const locate = page.getByRole('button', { name: 'Cerca de mí' });
+  await locate.click();
+  await expect(locate).toHaveAttribute('aria-busy', 'true');
+  await expect(locate).toBeDisabled();
 });
 
 test('al tocar un enlace con la red lenta aparece la barra y el aviso', async ({
@@ -184,7 +195,7 @@ test('pulsado: un botón cambia de aspecto mientras se mantiene pulsado', async 
   page,
 }) => {
   await page.goto('/es/list');
-  const button = page.getByRole('button', { name: 'Cerca de mí' });
+  const button = page.getByRole('button', { name: /Zona:/ });
   await expect(button).toBeVisible();
   const before = await button.evaluate((el) => getComputedStyle(el).boxShadow);
   const box = (await button.boundingBox())!;

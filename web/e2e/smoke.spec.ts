@@ -1,4 +1,4 @@
-import { expect, test, type Page } from './support/test';
+import { chooseNearMe, expect, test, type Page } from './support/test';
 
 // El estilo real vive en OpenFreeMap. En la prueba lo sustituimos por uno
 // propio para no depender de un servicio externo. Incluye una capa GeoJSON,
@@ -227,7 +227,7 @@ test.describe('Cerca de mí', () => {
   }) => {
     await context.setGeolocation({ latitude: 40.4085, longitude: -3.7012 });
     await page.goto('/es/list');
-    await page.getByRole('button', { name: 'Cerca de mí' }).click();
+    await chooseNearMe(page);
     await expect(page.getByText(/Ordenado por distancia/)).toBeVisible();
     const first = page.getByRole('listitem').first();
     await expect(first).toContainText('La Masa Madre');
@@ -238,7 +238,7 @@ test.describe('Cerca de mí', () => {
     // Sídney: ninguna zona con locales a menos de 60 km.
     await context.setGeolocation({ latitude: -33.8688, longitude: 151.2093 });
     await page.goto('/es/list');
-    await page.getByRole('button', { name: 'Cerca de mí' }).click();
+    await chooseNearMe(page);
     await expect(page.getByText(/Aún no hay locales cerca/)).toBeVisible();
     await expect(page.getByText('La Masa Madre')).toBeVisible();
   });

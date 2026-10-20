@@ -90,10 +90,31 @@
   border-radius: 12px;
 }
 
-/* El botón "Cerca de mí" ocupa la esquina superior derecha: los controles de
-   zoom quedan justo debajo. */
-.wrap :global(.maplibregl-ctrl-top-right) {
-  margin-top: 56px;
+/* La mirilla va debajo del zoom, en la esquina superior derecha. */
+.locate {
+  display: grid;
+  place-items: center;
+  color: var(--fg);
+}
+.locate[aria-pressed='true'] {
+  color: var(--accent-text);
+}
+.locate[aria-busy='true'] svg {
+  animation: locate-spin 0.8s linear infinite;
+}
+.locate:disabled {
+  cursor: progress;
+}
+@keyframes locate-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .locate[aria-busy='true'] svg {
+    animation: none;
+    opacity: 0.5;
+  }
 }
 
 .you {
