@@ -64,7 +64,7 @@
 }
 /* Recuento: en la lista se ve (arriba); en el mapa solo se anuncia. */
 .count {
-  max-width: 720px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 8px 16px 0;
   font-size: 0.9rem;
@@ -87,7 +87,7 @@
 }
 @media (min-width: 744px) {
   .listHeader {
-    padding-inline: max(12px, calc((100% - 720px) / 2 + 12px));
+    padding-inline: max(12px, calc((100% - 1080px) / 2 + 12px));
   }
 }
 .nearMe {
@@ -130,7 +130,7 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
 }
 .listNotice {
-  max-width: 696px;
+  max-width: 1056px;
   margin: 8px 12px 0;
 }
 @media (min-width: 744px) {
@@ -154,14 +154,15 @@
 }
 .list {
   display: grid;
-  gap: 12px;
-  max-width: 720px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 12px 12px 24px;
   list-style: none;
 }
 .item {
-  padding: 12px;
+  overflow: hidden;
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 16px;
