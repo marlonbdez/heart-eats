@@ -11,8 +11,8 @@
 
 ## CU-02 · Ver la lista de locales
 - **Quién:** Visitante.
-- **Pasos:** abre `/list` (o «Lista» en el conmutador) → ve el número de locales y una tarjeta por cada uno → «Ver local →» lleva a CU-06.
-- **Reglas:** es la alternativa accesible al mapa; la tarjeta es el mismo componente; mapa y lista son rutas distintas y se pueden compartir.
+- **Pasos:** abre la portada `/` (que es la lista; `/list` es un alias) → ve la frase que explica qué es, el número de locales y una tarjeta por cada uno (foto, nombre, barrio, plato estrella) → tocar la tarjeta lleva a CU-06. El botón «Mapa» lleva al mapa (`/map`); desde 900 px se ven lista y mapa a la vez.
+- **Reglas:** es la alternativa accesible al mapa; la tarjeta es el mismo componente; mapa y lista son rutas distintas (salvo desde 900 px) y se pueden compartir.
 
 ## CU-03 · Buscar sitios
 - **Quién:** Visitante. Extiende CU-01 y CU-02.

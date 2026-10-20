@@ -7,7 +7,7 @@ test.describe('zona que se mira', () => {
   test('arranca en la ciudad con más locales y el selector lista países y ciudades', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     const button = page.getByRole('button', { name: /Zona: Madrid, España/ });
     await expect(button).toBeVisible();
@@ -26,7 +26,7 @@ test.describe('zona que se mira', () => {
   });
 
   test('los países salen en el idioma de la interfaz', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/map');
     await page.getByRole('button', { name: /Area: Madrid, Spain/ }).click();
     const dialog = page.getByRole('dialog', { name: 'Where?' });
     await expect(dialog.getByRole('heading', { name: 'Spain' })).toBeVisible();
@@ -36,7 +36,7 @@ test.describe('zona que se mira', () => {
   test('elegir otra ciudad cambia los locales, la dirección y el mapa', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await page.getByRole('button', { name: /Zona: Madrid/ }).click();
     await page.getByRole('button', { name: /Barcelona/ }).click();
@@ -57,7 +57,7 @@ test.describe('zona que se mira', () => {
   test('el buscador del selector encuentra por ciudad y por país, sin acentos', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await page.getByRole('button', { name: /Zona: Madrid/ }).click();
     const dialog = page.getByRole('dialog');
     const search = dialog.getByRole('searchbox', {
@@ -83,7 +83,7 @@ test.describe('zona que se mira', () => {
   test('las ciudades salen en el idioma de la interfaz y se buscan por cualquiera de sus nombres', async ({
     page,
   }) => {
-    await page.goto('/en');
+    await page.goto('/en/map');
     await page.getByRole('button', { name: /Area: Madrid/ }).click();
     const dialog = page.getByRole('dialog');
     const search = dialog.getByRole('searchbox');
@@ -108,13 +108,13 @@ test.describe('zona que se mira', () => {
   test('la zona de la dirección se respeta; una que no existe, se ignora', async ({
     page,
   }) => {
-    await page.goto('/es?country=JP&city=' + encodeURIComponent('東京'));
+    await page.goto('/es/map?country=JP&city=' + encodeURIComponent('東京'));
     await expect(markers(page)).toHaveCount(1);
     await expect(
       page.getByRole('button', { name: /Zona: Tokio, Japón/ }),
     ).toBeVisible();
 
-    await page.goto('/es?country=FR&city=paris');
+    await page.goto('/es/map?country=FR&city=paris');
     await expect(markers(page)).toHaveCount(6);
     await expect(
       page.getByRole('button', { name: /Zona: Madrid/ }),
@@ -166,7 +166,7 @@ test.describe('zona que se mira', () => {
         },
       }),
     );
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await expect(page.getByText('Madrid', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /Zona:/ })).toHaveCount(0);
@@ -175,7 +175,7 @@ test.describe('zona que se mira', () => {
   test('si falla la carga de una zona, avisa, deja el mapa y permite reintentar', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
 
     let failing = true;
@@ -203,7 +203,7 @@ test.describe('zona que se mira', () => {
         json: { countries: [] },
       }),
     );
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(
       page.getByRole('heading', { name: /Todavía no hay locales/ }),
     ).toBeVisible();
@@ -218,7 +218,7 @@ test.describe('zona que se mira', () => {
       page,
     }) => {
       await page.setViewportSize({ width: 320, height: 700 });
-      await page.goto('/es?country=ES&city=barcelona');
+      await page.goto('/es/map?country=ES&city=barcelona');
       if (family) {
         await page.addStyleTag({
           content: `body, button, input, a { font-family: ${family} !important; }`,
@@ -248,7 +248,7 @@ test.describe('«Cerca de mí» y las zonas', () => {
     page,
   }) => {
     await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await page.getByRole('button', { name: 'Cerca de mí' }).click();
 

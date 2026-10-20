@@ -27,14 +27,14 @@ import { NearMeButton, NearMeNotice } from './NearMe';
 import { Remote } from './Remote';
 import { RestaurantCard } from './RestaurantCard';
 import { SearchBar } from './SearchBar';
-import { ViewSwitch } from './ViewSwitch';
+import { MapButton, ViewSwitch } from './ViewSwitch';
 import { ZoneMenu } from './ZoneMenu';
 import styles from './Discover.module.css';
 
 // Pantalla principal: buscador + categorías de comida + mapa o lista. El estado vive
 // en la URL (?q=…&food=a,b) para poder compartir o recargar una búsqueda.
 export function Discover({
-  view = 'map',
+  view = 'list',
   regions,
   foodTags,
 }: {
@@ -333,28 +333,20 @@ export function Discover({
           {showList && (
             <div key="list" className={styles.listPane}>
               <div className={styles.listScroll} ref={listRef}>
+                <p className={styles.tagline}>{t('results.tagline')}</p>
                 <div className={styles.listHeader}>
-                  {split ? (
-                    <p role="status" className={styles.countInline}>
-                      {t(
-                        split && exploring
-                          ? 'results.countArea'
-                          : 'results.count',
-                        {
-                          count: listed.length,
-                        },
-                      )}
-                    </p>
-                  ) : (
-                    <ViewSwitch view={view} query={query} />
-                  )}
+                  <p role="status" className={styles.countInline}>
+                    {t(
+                      split && exploring
+                        ? 'results.countArea'
+                        : 'results.count',
+                      {
+                        count: listed.length,
+                      },
+                    )}
+                  </p>
                   <NearMeButton />
                 </div>
-                {!split && (
-                  <p role="status" className={styles.count}>
-                    {t('results.count', { count: listed.length })}
-                  </p>
-                )}
                 {split && (
                   <p
                     role="status"
@@ -387,6 +379,7 @@ export function Discover({
                 </ul>
                 {split && empty}
               </div>
+              {!split && <MapButton query={query} />}
             </div>
           )}
           {!split && empty}

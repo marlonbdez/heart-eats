@@ -8,7 +8,7 @@ import { Remote } from './Remote';
 
 const loadBase = () => Promise.all([loadRegions(), getFoodTags()]);
 
-// Inicio y lista: dónde hay locales y las categorías se piden a la API al
+// Inicio (la lista), lista y mapa: dónde hay locales y las categorías se piden a la API al
 // abrir; los locales de la zona los pide Discover.
 export function DiscoverLoader({ view }: { view?: 'map' | 'list' }) {
   const state = useLoad(loadBase);

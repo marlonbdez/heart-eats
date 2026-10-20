@@ -69,5 +69,5 @@ test('corregir un dato: desde el menú explica cómo llegar a la ficha', async (
     page.getByRole('heading', { name: '¿Qué local quieres corregir?' }),
   ).toBeVisible();
   await page.getByRole('link', { name: 'Ver la lista de locales' }).click();
-  await expect(page).toHaveURL(/\/es\/list$/);
+  await expect(page).toHaveURL(/\/es$/);
 });

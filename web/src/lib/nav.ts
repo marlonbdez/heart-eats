@@ -12,8 +12,8 @@ export const navGroups: NavGroup[] = [
   {
     key: 'navigate',
     links: [
-      { href: '/', key: 'map' },
-      { href: '/list', key: 'list' },
+      { href: '/', key: 'list' },
+      { href: '/map', key: 'map' },
     ],
   },
   {

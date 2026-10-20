@@ -10,7 +10,7 @@ export default async function Home({
   setRequestLocale(locale);
   return (
     <main id="contenido" tabIndex={-1}>
-      <DiscoverLoader />
+      <DiscoverLoader view="list" />
     </main>
   );
 }

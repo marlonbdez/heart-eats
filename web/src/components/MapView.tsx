@@ -372,8 +372,7 @@ export function MapView({
       />
       {failed && (
         <p role="alert" className={styles.error}>
-          {t('map.loadError')}{' '}
-          <Link href="/list">{t('map.loadErrorLink')}</Link>
+          {t('map.loadError')} <Link href="/">{t('map.loadErrorLink')}</Link>
         </p>
       )}
       {current && (

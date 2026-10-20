@@ -6,7 +6,7 @@ import { discoveryFromSearch } from './DiscoveryContext';
 
 const noop = () => () => {};
 
-// "Volver" de la ficha: regresa al mapa o a la lista de donde se venía, con su
+// "Volver" de la ficha: regresa a la lista o al mapa de donde se venía, con su
 // búsqueda (que viaja en la dirección de la ficha).
 export function BackLink({
   className,
@@ -23,7 +23,7 @@ export function BackLink({
   const { view, query } = discoveryFromSearch(search);
   return (
     <Link
-      href={{ pathname: view === 'list' ? '/list' : '/', query }}
+      href={{ pathname: view === 'map' ? '/map' : '/', query }}
       className={className}
     >
       {children}

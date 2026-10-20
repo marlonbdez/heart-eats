@@ -25,7 +25,7 @@ test.describe('mapa por área visible', () => {
   test('al alejar el mapa salen los locales de otras ciudades', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await expect(marker(page, 'demo-cafe-del-mar')).toHaveCount(0);
 
@@ -43,7 +43,7 @@ test.describe('mapa por área visible', () => {
   test('elegir una zona descarta lo explorado, también la que ya era la actual', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await zoomOutUntil(page, 'demo-cafe-del-mar');
     await expect(markers(page)).toHaveCount(8);
@@ -60,7 +60,7 @@ test.describe('mapa por área visible', () => {
   test('con una búsqueda se busca en toda la zona y, al borrarla, se vuelve a ella', async ({
     page,
   }) => {
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await zoomOutUntil(page, 'demo-cafe-del-mar');
     await expect(markers(page)).toHaveCount(8);
@@ -80,7 +80,7 @@ test.describe('mapa por área visible', () => {
         json: { items: [], nextCursor: 'mas' },
       }),
     );
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await page.locator('.maplibregl-ctrl-zoom-out').click();
     await expect(
@@ -92,7 +92,7 @@ test.describe('mapa por área visible', () => {
     await page.route(`${API}/restaurants?*bbox=*`, (route) =>
       route.fulfill({ headers: cors, json: { items: [] } }),
     );
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await page.locator('.maplibregl-ctrl-zoom-out').click();
     await expect(
@@ -113,7 +113,7 @@ test.describe('mapa por área visible', () => {
           })
         : route.fallback(),
     );
-    await page.goto('/es');
+    await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
     await page.locator('.maplibregl-ctrl-zoom-out').click();
 

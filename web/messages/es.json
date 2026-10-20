@@ -90,6 +90,7 @@
   "results": {
     "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",
     "countArea": "{count, plural, =0 {Ningún local en esta zona del mapa} one {# local en esta zona del mapa} other {# locales en esta zona del mapa}}",
+    "tagline": "Descubre sitios donde comer que dan trabajo a personas con discapacidad.",
     "emptyTitle": "No hemos encontrado locales con esa búsqueda",
     "emptyBody": "Prueba a ampliar la búsqueda o a quitar algún filtro. Si conoces un sitio que debería estar aquí, puedes proponerlo.",
     "clearFilters": "Quitar filtros",

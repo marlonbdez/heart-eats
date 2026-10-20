@@ -75,7 +75,7 @@ test('el mapa se dibuja y muestra los locales', async ({ page }) => {
   });
   page.on('pageerror', (e) => errors.push(e.message));
 
-  await page.goto('/es');
+  await page.goto('/es/map');
   await expect(page.locator('[data-marker]').first()).toBeVisible();
 
   // Una capa que depende del worker de MapLibre se dibuja de verdad.
@@ -95,7 +95,7 @@ test('el mapa se dibuja y muestra los locales', async ({ page }) => {
 });
 
 test('un marcador abre su vista previa y Esc la cierra', async ({ page }) => {
-  await page.goto('/es');
+  await page.goto('/es/map');
   const marker = page.locator('[data-marker]').first();
   await marker.focus();
   await page.keyboard.press('Enter');
@@ -114,8 +114,8 @@ test('el menú lateral abre, navega y se cierra', async ({ page }) => {
   const menu = page.getByRole('dialog');
   await expect(menu).toBeVisible();
 
-  await menu.locator('a[href="/es/list"]').click();
-  await expect(page).toHaveURL(/\/es\/list$/);
+  await menu.locator('a[href="/es/map"]').click();
+  await expect(page).toHaveURL(/\/es\/map$/);
   await expect(menu).toBeHidden();
 });
 
@@ -125,7 +125,7 @@ test('los idiomas funcionan: /es y /en cargan en su idioma', async ({
   await page.goto('/es');
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 
-  await page.goto('/en');
+  await page.goto('/en/map');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('[data-marker]').first()).toBeVisible();
 });
@@ -133,7 +133,7 @@ test('los idiomas funcionan: /es y /en cargan en su idioma', async ({
 test('el buscador y las categorías filtran los marcadores', async ({
   page,
 }) => {
-  await page.goto('/es');
+  await page.goto('/es/map');
   const markers = page.locator('[data-marker]');
   await expect(markers.first()).toBeVisible();
   const total = await markers.count();
@@ -151,17 +151,16 @@ test('el buscador y las categorías filtran los marcadores', async ({
 test('la lista muestra los mismos locales y conserva la búsqueda', async ({
   page,
 }) => {
-  await page.goto('/es');
+  await page.goto('/es/map');
   const markers = page.locator('[data-marker]');
   await expect(markers.first()).toBeVisible();
   const total = await markers.count();
 
   await page
-    .getByRole('navigation')
-    .last()
-    .locator('a[href^="/es/list"]')
+    .getByRole('navigation', { name: 'Vista' })
+    .getByRole('link', { name: 'Lista' })
     .click();
-  await expect(page).toHaveURL(/\/es\/list$/);
+  await expect(page).toHaveURL(/\/es$/);
   const items = page.getByRole('list').last().getByRole('listitem');
   await expect(items).toHaveCount(total);
 
@@ -169,11 +168,8 @@ test('la lista muestra los mismos locales y conserva la búsqueda', async ({
   await expect(items).toHaveCount(1);
 
   // Volver al mapa lleva la búsqueda consigo.
-  await page
-    .getByRole('navigation')
-    .last()
-    .locator('a[href="/es?q=lavapies"]')
-    .click();
+  await page.getByRole('link', { name: 'Mapa' }).click();
+  await expect(page).toHaveURL(/\/es\/map\?q=lavapies$/);
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
   await expect(markers).toHaveCount(1);
 });
@@ -181,7 +177,7 @@ test('la lista muestra los mismos locales y conserva la búsqueda', async ({
 test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   page,
 }) => {
-  await page.goto('/es/list');
+  await page.goto('/es');
   await page
     .getByRole('list', { name: 'Lista de locales' })
     .getByRole('link')
@@ -194,13 +190,13 @@ test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Horario' })).toBeVisible();
   await page.getByRole('link', { name: /Volver/ }).click();
-  await expect(page).toHaveURL(/\/es\/list$/);
+  await expect(page).toHaveURL(/\/es$/);
 });
 
 test('volver desde la ficha regresa a la lista con su búsqueda', async ({
   page,
 }) => {
-  await page.goto('/es/list');
+  await page.goto('/es');
   await page.getByRole('searchbox').fill('lavapies');
   await page
     .getByRole('list', { name: 'Lista de locales' })
@@ -209,7 +205,7 @@ test('volver desde la ficha regresa a la lista con su búsqueda', async ({
     .click();
   await expect(page).toHaveURL(/\/es\/place\//);
   await page.getByRole('link', { name: /Volver/ }).click();
-  await expect(page).toHaveURL(/\/es\/list\?q=lavapies$/);
+  await expect(page).toHaveURL(/\/es\?q=lavapies$/);
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
 });
 
@@ -255,7 +251,7 @@ test('sin permiso de ubicación, avisa y la web sigue usable', async ({
     navigator.geolocation.getCurrentPosition = (_ok, fail) =>
       fail?.({ code: 1, PERMISSION_DENIED: 1 } as GeolocationPositionError);
   });
-  await page.goto('/es');
+  await page.goto('/es/map');
   await page.getByRole('button', { name: 'Cerca de mí' }).click();
   await expect(page.getByText(/No tenemos permiso/)).toBeVisible();
   await expect(page.locator('[data-marker]').first()).toBeVisible();

@@ -27,7 +27,7 @@ export default async function CorrectIndexPage({
       <h1>{t('pick.title')}</h1>
       <p>{t('pick.body')}</p>
       <p>
-        <Link href="/list">{t('pick.list')}</Link>
+        <Link href="/">{t('pick.list')}</Link>
       </p>
     </main>
   );

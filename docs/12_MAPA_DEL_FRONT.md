@@ -33,8 +33,9 @@ Viven en `web/src/app/[locale]/`. Las direcciones son en inglés en los dos idio
 
 | Ruta | Para qué |
 |---|---|
-| `/` | Mapa: arranca en la zona elegida (selector «¿Dónde?», una ciudad) y pide los locales de lo que se ve al moverlo |
-| `/list` | La misma información en lista (alternativa accesible al mapa) |
+| `/` | Portada: la lista de locales de la zona elegida (selector «¿Dónde?», una ciudad), con una frase que explica qué es y un botón «Mapa». Desde 900 px, lista y mapa a la vez |
+| `/map` | Mapa: pide los locales de lo que se ve al moverlo. Desde 900 px es igual que `/` |
+| `/list` | Alias de `/` |
 | `/place/[slug]` | Ficha: platos, equipo, horario, verificación, cómo llegar |
 | `/propose` | Proponer un local, 4 pasos, con borrador y fotos de platos |
 | `/correct/[slug]` | Sugerir una corrección, 3 pasos |
