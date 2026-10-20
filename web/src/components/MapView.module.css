@@ -27,8 +27,14 @@
   transition: transform 0.15s;
 }
 .marker:hover svg,
+.highlight svg,
 .selected svg {
   transform: scale(1.25);
+}
+/* El resaltado queda por encima de los marcadores vecinos. */
+.highlight,
+.selected {
+  z-index: 1;
 }
 .selected svg {
   fill: var(--accent-text);

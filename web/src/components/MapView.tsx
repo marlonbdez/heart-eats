@@ -55,6 +55,8 @@ export function MapView({
   split = false,
   selected,
   onSelect,
+  highlighted = null,
+  onHover,
   onUserMove,
 }: {
   restaurants: Restaurant[];
@@ -67,6 +69,10 @@ export function MapView({
   split?: boolean;
   selected: string | null;
   onSelect: (slug: string | null) => void;
+  // El local que se resalta (su tarjeta tiene el ratón o el foco) y el aviso
+  // de que la persona pasa el ratón o el foco por un marcador.
+  highlighted?: string | null;
+  onHover?: (slug: string | null) => void;
   onUserMove?: (move: MapMove) => void;
 }) {
   const t = useTranslations();
@@ -87,10 +93,12 @@ export function MapView({
   });
   const onUserMoveRef = useRef(onUserMove);
   const onSelectRef = useRef(onSelect);
+  const onHoverRef = useRef(onHover);
   const splitRef = useRef(split);
   useEffect(() => {
     onUserMoveRef.current = onUserMove;
     onSelectRef.current = onSelect;
+    onHoverRef.current = onHover;
     splitRef.current = split;
   });
   const [ready, setReady] = useState(false);
@@ -212,6 +220,14 @@ export function MapView({
       el.setAttribute('aria-label', label);
       el.innerHTML = MARKER_SVG;
       el.addEventListener('click', () => onSelectRef.current(r.slug));
+      for (const [event, slug] of [
+        ['mouseenter', r.slug],
+        ['focus', r.slug],
+        ['mouseleave', null],
+        ['blur', null],
+      ] as const) {
+        el.addEventListener(event, () => onHoverRef.current?.(slug));
+      }
       const marker = new lib.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([r.location.lng, r.location.lat])
         .addTo(map);
@@ -300,6 +316,16 @@ export function MapView({
       el.classList.toggle(styles.selected, slug === selected);
     });
   }, [selected, restaurants, ready]);
+
+  // El marcador del local que se resalta desde su tarjeta.
+  useEffect(() => {
+    markers.current.forEach(({ el }, slug) => {
+      const on = slug === highlighted;
+      el.classList.toggle(styles.highlight, on);
+      if (on) el.dataset.highlight = 'true';
+      else delete el.dataset.highlight;
+    });
+  }, [highlighted, restaurants, ready]);
 
   // Foco en la vista previa.
   useEffect(() => {
