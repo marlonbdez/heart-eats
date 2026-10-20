@@ -136,6 +136,9 @@ export function Discover({
   const [picked, setPicked] = useState<string | null>(null);
   const selected =
     picked && onMap.some((r) => r.slug === picked) ? picked : null;
+  // El local que la persona señala con el ratón o el foco, en su tarjeta o en
+  // su marcador: el otro se resalta.
+  const [hovered, setHovered] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!split || !selected) return;
@@ -311,6 +314,8 @@ export function Discover({
                 split={split}
                 selected={selected}
                 onSelect={setPicked}
+                highlighted={split ? hovered : null}
+                onHover={setHovered}
                 onUserMove={onUserMove}
               />
               {!split && (
@@ -368,6 +373,13 @@ export function Discover({
                       className={styles.item}
                       data-slug={r.slug}
                       data-selected={r.slug === selected}
+                      data-hover={split && r.slug === hovered}
+                      onMouseEnter={
+                        split ? () => setHovered(r.slug) : undefined
+                      }
+                      onMouseLeave={split ? () => setHovered(null) : undefined}
+                      onFocus={split ? () => setHovered(r.slug) : undefined}
+                      onBlur={split ? () => setHovered(null) : undefined}
                     >
                       <RestaurantCard restaurant={r} variant="list" />
                     </li>

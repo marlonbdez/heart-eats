@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { memo } from 'react';
 import { Link } from '@/i18n/navigation';
 import { coverThumb } from '@/lib/gallery';
 import type { Restaurant } from '@/lib/types';
@@ -9,7 +10,7 @@ import styles from './RestaurantCard.module.css';
 
 // Tarjeta de local. En la lista (`list`) la foto va arriba y toda la tarjeta
 // lleva a la ficha; en la vista previa del mapa (`preview`) es compacta.
-export function RestaurantCard({
+export const RestaurantCard = memo(function RestaurantCard({
   restaurant,
   variant = 'preview',
 }: {
@@ -86,4 +87,4 @@ export function RestaurantCard({
       </div>
     </div>
   );
-}
+});

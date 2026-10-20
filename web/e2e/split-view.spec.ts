@@ -136,3 +136,62 @@ test('en 1280 px el listado cabe y no desborda la página', async ({ page }) => 
     ),
   ).toBeLessThanOrEqual(0);
 });
+
+const pin = (page: Page, slug: string | null) =>
+  page.locator(`[data-marker="${slug}"]`);
+
+test('al pasar el ratón por una tarjeta se resalta su pin, y al salir se quita', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await expect(cards(page)).toHaveCount(6);
+  const card = cards(page).nth(1);
+  const slug = await card.getAttribute('data-slug');
+  await expect(pin(page, slug)).not.toHaveAttribute('data-highlight', 'true');
+
+  await card.hover();
+  await expect(pin(page, slug)).toHaveAttribute('data-highlight', 'true');
+  await expect(page.locator('[data-highlight="true"]')).toHaveCount(1);
+
+  await page.getByRole('searchbox').hover();
+  await expect(pin(page, slug)).not.toHaveAttribute('data-highlight', 'true');
+});
+
+test('al pasar el ratón por un pin se resalta su tarjeta', async ({ page }) => {
+  await page.goto('/es');
+  await expect(cards(page)).toHaveCount(6);
+  const slug = await cards(page).nth(2).getAttribute('data-slug');
+  await pin(page, slug).hover();
+  await expect(cards(page).nth(2)).toHaveAttribute('data-hover', 'true');
+  await expect(page.locator('[data-hover="true"]')).toHaveCount(1);
+
+  await page.getByRole('searchbox').hover();
+  await expect(cards(page).nth(2)).toHaveAttribute('data-hover', 'false');
+});
+
+test('con el teclado, el foco en una tarjeta o en un pin también resalta al otro', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await expect(cards(page)).toHaveCount(6);
+  const card = cards(page).nth(3);
+  const slug = await card.getAttribute('data-slug');
+
+  await card.getByRole('link').focus();
+  await expect(pin(page, slug)).toHaveAttribute('data-highlight', 'true');
+  await card.getByRole('link').blur();
+  await expect(pin(page, slug)).not.toHaveAttribute('data-highlight', 'true');
+
+  await pin(page, slug).focus();
+  await expect(card).toHaveAttribute('data-hover', 'true');
+  await pin(page, slug).blur();
+  await expect(card).toHaveAttribute('data-hover', 'false');
+});
+
+test('por debajo de 900 px no hay resalte', async ({ page }) => {
+  await page.setViewportSize({ width: 800, height: 800 });
+  await page.goto('/es/list');
+  await expect(cards(page).first()).toBeVisible();
+  await cards(page).first().hover();
+  await expect(page.locator('[data-hover="true"]')).toHaveCount(0);
+});
