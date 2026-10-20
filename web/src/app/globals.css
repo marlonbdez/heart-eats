@@ -43,6 +43,9 @@
 
 * {
   box-sizing: border-box;
+  /* Barras de desplazamiento finas y discretas: se ven, pero no mandan. */
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--fg) 30%, transparent) transparent;
 }
 
 body {
