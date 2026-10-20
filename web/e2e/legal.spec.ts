@@ -107,6 +107,9 @@ test('cookies y almacenamiento: dice qué cookie hay (solo moderación) y lista 
     page.getByText(/El borrador de «Proponer un local»/),
   ).toBeVisible();
   await expect(page.getByText(/Tu idioma: si lo cambias/)).toBeVisible();
+  await expect(
+    page.getByText(/Tu tema: si eliges claro u oscuro/),
+  ).toBeVisible();
 });
 
 test('la privacidad dice dónde se guardan los datos, en ES y EN', async ({

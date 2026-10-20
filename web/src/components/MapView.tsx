@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
 import { mapStyles, worldView } from '@/lib/map-config';
+import { isDark, watchTheme } from '@/lib/theme';
 import type { Bbox, Restaurant } from '@/lib/types';
 import { useLocation } from './LocationProvider';
 import { RestaurantCard } from './RestaurantCard';
@@ -107,9 +108,8 @@ export function MapView({
   // Crear el mapa una sola vez.
   useEffect(() => {
     let cancelled = false;
-    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const styleUrl = () =>
-      colorScheme.matches ? mapStyles.dark : mapStyles.light;
+    let stopWatching = () => {};
+    const styleUrl = () => (isDark() ? mapStyles.dark : mapStyles.light);
     const onSchemeChange = () => mapRef.current?.setStyle(styleUrl());
     const markerMap = markers.current;
 
@@ -140,7 +140,7 @@ export function MapView({
         new lib.NavigationControl({ showCompass: false }),
         'top-right',
       );
-      colorScheme.addEventListener('change', onSchemeChange);
+      stopWatching = watchTheme(onSchemeChange);
 
       // Un clic en el fondo cierra la vista previa (no en un marcador).
       map.on('click', (e) => {
@@ -156,7 +156,7 @@ export function MapView({
 
     return () => {
       cancelled = true;
-      colorScheme.removeEventListener('change', onSchemeChange);
+      stopWatching();
       mapRef.current?.remove();
       mapRef.current = null;
       markerMap.clear();

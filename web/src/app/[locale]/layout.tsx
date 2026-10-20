@@ -6,6 +6,7 @@ import { LocationProvider } from '@/components/LocationProvider';
 import { Header } from '@/components/Header';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { routing } from '@/i18n/routing';
+import { THEME_INIT_SCRIPT } from '@/lib/theme';
 
 export const dynamicParams = false;
 
@@ -41,6 +42,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        {/* Aplica el tema elegido antes de pintar, para que no parpadee. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <NextIntlClientProvider>
           <LocationProvider>

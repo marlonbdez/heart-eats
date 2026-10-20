@@ -10,7 +10,9 @@ test('al entrar se ve la lista con su frase, y el mapa no se carga', async ({
 }) => {
   await page.goto('/es');
   await expect(
-    page.getByText('Descubre sitios donde comer que dan trabajo'),
+    page
+      .locator('#contenido')
+      .getByText('Comer bien, con equipos que suman.', { exact: true }),
   ).toBeVisible();
   await expect(cards(page)).toHaveCount(6);
   await expect(page.locator('[data-marker]')).toHaveCount(0);
@@ -23,7 +25,11 @@ test('al entrar se ve la lista con su frase, y el mapa no se carga', async ({
 test('la frase también está en inglés', async ({ page }) => {
   await page.goto('/en');
   await expect(
-    page.getByText('Find places to eat that give jobs to people with'),
+    page
+      .locator('#contenido')
+      .getByText('Great food, with teams that make a difference.', {
+        exact: true,
+      }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'Map' })).toBeVisible();
 });

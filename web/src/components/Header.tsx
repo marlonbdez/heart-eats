@@ -6,6 +6,7 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { navGroups } from '@/lib/nav';
 import { LanguageMenu } from './LanguageMenu';
 import { LogoMark } from './LogoMark';
+import { ThemeSwitch } from './ThemeSwitch';
 import styles from './Header.module.css';
 
 // Icono "añadir lugar" (chincheta con un +), Material Icons, Apache-2.0.
@@ -54,7 +55,6 @@ export function Header() {
             Heart<span className={styles.eats}>Eats</span>
           </span>
         </Link>
-        <LanguageMenu />
         {/* En móvil solo se ve el icono; el nombre accesible es siempre el texto completo. */}
         <Link href="/propose" className={styles.cta}>
           <svg
@@ -69,6 +69,7 @@ export function Header() {
           </svg>
           <span className={styles.ctaText}>{t('header.propose')}</span>
         </Link>
+        <LanguageMenu />
       </header>
 
       <dialog
@@ -118,6 +119,8 @@ export function Header() {
             </section>
           ))}
         </nav>
+
+        <ThemeSwitch />
 
         <footer className={styles.drawerFoot}>
           <p className={styles.tagline}>{t('app.tagline')}</p>

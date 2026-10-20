@@ -134,8 +134,9 @@ test.describe('selector de idioma de la cabecera', () => {
         ].map((l) => l.boundingBox()),
       );
       const [lang, cta] = boxes;
-      expect(lang!.x + lang!.width).toBeLessThanOrEqual(cta!.x + 1);
-      expect(cta!.x + cta!.width).toBeLessThanOrEqual(320);
+      // «Proponer» va antes y el idioma al borde, sin pisarse.
+      expect(cta!.x + cta!.width).toBeLessThanOrEqual(lang!.x + 1);
+      expect(lang!.x + lang!.width).toBeLessThanOrEqual(320);
     });
   }
 });

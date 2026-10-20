@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { countryView } from '@/lib/country-views';
 import { MARKER_SVG } from '@/lib/marker';
 import { mapStyles, worldView } from '@/lib/map-config';
+import { isDark, watchTheme } from '@/lib/theme';
 import type { LatLng } from '@/lib/types';
 import form from './Form.module.css';
 import styles from './PinPicker.module.css';
@@ -49,9 +50,8 @@ export function PinPicker({
   // Crear el mapa una sola vez, centrado en el pin o, si no hay, en el país.
   useEffect(() => {
     let cancelled = false;
-    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const styleUrl = () =>
-      colorScheme.matches ? mapStyles.dark : mapStyles.light;
+    let stopWatching = () => {};
+    const styleUrl = () => (isDark() ? mapStyles.dark : mapStyles.light);
     const onSchemeChange = () => mapRef.current?.setStyle(styleUrl());
 
     (async () => {
@@ -83,7 +83,7 @@ export function PinPicker({
         'top-right',
       );
       map.getCanvas().setAttribute('aria-label', t('mapLabel'));
-      colorScheme.addEventListener('change', onSchemeChange);
+      stopWatching = watchTheme(onSchemeChange);
       map.on('click', (e) =>
         onChangeRef.current({ lat: e.lngLat.lat, lng: e.lngLat.lng }),
       );
@@ -94,7 +94,7 @@ export function PinPicker({
 
     return () => {
       cancelled = true;
-      colorScheme.removeEventListener('change', onSchemeChange);
+      stopWatching();
       markerRef.current?.remove();
       markerRef.current = null;
       mapRef.current?.remove();
