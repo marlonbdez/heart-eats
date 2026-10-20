@@ -85,7 +85,10 @@ for (const width of [320, 390]) {
     expect(n.x + n.width).toBeLessThanOrEqual(width);
 
     // Al bajar por la lista, el conmutador no se va.
-    const last = page.getByRole('link', { name: /Ver local/ }).last();
+    const last = page
+      .getByRole('list', { name: 'Lista de locales' })
+      .getByRole('link')
+      .last();
     await last.evaluate((el) => {
       let p = el.parentElement;
       while (p && p.scrollHeight <= p.clientHeight) p = p.parentElement;

@@ -126,7 +126,11 @@ test.describe('zona que se mira', () => {
   }) => {
     await page.goto('/es/list?country=ES&city=barcelona');
     await expect(page.getByRole('listitem')).toHaveCount(2);
-    await page.getByRole('link', { name: 'Ver local →' }).first().click();
+    await page
+      .getByRole('list', { name: 'Lista de locales' })
+      .getByRole('link')
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/es\/place\/demo-/);
     await page
       .getByRole('link', { name: /Volver/ })

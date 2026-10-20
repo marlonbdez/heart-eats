@@ -182,7 +182,11 @@ test('la lista lleva a la ficha, con El Equipo y el botón de volver', async ({
   page,
 }) => {
   await page.goto('/es/list');
-  await page.getByRole('link', { name: 'Ver local →' }).first().click();
+  await page
+    .getByRole('list', { name: 'Lista de locales' })
+    .getByRole('link')
+    .first()
+    .click();
   await expect(page).toHaveURL(/\/es\/place\/demo-/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('[DEMO]');
   await expect(
@@ -198,7 +202,11 @@ test('volver desde la ficha regresa a la lista con su búsqueda', async ({
 }) => {
   await page.goto('/es/list');
   await page.getByRole('searchbox').fill('lavapies');
-  await page.getByRole('link', { name: 'Ver local →' }).first().click();
+  await page
+    .getByRole('list', { name: 'Lista de locales' })
+    .getByRole('link')
+    .first()
+    .click();
   await expect(page).toHaveURL(/\/es\/place\//);
   await page.getByRole('link', { name: /Volver/ }).click();
   await expect(page).toHaveURL(/\/es\/list\?q=lavapies$/);
@@ -227,7 +235,7 @@ test.describe('Cerca de mí', () => {
     await expect(page.getByText(/Ordenado por distancia/)).toBeVisible();
     const first = page.getByRole('listitem').first();
     await expect(first).toContainText('La Masa Madre');
-    await expect(first).toContainText(/\d+\s?m\b/);
+    await expect(first.getByLabel(/^a \d+ m$/)).toBeVisible();
   });
 
   test('fuera de la zona avisa y no ordena', async ({ context, page }) => {

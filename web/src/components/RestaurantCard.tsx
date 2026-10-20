@@ -7,8 +7,15 @@ import { Distance } from './Distance';
 import { VerificationBadge } from './VerificationBadge';
 import styles from './RestaurantCard.module.css';
 
-// Tarjeta de local, reutilizable en mapa y lista. Lidera el plato estrella.
-export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
+// Tarjeta de local. En la lista (`list`) la foto va arriba y toda la tarjeta
+// lleva a la ficha; en la vista previa del mapa (`preview`) es compacta.
+export function RestaurantCard({
+  restaurant,
+  variant = 'preview',
+}: {
+  restaurant: Restaurant;
+  variant?: 'list' | 'preview';
+}) {
   const t = useTranslations('card');
   const discovery = useDiscovery();
   const dish = restaurant.signatureDishes[0];
@@ -16,9 +23,14 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const place = [restaurant.address.neighborhood, restaurant.address.city]
     .filter(Boolean)
     .join(', ');
+  const isList = variant === 'list';
+  const href = {
+    pathname: `/place/${restaurant.slug}`,
+    query: placeQuery(discovery),
+  };
 
   return (
-    <div className={styles.card}>
+    <div className={isList ? styles.listCard : styles.card}>
       <div className={styles.photo}>
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -35,30 +47,42 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         )}
       </div>
       <div className={styles.body}>
-        {dish && (
+        {isList ? (
+          <h2 className={styles.name}>
+            <Link className={styles.nameLink} href={href}>
+              {restaurant.name}
+            </Link>
+          </h2>
+        ) : (
           <>
-            <p className={styles.dishLabel}>{t('signatureDish')}</p>
-            <p className={styles.dish}>{dish.name}</p>
+            {dish && (
+              <>
+                <p className={styles.dishLabel}>{t('signatureDish')}</p>
+                <p className={styles.dish}>{dish.name}</p>
+              </>
+            )}
+            <h2 className={styles.name}>{restaurant.name}</h2>
           </>
         )}
-        <h2 className={styles.name}>{restaurant.name}</h2>
         <p className={styles.place}>
           {place}
           <Distance location={restaurant.location} />
         </p>
+        {isList && dish && (
+          <p className={styles.dishLine}>
+            <span className={styles.dishLabel}>{t('signatureDish')}</span>{' '}
+            {dish.name}
+          </p>
+        )}
         <p className={styles.seal}>
           <span aria-hidden="true">♥</span> {t('inclusiveSeal')}
         </p>
         <VerificationBadge verification={restaurant.verification} />
-        <Link
-          className={styles.more}
-          href={{
-            pathname: `/place/${restaurant.slug}`,
-            query: placeQuery(discovery),
-          }}
-        >
-          {t('viewLocal')}
-        </Link>
+        {!isList && (
+          <Link className={styles.more} href={href}>
+            {t('viewLocal')}
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -280,7 +280,7 @@ export function Discover({
               <ul className={styles.list} aria-label={t('results.listLabel')}>
                 {visible.map((r) => (
                   <li key={r.slug} className={styles.item}>
-                    <RestaurantCard restaurant={r} />
+                    <RestaurantCard restaurant={r} variant="list" />
                   </li>
                 ))}
               </ul>
