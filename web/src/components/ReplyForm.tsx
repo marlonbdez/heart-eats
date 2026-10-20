@@ -7,6 +7,8 @@ import { getInfoRequest, sendReply, type InfoRequest } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import { useLoad } from '@/lib/use-load';
 import { Remote } from './Remote';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 const MAX = 2000;
@@ -157,10 +159,13 @@ function Reply({ token, request }: { token: string; request: InfoRequest }) {
           type="submit"
           className={`${s.btn} ${s.primary}`}
           disabled={sending}
+          aria-busy={sending}
         >
+          {sending && <Spinner />}
           {sending ? t('sending') : t('submit')}
         </button>
       </div>
+      <SlowNotice active={sending} kind="send" className={s.small} />
     </form>
   );
 }

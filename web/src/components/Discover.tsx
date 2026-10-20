@@ -27,6 +27,9 @@ import { NearMeButton, NearMeNotice } from './NearMe';
 import { Remote } from './Remote';
 import { RestaurantCard } from './RestaurantCard';
 import { SearchBar } from './SearchBar';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
+import { ListSkeleton } from './ListSkeleton';
 import { MapButton, ViewSwitch } from './ViewSwitch';
 import { ZoneMenu } from './ZoneMenu';
 import styles from './Discover.module.css';
@@ -204,16 +207,12 @@ export function Discover({
 
   // La primera carga de la primera zona: todavía no hay nada que enseñar.
   if (data.restaurants === null) {
-    return (
-      <Remote
-        state={
-          data.failed
-            ? { status: 'error', retry: data.retry }
-            : { status: 'loading' }
-        }
-      >
+    return data.failed ? (
+      <Remote state={{ status: 'error', retry: data.retry }}>
         {() => null}
       </Remote>
+    ) : (
+      <ListSkeleton />
     );
   }
 
@@ -272,11 +271,20 @@ export function Discover({
         </div>
 
         <div className={styles.area} data-split={split}>
-          {loading && (
-            <p role="status" className={styles.srOnly}>
-              {t('load.loading')}
+          {loading && <div className={styles.loadingBar} aria-hidden="true" />}
+          <div className={styles.loadingNote}>
+            <p
+              role="status"
+              className={loading ? styles.loadingPill : styles.srOnly}
+            >
+              {loading && (
+                <>
+                  <Spinner /> {t('load.loading')}
+                </>
+              )}
             </p>
-          )}
+            <SlowNotice active={loading} className={styles.slowPill} />
+          </div>
           {failed && (
             <div role="alert" className={styles.zoneError}>
               <p>{t('load.error')}</p>

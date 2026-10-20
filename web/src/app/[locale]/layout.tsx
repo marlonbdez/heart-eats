@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { LocationProvider } from '@/components/LocationProvider';
 import { Header } from '@/components/Header';
+import { NavigationProgress } from '@/components/NavigationProgress';
 import { routing } from '@/i18n/routing';
 
 export const dynamicParams = false;
@@ -43,6 +44,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider>
           <LocationProvider>
+            <NavigationProgress />
             <Header />
             {children}
           </LocationProvider>

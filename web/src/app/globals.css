@@ -7,6 +7,7 @@
   --muted: #6b5a50;
   --line: #e4d8c6;
   --hover: #f1e6d3;
+  --press: color-mix(in srgb, var(--fg) 16%, transparent);
   color-scheme: light dark;
 }
 
@@ -38,6 +39,19 @@ body {
     Roboto,
     sans-serif;
   line-height: 1.5;
+}
+
+/* Pulsado: respuesta inmediata al toque (un velo y un leve encogimiento),
+   para que nunca parezca que el botón no ha recibido el clic. Los marcadores
+   y controles del mapa lo gestionan MapLibre y la propia página. */
+button:not(:disabled):not([data-marker]):not(.maplibregl-ctrl button):active {
+  box-shadow: inset 0 0 0 999px var(--press);
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: no-preference) {
+  button {
+    transition: transform 0.08s ease-out;
+  }
 }
 
 a:focus-visible,

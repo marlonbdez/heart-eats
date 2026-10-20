@@ -112,6 +112,7 @@ Repite A, C y F a **320 px** y a **390 px**, y una vez con la letra del móvil a
 - Todo botón se puede pulsar con el pulgar sin tocar otro.
 - Con teclado (Tab, Enter, Esc): se llega a todo, se ve dónde está el foco, Esc cierra el selector de zona y la tarjeta.
 - Modo oscuro del sistema: se lee todo, también el mapa.
+- **Poca cobertura:** en el móvil, con el modo avión un momento o la red limitada de las herramientas del navegador, toca una tarjeta, cambia de zona y envía un formulario. Debe verse siempre que algo está pasando (barra fina, «Cargando…», botón «Enviando…» con su rueda) y, pasados unos segundos, un aviso de paciencia. Un botón pulsado se oscurece mientras se mantiene el dedo.
 - Con un lector de pantalla (VoiceOver o TalkBack), prueba A3 y C1: el mapa dice cuántos locales hay y los marcadores tienen nombre.
 
 ## J · Qué mirar mientras se prueba la carga (con los datos de prueba)

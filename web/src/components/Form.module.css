@@ -202,6 +202,10 @@ select.input {
   margin-top: 24px;
 }
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   min-height: 52px;
   padding: 0 20px;
   font: inherit;
@@ -221,7 +225,7 @@ select.input {
   border: 0;
 }
 .primary:disabled {
-  opacity: 0.6;
+  opacity: 0.85;
   cursor: progress;
 }
 .honeypot {

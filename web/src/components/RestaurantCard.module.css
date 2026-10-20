@@ -118,3 +118,9 @@
   display: inline;
   margin-right: 2px;
 }
+
+/* Toque sobre la tarjeta entera (el enlace del nombre, estirado). */
+.card:has(.nameLink:active),
+.listCard:has(.nameLink:active) {
+  background: var(--hover);
+}

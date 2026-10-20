@@ -7,6 +7,8 @@ import { submitCorrection } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { CorrectionKind } from '@/lib/types';
 import { isEmail, isHttpUrl } from '@/lib/validation';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 const STEPS = 3;
@@ -328,10 +330,13 @@ export function CorrectForm({
             type="submit"
             className={`${s.btn} ${s.primary}`}
             disabled={sending}
+            aria-busy={sending}
           >
+            {sending && <Spinner />}
             {sending ? t('sending') : lastStep ? t('send') : t('next')}
           </button>
         </div>
+        <SlowNotice active={sending} kind="send" className={s.small} />
       </form>
     </main>
   );

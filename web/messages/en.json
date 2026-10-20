@@ -1267,6 +1267,8 @@
     "loading": "Loading…",
     "error": "We could not load the data. Please try again in a moment.",
     "retry": "Try again",
+    "slow": "The connection is slow. We are still loading, thank you for your patience.",
+    "slowSending": "Still sending. With a weak signal this can take a moment; please keep the page open.",
     "missingTitle": "We could not find this place",
     "missingBody": "It may no longer be published, or the address may be wrong.",
     "missingBack": "Back to the map"

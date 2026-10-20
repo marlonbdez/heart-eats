@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { Loaded } from '@/lib/use-load';
+import { SlowNotice } from './SlowNotice';
+import { Spinner } from './Spinner';
 import styles from './Remote.module.css';
 
 // Estado de una carga desde la API: cargando, error con reintento, o el
@@ -18,9 +20,12 @@ export function Remote<T>({
   if (state.status === 'ready') return <>{children(state.data)}</>;
   if (state.status === 'loading') {
     return (
-      <p role="status" className={styles.note}>
-        {t('loading')}
-      </p>
+      <div className={styles.note}>
+        <p role="status" className={styles.loading}>
+          <Spinner /> {t('loading')}
+        </p>
+        <SlowNotice active />
+      </div>
     );
   }
   return (

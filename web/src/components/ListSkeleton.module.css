@@ -1,0 +1,83 @@
+.screen {
+  height: calc(100dvh - 56px);
+  overflow: hidden;
+}
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 12px 0;
+  text-align: center;
+}
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 600;
+}
+.slow {
+  max-width: 36rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.slow:empty {
+  display: none;
+}
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px 12px;
+  list-style: none;
+}
+.card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.photo,
+.line {
+  background: linear-gradient(
+    90deg,
+    var(--hover) 25%,
+    var(--line) 50%,
+    var(--hover) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.photo {
+  aspect-ratio: 4 / 3;
+}
+.lines {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+.line {
+  height: 14px;
+  border-radius: 7px;
+}
+.line:first-child {
+  width: 70%;
+  height: 18px;
+}
+.line:last-child {
+  width: 45%;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo,
+  .line {
+    animation: none;
+  }
+}
