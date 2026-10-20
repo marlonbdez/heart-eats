@@ -33,10 +33,9 @@ for (const width of [320, 390]) {
   });
 }
 
-test('escritorio: el conmutador va centrado arriba del mapa', async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+test('tableta: el conmutador va centrado arriba del mapa', async ({ page }) => {
+  // Desde 900 px se ven lista y mapa a la vez y no hay conmutador.
+  await page.setViewportSize({ width: 800, height: 800 });
   await page.goto('/es');
   await expect(page.getByRole('navigation', { name: 'Vista' })).toBeVisible();
   const v = (await page
@@ -45,7 +44,7 @@ test('escritorio: el conmutador va centrado arriba del mapa', async ({
   const n = (await page
     .getByRole('button', { name: 'Cerca de mí' })
     .boundingBox())!;
-  expect(Math.abs(v.x + v.width / 2 - 1280 / 2)).toBeLessThan(2);
+  expect(Math.abs(v.x + v.width / 2 - 800 / 2)).toBeLessThan(2);
   expect(Math.abs(v.y + v.height / 2 - (n.y + n.height / 2))).toBeLessThan(8);
 });
 

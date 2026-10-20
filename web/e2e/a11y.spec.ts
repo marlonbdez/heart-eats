@@ -411,3 +411,22 @@ for (const scheme of ['light', 'dark'] as const) {
     });
   });
 }
+
+// Pantallas anchas: lista y mapa a la vez, con una tarjeta marcada.
+test.describe('vista partida (escritorio)', () => {
+  test.use({
+    isMobile: false,
+    hasTouch: false,
+    viewport: { width: 1280, height: 800 },
+  });
+  for (const scheme of ['light', 'dark'] as const) {
+    test(`lista y mapa, tema ${scheme}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto('/es');
+      await expect(page.getByRole('listitem').first()).toBeVisible();
+      await page.locator('[data-marker]').first().click();
+      await expect(page.locator('[data-selected="true"]')).toHaveCount(1);
+      await expectNoViolations(page);
+    });
+  }
+});

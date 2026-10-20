@@ -51,17 +51,16 @@ test('un local sin foto muestra un hueco tranquilo en su lugar', async ({
   await expect(item.getByRole('img', { name: 'Sin foto' })).toBeVisible();
 });
 
-test('en pantalla ancha las tarjetas se reparten en columnas', async ({
+test('en una tableta las tarjetas se reparten en columnas', async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
+  // Desde 900 px la lista va junto al mapa, en una columna.
+  await page.setViewportSize({ width: 800, height: 900 });
   await page.goto('/es/list');
   const items = list(page).getByRole('listitem');
   const a = (await items.nth(0).boundingBox())!;
   const b = (await items.nth(1).boundingBox())!;
-  const c = (await items.nth(2).boundingBox())!;
   expect(b.y).toBeCloseTo(a.y, 0);
-  expect(c.y).toBeCloseTo(a.y, 0);
   expect(b.x).toBeGreaterThan(a.x + a.width - 1);
 });
 

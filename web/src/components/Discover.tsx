@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation';
 import { sortByDistance, type Position } from '@/lib/geo';
 import { matchFoodTags, matchesQuery } from '@/lib/search';
 import type { Bbox, FoodTag, RegionCountry, Zone } from '@/lib/types';
+import { useMediaQuery } from '@/lib/use-media-query';
 import { useAreaRestaurants } from '@/lib/use-area-restaurants';
 import { useZoneRestaurants } from '@/lib/use-zone-restaurants';
 import {
@@ -60,6 +61,10 @@ export function Discover({
   const [ready, setReady] = useState(false);
   const hydrated = useRef(false);
   const { position, nearest, status } = useLocation();
+  // En pantallas anchas, lista y mapa a la vez; en las estrechas, una vista.
+  const split = useMediaQuery('(min-width: 900px)');
+  const showMap = view === 'map' || split;
+  const showList = view === 'list' || split;
   const zone = chosen ?? defaultZone(regions);
   const data = useZoneRestaurants(ready ? zone : null);
   const restaurants = useMemo(() => data.restaurants ?? [], [data.restaurants]);
@@ -117,9 +122,33 @@ export function Discover({
   // (con búsqueda se sigue buscando en toda la zona).
   const epoch = `${zone?.country}/${zone?.city}|${recenter}|${hasFilters}`;
   const exploring =
-    view === 'map' && !hasFilters && moved?.epoch === epoch ? moved : null;
+    showMap && !hasFilters && moved?.epoch === epoch ? moved : null;
   const area = useAreaRestaurants(exploring?.bbox ?? null);
   const onMap = exploring && area.restaurants ? area.restaurants : visible;
+  // Con la lista al lado, enseña lo mismo que el mapa (más cercanos primero si
+  // la persona compartió su ubicación); sola, enseña la zona entera.
+  const listed = !split
+    ? visible
+    : position
+      ? sortByDistance(onMap, position)
+      : onMap;
+  // El local marcado en el mapa; su tarjeta se ve en la lista.
+  const [picked, setPicked] = useState<string | null>(null);
+  const selected =
+    picked && onMap.some((r) => r.slug === picked) ? picked : null;
+  const listRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!split || !selected) return;
+    const card = listRef.current?.querySelector(
+      `[data-slug="${CSS.escape(selected)}"]`,
+    );
+    card?.scrollIntoView({
+      block: 'nearest',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
+  }, [selected, split]);
   // La zona que figura en el selector sigue al mapa: la ciudad más cercana.
   const shownZone = exploring
     ? (nearestCity(regions, exploring.center)?.zone ?? zone)
@@ -185,6 +214,25 @@ export function Discover({
     );
   }
 
+  const empty = visible.length === 0 && suggestions.length === 0 && (
+    <div className={styles.empty}>
+      <h2 className={styles.emptyTitle}>
+        {t(hasFilters ? 'results.emptyTitle' : 'results.noneTitle')}
+      </h2>
+      <p>{t(hasFilters ? 'results.emptyBody' : 'results.noneBody')}</p>
+      <div className={styles.emptyActions}>
+        {hasFilters && (
+          <button type="button" className={styles.secondary} onClick={clearAll}>
+            {t('results.clearFilters')}
+          </button>
+        )}
+        <Link href="/propose" className={styles.primary}>
+          {t('results.propose')}
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
     <DiscoveryProvider value={{ view, query }}>
       <div className={styles.screen}>
@@ -220,7 +268,7 @@ export function Discover({
           <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
         </div>
 
-        <div className={styles.area}>
+        <div className={styles.area} data-split={split}>
           {loading && (
             <p role="status" className={styles.srOnly}>
               {t('load.loading')}
@@ -238,76 +286,98 @@ export function Discover({
               </button>
             </div>
           )}
-          {view === 'map' ? (
-            <>
-              <ViewSwitch view={view} query={query} />
-              <p role="status" className={styles.srOnly}>
-                {t('results.count', { count: onMap.length })}
-              </p>
-              <p
-                role="status"
-                className={areaNote ? styles.areaNotice : styles.srOnly}
-              >
-                {areaNote}
-              </p>
+          {showMap && (
+            <div key="map" className={styles.mapPane}>
+              {!split && (
+                <>
+                  <ViewSwitch view={view} query={query} />
+                  <p role="status" className={styles.srOnly}>
+                    {t('results.count', { count: onMap.length })}
+                  </p>
+                  <p
+                    role="status"
+                    className={areaNote ? styles.areaNotice : styles.srOnly}
+                  >
+                    {areaNote}
+                  </p>
+                </>
+              )}
               <MapLoader
                 restaurants={onMap}
                 bounds={bounds}
                 recenter={recenter}
                 focus={hasFilters}
                 followUser={!!position && sameZone(zone, nearest)}
+                split={split}
+                selected={selected}
+                onSelect={setPicked}
                 onUserMove={onUserMove}
               />
-              <div className={styles.nearMe}>
-                <NearMeButton />
-              </div>
-              {status !== 'idle' && (
-                <NearMeNotice className={styles.mapNotice} />
+              {!split && (
+                <>
+                  <div className={styles.nearMe}>
+                    <NearMeButton />
+                  </div>
+                  {status !== 'idle' && (
+                    <NearMeNotice className={styles.mapNotice} />
+                  )}
+                </>
               )}
-            </>
-          ) : (
-            <div className={styles.listScroll}>
-              <div className={styles.listHeader}>
-                <ViewSwitch view={view} query={query} />
-                <NearMeButton />
-              </div>
-              <p role="status" className={styles.count}>
-                {t('results.count', { count: visible.length })}
-              </p>
-              {status !== 'idle' && (
-                <NearMeNotice className={styles.listNotice} />
-              )}
-              <ul className={styles.list} aria-label={t('results.listLabel')}>
-                {visible.map((r) => (
-                  <li key={r.slug} className={styles.item}>
-                    <RestaurantCard restaurant={r} variant="list" />
-                  </li>
-                ))}
-              </ul>
             </div>
           )}
-          {visible.length === 0 && suggestions.length === 0 && (
-            <div className={styles.empty}>
-              <h2 className={styles.emptyTitle}>
-                {t(hasFilters ? 'results.emptyTitle' : 'results.noneTitle')}
-              </h2>
-              <p>{t(hasFilters ? 'results.emptyBody' : 'results.noneBody')}</p>
-              <div className={styles.emptyActions}>
-                {hasFilters && (
-                  <button
-                    type="button"
-                    className={styles.secondary}
-                    onClick={clearAll}
-                  >
-                    {t('results.clearFilters')}
-                  </button>
+          {showList && (
+            <div key="list" className={styles.listPane}>
+              <div className={styles.listScroll} ref={listRef}>
+                <div className={styles.listHeader}>
+                  {split ? (
+                    <p role="status" className={styles.countInline}>
+                      {t(
+                        split && exploring
+                          ? 'results.countArea'
+                          : 'results.count',
+                        {
+                          count: listed.length,
+                        },
+                      )}
+                    </p>
+                  ) : (
+                    <ViewSwitch view={view} query={query} />
+                  )}
+                  <NearMeButton />
+                </div>
+                {!split && (
+                  <p role="status" className={styles.count}>
+                    {t('results.count', { count: listed.length })}
+                  </p>
                 )}
-                <Link href="/propose" className={styles.primary}>
-                  {t('results.propose')}
-                </Link>
+                {split && (
+                  <p
+                    role="status"
+                    className={areaNote ? styles.listNotice : styles.srOnly}
+                  >
+                    {areaNote}
+                  </p>
+                )}
+                {status !== 'idle' && (
+                  <NearMeNotice className={styles.listNotice} />
+                )}
+                <ul className={styles.list} aria-label={t('results.listLabel')}>
+                  {listed.map((r) => (
+                    <li
+                      key={r.slug}
+                      className={styles.item}
+                      data-slug={r.slug}
+                      data-selected={r.slug === selected}
+                    >
+                      <RestaurantCard restaurant={r} variant="list" />
+                    </li>
+                  ))}
+                </ul>
+                {split && empty}
               </div>
             </div>
           )}
+          {!split && empty}
         </div>
       </div>
     </DiscoveryProvider>

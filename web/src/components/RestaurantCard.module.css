@@ -66,6 +66,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  container-type: inline-size;
 }
 .listCard .photo {
   width: 100%;
@@ -73,6 +74,12 @@
   aspect-ratio: 4 / 3;
   font-size: 3rem;
   border-radius: 0;
+}
+/* Una tarjeta ancha (la lista junto al mapa) no se vuelve altísima. */
+@container (min-width: 460px) {
+  .listCard .photo {
+    aspect-ratio: 16 / 9;
+  }
 }
 .listCard .body {
   display: grid;
