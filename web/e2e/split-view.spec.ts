@@ -21,7 +21,6 @@ for (const path of ['/es', '/es/list']) {
     await page.goto(path);
     await expect(markers(page)).toHaveCount(6);
     await expect(cards(page)).toHaveCount(6);
-    const listBox = (await list(page).boundingBox())!;
     const mapBox = (await page
       .getByRole('region', { name: 'Mapa de locales' })
       .boundingBox())!;
@@ -194,4 +193,34 @@ test('por debajo de 900 px no hay resalte', async ({ page }) => {
   await expect(cards(page).first()).toBeVisible();
   await cards(page).first().hover();
   await expect(page.locator('[data-hover="true"]')).toHaveCount(0);
+});
+
+for (const width of [900, 1280, 1920]) {
+  test(`${width}px: la lista y el mapa se reparten la pantalla al 50 %`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/es');
+    await expect(cards(page)).toHaveCount(6);
+    const mapBox = (await page
+      .getByRole('region', { name: 'Mapa de locales' })
+      .boundingBox())!;
+    const pane = (await page.locator('[class*="listPane"]').boundingBox())!;
+    expect(Math.abs(pane.width - width / 2)).toBeLessThanOrEqual(1);
+    expect(Math.abs(mapBox.width - width / 2)).toBeLessThanOrEqual(2);
+  });
+}
+
+test('la barra de desplazamiento de la lista es fina y discreta', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await expect(cards(page)).toHaveCount(6);
+  const style = await page.locator('[class*="listScroll"]').evaluate((el) => {
+    const s = getComputedStyle(el);
+    return { width: s.scrollbarWidth, color: s.scrollbarColor };
+  });
+  expect(style.width).toBe('thin');
+  // Fondo transparente: el carril no pesa.
+  expect(style.color).toMatch(/transparent|rgba\(0, 0, 0, 0\)/);
 });

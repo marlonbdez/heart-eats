@@ -218,7 +218,8 @@
 }
 
 /* Pantallas anchas (≥ 900 px): las tarjetas a la izquierda, con su propio
-   desplazamiento, y el mapa a la derecha, a la altura de la pantalla. */
+   desplazamiento, y el mapa a la derecha, a la altura de la pantalla, mitad y
+   mitad. */
 .mapPane {
   position: absolute;
   inset: 0;
@@ -229,7 +230,7 @@
 }
 .area[data-split='true'] {
   display: grid;
-  grid-template-columns: clamp(380px, 46%, 760px) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .area[data-split='true'] .listPane {
   position: relative;
