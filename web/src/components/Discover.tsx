@@ -23,7 +23,7 @@ import { FoodFilters } from './FoodFilters';
 import { useLocation } from './LocationProvider';
 import { MapLoader } from './MapLoader';
 import type { MapMove } from './MapView';
-import { NearMeButton, NearMeNotice } from './NearMe';
+import { NearMeNotice } from './NearMe';
 import { Remote } from './Remote';
 import { RestaurantCard } from './RestaurantCard';
 import { SearchBar } from './SearchBar';
@@ -328,9 +328,6 @@ export function Discover({
               />
               {!split && (
                 <>
-                  <div className={styles.nearMe}>
-                    <NearMeButton />
-                  </div>
                   {status !== 'idle' && (
                     <NearMeNotice className={styles.mapNotice} />
                   )}
@@ -353,7 +350,6 @@ export function Discover({
                       },
                     )}
                   </p>
-                  <NearMeButton />
                 </div>
                 {split && (
                   <p

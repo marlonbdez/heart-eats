@@ -27,7 +27,7 @@
 
 ## CU-05 · Ordenar por cercanía
 - **Quién:** Visitante; Geolocalización. Extiende CU-01 y CU-02.
-- **Pasos:** pulsa «Cerca de mí» → el navegador pide permiso → se ordena por distancia y se muestra en tarjetas y fichas → pulsar de nuevo la descarta.
+- **Pasos:** elige «Cerca de mí» (primera opción del selector «¿Dónde?») o pulsa la mirilla del mapa → el navegador pide permiso → se ordena por distancia y se muestra en tarjetas y fichas → con la ubicación compartida, la mirilla vuelve a centrar el mapa en la persona y elegir una ciudad en el selector la descarta.
 - **Si no:** sin permiso, sin geolocalización, con error o fuera de la zona (60 km de Madrid) hay un aviso y se sigue en Madrid.
 - **Reglas:** solo se pide tras pulsar; la posición vive en memoria, nunca se guarda ni se envía; la distancia es en línea recta.
 

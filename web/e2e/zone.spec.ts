@@ -1,4 +1,4 @@
-import { API, expect, test } from './support/test';
+import { API, chooseNearMe, expect, test } from './support/test';
 
 const markers = (page: import('@playwright/test').Page) =>
   page.locator('[data-marker]');
@@ -140,7 +140,7 @@ test.describe('zona que se mira', () => {
     await expect(page.getByRole('listitem')).toHaveCount(2);
   });
 
-  test('con una sola zona con locales, solo hay una etiqueta', async ({
+  test('con una sola zona con locales, el selector ofrece «Cerca de mí» y esa zona', async ({
     page,
   }) => {
     await page.route(`${API}/regions`, (route) =>
@@ -168,8 +168,12 @@ test.describe('zona que se mira', () => {
     );
     await page.goto('/es/map');
     await expect(markers(page)).toHaveCount(6);
-    await expect(page.getByText('Madrid', { exact: true })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Zona:/ })).toHaveCount(0);
+    await page.getByRole('button', { name: /Zona: Madrid/ }).click();
+    const dialog = page.getByRole('dialog', { name: '¿Dónde?' });
+    await expect(
+      dialog.getByRole('button', { name: 'Cerca de mí' }),
+    ).toBeVisible();
+    await expect(dialog.getByRole('button', { name: /Madrid/ })).toBeVisible();
   });
 
   test('si falla la carga de una zona, avisa, deja el mapa y permite reintentar', async ({
@@ -243,7 +247,25 @@ test.describe('zona que se mira', () => {
 test.describe('«Cerca de mí» y las zonas', () => {
   test.use({ permissions: ['geolocation'] });
 
-  test('desde otra ciudad con locales, lleva a su zona', async ({
+  test('es la primera opción del selector, antes de las ciudades', async ({
+    page,
+  }) => {
+    await page.goto('/es/map');
+    await expect(markers(page)).toHaveCount(6);
+    await page.getByRole('button', { name: /Zona:/ }).click();
+    const dialog = page.getByRole('dialog', { name: '¿Dónde?' });
+    const buttons = dialog.getByRole('button');
+    // Primero «Cerrar», después «Cerca de mí» y luego las ciudades.
+    await expect(buttons.nth(1)).toHaveAccessibleName('Cerca de mí');
+    await expect(buttons.nth(2)).toHaveAccessibleName(/Madrid/);
+    // Al escribir una ciudad, solo salen ciudades.
+    await dialog.getByRole('searchbox').fill('barce');
+    await expect(
+      dialog.getByRole('button', { name: 'Cerca de mí' }),
+    ).toHaveCount(0);
+  });
+
+  test('desde otra ciudad con locales, lleva a su zona (mirilla del mapa)', async ({
     context,
     page,
   }) => {
@@ -253,10 +275,64 @@ test.describe('«Cerca de mí» y las zonas', () => {
     await page.getByRole('button', { name: 'Cerca de mí' }).click();
 
     await expect(
-      page.getByRole('button', { name: /Zona: Barcelona/ }),
+      page.getByRole('button', { name: /Zona: Cerca de mí/ }),
     ).toBeVisible();
     await expect(markers(page)).toHaveCount(2);
     await expect(page).toHaveURL(/city=barcelona/);
     await expect(page.getByRole('img', { name: 'Tu ubicación' })).toBeVisible();
+  });
+
+  test('desde el selector, lo mismo; elegir una ciudad deja de lado la ubicación', async ({
+    context,
+    page,
+  }) => {
+    await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
+    await page.goto('/es');
+    await expect(page.getByRole('listitem')).toHaveCount(6);
+    await chooseNearMe(page);
+    await expect(
+      page.getByRole('button', { name: /Zona: Cerca de mí/ }),
+    ).toBeVisible();
+    await expect(page.getByRole('listitem')).toHaveCount(2);
+    await expect(page.getByText(/Ordenado por distancia/)).toBeVisible();
+
+    await page.getByRole('button', { name: /Zona:/ }).click();
+    const dialog = page.getByRole('dialog', { name: '¿Dónde?' });
+    await expect(
+      dialog.getByRole('button', { name: 'Cerca de mí' }),
+    ).toHaveAttribute('aria-current', 'true');
+    await dialog.getByRole('button', { name: /Madrid/ }).click();
+    await expect(
+      page.getByRole('button', { name: /Zona: Madrid/ }),
+    ).toBeVisible();
+    await expect(page.getByRole('listitem')).toHaveCount(6);
+    await expect(page.getByText(/Ordenado por distancia/)).toHaveCount(0);
+  });
+
+  test('con la ubicación ya compartida, la mirilla vuelve a centrar el mapa en ella', async ({
+    context,
+    page,
+  }) => {
+    await context.setGeolocation({ latitude: 41.3851, longitude: 2.1734 });
+    await page.goto('/es/map');
+    const locate = page.getByRole('button', {
+      name: 'Cerca de mí',
+      exact: true,
+    });
+    await locate.click();
+    await expect(locate).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('img', { name: 'Tu ubicación' })).toBeVisible();
+    // Se mueve el mapa y la mirilla lo trae de vuelta.
+    const you = page.getByRole('img', { name: 'Tu ubicación' });
+    const box = (await page.getByRole('region').first().boundingBox())!;
+    await page.mouse.move(box.x + 100, box.y + 300);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 250, box.y + 300, { steps: 5 });
+    await page.mouse.up();
+    const moved = (await you.boundingBox())!;
+    await locate.click();
+    await expect
+      .poll(async () => Math.abs((await you.boundingBox())!.x - moved.x))
+      .toBeGreaterThan(20);
   });
 });

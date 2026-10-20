@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { fillPlace } from './support/propose';
-import { API, expect, test } from './support/test';
+import { API, chooseNearMe, expect, test } from './support/test';
 
 // Revisión automática de accesibilidad (WCAG 2.2 AA) en todas las pantallas,
 // en español e inglés, con tema claro y oscuro, en móvil. Una revisión
@@ -426,7 +426,7 @@ for (const scheme of ['light', 'dark'] as const) {
 
     test('«Cerca de mí» sin permiso de ubicación', async ({ page }) => {
       await page.goto('/es/list');
-      await page.getByRole('button', { name: 'Cerca de mí' }).click();
+      await chooseNearMe(page);
       await expect(page.getByRole('status').first()).toBeVisible();
       await expectNoViolations(page);
     });
