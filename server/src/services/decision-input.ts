@@ -115,6 +115,9 @@ export const teamApprovalSchema = z.object({
   ownerConfirmed: z.literal(true, {
     error: 'el negocio tiene que haber confirmado su equipo',
   }),
+  // Fotos de personas del equipo que no se publican (por ejemplo, una donde
+  // sale alguien más): se borran y la historia sale sin foto.
+  skipPhotos: z.array(quarantineKey).max(3).default([]),
 });
 
 export type TeamApproval = z.infer<typeof teamApprovalSchema>;

@@ -66,6 +66,18 @@ export interface TeamStory {
   role: string;
   storyText: string;
   consentBy: string;
+  // La foto en cuarentena, mientras la solicitud espera. `key` es lo que se
+  // manda en `skipPhotos` para dejarla fuera.
+  photo?: { key: string; url: string; thumbUrl: string };
+}
+
+// Una foto en cuarentena de una solicitud, con las direcciones por las que
+// Moderación la ve (`GET /suggestions/:id/photos/:file`).
+function quarantinePhoto(apiUrl: string, id: string, key: string) {
+  const file = fileOf(key);
+  const at = (name: string) =>
+    `${apiUrl}/api/v1/suggestions/${id}/photos/${name}`;
+  return { key, url: at(file), thumbUrl: at(thumbOf(file)) };
 }
 
 export interface ItemOptions {
@@ -97,7 +109,7 @@ interface TeamPayload {
   summary: { totalStaff: number; staffWithDisability: number };
   areas?: string[];
   disabilityTypes?: string[];
-  stories?: TeamStory[];
+  stories?: (Omit<TeamStory, 'photo'> & { photoKey?: string })[];
 }
 interface RemovalPayload {
   what: string;
@@ -130,21 +142,15 @@ export function toModerationItem(
       : undefined,
   };
 
+  // Resuelta la solicitud, las fotos ya no están en la cuarentena.
+  const waiting = s.status === 'pending' || s.status === 'info_requested';
+
   if (s.type === 'new') {
     const p = s.payload as unknown as ProposalPayload;
-    // Resuelta la solicitud, las fotos ya no están en la cuarentena.
-    const waiting = s.status === 'pending' || s.status === 'info_requested';
-    const photo = (key: string, dish?: string) => {
-      const file = fileOf(key);
-      const at = (name: string) =>
-        `${apiUrl}/api/v1/suggestions/${String(s._id)}/photos/${name}`;
-      return {
-        key,
-        url: at(file),
-        thumbUrl: at(thumbOf(file)),
-        ...(dish ? { dish } : {}),
-      };
-    };
+    const photo = (key: string, dish?: string) => ({
+      ...quarantinePhoto(apiUrl, String(s._id), key),
+      ...(dish ? { dish } : {}),
+    });
     const valid = (key: unknown): key is string =>
       quarantineKey.safeParse(key).success;
     const photos = waiting
@@ -221,11 +227,14 @@ export function toModerationItem(
       ...(withStories && p.stories?.length
         ? {
             storyTexts: p.stories.map(
-              ({ displayName, role, storyText, consentBy }) => ({
+              ({ displayName, role, storyText, consentBy, photoKey }) => ({
                 displayName,
                 role,
                 storyText,
                 consentBy,
+                ...(waiting && quarantineKey.safeParse(photoKey).success
+                  ? { photo: quarantinePhoto(apiUrl, String(s._id), photoKey!) }
+                  : {}),
               }),
             ),
           }

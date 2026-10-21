@@ -22,19 +22,35 @@ export const fileOf = (key: string) => key.replace(/^q\//, '');
 export const contentTypeOf = (file: string) =>
   file.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
 
-// Las claves de cuarentena de una propuesta (fotos del local y de sus platos),
-// leídas sin dar por hecho que el contenido es correcto.
-export function photoKeysIn(payload: Record<string, unknown>): string[] {
-  const dishes = Array.isArray(payload.dishes) ? payload.dishes : [];
-  const places = Array.isArray(payload.photoKeys) ? payload.photoKeys : [];
-  const candidates: unknown[] = [
-    ...places,
-    ...dishes.map((d) => (d as { photoKey?: unknown } | null)?.photoKey),
-  ];
-  return candidates.flatMap((key) => {
+const validKeys = (candidates: unknown[]) =>
+  candidates.flatMap((key) => {
     const parsed = quarantineKey.safeParse(key);
     return parsed.success ? [parsed.data] : [];
   });
+
+// Las claves de cuarentena de las fotos de las personas de un equipo, leídas
+// sin dar por hecho que el contenido es correcto. Solo las ve quien decide
+// sobre el equipo (un administrador).
+export function storyPhotoKeysIn(payload: Record<string, unknown>): string[] {
+  const stories = Array.isArray(payload.stories) ? payload.stories : [];
+  return validKeys(
+    stories.map((s) => (s as { photoKey?: unknown } | null)?.photoKey),
+  );
+}
+
+// Las claves de cuarentena de una solicitud (fotos del local y de sus platos, y
+// las de las personas del equipo), leídas sin dar por hecho que el contenido es
+// correcto.
+export function photoKeysIn(payload: Record<string, unknown>): string[] {
+  const dishes = Array.isArray(payload.dishes) ? payload.dishes : [];
+  const places = Array.isArray(payload.photoKeys) ? payload.photoKeys : [];
+  return [
+    ...validKeys([
+      ...places,
+      ...dishes.map((d) => (d as { photoKey?: unknown } | null)?.photoKey),
+    ]),
+    ...storyPhotoKeysIn(payload),
+  ];
 }
 
 // Direcciones públicas de una foto y de su miniatura. `base` es el origen de la

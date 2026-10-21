@@ -33,7 +33,7 @@ export function toPublicRestaurant(
   const { level, method, lastVerifiedAt } = r.verification;
 
   const publicTeamData = team
-    ? publicTeam(team, r.ownerConfirmedAt)
+    ? publicTeam(team, r.ownerConfirmedAt, apiUrl)
     : undefined;
 
   return {

@@ -21,6 +21,8 @@ export interface TeamRecord {
     role: string;
     storyText: string;
     photoUrl?: string;
+    // Archivo de la foto publicada (`p/<archivo>` y su miniatura), si la hay.
+    photo?: string;
     consentRecordedAt: Date;
     consentBy: (typeof consentBy)[number];
     revokedAt?: Date;
@@ -47,6 +49,7 @@ const storySchema = new Schema(
     role: { type: String, required: contentRequired, maxlength: 80 },
     storyText: { type: String, required: contentRequired, maxlength: 2000 },
     photoUrl: String,
+    photo: String,
     consentRecordedAt: { type: Date, required: true },
     consentBy: { type: String, enum: consentBy, required: true },
     revokedAt: Date,

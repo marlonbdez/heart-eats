@@ -36,6 +36,8 @@ export function reportsRouter({ limiter }: { limiter: RateLimiter }) {
     submissionHandler({
       limiter,
       schema: teamSchema,
+      photos: (input) =>
+        (input.stories ?? []).flatMap((s) => (s.photoKey ? [s.photoKey] : [])),
       build: async ({ restaurantSlug, contactEmail, locale, ...team }) => ({
         type: 'team',
         targetRestaurantId: await findTargetRestaurant(restaurantSlug),
