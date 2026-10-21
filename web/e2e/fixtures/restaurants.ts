@@ -1,16 +1,26 @@
 import type { FoodTag, Restaurant } from '../../src/lib/types';
 
 export const foodTags: FoodTag[] = [
-  { key: 'pizza', icon: '🍕' },
-  { key: 'burgers', icon: '🍔' },
-  { key: 'sushi', icon: '🍣' },
-  { key: 'italian', icon: '🍝' },
-  { key: 'coffee', icon: '☕' },
-  { key: 'desserts', icon: '🍰' },
+  { key: 'spanish', icon: '🥘' },
   { key: 'tapas', icon: '🫒' },
   { key: 'set_menu', icon: '🍽️' },
+  { key: 'coffee', icon: '☕' },
+  { key: 'brunch', icon: '🥞' },
   { key: 'bakery', icon: '🥖' },
+  { key: 'desserts', icon: '🍰' },
+  { key: 'italian', icon: '🍝' },
+  { key: 'pizza', icon: '🍕' },
+  { key: 'burgers', icon: '🍔' },
+  { key: 'asian', icon: '🥢' },
+  { key: 'sushi', icon: '🍣' },
+  { key: 'mexican', icon: '🌮' },
+  { key: 'latin', icon: '🥑' },
+  { key: 'arab', icon: '🧆' },
+  { key: 'seafood', icon: '🦐' },
+  { key: 'rice', icon: '🍚' },
+  { key: 'grill', icon: '🥩' },
   { key: 'vegetarian', icon: '🥗' },
+  { key: 'vegan', icon: '🌱' },
 ];
 
 const week = (open: string, close: string, days: number[]) =>
@@ -36,7 +46,7 @@ export const restaurants: Restaurant[] = [
     description: { es: 'Pizzería de barrio con masa de 48 horas.' },
     businessType: 'restaurant',
     cuisineTypes: ['italian'],
-    foodTags: ['pizza', 'italian'],
+    foodTags: ['pizza', 'italian', 'mexican'],
     address: {
       street: 'Calle de Ejemplo 12',
       postalCode: '28012',
@@ -89,7 +99,7 @@ export const restaurants: Restaurant[] = [
     description: { es: 'Cafetería de especialidad y repostería casera.' },
     businessType: 'cafe',
     cuisineTypes: [],
-    foodTags: ['coffee', 'desserts', 'bakery'],
+    foodTags: ['coffee', 'desserts', 'bakery', 'brunch'],
     address: {
       street: 'Calle de Muestra 5',
       postalCode: '28004',
@@ -120,7 +130,7 @@ export const restaurants: Restaurant[] = [
     description: { es: 'Tapas y menú del día con producto de temporada.' },
     businessType: 'bar',
     cuisineTypes: ['spanish'],
-    foodTags: ['tapas', 'set_menu'],
+    foodTags: ['tapas', 'set_menu', 'spanish'],
     address: {
       street: 'Plaza de Prueba 3',
       postalCode: '28005',
@@ -163,7 +173,7 @@ export const restaurants: Restaurant[] = [
     description: { es: 'Cocina vegetariana de temporada.' },
     businessType: 'restaurant',
     cuisineTypes: ['vegetarian'],
-    foodTags: ['vegetarian', 'set_menu'],
+    foodTags: ['vegetarian', 'set_menu', 'vegan'],
     address: {
       street: 'Calle de Ensayo 20',
       postalCode: '28010',
@@ -192,7 +202,7 @@ export const restaurants: Restaurant[] = [
     name: '[DEMO] Panadería El Horno',
     businessType: 'bakery',
     cuisineTypes: [],
-    foodTags: ['bakery', 'desserts', 'coffee'],
+    foodTags: ['bakery', 'desserts', 'coffee', 'asian'],
     address: {
       street: 'Calle de Demostración 7',
       postalCode: '28045',
@@ -217,7 +227,7 @@ export const restaurants: Restaurant[] = [
     name: '[DEMO] Burger del Barrio',
     businessType: 'restaurant',
     cuisineTypes: ['american'],
-    foodTags: ['burgers'],
+    foodTags: ['burgers', 'arab'],
     address: {
       street: 'Calle de Maqueta 31',
       postalCode: '28028',

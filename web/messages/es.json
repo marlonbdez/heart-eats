@@ -81,7 +81,17 @@
     "tapas": "Tapas",
     "set_menu": "Menú del día",
     "bakery": "Panadería",
-    "vegetarian": "Vegetariano"
+    "vegetarian": "Vegetariano",
+    "spanish": "Española",
+    "brunch": "Desayunos y brunch",
+    "asian": "Asiática",
+    "mexican": "Mexicana",
+    "latin": "Latina",
+    "arab": "Árabe",
+    "seafood": "Marisquería",
+    "rice": "Arrocería",
+    "grill": "Asador",
+    "vegan": "Vegano"
   },
   "search": {
     "label": "Buscar un local, barrio, ciudad o código postal",
@@ -90,7 +100,9 @@
     "suggestFood": "Filtrar por {food}"
   },
   "filters": {
-    "label": "Tipo de comida"
+    "label": "Tipo de comida",
+    "previous": "Categorías anteriores",
+    "next": "Categorías siguientes"
   },
   "results": {
     "count": "{count, plural, =0 {Ningún local} one {# local} other {# locales}}",

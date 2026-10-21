@@ -23,7 +23,7 @@
 ## CU-04 · Filtrar por tipo de comida
 - **Quién:** Visitante. Extiende CU-01 y CU-02.
 - **Pasos:** pulsa una o varias categorías → se muestran los locales que tengan alguna (combinan con «o») → vuelve a pulsar para quitarla.
-- **Reglas:** nunca se filtra por discapacidad; cada categoría lleva icono y texto; quedan en la URL (`?food=`).
+- **Reglas:** nunca se filtra por discapacidad; cada categoría lleva icono y texto; quedan en la URL (`?food=`). Cada zona enseña solo las categorías que tienen locales, de más a menos; la elegida siempre sigue a la vista. Si no caben, en el móvil se desliza el dedo y con ratón salen flechas ‹ › en el lado donde hay más.
 
 ## CU-05 · Ordenar por cercanía
 - **Quién:** Visitante; Geolocalización. Extiende CU-01 y CU-02.

@@ -313,7 +313,9 @@ describe('GET /meta/filters', () => {
   it('sirve los catálogos', async () => {
     const res = await get('/meta/filters');
     expect(res.status).toBe(200);
-    expect(res.body.foodTags[0]).toEqual({ key: 'pizza', icon: '🍕' });
+    expect(res.body.foodTags[0]).toEqual({ key: 'spanish', icon: '🥘' });
+    expect(res.body.foodTags).toHaveLength(20);
+    expect(res.body.foodTags).toContainEqual({ key: 'pizza', icon: '🍕' });
     expect(res.body.businessTypes).toContain('social_project');
     expect(res.body.inclusionTypes).toContain('autism_spectrum');
   });

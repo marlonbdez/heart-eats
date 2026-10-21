@@ -53,10 +53,9 @@ test.describe('selector de idioma de la cabecera', () => {
 
     await button.click();
     await expect(button).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.getByRole('button', { name: 'Español' })).toHaveAttribute(
-      'aria-current',
-      'true',
-    );
+    await expect(
+      page.getByRole('button', { name: 'Español', exact: true }),
+    ).toHaveAttribute('aria-current', 'true');
     await page.getByRole('button', { name: 'English' }).click();
 
     await expect(page).toHaveURL(/\/en\/?$/);
