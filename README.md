@@ -76,8 +76,8 @@ El frontend se publica en Netlify (`netlify.toml`): cada merge a `main` actualiz
 ## Licencia
 
 - Código: [AGPL-3.0](LICENSE)
-- Base de datos de negocios: ODbL 1.0
 - Documentación: CC BY-SA 4.0
-- Historias, nombres y fotos de personas: no incluidos en la licencia abierta
+- Datos de HeartEats, fotos e historias de personas: todos los derechos reservados; se ven en la web y no se ofrecen para descarga ni reutilización
+- El mapa usa datos de OpenStreetMap, con su propia licencia y atribución
 
-Detalle y motivos en [`docs/adr/0001-licencias.md`](docs/adr/0001-licencias.md).
+Detalle y motivos en [`docs/adr/0009-licencias-simplificadas.md`](docs/adr/0009-licencias-simplificadas.md). ¿Quieres ayudar? Mira [`CONTRIBUTING.md`](CONTRIBUTING.md): hay una forma para casi todo el mundo, y cada cambio de código lo revisa y lo aprueba el responsable del proyecto.

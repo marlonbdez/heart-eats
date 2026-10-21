@@ -22,7 +22,7 @@
 | [design/](design/) | Prototipos de las pantallas del MVP |
 | [casos-de-uso/](casos-de-uso/README.md) | Fichas detalladas de cada caso de uso |
 | [modelado/](modelado/) | Fuentes PlantUML y SVG de los diagramas |
-| [adr/](adr/) | Decision records (0001 licencias, 0002 mapa, 0003 idiomas y rutas, 0004 logo, 0005 hosting del backend, 0006 geocodificación, 0007 autenticación, 0008 moderación inicial) |
+| [adr/](adr/) | Decision records (0001 licencias, 0009 licencias simplificadas, 0002 mapa, 0003 idiomas y rutas, 0004 logo, 0005 hosting del backend, 0006 geocodificación, 0007 autenticación, 0008 moderación inicial) |
 
 ## Estado (2026-10-18)
 

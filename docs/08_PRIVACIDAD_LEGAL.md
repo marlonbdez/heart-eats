@@ -6,7 +6,7 @@
 
 ## Licencias
 
-Ver [ADR 0001](adr/0001-licencias.md). Punto clave: las historias, nombres y fotos de personas quedan fuera de la licencia abierta de los datos y de cualquier exportación pública.
+Ver [ADR 0009](adr/0009-licencias-simplificadas.md). Punto clave: los datos de HeartEats y, sobre todo, las historias, nombres y fotos de personas no se ofrecen para descarga ni reutilización; solo se muestran en la web.
 
 ## Principios
 
@@ -55,7 +55,7 @@ Este apartado es el que más nos importa, así que lo contamos con palabras senc
 - **Una historia sin consentimiento registrado no se guarda.**
 - **Se puede retirar en cualquier momento y sin dar explicaciones**, escribiendo a `contact@hearteats.org` o desde el formulario «Pedir una retirada». La historia deja de mostrarse al instante y los datos se borran en un máximo de ❓ 7 días.
 - **En equipos pequeños** (❓ menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.
-- Las historias, nombres y fotos **no están bajo licencia abierta** y nunca se incluyen en las exportaciones de datos abiertos.
+- Las historias, nombres y fotos **no se ofrecen para descarga ni reutilización**: solo se ven en HeartEats, con permiso y retirables.
 
 ### Terceros que intervienen
 
@@ -68,9 +68,9 @@ Este apartado es el que más nos importa, así que lo contamos con palabras senc
 - **Direcciones.** Para colocar un local nuevo en el mapa, el servidor consulta Nominatim (OpenStreetMap) con la dirección del **local**, nunca con datos de quien propone (ADR 0006).
 - Ninguno de ellos recibe tus propuestas ni tu correo ❓ _(salvo el proveedor que aloje el backend)_. No vendemos ni cedemos datos a nadie.
 
-### Datos abiertos
+### Datos
 
-La base de datos de negocios se publica bajo licencia ODbL (nombre, dirección, tipo de cocina, nivel de verificación y cifras agregadas). **No incluye** historias, nombres, fotos, correos ni datos de quien propone o corrige.
+No ofrecemos una descarga de la base de datos de negocios: se ve en la web y no se expone de otra forma. Todos los derechos reservados, con el mapa de OpenStreetMap con su propia licencia y atribución (ADR 0009). No se permite extraerla en masa (`/legal`). Las historias, nombres, fotos, correos y datos de quien propone o corrige nunca salen de HeartEats.
 
 ### Tus derechos
 

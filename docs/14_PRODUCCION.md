@@ -220,7 +220,10 @@ Los plazos son **provisionales** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.
 ### 6.8 Copia de seguridad semanal
 `.github/workflows/backup.yml`: domingos a las 03:17 UTC y a mano. `mongodump` (sin `sessions` ni `logintokens`) → cifrado con `age` → `backups/hearteats-AAAA-MM-DD.archive.gz.age` en R2. Falla si pesa menos de 1 KB. El bucket borra a los 28 días. Detalle, puesta en marcha y restauración: `13_COPIAS.md`.
 
-### 6.9 Despliegue
+### 6.9 Quién aprueba los cambios (GitHub)
+Cada cambio entra por una PR y la aprueba el responsable. `.github/CODEOWNERS` lo nombra dueño de todo (`* @marlonbdez`). Para que sea obligatorio, en GitHub → *Settings → Branches → Branch protection rules* (o *Rulesets*) sobre `main`: exigir una PR antes de fusionar, **exigir revisión de los Code Owners**, exigir que pasen las comprobaciones, no permitir *force-push* ni borrar la rama, y dar permiso de escritura solo a quien deba tenerlo (quien contribuye desde fuera trabaja en su *fork* y no puede fusionar nada). Mientras seas la única persona con permiso de escritura, GitHub no te deja aprobar tu propia PR: deja el número de aprobaciones requeridas en 0 y **pon activa la revisión de Code Owners solo cuando haya más personas con escritura**; entonces cada PR de un tercero necesitará tu aprobación.
+
+### 6.10 Despliegue
 - **Web**: cada fusión a `main` despliega en Netlify; cada PR tiene su vista previa (que, hoy, **no puede llamar a la API**: `CORS_ORIGINS` solo incluye `https://hearteats.org`).
 - **API**: Railway despliega solo cada vez que cambia `main` (lo hace la integración con GitHub; aparece como *railway-app[bot]* en los despliegues). El panel de Railway muestra como constructor «Railpack» (el predeterminado); el comando de arranque del proyecto es `npm start` (`node dist/server.js`). El `Dockerfile` de `server/` está pensado para desarrollo local y para una opción de despliegue con Docker; ❓ confirmar cuál usa Railway hoy.
 - **CI** (`.github/workflows/ci.yml`): en cada PR y en `main`, servidor (lint, tipos, pruebas con MongoDB en memoria, build) y web (lint, tipos, build, prueba de humo).
