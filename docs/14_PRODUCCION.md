@@ -174,7 +174,7 @@ Esta es la tabla más importante en caso de apuro. «Gestor» = gestor de contra
 2. Límite por IP (100/hora y 1000/día por defecto). Solo cuenta lo que se **guarda**; un envío con errores no cuenta. Los contadores están **en la memoria** de la API.
 3. Se guarda una `Suggestion` en estado `pending`, con avisos automáticos (cadena, sin pruebas…). Si hay correo, se guarda en la solicitud.
 4. Responde `202`. La API no envía nada por correo en este paso.
-5. Las fotos aún no se piden (`photoUploads` apagado en `web/src/lib/features.ts`, a la espera de `POST /uploads` y R2).
+5. Las fotos (de un local nuevo y de las personas del equipo) se suben antes con `POST /uploads` a la cuarentena privada de R2 y el envío las reclama con su clave; si el envío no se guarda, se sueltan, y las que nadie reclama se borran a las 24 h.
 
 ### 6.3 Entrada a moderación (enlace mágico)
 1. La persona escribe su correo en `/moderation/login`. `POST /auth/magic-link` responde siempre lo mismo, exista o no, y solo envía correo si el usuario existe y está activo. Límite: 20 por IP y hora, y como mucho 5 enlaces vivos a la vez por persona.

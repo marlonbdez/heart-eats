@@ -518,6 +518,7 @@ test.describe('con la sesión abierta', () => {
       /He confirmado con el negocio/,
       /Las cifras son coherentes/,
       /Cada historia trae el consentimiento/,
+      /Cada foto es de la persona de su historia/,
     ]) {
       await page.getByLabel(name).check();
     }
@@ -529,6 +530,50 @@ test.describe('con la sesión abierta', () => {
       {
         path: '/suggestions/s7/decision',
         body: { action: 'approve', ownerConfirmed: true },
+      },
+    ]);
+  });
+
+  test('aprobar el equipo: se ve la foto de cada persona y se puede dejar fuera', async ({
+    page,
+    sent,
+  }) => {
+    await page.goto('/es/moderation');
+    await page
+      .getByRole('button', { name: /Equipo.*Café Paso a Paso/s })
+      .click();
+    await expect(
+      page.getByRole('heading', { name: 'Fotos enviadas' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', {
+        name: /Foto de Persona de ejemplo\. Abrir la foto en grande/,
+      }),
+    ).toHaveAttribute('href', /\/suggestions\/s7\/photos\/.*\.webp$/);
+
+    for (const name of [
+      /He confirmado con el negocio/,
+      /Las cifras son coherentes/,
+      /Cada historia trae el consentimiento/,
+      /Cada foto es de la persona de su historia/,
+    ]) {
+      await page.getByLabel(name).check();
+    }
+    await page
+      .getByLabel('Foto de Persona de ejemplo: No publicar esta foto')
+      .check();
+    await page
+      .getByRole('button', { name: 'Aprobar y publicar el equipo' })
+      .click();
+    await expect(page.getByRole('status')).toHaveText('Equipo publicado');
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s7/decision',
+        body: {
+          action: 'approve',
+          ownerConfirmed: true,
+          skipPhotos: ['q/0b8e3a52-5a43-4b8a-9d5e-0000000000a1.webp'],
+        },
       },
     ]);
   });
@@ -552,6 +597,7 @@ test.describe('con la sesión abierta', () => {
       /He confirmado con el negocio/,
       /Las cifras son coherentes/,
       /Cada historia trae el consentimiento/,
+      /Cada foto es de la persona de su historia/,
     ]) {
       await page.getByLabel(name).check();
     }

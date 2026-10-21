@@ -540,23 +540,22 @@
       "name": "Name or pseudonym",
       "role": "Role",
       "story": "Their story, in their own words",
+      "personPhoto": "Photo of the person",
+      "personPhotoHint": "Optional. It is resized on your device and not shown until we review it. Only if the person (or their representative) wants their face to appear: without a photo, the story is just as valuable.",
+      "personPhotoAlt": "Photo of person {n}",
       "who": "Who gives permission?",
       "self": "The person themselves",
       "representative": "Their legal representative",
-      "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my role and what is written above. It is voluntary, I can change my mind whenever I like and, if I ask, it will be deleted within 7 days at most.",
-      "consentRepresentative": "As legal representative, I give permission for HeartEats to publish this person’s name (or pseudonym), role and what is written above. It is voluntary, they can change their mind whenever they like and, if they ask, it will be deleted within 7 days at most.",
+      "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my job, what is written above and my photo, if I have added one. It is voluntary, I can change my mind at any time and, if I ask, it will be deleted within 7 days at most.",
+      "consentRepresentative": "As their legal representative, I give permission for HeartEats to publish this person’s name (or pseudonym), job, what is written above and photo, if one has been added. It is voluntary, they can change their mind at any time and, if they ask, it will be deleted within 7 days at most.",
       "consentNote": "Provisional consent text: it must be reviewed by a professional before it is published.",
-      "photosTitle": "Photos of your place",
-      "photosHint": "Optional, up to 3: of your dishes or the place. They are resized on your device and stay hidden until we review them. Please show the dish rather than people: avoid photos in which someone can be recognised.",
-      "photoLabel": "Photo {n}",
-      "photoAlt": "Photo {n} of your place",
       "storyError": "Complete the name, role and story, and tick the permission, to continue.",
       "add": "+ Add another person"
     },
     "s4": {
       "intro": "Take your time to review it. This is how it will look on your place’s page.",
       "previewLabel": "It will look like this:",
-      "photos": "{count, plural, one {1 photo} other {# photos}} (reviewed before they show)",
+      "photos": "{count, plural, one {1 photo of a person} other {# photos of people}} (they will be reviewed before being shown)",
       "email": "Contact email",
       "emailHint": "It is not published. We use it to confirm with you that you belong to the business and to let you know when it is published.",
       "emailError": "Enter a valid email to send it.",
@@ -594,7 +593,7 @@
       {
         "heading": "This version is just starting",
         "paragraphs": [
-          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story is also really sent. The photos of a new place are also really sent; team photos are not asked for yet. What follows describes how we handle data."
+          "Suggestions, corrections and removal requests are now really sent and reviewed by a person. The business form for telling a team story is also really sent. The photos of a new place and the photos of the people in a team are also really sent. What follows describes how we handle data."
         ]
       },
       {
@@ -620,7 +619,7 @@
           "If you request a removal: what you want removed, your explanation (without health data or third-party names) and your email, which is required so we can confirm by email that you are the person or their representative before hiding anything. They are kept like a suggestion; your email is deleted when it is resolved or after 9 months at the latest.",
           "If you are a moderator: your email and the area you moderate, so you can sign in and review suggestions, for as long as you are one.",
           "To prevent unwanted messages: a temporary counter per IP address, kept for a few hours. The hidden field in the form does not store anything about you.",
-          "If you are a business and tell your team story: team figures, your email (required, so we can confirm with you that the business is sending it) and, at the highest level, name or pseudonym, role and story of each person, with their permission (photos are not asked for yet). We use them to show the listing with the detail the business chooses. While it is being reviewed, only an administrator reads them; the email is deleted when the request is resolved or after 9 months at most. The stories leave the request once it is resolved: if it is approved, they move to the listing and are kept for as long as the business and the person keep them; if not, they are deleted."
+          "If you are a business and tell your team story: team figures, your email (required, so we can confirm with you that the business is sending it) and, at the highest level, name or pseudonym, role, story and, if they wish, photo of each person, with their permission (the photo is resized on your device and waits in a private store that only an administrator can see, who can leave it out; if it is not published or the request is rejected, it is deleted). We use them to show the listing with the detail the business chooses. While it is being reviewed, only an administrator reads them; the email is deleted when the request is resolved or after 9 months at most. The stories leave the request once it is resolved: if it is approved, they move to the listing and are kept for as long as the business and the person keep them; if not, they are deleted."
         ],
         "paragraphs": [
           "We process your email and what you write in the forms because you give them to us when you send them (your consent). The data of a team member is processed only with that person’s explicit consent."
@@ -940,13 +939,13 @@
     "change": "Proposed change",
     "food": "Food",
     "dishes": "Signature dishes",
-    "photosCount": "Photos",
-    "photosNote": "{count} (this prototype does not show them)",
     "photosTitle": "Photos sent",
     "photosHint": "Look at them before deciding. The ones you mark «Do not publish» are deleted on approval; the rest are published. If you reject the request, all of them are deleted.",
+    "teamPhotosHint": "Look at them before deciding. Those you mark “Do not publish” are deleted on approval and that story is published without a photo; the rest are published with their story. If you reject the request, all are deleted.",
     "photoOpen": "Open the photo full size (opens in a new tab)",
     "photoOfDish": "Photo of the dish «{dish}»",
     "photoOfPlace": "Photo {n} of the place",
+    "photoOfPerson": "Photo of {name}",
     "photoSkip": "Do not publish this photo",
     "howKnown": "How the sender knows the place",
     "evidence": "Link provided",
@@ -965,6 +964,7 @@
       "teamOwner": "I have confirmed through an official channel that the sender represents the business",
       "teamFigures": "The figures make sense (at least one person; not more with a disability than in total)",
       "teamConsents": "Each story comes with consent from the person or their legal representative",
+      "teamPhotos": "Each photo is of the person in their story, with their permission (or their legal representative’s), and nobody else appears",
       "photos": "The photos being published show the dish or the place, with no recognisable faces or personal data, and there is permission to use them",
       "removalIdentity": "I have confirmed by email that the requester is the person or their representative"
     },

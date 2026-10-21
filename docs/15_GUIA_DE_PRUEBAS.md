@@ -76,6 +76,7 @@ Usa tu segundo correo en «Tu correo» cuando lo pida. Pon siempre «[DEMO]» al
 | F3 | Empieza otra propuesta, escribe algo y cierra la pestaña; vuelve | «Hemos recuperado el borrador…»; «Empezar de cero» lo borra. El borrador no guarda el correo |
 | F4 | Abre una ficha → «Sugerir una corrección» → «El horario»/«Ha cerrado» → envía | «¡Gracias por avisarnos!» |
 | F5 | «Soy de un negocio» desde una ficha: elige «Solo cifras» y envía | «¡Gracias!»; no pide fotos |
+| F5b | «Soy de un negocio» de un equipo de más de 5 personas: elige «Historias con nombre», rellena una persona, añade su foto y marca el permiso | La foto sale en la vista previa; en 320 px todo cabe; el texto del permiso nombra la foto. «Quitar foto» la quita; un archivo que no es imagen avisa con calma |
 | F6 | «Pedir una retirada» desde el menú | «Petición recibida»; dice que te escribirán para confirmar que eres tú |
 | F7 | **Fallo a propósito:** escribe un correo inválido (`a@`) | Lo avisa en el campo, sin borrar lo demás |
 | F8 | **Fallo a propósito:** envía con la conexión cortada | «No hemos podido enviar… puedes intentarlo de nuevo»; no se pierde lo escrito |
@@ -95,6 +96,7 @@ Usa tu segundo correo en «Tu correo» cuando lo pida. Pon siempre «[DEMO]» al
 | G9 | «Aprobar y publicar» sin marcar las comprobaciones | Se niega y dice qué falta |
 | G10 | Marca comprobaciones, nivel y método, y aprueba | «Aprobada y publicada»; en el mapa aparece el local; llega un correo de aviso a tu segundo correo |
 | G11 | Aprueba la corrección (F4) y la retirada (F6) | Los cambios se ven en la ficha; la retirada la oculta al momento |
+| G11b | Como administrador, abre la solicitud del equipo con foto (F5b) | Ves la foto de cada persona con «No publicar esta foto»; al aprobar con una marcada, esa historia sale en la ficha sin foto y las demás con ella. Un moderador no ve ni las historias ni las fotos |
 | G12 | Rechaza el equipo (F5) con motivo | «Rechazada»; en «Resueltas» queda con el motivo |
 | G13 | Baja por la pantalla de moderación (solo administración): «Quién modera» y «Registro de auditoría» | El registro enseña cada decisión con quién la tomó, sin textos de historias ni correos. En «Quién modera», invita a un segundo correo tuyo y comprueba que puede entrar y que no ve esas dos secciones |
 | G13b | Como administrador, abre «Retiradas» | Lista las fichas e historias pendientes de borrar con su fecha («Se borra el … (en N días)»). De las historias solo sale el local y «historia N», nunca su texto; no tienen botón. Pulsa «Restaurar» en una ficha de prueba y confirma: avisa «vuelve a verse», desaparece de la lista y reaparece en el mapa. Un moderador no ve esta sección |

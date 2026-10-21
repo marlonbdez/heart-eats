@@ -1,4 +1,4 @@
-import { expect, test } from './support/test';
+import { expect, test, type Page } from './support/test';
 
 test('soy de un negocio: solo cifras, en 4 pasos', async ({ page, sent }) => {
   await page.goto('/es/business');
@@ -191,4 +191,139 @@ test('soy de un negocio: de momento no pide fotos (no hay dónde subirlas)', asy
   await page.getByRole('button', { name: 'Continuar' }).click();
   await expect(page.getByLabel('Personas en el equipo')).toBeVisible();
   await expect(page.locator('input[type=file]')).toHaveCount(0);
+});
+
+// PNG de 1×1 píxel, para probar la subida sin depender de ningún archivo.
+const PIXEL = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+  'base64',
+);
+const png = { name: 'foto.png', mimeType: 'image/png', buffer: PIXEL };
+
+// Hasta el paso 3 con «Historias con nombre» y una persona rellenada.
+async function toStory(page: Page) {
+  await page.goto('/es/business');
+  await page
+    .getByLabel('¿De qué local se trata?')
+    .selectOption('demo-la-masa-madre');
+  await page.getByRole('button', { name: 'Empezar' }).click();
+  await page.getByLabel(/Historias con nombre/).check();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByLabel('Personas en el equipo').fill('11');
+  await page.getByLabel('De ellas, con discapacidad').fill('4');
+  await page.getByLabel('Nombre o seudónimo').fill('Persona de ejemplo');
+  await page.getByLabel('Puesto', { exact: true }).fill('Cocina');
+  await page
+    .getByLabel('Su historia, con sus palabras')
+    .fill('Texto de ejemplo.');
+}
+
+test('soy de un negocio: la foto de una persona se sube y viaja con su historia', async ({
+  page,
+  sent,
+}) => {
+  await toStory(page);
+  // Un archivo que no es imagen se rechaza con un aviso.
+  await page.locator('#p0p').setInputFiles({
+    name: 'nota.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('hola'),
+  });
+  await expect(page.locator('p[role=alert]')).toContainText('JPG, PNG o WebP');
+
+  await page.locator('#p0p').setInputFiles(png);
+  await expect(
+    page.getByRole('img', { name: 'Foto de la persona 1' }),
+  ).toBeVisible();
+  // El permiso de la historia nombra la foto.
+  await expect(page.getByLabel(/Doy mi permiso/)).toHaveAccessibleName(
+    /mi foto, si he añadido una/,
+  );
+  await page.getByLabel(/Doy mi permiso/).check();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+
+  await expect(page.getByText('1 foto de una persona')).toBeVisible();
+  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+  await page.getByLabel(/Soy responsable del negocio/).check();
+  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
+  await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
+
+  // La foto sube con su miniatura, que cuelga de ella, y el envío lleva la clave.
+  const uploads = sent.filter((s) => s.path.startsWith('/uploads'));
+  expect(uploads.map((u) => u.body.type)).toEqual(['image/webp', 'image/webp']);
+  const team = sent.find((s) => s.path === '/teams')!;
+  const stories = team.body.stories as { photoKey?: string }[];
+  const key = stories[0]!.photoKey!;
+  expect(key).toMatch(/^q\/[0-9a-f-]{36}\.webp$/);
+  expect(uploads.at(-1)!.path).toBe(
+    `/uploads?thumbOf=${key.replace(/^q\/|\.webp$/g, '')}`,
+  );
+});
+
+test('soy de un negocio: sin foto no se sube nada; con foto se puede quitar', async ({
+  page,
+  sent,
+}) => {
+  await toStory(page);
+  await page.locator('#p0p').setInputFiles(png);
+  await page.getByRole('button', { name: 'Quitar foto' }).click();
+  await expect(page.locator('#p0p')).toBeVisible();
+  await page.getByLabel(/Doy mi permiso/).check();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await expect(page.getByText(/foto de una persona/)).toHaveCount(0);
+  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+  await page.getByLabel(/Soy responsable del negocio/).check();
+  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
+  await expect(page.getByRole('heading', { name: '¡Gracias!' })).toBeFocused();
+  expect(sent.some((s) => s.path.startsWith('/uploads'))).toBe(false);
+  const stories = sent.find((s) => s.path === '/teams')!.body.stories;
+  expect(stories).toEqual([
+    {
+      displayName: 'Persona de ejemplo',
+      role: 'Cocina',
+      storyText: 'Texto de ejemplo.',
+      consentBy: 'self',
+    },
+  ]);
+});
+
+test('soy de un negocio: si falla la subida de la foto, avisa y no envía', async ({
+  page,
+  sent,
+}) => {
+  await page.route('http://localhost:3001/api/v1/uploads*', (route) =>
+    route.fulfill({
+      status: 503,
+      headers: { 'access-control-allow-origin': '*' },
+      json: { error: { code: 'uploads_unavailable', message: 'No' } },
+    }),
+  );
+  await toStory(page);
+  await page.locator('#p0p').setInputFiles(png);
+  await page.getByLabel(/Doy mi permiso/).check();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByLabel('Correo de contacto').fill('negocio@ejemplo.org');
+  await page.getByLabel(/Soy responsable del negocio/).check();
+  await page.getByRole('button', { name: 'Enviar a revisión' }).click();
+  await expect(page.locator('p[role=alert]')).toBeVisible();
+  expect(sent.some((s) => s.path === '/teams')).toBe(false);
+});
+
+test('soy de un negocio: en 320 px la foto de la persona cabe, también con letra ancha', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await toStory(page);
+  await page.addStyleTag({ content: '* { font-family: Verdana !important; }' });
+  await page.locator('#p0p').setInputFiles(png);
+  await expect(
+    page.getByRole('img', { name: 'Foto de la persona 1' }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    ),
+  ).toBeLessThanOrEqual(0);
 });

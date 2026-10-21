@@ -171,6 +171,17 @@ export type ConsentBy = 'self' | 'legal_representative';
 
 export interface BusinessStoryInput extends TeamStory {
   consentBy: ConsentBy; // una historia sin permiso no se envía
+  photo?: PhotoBlobs; // la foto de la persona, ya reducida y sin subir
+}
+
+// Una historia como la ve un administrador al abrir la solicitud del equipo.
+export interface ModerationStory {
+  displayName: string;
+  role: string;
+  storyText: string;
+  consentBy: ConsentBy;
+  // La foto de la persona, en cuarentena hasta que se decide.
+  photo?: ModerationPhoto;
 }
 
 // El negocio cuenta su equipo (F3). Entra en moderación, que se pone en
@@ -183,7 +194,6 @@ export interface BusinessTeamInput {
   areas?: TeamArea[];
   disabilityTypes?: DisabilityType[];
   stories?: BusinessStoryInput[]; // 0-3
-  photos?: Blob[]; // 0-3, ya reducidas; todavía no se envían (falta /uploads)
   contactEmail: string; // privado, nunca se muestra
   website?: string; // honeypot: debe llegar vacío
 }
@@ -239,8 +249,6 @@ export interface ModerationItem {
   // Solo en un local nuevo:
   foodTags?: string[];
   dishes?: string[];
-  // Cuántas fotos se adjuntaron; la imagen no se guarda en el buzón de prueba.
-  photoCount?: number;
   // Las fotos de un local nuevo, en cuarentena hasta que se decide. `key` es lo
   // que se manda en `skipPhotos` para no publicar una.
   photos?: ModerationPhoto[];
@@ -261,7 +269,7 @@ export interface ModerationItem {
     areas?: TeamArea[];
     disabilityTypes?: DisabilityType[];
     stories: number;
-    storyTexts?: BusinessStoryInput[];
+    storyTexts?: ModerationStory[];
   };
 }
 
@@ -282,8 +290,8 @@ export type ModerationDecision =
       method?: VerificationMethod;
       // Solo en un local nuevo sin pin geocodificado: el pin a mano.
       location?: { lat: number; lng: number };
-      // Solo en un local nuevo: las fotos (`ModerationPhoto.key`) que no se
-      // publican. Se borran.
+      // Solo en un local nuevo o en el equipo de un negocio: las fotos
+      // (`ModerationPhoto.key`) que no se publican. Se borran.
       skipPhotos?: string[];
       // Solo en una retirada de una historia: su posición en la ficha (0–2).
       storyIndex?: number;

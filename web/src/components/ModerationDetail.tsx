@@ -9,6 +9,7 @@ import type {
   CorrectionChange,
   ModerationDecision,
   ModerationItem,
+  ModerationPhoto,
   ModerationSession,
   RejectReason,
   VerificationLevel,
@@ -23,7 +24,11 @@ const CHECKS_EDIT = ['correct'] as const;
 const CHECKS_TEAM = ['teamOwner', 'teamFigures'] as const;
 const CHECK_TEAM_STORIES = 'teamConsents';
 const CHECK_PHOTOS = 'photos';
+const CHECK_TEAM_PHOTOS = 'teamPhotos';
 const CHECKS_REMOVAL = ['removalIdentity'] as const;
+// Una foto en cuarentena que Moderación revisa: de un plato o del local, o la
+// de una persona del equipo (`person` es su nombre).
+type ShownPhoto = ModerationPhoto & { person?: string };
 const LEVELS: VerificationLevel[] = ['admin', 'community'];
 const METHODS: VerificationMethod[] = [
   'visit',
@@ -106,6 +111,16 @@ export function ModerationDetail({
   // Claves de los textos que cambian según el tipo de solicitud.
   const isRemoval = item.kind === 'removal';
   const k = isNew ? 'New' : isTeam ? 'Team' : isRemoval ? 'Removal' : 'Edit';
+  // Las fotos de las personas del equipo, que solo ve un administrador al abrir
+  // la solicitud (con las historias).
+  const storyPhotos: ShownPhoto[] = (item.team?.storyTexts ?? []).flatMap(
+    (st) => (st.photo ? [{ ...st.photo, person: st.displayName }] : []),
+  );
+  const photos: ShownPhoto[] = isNew
+    ? (item.photos ?? [])
+    : isTeam
+      ? storyPhotos
+      : [];
   const checkKeys: readonly string[] = isNew
     ? item.photos?.length
       ? [...CHECKS_NEW, CHECK_PHOTOS]
@@ -114,7 +129,7 @@ export function ModerationDetail({
       ? [
           ...CHECKS_TEAM,
           ...(item.team && item.team.stories > 0 ? [CHECK_TEAM_STORIES] : []),
-          ...(item.photoCount ? [CHECK_PHOTOS] : []),
+          ...(storyPhotos.length > 0 ? [CHECK_TEAM_PHOTOS] : []),
         ]
       : isRemoval
         ? CHECKS_REMOVAL
@@ -128,7 +143,7 @@ export function ModerationDetail({
   const [note, setNote] = useState('');
   const [pin, setPin] = useState({ lat: '', lng: '' });
   const [story, setStory] = useState('');
-  // Fotos de un local nuevo que no se publican.
+  // Fotos (de un local nuevo o de las personas de un equipo) que no se publican.
   const [skipped, setSkipped] = useState<string[]>([]);
   const [change, setChange] = useState({
     name: '',
@@ -240,7 +255,7 @@ export function ModerationDetail({
         action: 'approve',
         ...(isNew && level && method ? { level, method } : {}),
         ...(isNew && hasPin ? { location: { lat, lng } } : {}),
-        ...(isNew && skipped.length > 0 ? { skipPhotos: skipped } : {}),
+        ...(skipped.length > 0 ? { skipPhotos: skipped } : {}),
         ...(isStoryRemoval ? { storyIndex: Number(story) - 1 } : {}),
       });
     }
@@ -447,12 +462,6 @@ export function ModerationDetail({
                   t('teamStoriesHidden')}
               </dd>
             </div>
-            {item.photoCount ? (
-              <div>
-                <dt>{t('photosCount')}</dt>
-                <dd>{t('photosNote', { count: item.photoCount })}</dd>
-              </div>
-            ) : null}
           </dl>
           {item.team.storyTexts?.map((st) => (
             <blockquote
@@ -571,18 +580,21 @@ export function ModerationDetail({
         </section>
       )}
 
-      {isNew && item.photos && item.photos.length > 0 && !outcome && (
+      {photos.length > 0 && !outcome && (
         <section aria-labelledby="mod-photos" className={form.step}>
           <h3 id="mod-photos">{t('photosTitle')}</h3>
-          <p className={form.note}>{t('photosHint')}</p>
+          <p className={form.note}>
+            {t(isTeam ? 'teamPhotosHint' : 'photosHint')}
+          </p>
           <ul className={styles.photos}>
-            {item.photos.map((p, i) => {
-              const label = p.dish
-                ? t('photoOfDish', { dish: p.dish })
-                : t('photoOfPlace', {
-                    n: item.photos!.slice(0, i + 1).filter((x) => !x.dish)
-                      .length,
-                  });
+            {photos.map((p, i) => {
+              const label = p.person
+                ? t('photoOfPerson', { name: p.person })
+                : p.dish
+                  ? t('photoOfDish', { dish: p.dish })
+                  : t('photoOfPlace', {
+                      n: photos.slice(0, i + 1).filter((x) => !x.dish).length,
+                    });
               return (
                 <li key={p.key}>
                   <a

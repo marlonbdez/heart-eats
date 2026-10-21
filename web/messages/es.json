@@ -540,23 +540,22 @@
       "name": "Nombre o seudónimo",
       "role": "Puesto",
       "story": "Su historia, con sus palabras",
+      "personPhoto": "Foto de la persona",
+      "personPhotoHint": "Opcional. Se reduce en tu dispositivo y no se ve hasta que la revisemos. Solo si la persona (o su representante) quiere que salga su cara: sin foto, la historia vale igual.",
+      "personPhotoAlt": "Foto de la persona {n}",
       "who": "¿Quién da el permiso?",
       "self": "La propia persona",
       "representative": "Su representante legal",
-      "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto y lo escrito arriba. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.",
-      "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto y lo escrito arriba de esta persona. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 7 días.",
+      "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto, lo escrito arriba y mi foto, si he añadido una. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.",
+      "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto, lo escrito arriba y la foto de esta persona, si se ha añadido una. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 7 días.",
       "consentNote": "Texto de consentimiento provisional: debe revisarlo un profesional antes de publicarse.",
-      "photosTitle": "Fotos de tu local",
-      "photosHint": "Opcional, hasta 3: de tus platos o del local. Se reducen en tu dispositivo y no se ven hasta que las revisemos. Mejor el plato que las personas: evita fotos donde se reconozca a alguien.",
-      "photoLabel": "Foto {n}",
-      "photoAlt": "Foto {n} de tu local",
       "storyError": "Completa el nombre, el puesto y la historia, y marca el permiso, para continuar.",
       "add": "+ Añadir otra persona"
     },
     "s4": {
       "intro": "Revísalo con calma. Así se verá en la ficha de tu local.",
       "previewLabel": "Así se verá:",
-      "photos": "{count, plural, one {1 foto} other {# fotos}} (se revisarán antes de verse)",
+      "photos": "{count, plural, one {1 foto de una persona} other {# fotos de personas}} (se revisarán antes de verse)",
       "email": "Correo de contacto",
       "emailHint": "No se publica. Lo usamos para confirmar contigo que eres del negocio y para avisarte cuando esté publicado.",
       "emailError": "Escribe un correo válido para poder enviarlo.",
@@ -594,7 +593,7 @@
       {
         "heading": "Esta versión está empezando",
         "paragraphs": [
-          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo también se envía de verdad. Las fotos de un local nuevo también se envían de verdad; las del equipo todavía no se piden. Lo que sigue describe cómo tratamos los datos."
+          "Las propuestas, las correcciones y las peticiones de retirada ya se envían de verdad y las revisa una persona. El formulario del negocio para contar su equipo también se envía de verdad. Las fotos de un local nuevo y las de las personas de un equipo también se envían de verdad. Lo que sigue describe cómo tratamos los datos."
         ]
       },
       {
@@ -620,7 +619,7 @@
           "Si pides una retirada: qué quieres retirar, tu explicación (sin datos de salud ni nombres de terceros) y tu correo, que es obligatorio para confirmar por correo que eres la persona o su representante antes de ocultar nada. Se conservan igual que una propuesta; el correo se borra al resolverla o, como máximo, a los 9 meses.",
           "Si eres moderador o moderadora: tu correo y el ámbito que moderas, para que puedas entrar y revisar propuestas, mientras lo seas.",
           "Para evitar mensajes no deseados: un contador temporal por dirección IP, que se guarda unas horas. El campo oculto del formulario no guarda nada tuyo.",
-          "Si eres un negocio y cuentas tu equipo: cifras del equipo, tu correo (obligatorio, para confirmar contigo que lo envía el negocio) y, en el nivel máximo, nombre o seudónimo, puesto e historia de cada persona, con su permiso (las fotos todavía no se piden). Los usamos para mostrar la ficha con el detalle que el negocio elija. Mientras se revisa, solo las lee un administrador; el correo se borra al resolver la solicitud o, como máximo, a los 9 meses. Las historias salen de la solicitud al resolverla: si se aprueba, pasan a la ficha y se conservan mientras el negocio y la persona lo mantengan; si no, se borran."
+          "Si eres un negocio y cuentas tu equipo: cifras del equipo, tu correo (obligatorio, para confirmar contigo que lo envía el negocio) y, en el nivel máximo, nombre o seudónimo, puesto, historia y, si quiere, foto de cada persona, con su permiso (la foto se reduce en tu dispositivo y espera en un almacén privado que solo ve un administrador, que puede dejarla fuera; si no se publica o la solicitud se rechaza, se borra). Los usamos para mostrar la ficha con el detalle que el negocio elija. Mientras se revisa, solo las lee un administrador; el correo se borra al resolver la solicitud o, como máximo, a los 9 meses. Las historias salen de la solicitud al resolverla: si se aprueba, pasan a la ficha y se conservan mientras el negocio y la persona lo mantengan; si no, se borran."
         ],
         "paragraphs": [
           "Tu correo y lo que escribes en los formularios los tratamos porque tú nos los das al enviar (tu consentimiento). Los datos de una persona del equipo, solo con el consentimiento explícito de esa persona."
@@ -940,13 +939,13 @@
     "change": "Cambio propuesto",
     "food": "Comida",
     "dishes": "Platos estrella",
-    "photosCount": "Fotos",
-    "photosNote": "{count} (este prototipo no las muestra)",
     "photosTitle": "Fotos enviadas",
     "photosHint": "Míralas antes de decidir. Las que marques como «No publicar» se borran al aprobar; el resto se publica. Si rechazas la solicitud, se borran todas.",
+    "teamPhotosHint": "Míralas antes de decidir. Las que marques como «No publicar» se borran al aprobar y esa historia se publica sin foto; el resto se publica con su historia. Si rechazas la solicitud, se borran todas.",
     "photoOpen": "Abrir la foto en grande (se abre en una pestaña nueva)",
     "photoOfDish": "Foto del plato «{dish}»",
     "photoOfPlace": "Foto del local {n}",
+    "photoOfPerson": "Foto de {name}",
     "photoSkip": "No publicar esta foto",
     "howKnown": "Cómo lo conoce quien propone",
     "evidence": "Enlace aportado",
@@ -965,6 +964,7 @@
       "teamOwner": "He confirmado con el negocio, por un canal oficial, que quien envía lo representa",
       "teamFigures": "Las cifras son coherentes (al menos una persona; no más con discapacidad que en total)",
       "teamConsents": "Cada historia trae el consentimiento de la persona o de su representante legal",
+      "teamPhotos": "Cada foto es de la persona de su historia, con su permiso (o el de su representante legal), y no aparece nadie más",
       "photos": "Las fotos que se publican son del plato o del local, sin caras reconocibles ni datos personales, y hay permiso para usarlas",
       "removalIdentity": "He confirmado, por el correo, que quien lo pide es la persona o su representante"
     },
