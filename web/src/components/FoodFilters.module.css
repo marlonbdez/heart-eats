@@ -89,17 +89,12 @@
   cursor: pointer;
   scroll-snap-align: start;
 }
+/* Marcada: solo cambia el relleno, sin negrita ni marcas que la ensanchen. */
 .chip[aria-pressed='true'] {
-  font-weight: 600;
   color: var(--on-accent);
   background: var(--accent);
   border-color: var(--accent);
 }
 .icon {
   font-size: 1.15rem;
-}
-
-/* La categoría activa no depende solo del color: lleva una marca. */
-.chip[aria-pressed='true']::before {
-  content: '✓' / '';
 }

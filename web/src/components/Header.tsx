@@ -6,6 +6,7 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { navGroups } from '@/lib/nav';
 import { LanguageMenu } from './LanguageMenu';
 import { LogoMark } from './LogoMark';
+import { Tagline } from './Tagline';
 import { ThemeSwitch } from './ThemeSwitch';
 import styles from './Header.module.css';
 
@@ -123,7 +124,10 @@ export function Header() {
         <ThemeSwitch />
 
         <footer className={styles.drawerFoot}>
-          <p className={styles.tagline}>{t('app.tagline')}</p>
+          <Tagline className={styles.tagline} />
+          <p className={styles.copyright}>
+            © 2026 Heart<span className={styles.eats}>Eats</span>
+          </p>
         </footer>
       </dialog>
     </>
