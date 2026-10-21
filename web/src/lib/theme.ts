@@ -45,6 +45,15 @@ export function isDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
+// Pasa al otro aspecto, de claro a oscuro y al revés, así que cada toque se ve.
+// Si el aspecto al que se pasa es el del dispositivo, se vuelve a «system» (sigue
+// al dispositivo y no se guarda nada).
+export function toggleTheme() {
+  const deviceDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const next: Theme = isDark() ? 'light' : 'dark';
+  saveTheme((next === 'dark') === deviceDark ? 'system' : next);
+}
+
 // Avisa cuando cambia el tema, venga de la elección o del dispositivo. Devuelve
 // la función que lo deja de escuchar.
 export function watchTheme(onChange: () => void): () => void {

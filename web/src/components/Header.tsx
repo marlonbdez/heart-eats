@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { navGroups } from '@/lib/nav';
 import { LanguageMenu } from './LanguageMenu';
-import { LanguageSwitch } from './LanguageSwitch';
+import { LanguageSetting } from './LanguageSetting';
 import { LogoMark } from './LogoMark';
 import { Tagline } from './Tagline';
-import { ThemeSwitch } from './ThemeSwitch';
+import { ThemeSetting } from './ThemeSetting';
 import styles from './Header.module.css';
 
 // Icono "añadir lugar" (chincheta con un +), Material Icons, Apache-2.0.
@@ -123,8 +123,8 @@ export function Header() {
         </nav>
 
         <div className={styles.settings}>
-          <LanguageSwitch />
-          <ThemeSwitch />
+          <LanguageSetting />
+          <ThemeSetting />
         </div>
 
         <footer className={styles.drawerFoot}>
