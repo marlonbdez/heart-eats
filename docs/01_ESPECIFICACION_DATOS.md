@@ -44,6 +44,7 @@
 | `verification.method` | enum | | `visit`, `call`, `documentation`, `owner_confirmed` |
 | `verification.evidence[]` | `{type,url,note}` | | |
 | `ownerConfirmedAt` | Date | | el negocio sabe que aparece (§11.5 handoff) |
+| `retiredAt` | Date | | se pone al aprobar la retirada de la ficha a petición del negocio; 21 días después se borra la ficha con su equipo y sus fotos (`02_API_SPEC.md`, «Conservación») |
 | `createdAt`, `updatedAt` | Date | ✔ | |
 
 **Reglas de negocio**

@@ -1,7 +1,10 @@
 import { Types } from 'mongoose';
 import { AuditLog } from '../models/audit-log.js';
+import { Restaurant, type RestaurantRecord } from '../models/restaurant.js';
 import { Suggestion } from '../models/suggestion.js';
 import { Team, type TeamRecord } from '../models/team.js';
+import { thumbOf } from './photo-keys.js';
+import type { PhotoStore } from './photo-store.js';
 
 const DAY = 24 * 60 * 60_000;
 
@@ -9,6 +12,9 @@ const DAY = 24 * 60 * 60_000;
 // Lo retirado se oculta al instante; el contenido se borra pasado este plazo.
 // La política dice 7 días: aquí hay más margen, sin pasar del mes que da el RGPD.
 export const REVOKED_STORY_DAYS = 21;
+// Una ficha retirada a petición del negocio se borra del todo (con su equipo y
+// sus fotos) pasado este plazo, el mismo que las historias.
+export const RETIRED_LISTING_DAYS = 21;
 // Tope del correo de una solicitud que sigue sin resolverse (≈ 9 meses).
 export const CONTACT_EMAIL_DAYS = 270;
 
@@ -92,6 +98,71 @@ export async function purgeOldContactEmails(now = new Date()): Promise<number> {
       diff: { contactEmail: { removed: true } },
     });
     purged++;
+  }
+  return purged;
+}
+
+// Los archivos de fotos de una ficha: las del local y las de sus platos, cada
+// una con su miniatura, tal como viven en `p/`.
+function photoObjects(
+  place: Pick<RestaurantRecord, 'photos' | 'signatureDishes'>,
+) {
+  const files = [
+    ...(place.photos ?? []).map((p) => p.file),
+    ...(place.signatureDishes ?? []).flatMap((d) => (d.photo ? [d.photo] : [])),
+  ];
+  return [...new Set(files)].flatMap((file) => [
+    `p/${file}`,
+    `p/${thumbOf(file)}`,
+  ]);
+}
+
+// Borra del todo las fichas retiradas a petición del negocio hace más del plazo:
+// las fotos del almacén, el equipo y la ficha. Las que solo se archivaron por
+// cierre del local no se tocan. Devuelve cuántas borró. Deja una línea de
+// auditoría sin actor y sin contenido (solo si había equipo y cuántas fotos).
+// Primero van las fotos, que se pueden borrar dos veces sin problema: si algo
+// falla, la ficha sigue ahí y se reintenta en la próxima pasada. Sin almacén no
+// se borra una ficha con fotos, para no dejarlas huérfanas.
+export async function purgeRetiredListings(
+  now = new Date(),
+  store?: PhotoStore,
+): Promise<number> {
+  const limit = new Date(now.getTime() - RETIRED_LISTING_DAYS * DAY);
+  const due = await Restaurant.find({
+    status: 'archived',
+    retiredAt: { $lt: limit },
+  })
+    .limit(BATCH)
+    .select('_id photos signatureDishes')
+    .lean<Pick<RestaurantRecord, '_id' | 'photos' | 'signatureDishes'>[]>();
+
+  let purged = 0;
+  for (const place of due) {
+    const objects = photoObjects(place);
+    if (objects.length > 0 && !store) continue;
+    try {
+      for (const key of objects) await store?.remove(key);
+      const team = await Team.deleteOne({ restaurantId: place._id });
+      const done = await Restaurant.deleteOne({
+        _id: place._id,
+        status: 'archived',
+        retiredAt: { $lt: limit },
+      });
+      if (done.deletedCount === 0) continue; // otra instancia se adelantó
+      await AuditLog.create({
+        entity: 'restaurant',
+        entityId: place._id,
+        action: 'purge_listing',
+        diff: { team: team.deletedCount > 0, photos: objects.length / 2 },
+      });
+      purged++;
+    } catch (err) {
+      console.error(
+        'No se pudo borrar una ficha retirada:',
+        err instanceof Error ? err.message : err,
+      );
+    }
   }
   return purged;
 }

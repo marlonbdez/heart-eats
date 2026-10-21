@@ -334,6 +334,8 @@ describe('aprobar una retirada', () => {
 
     expect(res.status).toBe(200);
     expect((await place())?.status).toBe('archived');
+    // Desde aquí corre el plazo del borrado definitivo.
+    expect((await place())?.retiredAt).toBeInstanceOf(Date);
     const doc = await stored(s._id);
     expect(doc).toMatchObject({ status: 'approved' });
     expect(doc?.contactEmail).toBeUndefined();

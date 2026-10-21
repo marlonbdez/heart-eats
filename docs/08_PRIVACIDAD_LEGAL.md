@@ -116,6 +116,7 @@ Para que el texto sea cierto, el código tiene que cumplir esto. Hoy se cumple t
 | --- | ---------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | 1   | ❓ Quién figura como responsable y qué correo de contacto se publica (P6)          | Marlon a título personal hasta que exista la asociación; correo público: `contact@hearteats.org` (reenvío a un correo personal, ver `09_CORREO.md`) |
 | 2   | ❓ Plazo de borrado tras retirar una historia                                      | 7 días (el servidor usa 21, dentro del mes del RGPD)     |
+| 2b  | ❓ Plazo de borrado tras retirar una ficha entera (ficha, equipo y fotos)          | El servidor usa 21 días, como las historias               |
 | 3   | ❓ Umbral de equipo pequeño                                                        | Menos de 5 personas                                     |
 | 4   | ❓ Cuánto se guarda el correo de quien propone o corrige                           | Hasta resolver la propuesta, y como máximo 6 meses (el servidor usa 270 días) |
 | 5   | ❓ Proveedor y país del hosting y de la base de datos (P1)                         | Railway, Atlas y R2 en la UE (ADR 0005); confirmar regiones al contratar |

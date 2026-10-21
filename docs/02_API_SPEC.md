@@ -164,9 +164,10 @@ Sin ninguna llamada de por medio, el servidor repasa los plazos al arrancar y ca
 
 - **Solicitudes sin respuesta:** se cierran como `rejected` / `no_reply` (ver «Responder a "Info pedida"»).
 - **Historias retiradas:** pasados ❓ **21 días** desde `revokedAt`, se borran el nombre, el puesto, el texto y la foto. Se conserva el hueco (las posiciones no se mueven), el consentimiento y las fechas, con `purgedAt`. Auditoría: `purge_stories` con las posiciones.
+- **Fichas retiradas:** al aprobar una retirada de ficha (`what: listing`) se archiva y se marca `retiredAt`. Pasados ❓ **21 días**, se borran la ficha, su equipo y sus fotos (con miniaturas) del almacén `p/`. Primero van las fotos y luego los documentos, así que un fallo del almacén deja la ficha para reintentar en la hora siguiente; sin almacén no se borra una ficha con fotos. No se tocan las fichas archivadas por cierre del local (sin `retiredAt`) ni las retiradas antes de que existiera el campo. Auditoría: `purge_listing`, sin actor y sin contenido.
 - **Correo de las solicitudes:** pasados ❓ **270 días** (≈ 9 meses) desde que se envió, se borra el correo aunque la solicitud siga sin resolver. Auditoría: `purge_email`.
 
-Los plazos son constantes en `services/retention.ts` y provisionales hasta la revisión legal. Las fotos de una historia retirada se borrarán del almacenamiento cuando existan.
+Los plazos son constantes en `services/retention.ts` y provisionales hasta la revisión legal. Las fotos de una historia retirada se borrarán del almacenamiento cuando existan (el equipo aún no las admite).
 
 ## Modelo de la solicitud (resumen)
 

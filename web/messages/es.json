@@ -1221,6 +1221,7 @@
         "create": "Creada",
         "update": "Modificada",
         "purge_email": "Correo borrado",
+        "purge_listing": "Ficha borrada",
         "purge_stories": "Historias borradas",
         "revoke_story": "Historia retirada"
       },

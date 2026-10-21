@@ -55,6 +55,9 @@ export interface RestaurantRecord {
     lastVerifiedAt?: Date;
   };
   ownerConfirmedAt?: Date;
+  // Cuándo se aprobó retirar la ficha a petición suya: desde ahí corre el plazo
+  // del borrado definitivo (services/retention.ts).
+  retiredAt?: Date;
   isDemo?: boolean;
 }
 
@@ -182,6 +185,7 @@ const restaurantSchema = new Schema(
     },
     // El negocio sabe que aparece y ha dado el visto bueno.
     ownerConfirmedAt: Date,
+    retiredAt: Date,
     isDemo: Boolean,
     // Derivados de arriba, para buscar sin acentos ni mayúsculas.
     cityKey: { type: String, required: true },
