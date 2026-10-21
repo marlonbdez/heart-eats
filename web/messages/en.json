@@ -1221,6 +1221,7 @@
         "create": "Created",
         "update": "Edited",
         "purge_email": "Email deleted",
+        "purge_listing": "Listing deleted",
         "purge_stories": "Stories deleted",
         "revoke_story": "Story removed"
       },

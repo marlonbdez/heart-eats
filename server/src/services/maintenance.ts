@@ -1,6 +1,10 @@
 import { closeExpiredRequests } from './close-expired.js';
 import type { PhotoStore } from './photo-store.js';
-import { purgeOldContactEmails, purgeRevokedStories } from './retention.js';
+import {
+  purgeOldContactEmails,
+  purgeRetiredListings,
+  purgeRevokedStories,
+} from './retention.js';
 import { purgeUnusedUploads } from './uploads.js';
 
 const HOUR = 60 * 60_000;
@@ -12,6 +16,8 @@ const tasks: readonly (readonly [string, Task])[] = [
   ['Solicitudes cerradas sin respuesta', closeExpiredRequests],
   ['Historias retiradas vaciadas', purgeRevokedStories],
   ['Correos borrados por antigüedad', purgeOldContactEmails],
+  // Sin almacén solo se borran las fichas que no tienen fotos.
+  ['Fichas retiradas borradas', purgeRetiredListings],
   // Sin almacén no hay fotos que borrar.
   [
     'Fotos sin usar borradas',

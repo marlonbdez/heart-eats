@@ -230,7 +230,9 @@ export async function approveCorrection(
 }
 
 // Aprobar una retirada: lo pedido deja de verse al momento. El borrado
-// definitivo llega con el plazo de la política (docs/08_PRIVACIDAD_LEGAL.md).
+// definitivo llega con el plazo de la política (docs/08_PRIVACIDAD_LEGAL.md):
+// una ficha retirada lleva `retiredAt` y el trabajo horario la borra, con su
+// equipo y sus fotos (services/retention.ts).
 export async function approveRemoval(
   record: SuggestionRecord,
   user: User,
@@ -243,7 +245,10 @@ export async function approveRemoval(
 
   if (what === 'listing') {
     return approveAndApply(record, user, now, id, async () => {
-      await setOnPublished(id, [['status', 'archived']]);
+      await setOnPublished(id, [
+        ['status', 'archived'],
+        ['retiredAt', now],
+      ]);
       return {
         entity: 'restaurant',
         entityId: id,

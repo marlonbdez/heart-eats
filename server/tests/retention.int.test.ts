@@ -1,5 +1,13 @@
 import request from 'supertest';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 import { createApp } from '../src/app.js';
 import { AuditLog } from '../src/models/audit-log.js';
 import { Restaurant } from '../src/models/restaurant.js';
@@ -9,11 +17,14 @@ import { runMaintenance } from '../src/services/maintenance.js';
 import {
   CONTACT_EMAIL_DAYS,
   purgeOldContactEmails,
+  purgeRetiredListings,
   purgeRevokedStories,
+  RETIRED_LISTING_DAYS,
   REVOKED_STORY_DAYS,
 } from '../src/services/retention.js';
 import { restaurantData } from './helpers/data.js';
 import { clearTestDb, startTestDb, stopTestDb } from './helpers/db.js';
+import { memoryPhotoStore } from './helpers/photo-store.js';
 
 const DAY = 86_400_000;
 const daysAgo = (n: number) => new Date(Date.now() - n * DAY);
@@ -193,6 +204,142 @@ describe('tope del correo guardado', () => {
   });
 });
 
+const FILE = '0b8e3a52-5a43-4b8a-9d5e-000000000101.webp';
+const THUMB = '0b8e3a52-5a43-4b8a-9d5e-000000000101-thumb.webp';
+const DISH = '0b8e3a52-5a43-4b8a-9d5e-000000000102.webp';
+const DISH_THUMB = '0b8e3a52-5a43-4b8a-9d5e-000000000102-thumb.webp';
+
+// Una ficha archivada, con equipo y fotos, retirada hace `days` días.
+async function retired(
+  days: number | null,
+  over: Record<string, unknown> = {},
+) {
+  const restaurant = await Restaurant.create(
+    restaurantData({
+      slug: `demo-retirada-${Math.round(Math.random() * 1e9)}`,
+      status: 'archived',
+      ...(days !== null && { retiredAt: daysAgo(days) }),
+      photos: [{ file: FILE }],
+      signatureDishes: [{ name: 'Pizza', photo: DISH }],
+      ...over,
+    }),
+  );
+  await Team.create({
+    restaurantId: restaurant._id,
+    visibilityLevel: 'full',
+    summary: { totalStaff: 10, staffWithDisability: 4 },
+    stories: [story('Ana')],
+  });
+  return restaurant;
+}
+
+function storeWithPhotos() {
+  const photos = memoryPhotoStore();
+  for (const key of [FILE, THUMB, DISH, DISH_THUMB]) {
+    photos.objects.set(`p/${key}`, {
+      body: Buffer.from('x'),
+      contentType: 'image/webp',
+    });
+  }
+  return photos;
+}
+
+describe('borrado de fichas retiradas', () => {
+  it('pasado el plazo borra la ficha, su equipo y sus fotos con las miniaturas', async () => {
+    const place = await retired(RETIRED_LISTING_DAYS + 1);
+    const photos = storeWithPhotos();
+
+    expect(await purgeRetiredListings(new Date(), photos.store)).toBe(1);
+
+    expect(await Restaurant.exists({ _id: place._id })).toBeNull();
+    expect(await Team.exists({ restaurantId: place._id })).toBeNull();
+    expect([...photos.objects.keys()]).toEqual([]);
+  });
+
+  it('deja una línea de auditoría sin actor ni contenido', async () => {
+    const place = await retired(RETIRED_LISTING_DAYS + 1);
+    await purgeRetiredListings(new Date(), storeWithPhotos().store);
+
+    const logs = await AuditLog.find({ action: 'purge_listing' }).lean();
+    expect(logs).toHaveLength(1);
+    expect(logs[0]).toMatchObject({
+      entity: 'restaurant',
+      entityId: place._id,
+      diff: { team: true, photos: 2 },
+    });
+    expect(logs[0]?.actorId).toBeUndefined();
+    expect(JSON.stringify(logs[0])).not.toContain('Uno');
+  });
+
+  it('no toca lo que está dentro del plazo', async () => {
+    const place = await retired(RETIRED_LISTING_DAYS - 1);
+    const photos = storeWithPhotos();
+
+    expect(await purgeRetiredListings(new Date(), photos.store)).toBe(0);
+
+    expect(await Restaurant.exists({ _id: place._id })).not.toBeNull();
+    expect(await Team.exists({ restaurantId: place._id })).not.toBeNull();
+    expect(photos.objects.size).toBe(4);
+  });
+
+  it('no toca una ficha archivada por cierre del local (sin retiredAt)', async () => {
+    const place = await retired(null);
+    expect(
+      await purgeRetiredListings(new Date(), storeWithPhotos().store),
+    ).toBe(0);
+    expect(await Restaurant.exists({ _id: place._id })).not.toBeNull();
+  });
+
+  it('no toca una ficha que se volvió a publicar', async () => {
+    const place = await retired(RETIRED_LISTING_DAYS + 30, {
+      status: 'published',
+    });
+    expect(
+      await purgeRetiredListings(new Date(), storeWithPhotos().store),
+    ).toBe(0);
+    expect(await Restaurant.exists({ _id: place._id })).not.toBeNull();
+  });
+
+  it('es idempotente', async () => {
+    await retired(RETIRED_LISTING_DAYS + 1);
+    const photos = storeWithPhotos();
+    expect(await purgeRetiredListings(new Date(), photos.store)).toBe(1);
+    expect(await purgeRetiredListings(new Date(), photos.store)).toBe(0);
+    expect(await AuditLog.countDocuments({ action: 'purge_listing' })).toBe(1);
+  });
+
+  it('sin almacén no borra una ficha con fotos, pero sí una sin ellas', async () => {
+    const withPhotos = await retired(RETIRED_LISTING_DAYS + 1);
+    const without = await retired(RETIRED_LISTING_DAYS + 1, {
+      photos: [],
+      signatureDishes: [],
+    });
+
+    expect(await purgeRetiredListings()).toBe(1);
+
+    expect(await Restaurant.exists({ _id: withPhotos._id })).not.toBeNull();
+    expect(await Restaurant.exists({ _id: without._id })).toBeNull();
+  });
+
+  it('si falla el almacén, la ficha se queda para reintentarla y las demás siguen', async () => {
+    const broken = await retired(RETIRED_LISTING_DAYS + 1);
+    const fine = await retired(RETIRED_LISTING_DAYS + 1, {
+      photos: [],
+      signatureDishes: [],
+    });
+    const photos = storeWithPhotos();
+    photos.store.remove = () => Promise.reject(new Error('R2 respondió 500'));
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    expect(await purgeRetiredListings(new Date(), photos.store)).toBe(1);
+
+    expect(await Restaurant.exists({ _id: broken._id })).not.toBeNull();
+    expect(await Team.exists({ restaurantId: broken._id })).not.toBeNull();
+    expect(await Restaurant.exists({ _id: fine._id })).toBeNull();
+    errors.mockRestore();
+  });
+});
+
 describe('pasada de mantenimiento', () => {
   it('ejecuta todas las tareas', async () => {
     await teamWith([story('Ana', { revokedAt: daysAgo(40) })]);
@@ -207,9 +354,13 @@ describe('pasada de mantenimiento', () => {
       contactEmail: 'ana@example.com',
       createdAt: daysAgo(CONTACT_EMAIL_DAYS + 1),
     });
+    await retired(RETIRED_LISTING_DAYS + 1, {
+      photos: [],
+      signatureDishes: [],
+    });
     await runMaintenance();
     expect(await AuditLog.find().distinct('action')).toEqual(
-      expect.arrayContaining(['purge_stories', 'purge_email']),
+      expect.arrayContaining(['purge_stories', 'purge_email', 'purge_listing']),
     );
   });
 });
