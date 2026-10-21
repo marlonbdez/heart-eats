@@ -12,6 +12,7 @@ test('quien solo modera ve solicitudes y fotos, no las secciones de administraci
     'Solicitudes',
     'Fotos',
   ]);
+  await expect(page.getByRole('button', { name: 'Retiradas' })).toBeHidden();
   await expect(page.getByRole('button', { name: 'Usuarios' })).toBeHidden();
   await expect(page.getByRole('button', { name: 'Registro' })).toBeHidden();
 });
@@ -154,6 +155,125 @@ test.describe('administración', () => {
       await page.getByRole('button', { name: 'Registro' }).click();
       await expect(page.getByText('Alta de moderador')).toBeVisible();
       expect(await overflows()).toBe(false);
+    });
+  });
+
+  test.describe('retiradas', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.getByRole('button', { name: 'Retiradas' }).click();
+    });
+
+    test('lista las fichas y las historias pendientes de borrar, con su fecha', async ({
+      page,
+    }) => {
+      await expect(
+        page.getByRole('heading', { name: 'Retiradas', level: 2 }),
+      ).toBeVisible();
+      const listings = page
+        .getByRole('listitem')
+        .filter({ hasText: 'Retirada el' });
+      const lola = listings.filter({ hasText: 'Casa Lola' }).first();
+      await expect(lola).toContainText('Madrid');
+      await expect(lola).toContainText('en 3 días');
+      await expect(listings.filter({ hasText: 'Bar Esperanza' })).toContainText(
+        'en 19 días',
+      );
+      // Las historias salen por local y posición, nunca con su contenido, y
+      // no se pueden restaurar.
+      const story = page
+        .getByRole('listitem')
+        .filter({ hasText: 'historia 2' });
+      await expect(story).toContainText('Casa Lola');
+      await expect(story).toContainText('en 9 días');
+      await expect(story.getByRole('button')).toHaveCount(0);
+      await expect(page.getByText(/No se pueden restaurar/)).toBeVisible();
+    });
+
+    test('restaurar una ficha pide confirmación, la quita de la lista y deja el foco en el aviso', async ({
+      page,
+      sent,
+    }) => {
+      const bar = page
+        .getByRole('listitem')
+        .filter({ hasText: 'Bar Esperanza' });
+      await bar
+        .getByRole('button', { name: 'Restaurar Bar Esperanza' })
+        .click();
+      await expect(bar).toContainText('Volverá a verse en el mapa ahora mismo');
+      await bar.getByRole('button', { name: 'Cancelar' }).click();
+      await expect(bar).not.toContainText('Volverá a verse');
+      expect(sent).toEqual([]);
+
+      await bar
+        .getByRole('button', { name: 'Restaurar Bar Esperanza' })
+        .click();
+      await bar.getByRole('button', { name: 'Confirmar restauración' }).click();
+      const notice = page.getByRole('status');
+      await expect(notice).toHaveText(
+        'Listo: Bar Esperanza vuelve a verse en HeartEats.',
+      );
+      await expect(notice).toBeFocused();
+      await expect(bar).toHaveCount(0);
+      expect(sent).toEqual([
+        { path: '/retired/listings/rl2/restore', body: {} },
+      ]);
+    });
+
+    test('si la ficha ya no estaba, lo dice y la quita de la lista', async ({
+      page,
+    }) => {
+      const ghost = page
+        .getByRole('listitem')
+        .filter({ hasText: 'Cafetería Fantasma' });
+      await ghost
+        .getByRole('button', { name: 'Restaurar Cafetería Fantasma' })
+        .click();
+      await ghost
+        .getByRole('button', { name: 'Confirmar restauración' })
+        .click();
+      await expect(page.locator('p[role=alert]')).toContainText(
+        'Cafetería Fantasma ya no estaba pendiente de borrar',
+      );
+      await expect(ghost).toHaveCount(0);
+    });
+
+    test('si no hay nada retirado, lo dice con calma', async ({ page }) => {
+      await page.route('**/api/v1/retired', (route) =>
+        route.fulfill({
+          headers: {
+            'access-control-allow-origin':
+              route.request().headers()['origin'] ?? '*',
+            'access-control-allow-credentials': 'true',
+          },
+          json: { listings: [], stories: [] },
+        }),
+      );
+      await page.getByRole('button', { name: 'Solicitudes' }).click();
+      await page.getByRole('button', { name: 'Retiradas' }).click();
+      await expect(
+        page.getByText('No hay ninguna ficha pendiente de borrar.'),
+      ).toBeVisible();
+      await expect(
+        page.getByText('No hay ninguna historia pendiente de borrar.'),
+      ).toBeVisible();
+    });
+
+    test('en 320 px, con una fuente ancha, nada se sale de la pantalla', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 700 });
+      await page.addStyleTag({
+        content: '* { font-family: Verdana !important }',
+      });
+      await page.getByRole('button', { name: 'Restaurar Casa Lola' }).click();
+      await expect(page.getByText('Confirmar restauración')).toBeVisible();
+      expect(
+        await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth >
+            document.documentElement.clientWidth,
+        ),
+      ).toBe(false);
     });
   });
 

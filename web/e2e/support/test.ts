@@ -2,7 +2,12 @@ import { test as base, type Page, type Route } from '@playwright/test';
 import { foodTags, restaurants } from '../fixtures/restaurants';
 import type { Restaurant } from '../../src/lib/types';
 import { suggestions } from '../fixtures/moderation';
-import { auditLines, staff, type ApiStaff } from '../fixtures/staff';
+import {
+  auditLines,
+  retired as retiredFixture,
+  staff,
+  type ApiStaff,
+} from '../fixtures/staff';
 
 export * from '@playwright/test';
 
@@ -141,6 +146,8 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
 
     // Quién modera cambia con las altas y bajas de la propia prueba.
     const team: ApiStaff[] = structuredClone(staff);
+    // Lo retirado cambia con las restauraciones de la propia prueba.
+    const retired = structuredClone(retiredFixture);
     const denied = (route: Route) =>
       route.fulfill({
         status: 403,
@@ -316,6 +323,22 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
           );
           return route.fulfill({ status: 201, headers, json: member });
         }
+        const restoreCall = /^\/retired\/listings\/([^/]+)\/restore$/.exec(
+          path,
+        );
+        if (restoreCall) {
+          if (session.role !== 'admin') return denied(route);
+          const at = retired.listings.findIndex((l) => l.id === restoreCall[1]);
+          if (at === -1 || restoreCall[1] === 'rl3') {
+            return route.fulfill({
+              status: 404,
+              headers,
+              json: { error: { code: 'not_found', message: 'Ya no está' } },
+            });
+          }
+          retired.listings.splice(at, 1);
+          return route.fulfill({ status: 204, headers });
+        }
         if (path === '/auth/logout') {
           session.role = null;
           return route.fulfill({ status: 204, headers });
@@ -362,6 +385,10 @@ export const test = base.extend<{ sent: Sent[]; session: Session }>({
       if (path === '/users') {
         if (session.role !== 'admin') return denied(route);
         return route.fulfill({ headers, json: { items: team } });
+      }
+      if (path === '/retired') {
+        if (session.role !== 'admin') return denied(route);
+        return route.fulfill({ headers, json: retired });
       }
       if (path === '/audit') {
         if (session.role !== 'admin') return denied(route);

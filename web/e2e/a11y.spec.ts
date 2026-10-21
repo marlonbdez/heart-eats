@@ -399,6 +399,26 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('moderación: retiradas (lista, confirmación y aviso)', async ({
+      page,
+      session,
+    }) => {
+      session.role = 'admin';
+      await page.goto('/es/moderation');
+      await page.getByRole('button', { name: 'Retiradas' }).click();
+      await expect(page.getByText('Bar Esperanza')).toBeVisible();
+      await expectNoViolations(page);
+      await page
+        .getByRole('button', { name: 'Restaurar Bar Esperanza' })
+        .click();
+      await expectNoViolations(page);
+      await page
+        .getByRole('button', { name: 'Confirmar restauración' })
+        .click();
+      await expect(page.getByRole('status')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('moderación: registro', async ({ page, session }) => {
       session.role = 'admin';
       await page.goto('/es/moderation');

@@ -58,6 +58,11 @@
 - **Pasos:** tras cada decisión se añade una línea al registro de la solicitud (qué se hizo, sobre qué y con qué nivel, método o motivo).
 - **Observación:** hoy es una línea en pantalla, sin persona ni hora, y se pierde al recargar. Con servidor será persistente (`AuditLog`) y no editable. Un administrador la consulta en `/moderation`, sección «Registro» (quién, cuándo y qué cambió; nunca nombres ni historias).
 
+## CU-27b · Ver lo retirado pendiente de borrar y restaurar una ficha
+- **Quién:** Administrador/a.
+- **Pasos:** en `/moderation`, sección «Retiradas», ve las fichas y las historias retiradas con el día en que se borrarán (21 días tras la retirada). En una ficha, «Restaurar» y confirmar la devuelve al mapa y detiene el plazo; queda una línea `restore` en el registro.
+- **Observación:** las historias no se restauran (retirarlas es retirar el consentimiento) y de ellas solo se muestra el local y la posición. Una ficha que el trabajo horario ya borró no se puede devolver: la pantalla avisa y la quita de la lista.
+
 ## CU-33 · Autenticarse (enlace mágico) — *pendiente*
 - **Quién:** Moderador/a. Depende de P5 y P9.
 - **Previsto:** indica su correo → recibe un enlace de un solo uso → al abrirlo entra en la cola.

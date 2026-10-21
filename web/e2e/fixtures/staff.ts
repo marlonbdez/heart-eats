@@ -92,3 +92,66 @@ export const auditLines: ApiAuditLine[] = [
     actor: 'admin@ejemplo.org',
   },
 ];
+
+export interface ApiRetired {
+  listings: {
+    id: string;
+    slug: string;
+    name: string;
+    city: string;
+    retiredAt: string;
+    deleteAt: string;
+  }[];
+  stories: {
+    restaurantSlug: string;
+    restaurantName: string;
+    index: number;
+    revokedAt: string;
+    deleteAt: string;
+  }[];
+}
+
+const DAY = 24 * 60 * 60_000;
+const plus21 = (iso: string) =>
+  new Date(new Date(iso).getTime() + 21 * DAY).toISOString();
+
+// Lo retirado que espera su borrado, como lo devuelve GET /retired: lo más
+// próximo a borrarse, primero. La ficha `rl3` «ya no está» al restaurarla
+// (la borró el trabajo horario mientras tanto).
+export const retired: ApiRetired = {
+  listings: [
+    {
+      id: 'rl1',
+      slug: 'casa-lola',
+      name: 'Casa Lola',
+      city: 'Madrid',
+      retiredAt: daysAgo(18),
+      deleteAt: plus21(daysAgo(18)),
+    },
+    {
+      id: 'rl3',
+      slug: 'cafeteria-fantasma',
+      name: 'Cafetería Fantasma',
+      city: 'Sevilla',
+      retiredAt: daysAgo(10),
+      deleteAt: plus21(daysAgo(10)),
+    },
+    {
+      id: 'rl2',
+      slug: 'bar-esperanza',
+      name: 'Bar Esperanza',
+      city: 'Madrid',
+      retiredAt: daysAgo(2),
+      deleteAt: plus21(daysAgo(2)),
+    },
+  ],
+  stories: [
+    {
+      restaurantSlug: 'casa-lola',
+      restaurantName: 'Casa Lola',
+      index: 1,
+      revokedAt: daysAgo(12),
+      deleteAt: plus21(daysAgo(12)),
+    },
+  ],
+};

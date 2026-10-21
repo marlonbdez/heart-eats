@@ -97,6 +97,7 @@ Usa tu segundo correo en «Tu correo» cuando lo pida. Pon siempre «[DEMO]» al
 | G11 | Aprueba la corrección (F4) y la retirada (F6) | Los cambios se ven en la ficha; la retirada la oculta al momento |
 | G12 | Rechaza el equipo (F5) con motivo | «Rechazada»; en «Resueltas» queda con el motivo |
 | G13 | Baja por la pantalla de moderación (solo administración): «Quién modera» y «Registro de auditoría» | El registro enseña cada decisión con quién la tomó, sin textos de historias ni correos. En «Quién modera», invita a un segundo correo tuyo y comprueba que puede entrar y que no ve esas dos secciones |
+| G13b | Como administrador, abre «Retiradas» | Lista las fichas e historias pendientes de borrar con su fecha («Se borra el … (en N días)»). De las historias solo sale el local y «historia N», nunca su texto; no tienen botón. Pulsa «Restaurar» en una ficha de prueba y confirma: avisa «vuelve a verse», desaparece de la lista y reaparece en el mapa. Un moderador no ve esta sección |
 | G14 | Pulsa «Salir» y luego «Atrás» en el navegador | No debe verse la cola; pide entrar de nuevo |
 
 ## H · Fichas y rutas que no existen

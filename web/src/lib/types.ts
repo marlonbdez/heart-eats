@@ -343,6 +343,30 @@ export interface AuditLine {
   diff?: Record<string, unknown>;
 }
 
+// Lo retirado que aún no se ha borrado (GET /retired). De las historias solo
+// consta el local, la posición y las fechas: nunca su contenido.
+export interface RetiredListing {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  retiredAt: string;
+  deleteAt: string;
+}
+
+export interface RetiredStory {
+  restaurantSlug: string;
+  restaurantName: string;
+  index: number;
+  revokedAt: string;
+  deleteAt: string;
+}
+
+export interface Retired {
+  listings: RetiredListing[];
+  stories: RetiredStory[];
+}
+
 export interface AuditPage {
   items: AuditLine[];
   nextCursor?: string;

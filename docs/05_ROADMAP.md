@@ -69,6 +69,7 @@ Una PR por paso:
   - [x] Retiradas de fotos y de datos: se marcan como atendidas (la foto se retira antes desde «Fotos», que la borra al momento; los datos se atienden por correo) con auditoría `handle_removal` sin el texto; la solicitud enlaza con las fotos del local
   - [x] Borrado definitivo de las historias retiradas (21 días) y tope de conservación del correo (9 meses), en el trabajo horario
   - [x] Borrado definitivo de una ficha retirada a petición del negocio: al aprobar la retirada se marca `retiredAt` y, pasados 21 días, el trabajo horario borra la ficha, su equipo y sus fotos (con miniaturas) del almacén; auditoría `purge_listing`. No toca lo archivado por cierre del local ni las retiradas aprobadas antes de este cambio (sin `retiredAt`)
+  - [x] Retiradas pendientes de borrar (`GET /retired`, solo admin) y «Restaurar» una ficha retirada por error (`POST /retired/listings/:id/restore`, auditoría `restore`); sección «Retiradas» en Administración. Las historias salen solo por local y posición, sin contenido, y no se restauran
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
   - [x] Consulta de la auditoría (`GET /audit`, solo admin, con filtros y paginación)
   - [x] Altas y bajas de moderadores (`/users`, solo admin, por invitación)
