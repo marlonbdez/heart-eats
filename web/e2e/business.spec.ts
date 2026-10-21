@@ -327,3 +327,23 @@ test('soy de un negocio: en 320 px la foto de la persona cabe, también con letr
     ),
   ).toBeLessThanOrEqual(0);
 });
+
+test('soy de un negocio: mientras se prepara la foto se avisa y no se puede elegir otra', async ({
+  page,
+}) => {
+  // Reducir una foto grande tarda: se simula con una espera al codificarla.
+  await page.addInitScript(() => {
+    const toBlob = HTMLCanvasElement.prototype.toBlob;
+    HTMLCanvasElement.prototype.toBlob = function (...args) {
+      setTimeout(() => toBlob.apply(this, args), 800);
+    };
+  });
+  await toStory(page);
+  await page.locator('#p0p').setInputFiles(png);
+  await expect(page.getByRole('status')).toContainText('Preparando la foto');
+  await expect(page.locator('#p0p')).toHaveCount(0);
+  await expect(
+    page.getByRole('img', { name: 'Foto de la persona 1' }),
+  ).toBeVisible();
+  await expect(page.getByText('Preparando la foto')).toHaveCount(0);
+});

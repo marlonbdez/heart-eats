@@ -16,10 +16,11 @@
   "menu": {
     "title": "Menú",
     "theme": {
-      "system": "Sistema",
       "light": "Claro",
       "dark": "Oscuro",
-      "label": "Tema"
+      "label": "Tema",
+      "change": "Tema: {current}. Cambiar a {next}",
+      "now": "Tema: {current}"
     },
     "groups": {
       "navigate": "Navegar",
@@ -40,7 +41,8 @@
       "contact": "Contacto",
       "removal": "Pedir una retirada",
       "contribute": "Cómo ayudar"
-    }
+    },
+    "closeLanguage": "Cerrar la lista de idiomas"
   },
   "languages": {
     "es": "Español",
@@ -203,6 +205,7 @@
   "photo": {
     "optional": "(opcional)",
     "remove": "Quitar foto",
+    "preparing": "Preparando la foto…",
     "consent": "Estas fotos son mías o tengo permiso del negocio para usarlas.",
     "consentError": "Marca la casilla para poder continuar con las fotos.",
     "photoType": "Usa una foto en formato JPG, PNG o WebP.",

@@ -16,10 +16,11 @@
   "menu": {
     "title": "Menu",
     "theme": {
-      "system": "System",
       "light": "Light",
       "dark": "Dark",
-      "label": "Theme"
+      "label": "Theme",
+      "change": "Theme: {current}. Change to {next}",
+      "now": "Theme: {current}"
     },
     "groups": {
       "navigate": "Browse",
@@ -40,7 +41,8 @@
       "contact": "Contact",
       "removal": "Ask for a removal",
       "contribute": "How to help"
-    }
+    },
+    "closeLanguage": "Close the language list"
   },
   "languages": {
     "es": "Español",
@@ -203,6 +205,7 @@
   "photo": {
     "optional": "(optional)",
     "remove": "Remove photo",
+    "preparing": "Preparing the photo…",
     "consent": "These photos are mine, or I have the business’s permission to use them.",
     "consentError": "Tick the box to continue with the photos.",
     "photoType": "Use a JPG, PNG or WebP photo.",

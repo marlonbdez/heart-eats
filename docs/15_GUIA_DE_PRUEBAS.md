@@ -27,7 +27,7 @@
 | B1 | Pulsa el icono de traducir (文A) de la cabecera y elige English | Toda la pantalla pasa a inglés; la dirección cambia a `/en…` |
 | B2 | Cierra la ventana y vuelve a abrir `https://hearteats.org` | Entra en inglés: se acuerda de tu elección |
 | B3 | Vuelve a español y recarga | Sigue en español |
-| B5 | Abre el menú ☰: en «Idioma» y «Tema» elige otra opción | El idioma cambia (y se acuerda); el tema también. Cada ajuste lleva su icono y todo cabe a 320 px |
+| B5 | Abre el menú ☰: toca la fila «Tema» y luego la fila «Idioma» | El tema pasa al otro aspecto al momento (un segundo toque vuelve al del dispositivo); «Idioma» abre un diálogo con los idiomas, elige otro y el menú se cierra. Cada fila lleva su icono y el valor de ahora, y todo cabe a 320 px |
 | B4 | Mira las ciudades de otros alfabetos en el selector de zona | En español salen «Tokio», «Seúl»… y en inglés «Tokyo», «Seoul» (solo en los de prueba que ya llevan nombres) |
 
 ## C · Dónde estoy mirando (zona y mapa)
