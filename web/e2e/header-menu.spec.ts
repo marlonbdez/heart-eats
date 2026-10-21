@@ -17,54 +17,76 @@ test('el idioma de la cabecera es solo un icono, con nombre accesible', async ({
   await expect(page.getByRole('button', { name: 'English' })).toBeVisible();
 });
 
-test('el menú lateral lleva el idioma y el tema con icono y texto', async ({
+test('el menú lateral lleva el idioma y el tema como filas con su valor', async ({
   page,
 }) => {
   await page.goto('/es');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
-  const menu = page.getByRole('dialog');
+  const menu = page.getByRole('dialog', { name: 'Menú' });
 
-  const language = menu.getByRole('group', { name: 'Idioma' });
-  await expect(language.getByRole('radio', { name: 'Español' })).toBeChecked();
-  await expect(
-    language.getByRole('radio', { name: 'English' }),
-  ).not.toBeChecked();
-
-  const theme = menu.getByRole('group', { name: 'Tema' });
-  for (const name of ['Sistema', 'Claro', 'Oscuro']) {
-    await expect(theme.getByRole('radio', { name })).toBeAttached();
-    // Cada opción lleva su icono, y ninguna ocupa más que un botón táctil.
-    const label = theme.locator('label', { hasText: name });
-    await expect(label.locator('svg')).toBeVisible();
-    expect((await label.boundingBox())!.height).toBeLessThanOrEqual(52);
+  const language = menu.getByRole('button', { name: /^Idioma/ });
+  await expect(language).toContainText('Español');
+  await expect(language).toHaveAttribute('aria-haspopup', 'dialog');
+  const theme = menu.getByRole('button', { name: /^Tema:/ });
+  await expect(theme).toContainText('Claro');
+  // Cada fila lleva su icono y es un botón táctil.
+  for (const row of [language, theme]) {
+    await expect(row.locator('svg')).toBeVisible();
+    expect((await row.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   }
 });
 
-test('elegir idioma en el menú lo cambia, lo recuerda y conserva la búsqueda', async ({
+test('elegir idioma en el menú abre un diálogo, lo cambia, lo recuerda y conserva la búsqueda', async ({
   page,
 }) => {
   await page.goto('/es?q=lavapies');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
   await page
-    .getByRole('dialog')
-    .getByRole('group', { name: 'Idioma' })
-    .getByText('English')
+    .getByRole('dialog', { name: 'Menú' })
+    .getByRole('button', { name: /^Idioma/ })
     .click();
+  const picker = page.getByRole('dialog', { name: 'Idioma' });
+  await expect(picker.getByRole('button', { name: 'Español' })).toHaveAttribute(
+    'aria-current',
+    'true',
+  );
+  await picker.getByRole('button', { name: 'English' }).click();
   await expect(page).toHaveURL(/\/en\?q=lavapies$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.getByRole('searchbox')).toHaveValue('lavapies');
   expect(
     await page.evaluate(() => localStorage.getItem('hearteats:language')),
   ).toBe('en');
-  // El menú se cierra al cambiar y ahora marca English.
-  await expect(page.getByRole('dialog')).toBeHidden();
+  // El diálogo y el menú se cierran al cambiar y ahora marca English.
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.getByRole('button', { name: 'Open menu' }).click();
   await expect(
-    page
-      .getByRole('dialog')
-      .getByRole('group', { name: 'Language' })
-      .getByRole('radio', { name: 'English' }),
-  ).toBeChecked();
+    page.getByRole('dialog', { name: 'Menu' }).getByRole('button', {
+      name: /^Language/,
+    }),
+  ).toContainText('English');
+});
+
+test('el diálogo de idiomas se cierra con Escape y con el botón, sin cerrar el menú', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  const row = page.getByRole('button', { name: /^Idioma/ });
+  await row.click();
+  const picker = page.getByRole('dialog', { name: 'Idioma' });
+  await expect(picker).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(picker).toBeHidden();
+  await expect(page.getByRole('dialog', { name: 'Menú' })).toBeVisible();
+  await expect(row).toBeFocused();
+
+  await row.click();
+  await picker
+    .getByRole('button', { name: 'Cerrar la lista de idiomas' })
+    .click();
+  await expect(picker).toBeHidden();
+  await expect(page.getByRole('dialog', { name: 'Menú' })).toBeVisible();
 });
 
 for (const width of [320, 390]) {
@@ -81,7 +103,7 @@ for (const width of [320, 390]) {
       .boundingBox())!;
     expect(language.x + language.width).toBeLessThanOrEqual(width);
     await page.getByRole('button', { name: 'Abrir menú' }).click();
-    const theme = page.getByRole('group', { name: 'Tema' });
+    const theme = page.getByRole('button', { name: /^Tema:/ });
     await expect(theme).toBeVisible();
     const box = (await theme.boundingBox())!;
     const menu = (await page.getByRole('dialog').boundingBox())!;

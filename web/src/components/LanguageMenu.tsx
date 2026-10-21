@@ -2,9 +2,8 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter } from '@/i18n/navigation';
 import { routing, type Locale } from '@/i18n/routing';
-import { saveLanguage } from '@/lib/language';
+import { useChooseLanguage } from '@/lib/use-choose-language';
 import { TranslateIcon } from './Icons';
 import styles from './LanguageMenu.module.css';
 
@@ -15,8 +14,7 @@ import styles from './LanguageMenu.module.css';
 export function LanguageMenu() {
   const t = useTranslations();
   const locale = useLocale();
-  const pathname = usePathname();
-  const router = useRouter();
+  const chooseLanguage = useChooseLanguage();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -41,12 +39,8 @@ export function LanguageMenu() {
   }, [open]);
 
   const choose = (code: Locale) => {
-    saveLanguage(code);
     setOpen(false);
-    if (code === locale) return;
-    // Cambia de idioma sin perder la búsqueda (?q, ?food), que solo se conoce
-    // en el navegador.
-    router.replace(`${pathname}${window.location.search}`, { locale: code });
+    chooseLanguage(code);
   };
 
   return (

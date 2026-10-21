@@ -1,0 +1,117 @@
+/* Una fila de ajuste del menú lateral: icono, nombre y el valor de ahora. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 8px;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.row:hover {
+  background: var(--hover);
+}
+.row:active {
+  box-shadow: inset 0 0 0 999px var(--press);
+}
+.icon {
+  flex: none;
+}
+.label {
+  flex: 1;
+  min-width: 0;
+}
+.value {
+  flex: none;
+  max-width: 50%;
+  font-weight: 700;
+  color: var(--accent-text);
+  overflow-wrap: anywhere;
+}
+
+/* Solo para lectores de pantalla. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* El diálogo de idiomas, como el de zona. */
+.picker {
+  width: min(92vw, 320px);
+  max-width: none;
+  margin: auto;
+  padding: 8px 12px 12px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+}
+.picker::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+.pickerHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pickerTitle {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--fg);
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.close:hover {
+  background: var(--hover);
+}
+.options {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.option:hover {
+  background: var(--hover);
+}
+.option[aria-current='true'] {
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--hover);
+}

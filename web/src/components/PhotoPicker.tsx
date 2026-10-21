@@ -1,11 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { PHOTO_TYPES, preparePhoto, type PreparedPhoto } from '@/lib/image';
+import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
 // Campo de una foto opcional: elegir, ver la vista previa y quitarla. La foto
-// se reduce en el navegador; la subida real llegará con el servidor.
+// se reduce en el navegador (puede tardar un par de segundos, y se avisa); se
+// sube al enviar el formulario.
 export function PhotoPicker({
   id,
   label,
@@ -26,6 +29,7 @@ export function PhotoPicker({
   onError: (error: string) => void;
 }) {
   const t = useTranslations('photo');
+  const [preparing, setPreparing] = useState(false);
 
   const remove = () => {
     if (photo) URL.revokeObjectURL(photo.url);
@@ -34,7 +38,8 @@ export function PhotoPicker({
   const choose = async (file?: File) => {
     if (!file) return;
     onError('');
-    const result = await preparePhoto(file);
+    setPreparing(true);
+    const result = await preparePhoto(file).finally(() => setPreparing(false));
     if ('error' in result) return onError(result.error);
     if (photo) URL.revokeObjectURL(photo.url);
     onChange(result.photo);
@@ -53,6 +58,10 @@ export function PhotoPicker({
             {t('remove')}
           </button>
         </div>
+      ) : preparing ? (
+        <p role="status" className={s.small}>
+          <Spinner /> {t('preparing')}
+        </p>
       ) : (
         <input
           id={id}
