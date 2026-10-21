@@ -7,6 +7,7 @@ import type { RegionCountry, Zone } from '@/lib/types';
 import { cityLabel, cityNames, findCity } from '@/lib/zone';
 import { useLocation } from './LocationProvider';
 import { Spinner } from './Spinner';
+import { Chevron } from './Chevron';
 import styles from './ZoneMenu.module.css';
 
 // Pin (Material Icons, Apache-2.0).
@@ -133,9 +134,7 @@ export function ZoneMenu({
       >
         {icon}
         <span className={styles.name}>{shownName}</span>
-        <span aria-hidden="true" className={styles.chevron}>
-          ▾
-        </span>
+        <Chevron className={styles.chevron} />
       </button>
 
       <dialog

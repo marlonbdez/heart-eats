@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { routing, type Locale } from '@/i18n/routing';
 import { saveLanguage } from '@/lib/language';
+import { Chevron } from './Chevron';
 import styles from './LanguageMenu.module.css';
 
 // Globo (Material Icons, Apache-2.0).
@@ -80,9 +81,7 @@ export function LanguageMenu() {
           <path d={GLOBE_PATH} />
         </svg>
         <span className={styles.code}>{locale.toUpperCase()}</span>
-        <span aria-hidden="true" className={styles.chevron}>
-          ▾
-        </span>
+        <Chevron className={styles.chevron} />
       </button>
       <ul id="language-list" className={styles.list} hidden={!open}>
         {routing.locales.map((code) => (

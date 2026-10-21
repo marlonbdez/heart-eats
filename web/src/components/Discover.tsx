@@ -20,6 +20,7 @@ import {
 } from '@/lib/zone';
 import { DiscoveryProvider } from './DiscoveryContext';
 import { FoodFilters } from './FoodFilters';
+import { Tagline } from './Tagline';
 import { useLocation } from './LocationProvider';
 import { MapLoader } from './MapLoader';
 import type { MapMove } from './MapView';
@@ -351,7 +352,7 @@ export function Discover({
           {showList && (
             <div key="list" className={styles.listPane}>
               <div className={styles.listScroll} ref={listRef}>
-                <p className={styles.tagline}>{t('app.tagline')}</p>
+                <Tagline className={styles.tagline} />
                 <div className={styles.listHeader}>
                   <p role="status" className={styles.countInline}>
                     {t(

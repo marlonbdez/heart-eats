@@ -25,7 +25,7 @@
   fill: currentColor;
 }
 .chevron {
-  font-size: 0.7rem;
+  flex: none;
 }
 /* En pantallas muy estrechas el globo basta: el código sigue visible. */
 @media (max-width: 359px) {
