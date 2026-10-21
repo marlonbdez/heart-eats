@@ -190,4 +190,4 @@ Ampliación de `Suggestion` (`01_ESPECIFICACION_DATOS.md` §2.3) con lo que nece
 1. ❓ Cómo revisa Moderación el **contenido** de las historias antes de publicarlas (CU-22): un administrador las lee al abrir la solicitud (`team.storyTexts`) y desaparecen de ella al decidir. Falta decidir si hace falta un registro de quién las abre y si se cifran en reposo.
 2. ❓ Límites exactos de envíos por IP.
 3. ❓ Plazos de borrado del correo (270 días) y de las historias retiradas (21 días), provisionales hasta la revisión legal (`08_PRIVACIDAD_LEGAL.md`).
-4. ❓ Si la API pública de datos abiertos (ODbL) se expone aparte, con su propio formato.
+4. ✅ No hay API pública de datos abiertos: los datos de HeartEats no se ofrecen para descarga ni reutilización (ADR 0009). La API es la de la web.

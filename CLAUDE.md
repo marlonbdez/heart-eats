@@ -48,4 +48,4 @@ Desde `web/`: `npm run dev`, `npm run lint`, `npm run typecheck`, `npm run build
 
 ## Decisiones ya tomadas (no reabrir sin motivo)
 
-Licencias AGPL-3.0 / ODbL / CC BY-SA (ADR 0001) · MapLibre + OpenFreeMap (0002) · ES/EN con URLs en inglés (0003) · logo del corazón mordido (0004) · sin PWA por ahora · correo con reenvío gratuito.
+Licencias: código AGPL-3.0, documentación CC BY-SA, datos y personas con todos los derechos reservados y sin descarga (ADR 0009) · MapLibre + OpenFreeMap (0002) · ES/EN con URLs en inglés (0003) · logo del corazón mordido (0004) · sin PWA por ahora · correo con reenvío gratuito.

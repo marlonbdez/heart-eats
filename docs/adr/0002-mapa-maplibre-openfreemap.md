@@ -34,5 +34,5 @@ HeartEats es software libre sin ánimo de lucro y sin presupuesto: no podemos de
 ## Consecuencias
 
 - La atribución (OpenFreeMap, OpenMapTiles, OpenStreetMap) debe permanecer visible en el mapa.
-- Los datos de OpenStreetMap implican respetar ODbL (ver ADR 0001).
+- Los datos de OpenStreetMap mantienen su licencia (ODbL) y su atribución (ver ADR 0009).
 - Hay que comprobar en el navegador (WebGL) el comportamiento en móviles antiguos y ofrecer alternativa si falla.

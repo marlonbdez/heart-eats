@@ -39,7 +39,8 @@
       "cookies": "Cookies y almacenamiento",
       "legal": "Aviso legal",
       "contact": "Contacto",
-      "removal": "Pedir una retirada"
+      "removal": "Pedir una retirada",
+      "contribute": "Cómo ayudar"
     },
     "closeLanguage": "Cerrar la lista de idiomas"
   },
@@ -408,7 +409,7 @@
       {
         "heading": "Abierto y sin ánimo de lucro",
         "paragraphs": [
-          "HeartEats es un proyecto sin ánimo de lucro. Su código es abierto (licencia AGPL-3.0) y también lo es la base de datos de negocios (licencia ODbL). Las historias, los nombres y las fotos de las personas quedan fuera de esa licencia. El mapa se apoya en datos abiertos y siempre muestra su origen."
+          "HeartEats es un proyecto sin ánimo de lucro. Su código es abierto (licencia AGPL-3.0): cualquiera puede verlo y proponer mejoras, y las revisa una persona del proyecto. Los datos de los locales, las fotos y, sobre todo, las historias, los nombres y las fotos de las personas se ven en esta web y no se ofrecen para descarga ni reutilización. El mapa se apoya en datos abiertos y siempre muestra su origen."
         ]
       },
       {
@@ -640,7 +641,7 @@
           "Una historia sin consentimiento registrado no se guarda.",
           "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 21 días.",
           "En equipos pequeños (menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.",
-          "Las historias, nombres y fotos no están bajo licencia abierta y nunca se incluyen en las exportaciones de datos abiertos."
+          "Las historias, nombres y fotos no se ofrecen para descarga ni reutilización: solo se ven en HeartEats, con permiso y retirables."
         ]
       },
       {
@@ -656,9 +657,9 @@
         ]
       },
       {
-        "heading": "Datos abiertos",
+        "heading": "Datos",
         "paragraphs": [
-          "La base de datos de negocios se publica bajo licencia ODbL: nombre, dirección, tipo de cocina, nivel de verificación y cifras agregadas. No incluye historias, nombres, fotos, correos ni datos de quien propone o corrige."
+          "No ofrecemos una descarga de la base de datos de negocios: se ve en esta web y no se expone de otra forma. Los datos de los locales y las fotos son de HeartEats, con todos los derechos reservados, y el mapa mantiene la licencia y la atribución de OpenStreetMap. Las historias, nombres, fotos, correos y datos de quien propone o corrige nunca salen de HeartEats."
         ]
       },
       {
@@ -736,10 +737,11 @@
       {
         "heading": "Licencias",
         "items": [
-          "El código es libre, con licencia AGPL-3.0.",
-          "La base de datos de negocios, con licencia ODbL, y la documentación, con CC BY-SA 4.0.",
-          "Las historias, los nombres y las fotos de personas no tienen licencia abierta: se muestran solo con su permiso y se pueden retirar.",
-          "El mapa usa datos de OpenStreetMap, © colaboradores de OpenStreetMap."
+          "El código es libre, con licencia AGPL-3.0: puedes usarlo y mejorarlo, y quien ofrezca una versión modificada como servicio debe compartir sus cambios.",
+          "La documentación del proyecto tiene licencia CC BY-SA 4.0.",
+          "Los datos de HeartEats (locales, fichas, categorías, verificación) y las fotos de los locales se muestran en esta web y no se ofrecen para descarga ni reutilización: todos los derechos reservados.",
+          "Las historias, los nombres y las fotos de personas, igualmente, solo se muestran aquí con su permiso, que se puede retirar.",
+          "El mapa usa datos de OpenStreetMap, © colaboradores de OpenStreetMap, con su propia licencia."
         ],
         "links": [
           {
@@ -751,7 +753,7 @@
       {
         "heading": "Uso adecuado",
         "paragraphs": [
-          "Te pedimos un uso respetuoso: no enviar datos falsos a propósito, ni nombres o datos de salud de otras personas sin su permiso, ni saturar los formularios con envíos automáticos. Podemos descartar lo que no cumpla."
+          "Te pedimos un uso respetuoso: no enviar datos falsos a propósito, ni nombres o datos de salud de otras personas sin su permiso, ni saturar los formularios con envíos automáticos. Tampoco copiar de forma masiva los datos ni las fotos de la web (por ejemplo, con programas que la recorran entera) para publicarlos o usarlos en otro sitio; si quieres usarlos para algo concreto, escríbenos. Podemos descartar lo que no cumpla."
         ]
       },
       {
@@ -900,6 +902,96 @@
           {
             "label": "Avisar de un fallo en GitHub",
             "href": "https://github.com/marlonbdez/heart-eats/issues"
+          },
+          {
+            "label": "Cómo ayudar",
+            "href": "/contribute"
+          }
+        ]
+      }
+    ]
+  },
+  "contribute": {
+    "title": "Cómo ayudar",
+    "intro": "HeartEats es de código abierto y sin ánimo de lucro, y se construye mejor entre muchas personas. No hace falta saber programar: hay una forma de ayudar para casi todo el mundo.",
+    "sections": [
+      {
+        "heading": "Programar",
+        "paragraphs": [
+          "El código es abierto (AGPL-3.0). Puedes mirarlo, avisar de un fallo o proponer un cambio. Cada cambio lo revisa y lo aprueba una persona del proyecto antes de entrar, con calma y con ganas de que salga bien."
+        ],
+        "links": [
+          {
+            "label": "Ver el código y las incidencias",
+            "href": "https://github.com/marlonbdez/heart-eats"
+          },
+          {
+            "label": "Cómo proponer un cambio",
+            "href": "https://github.com/marlonbdez/heart-eats/blob/main/CONTRIBUTING.md"
+          }
+        ]
+      },
+      {
+        "heading": "Diseñar y cuidar la accesibilidad",
+        "paragraphs": [
+          "Si diseñas, o usas lector de pantalla, teclado o letra grande, tu mirada vale mucho. Cuéntanos qué se hace difícil y cómo lo mejorarías. Aspiramos a cumplir las pautas WCAG 2.2 AA, pero ninguna prueba automática sustituye a una persona."
+        ],
+        "links": [
+          {
+            "label": "Contarnos una mejora",
+            "href": "mailto:contact@hearteats.org"
+          }
+        ]
+      },
+      {
+        "heading": "Moderar y verificar locales",
+        "paragraphs": [
+          "Cada local lo revisa una persona antes de publicarse. Si conoces bien tu barrio o tu ciudad y te gusta comprobar las cosas con cuidado, escríbenos y te contamos cómo se hace. Quien modera entra por invitación y decide solo en su zona."
+        ],
+        "links": [
+          {
+            "label": "Escribir a contact@hearteats.org",
+            "href": "mailto:contact@hearteats.org"
+          }
+        ]
+      },
+      {
+        "heading": "Traducir y revisar textos",
+        "paragraphs": [
+          "La web está en español y en inglés, y queremos que cada idioma suene natural. Si el inglés es tu lengua, o dominas otro idioma, ayúdanos a revisar los textos. No abrimos más idiomas hasta que alguien nativo pueda revisarlos."
+        ],
+        "links": [
+          {
+            "label": "Ofrecerte a revisar textos",
+            "href": "mailto:contact@hearteats.org"
+          }
+        ]
+      },
+      {
+        "heading": "Proponer locales y corregir datos",
+        "paragraphs": [
+          "La forma más directa: conoces un sitio con un equipo inclusivo, o ves un dato que ya no es cierto. Sin cuenta y en un par de minutos."
+        ],
+        "links": [
+          {
+            "label": "Proponer un local",
+            "href": "/propose"
+          },
+          {
+            "label": "Corregir un dato",
+            "href": "/correct"
+          }
+        ]
+      },
+      {
+        "heading": "Una cosa que no cambia",
+        "paragraphs": [
+          "Las historias, los nombres y las fotos de las personas del equipo no se abren ni se descargan: solo se ven en HeartEats, con su permiso y pudiendo retirarse cuando quieran. Y todo el proyecto se rige por un código de conducta con un trato respetuoso y sin paternalismo."
+        ],
+        "links": [
+          {
+            "label": "Ver el código de conducta",
+            "href": "https://github.com/marlonbdez/heart-eats/blob/main/CODE_OF_CONDUCT.md"
           }
         ]
       }

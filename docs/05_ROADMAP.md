@@ -107,6 +107,7 @@ La web debe servir a cualquier lugar del mundo, en el idioma de cada persona, si
 - [ ] **Revisión legal** de privacidad y consentimientos (los plazos de conservación son provisionales)
 - [ ] **P6** estructura legal: hoy figura Marlon Bermúdez como responsable; decidir cuándo se constituye la asociación
 - [ ] **P8** búsqueda de marca (OEPM / EUIPO)
+- [x] Licencias en pocas palabras (ADR 0009): código AGPL-3.0 con PRs aprobadas por el responsable (`CODEOWNERS`, DCO), documentación CC BY-SA, datos de HeartEats y personas con todos los derechos reservados y sin descarga, OpenStreetMap con su atribución; `/legal`, `/privacy`, `/about`, README y `CONTRIBUTING` dicen lo mismo. Página «Cómo ayudar» (`/contribute`) con cinco vías (programar, diseñar y accesibilidad, moderar y verificar, traducir y revisar, proponer y corregir)
 - [x] Aviso legal (`/legal`) y política de cookies y almacenamiento (`/cookies`), en borrador; falta añadir domicilio y número fiscal (P6) y la revisión legal
 - [x] Revisión editorial del inglés hecha en octubre de 2026 (por IA, `fix/revision-ingles`)
 - [ ] Revisión del inglés por una persona nativa, antes de abrir al público

@@ -22,6 +22,7 @@ export const navGroups: NavGroup[] = [
       { href: '/propose', key: 'propose' },
       { href: '/correct', key: 'correct' },
       { href: '/business', key: 'business' },
+      { href: '/contribute', key: 'contribute' },
     ],
   },
   {

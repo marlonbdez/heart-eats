@@ -24,6 +24,7 @@ const PAGES = [
   '/cookies',
   '/legal',
   '/contact',
+  '/contribute',
 ];
 
 test.use({ viewport: { width: 360, height: 780 } });

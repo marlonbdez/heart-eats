@@ -21,7 +21,7 @@ Quien propone un local escribe calle, código postal y ciudad; el mapa necesita 
 
 - Cero coste y cero cuentas.
 - El volumen está muy por debajo del límite; geocodificar en moderación en vez de al enviar evita que cualquiera pueda gastar peticiones con el formulario.
-- Los datos de OpenStreetMap ya son parte del proyecto (ODbL, ADR 0001).
+- Los datos de OpenStreetMap ya son parte del proyecto (con su licencia y su atribución, ADR 0009).
 
 ## Plan B
 

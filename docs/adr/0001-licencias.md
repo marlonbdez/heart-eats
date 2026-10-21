@@ -1,6 +1,6 @@
 # ADR 0001 · Licencias
 
-- **Estado:** aceptada (pendiente de revisión legal antes del lanzamiento público)
+- **Estado:** sustituida en parte por la [ADR 0009](0009-licencias-simplificadas.md) (los datos de negocios ya no se publican bajo ODbL); el código (AGPL-3.0) y la documentación (CC BY-SA 4.0) siguen igual
 - **Fecha:** 2026-10-06
 - **Resuelve:** P2
 
