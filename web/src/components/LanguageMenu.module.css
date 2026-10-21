@@ -5,12 +5,11 @@
 .button {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
   min-width: 44px;
   min-height: 44px;
-  padding: 0 6px;
+  padding: 0;
   font: inherit;
-  font-weight: 600;
   color: var(--fg);
   background: none;
   border: 0;
@@ -22,18 +21,7 @@
 }
 .icon {
   flex: none;
-  fill: currentColor;
 }
-.chevron {
-  flex: none;
-}
-/* En pantallas muy estrechas el globo basta: el código sigue visible. */
-@media (max-width: 359px) {
-  .chevron {
-    display: none;
-  }
-}
-
 .list {
   position: absolute;
   top: calc(100% + 4px);
