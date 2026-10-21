@@ -1119,6 +1119,7 @@
       "label": "Sections",
       "queue": "Requests",
       "photos": "Photos",
+      "retired": "Withdrawn",
       "staff": "Users",
       "audit": "Log"
     },
@@ -1169,6 +1170,31 @@
         "add": "We could not upload the photo. You can try again.",
         "tooMany": "The gallery is full. Remove a photo to add another.",
         "none": "Choose a photo to add."
+      }
+    },
+    "retired": {
+      "title": "Withdrawn",
+      "intro": "Whatever is withdrawn stops being shown right away and is deleted for good once the period ends. Here you can see what is left to delete and when.",
+      "listingsTitle": "Listings",
+      "noListings": "No listing is waiting to be deleted.",
+      "storiesTitle": "Stories",
+      "storiesHelp": "Their content is no longer shown and will be deleted on the date given. They cannot be restored: withdrawing a story means withdrawing the person’s consent.",
+      "noStories": "No story is waiting to be deleted.",
+      "story": "{name} · story {n}",
+      "retiredOn": "Withdrawn on {date}",
+      "deleteOn": "{days, plural, =0 {Deleted today} one {Deleted on {date} (in 1 day)} other {Deleted on {date} (in # days)}}",
+      "restore": "Restore",
+      "restoreLabel": "Restore {name}",
+      "confirmAsk": "Restore {name}? It will show on the map again right away and the deletion period will stop counting.",
+      "confirm": "Confirm restore",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "notice": {
+        "restored": "Done: {name} is visible on HeartEats again.",
+        "gone": "{name} was no longer waiting to be deleted: it may already have been deleted or restored."
+      },
+      "errors": {
+        "restore": "We could not restore it. You can try again."
       }
     },
     "staff": {
@@ -1232,7 +1258,8 @@
         "purge_email": "Email deleted",
         "purge_listing": "Listing deleted",
         "purge_stories": "Stories deleted",
-        "revoke_story": "Story removed"
+        "revoke_story": "Story removed",
+        "restore": "Listing restored"
       },
       "by": "by {email}",
       "system": "by the system",

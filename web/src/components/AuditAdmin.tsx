@@ -30,6 +30,7 @@ const knownActions = new Set([
   'purge_email',
   'purge_listing',
   'purge_stories',
+  'restore',
   'revoke_story',
 ]);
 

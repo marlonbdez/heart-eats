@@ -1119,6 +1119,7 @@
       "label": "Secciones",
       "queue": "Solicitudes",
       "photos": "Fotos",
+      "retired": "Retiradas",
       "staff": "Usuarios",
       "audit": "Registro"
     },
@@ -1169,6 +1170,31 @@
         "add": "No hemos podido subir la foto. Puedes intentarlo de nuevo.",
         "tooMany": "La galería ya está completa. Retira alguna foto para añadir otra.",
         "none": "Elige una foto para añadir."
+      }
+    },
+    "retired": {
+      "title": "Retiradas",
+      "intro": "Lo que se ha retirado deja de verse al momento y se borra del todo pasado el plazo. Aquí ves qué queda por borrar y cuándo.",
+      "listingsTitle": "Fichas",
+      "noListings": "No hay ninguna ficha pendiente de borrar.",
+      "storiesTitle": "Historias",
+      "storiesHelp": "Su contenido ya no se ve y se borrará en la fecha indicada. No se pueden restaurar: retirar una historia es retirar el consentimiento de la persona.",
+      "noStories": "No hay ninguna historia pendiente de borrar.",
+      "story": "{name} · historia {n}",
+      "retiredOn": "Retirada el {date}",
+      "deleteOn": "{days, plural, =0 {Se borra hoy} one {Se borra el {date} (en 1 día)} other {Se borra el {date} (en # días)}}",
+      "restore": "Restaurar",
+      "restoreLabel": "Restaurar {name}",
+      "confirmAsk": "¿Restaurar {name}? Volverá a verse en el mapa ahora mismo y dejará de contar el plazo de borrado.",
+      "confirm": "Confirmar restauración",
+      "cancel": "Cancelar",
+      "saving": "Guardando…",
+      "notice": {
+        "restored": "Listo: {name} vuelve a verse en HeartEats.",
+        "gone": "{name} ya no estaba pendiente de borrar: puede que ya se haya borrado o restaurado."
+      },
+      "errors": {
+        "restore": "No hemos podido restaurarla. Puedes intentarlo de nuevo."
       }
     },
     "staff": {
@@ -1232,7 +1258,8 @@
         "purge_email": "Correo borrado",
         "purge_listing": "Ficha borrada",
         "purge_stories": "Historias borradas",
-        "revoke_story": "Historia retirada"
+        "revoke_story": "Historia retirada",
+        "restore": "Ficha restaurada"
       },
       "by": "por {email}",
       "system": "por el sistema",

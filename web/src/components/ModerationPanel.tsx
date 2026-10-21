@@ -18,15 +18,18 @@ import { AuditAdmin } from './AuditAdmin';
 import { ModerationDetail } from './ModerationDetail';
 import { PlacePhotosAdmin } from './PlacePhotosAdmin';
 import { Remote } from './Remote';
+import { RetiredAdmin } from './RetiredAdmin';
 import { StaffAdmin } from './StaffAdmin';
 import form from './Form.module.css';
 import styles from './Moderation.module.css';
 
 type Tab = 'pending' | 'resolved';
-type Section = 'queue' | 'photos' | 'staff' | 'audit';
-// Usuarios y registro son solo de administración.
+type Section = 'queue' | 'photos' | 'retired' | 'staff' | 'audit';
+// Lo retirado, los usuarios y el registro son solo de administración.
 const sectionsFor = (isAdmin: boolean): Section[] =>
-  isAdmin ? ['queue', 'photos', 'staff', 'audit'] : ['queue', 'photos'];
+  isAdmin
+    ? ['queue', 'photos', 'retired', 'staff', 'audit']
+    : ['queue', 'photos'];
 
 // Las tres listas de la cola: lo pendiente, lo que espera respuesta de quien
 // propuso y lo ya resuelto.
@@ -107,7 +110,9 @@ export function ModerationPanel({
               ?.country
           }
         />
-      ) : !isAdmin ? null : section === 'staff' ? (
+      ) : !isAdmin ? null : section === 'retired' ? (
+        <RetiredAdmin />
+      ) : section === 'staff' ? (
         <StaffAdmin />
       ) : (
         <AuditAdmin />

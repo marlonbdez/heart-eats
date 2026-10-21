@@ -12,6 +12,7 @@ import { regionsRouter } from './regions.js';
 import { restaurantPhotosRouter } from './restaurant-photos.js';
 import { repliesRouter } from './replies.js';
 import { reportsRouter } from './reports.js';
+import { retiredRouter } from './retired.js';
 import { restaurantsRouter } from './restaurants.js';
 import { suggestionsRouter } from './suggestions.js';
 import { uploadsRouter } from './uploads.js';
@@ -81,6 +82,7 @@ export function createApiRouter({
     restaurantPhotosRouter({ allowedOrigins, store: photoStore, apiUrl }),
   );
   api.use(auditRouter({ allowedOrigins }));
+  api.use(retiredRouter({ allowedOrigins }));
   api.use(usersRouter({ allowedOrigins }));
   return api;
 }

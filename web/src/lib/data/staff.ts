@@ -2,12 +2,13 @@ import { sessionDelete, sessionGet, sessionPost } from '../api';
 import type {
   AuditEntity,
   AuditPage,
+  Retired,
   StaffInvite,
   StaffMember,
 } from '../types';
 
-// Administración (solo `admin`; docs/02_API_SPEC.md): quién modera y el
-// registro de lo que se ha hecho.
+// Administración (solo `admin`; docs/02_API_SPEC.md): quién modera, lo
+// retirado que espera su borrado y el registro de lo que se ha hecho.
 
 export async function getStaff(): Promise<StaffMember[]> {
   return (await sessionGet<{ items: StaffMember[] }>('/users')).items;
@@ -42,4 +43,14 @@ export async function getAudit(
     cursor,
     limit: AUDIT_PAGE,
   });
+}
+
+// Lo retirado que está a la espera de borrarse, con el día en que se borrará.
+export async function getRetired(): Promise<Retired> {
+  return sessionGet<Retired>('/retired');
+}
+
+// Devuelve una ficha retirada por error. Las historias no se restauran.
+export async function restoreListing(id: string) {
+  await sessionPost(`/retired/listings/${id}/restore`);
 }
