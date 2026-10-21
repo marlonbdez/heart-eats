@@ -115,7 +115,13 @@ function decisionBody(item: ModerationItem, d: ModerationDecision) {
       storyIndex: d.storyIndex,
     };
   }
-  if (item.kind === 'team') return { action: 'approve', ownerConfirmed: true };
+  if (item.kind === 'team') {
+    return {
+      action: 'approve',
+      ownerConfirmed: true,
+      skipPhotos: d.skipPhotos,
+    };
+  }
   return { action: 'approve', ...d.change };
 }
 

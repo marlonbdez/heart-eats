@@ -60,7 +60,7 @@ lib/data/index.ts   ← FRONTERA con el backend
 API → Suggestion «pending» → cola de moderación (§6.2 y §6.4 de 14_PRODUCCION.md)
 ```
 
-La lectura sigue el mismo patrón: `getRegions()`, `getRestaurants(zona)`, `getRestaurantsIn(rectángulo)`, `getRestaurant()` y `getFoodTags()` llaman a la API. Las fotos no se envían todavía (`web/src/lib/features.ts`).
+La lectura sigue el mismo patrón: `getRegions()`, `getRestaurants(zona)`, `getRestaurantsIn(rectángulo)`, `getRestaurant()` y `getFoodTags()` llaman a la API. Las fotos de un local nuevo y las de las personas del equipo se suben a la cuarentena antes de enviar (`uploadPhoto`).
 
 ## Dónde está cada cosa
 

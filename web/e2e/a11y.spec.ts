@@ -239,6 +239,36 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('negocio: foto de una persona (vista previa y error de archivo)', async ({
+      page,
+    }) => {
+      await page.goto('/es/business/demo-la-masa-madre');
+      await page.getByRole('button', { name: 'Empezar' }).click();
+      await page.getByLabel(/Historias con nombre/).check();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await page.getByLabel('Personas en el equipo').fill('11');
+      await page.getByLabel('De ellas, con discapacidad').fill('4');
+      await page.locator('#p0p').setInputFiles({
+        name: 'nota.txt',
+        mimeType: 'text/plain',
+        buffer: Buffer.from('hola'),
+      });
+      await expect(page.locator('p[role=alert]').first()).toBeVisible();
+      await expectNoViolations(page);
+      await page.locator('#p0p').setInputFiles({
+        name: 'foto.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+          'base64',
+        ),
+      });
+      await expect(
+        page.getByRole('img', { name: 'Foto de la persona 1' }),
+      ).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('negocio: aviso de demasiados envíos', async ({ page }) => {
       await page.route(`${API}/teams`, (route) =>
         route.fulfill({

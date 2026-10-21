@@ -111,6 +111,13 @@ export const suggestions: ApiSuggestion[] = [
           role: 'Cocina',
           storyText: 'Texto de ejemplo de una historia.',
           consentBy: 'self',
+          // Su foto en cuarentena, como la devuelve la API a un administrador.
+          photo: {
+            key: 'q/0b8e3a52-5a43-4b8a-9d5e-0000000000a1.webp',
+            url: 'http://localhost:3001/api/v1/suggestions/s7/photos/0b8e3a52-5a43-4b8a-9d5e-0000000000a1.webp',
+            thumbUrl:
+              'http://localhost:3001/api/v1/suggestions/s7/photos/0b8e3a52-5a43-4b8a-9d5e-0000000000a1-thumb.webp',
+          },
         },
       ],
     },

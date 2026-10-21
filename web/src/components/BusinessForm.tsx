@@ -4,7 +4,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { isRateLimited } from '@/lib/api';
 import { submitBusinessTeam } from '@/lib/data';
-import { teamPhotoUploads } from '@/lib/features';
 import { Link } from '@/i18n/navigation';
 import type { PreparedPhoto } from '@/lib/image';
 import { isSmallTeam } from '@/lib/team';
@@ -16,7 +15,6 @@ import type {
   TeamLevel,
 } from '@/lib/types';
 import { isEmail } from '@/lib/validation';
-import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
 import { TeamBlock } from './TeamBlock';
 import { SlowNotice } from './SlowNotice';
@@ -25,7 +23,6 @@ import s from './Form.module.css';
 
 const STEPS = 4;
 const MAX_STORIES = 3;
-const MAX_PHOTOS = 3;
 const LEVELS: TeamLevel[] = ['minimal', 'medium', 'full'];
 const AREAS: TeamArea[] = ['kitchen', 'dining', 'bar', 'workshop', 'delivery'];
 const TYPES: DisabilityType[] = [
@@ -50,6 +47,7 @@ interface StoryState {
   text: string;
   consentBy: ConsentBy;
   consent: boolean;
+  photo?: PreparedPhoto; // reducida; no sale del navegador hasta enviar
 }
 interface FormState {
   slug: string;
@@ -59,8 +57,6 @@ interface FormState {
   areas: TeamArea[];
   types: DisabilityType[];
   stories: StoryState[];
-  photos: PreparedPhoto[]; // reducidas; no salen del navegador hasta enviar
-  photoConsent: boolean;
   email: string;
   ack: boolean;
   website: string; // honeypot
@@ -81,8 +77,6 @@ const initial: FormState = {
   areas: [],
   types: [],
   stories: [emptyStory],
-  photos: [],
-  photoConsent: false,
   email: '',
   ack: false,
   website: '',
@@ -114,7 +108,11 @@ export function BusinessForm({
   const [status, setStatus] = useState<
     'idle' | 'sending' | 'error' | 'limited' | 'done'
   >('idle');
-  const [photoError, setPhotoError] = useState('');
+  // El aviso de la foto de una persona (la que se acaba de elegir).
+  const [photoError, setPhotoError] = useState<{
+    story: number;
+    key: string;
+  }>();
   const isDone = status === 'done';
   const headingRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -163,6 +161,7 @@ export function BusinessForm({
         displayName: st.name.trim(),
         role: st.role.trim(),
         storyText: st.text.trim(),
+        ...(st.photo && { photoUrl: st.photo.url }),
       })),
     }),
   });
@@ -179,8 +178,6 @@ export function BusinessForm({
         form.stories.forEach((st, i) => {
           if (!storyIsComplete(st)) next[`story${i}`] = true;
         });
-      if (form.photos.length > 0 && !form.photoConsent)
-        next.photoConsent = true;
     }
     if (step === 4) {
       if (!isEmail(form.email.trim())) next.email = true;
@@ -203,8 +200,8 @@ export function BusinessForm({
         stories: team.stories?.map((st, i) => ({
           ...st,
           consentBy: form.stories[i].consentBy,
+          photo: form.stories[i].photo,
         })),
-        photos: form.photos.map((p) => p.blob),
         contactEmail: form.email.trim(),
         website: form.website,
         locale,
@@ -222,8 +219,8 @@ export function BusinessForm({
   };
 
   const reset = () => {
-    form.photos.forEach((p) => URL.revokeObjectURL(p.url));
-    setPhotoError('');
+    form.stories.forEach((st) => st.photo && URL.revokeObjectURL(st.photo.url));
+    setPhotoError(undefined);
     setForm(initial);
     setErrors({});
     setStep(1);
@@ -256,6 +253,9 @@ export function BusinessForm({
   const sending = status === 'sending';
   const guarantees = t.raw('s1.guarantees') as string[];
   const showDetails = level !== 'minimal';
+  // Las fotos de las personas solo viajan con las historias del nivel completo.
+  const photoCount =
+    level === 'full' ? form.stories.filter((st) => st.photo).length : 0;
 
   return (
     <main id="contenido" className={s.main}>
@@ -510,6 +510,23 @@ export function BusinessForm({
                       value={st.text}
                       onChange={(e) => setStory(i, { text: e.target.value })}
                     />
+                    <p id={`p${i}p-hint`} className={s.small}>
+                      {t('s3.personPhotoHint')}
+                    </p>
+                    <PhotoPicker
+                      id={`p${i}p`}
+                      label={t('s3.personPhoto')}
+                      alt={t('s3.personPhotoAlt', { n: i + 1 })}
+                      photo={st.photo}
+                      error={
+                        photoError?.story === i ? photoError.key : undefined
+                      }
+                      describedBy={`p${i}p-hint`}
+                      onChange={(photo) => setStory(i, { photo })}
+                      onError={(key) =>
+                        setPhotoError(key ? { story: i, key } : undefined)
+                      }
+                    />
                     <fieldset className={s.options}>
                       <legend className={s.label}>{t('s3.who')}</legend>
                       {(['self', 'legal_representative'] as const).map((w) => (
@@ -552,12 +569,14 @@ export function BusinessForm({
                       <button
                         type="button"
                         className={s.linkButton}
-                        onClick={() =>
+                        onClick={() => {
+                          if (st.photo) URL.revokeObjectURL(st.photo.url);
+                          setPhotoError(undefined);
                           set(
                             'stories',
                             form.stories.filter((_, j) => j !== i),
-                          )
-                        }
+                          );
+                        }}
                       >
                         {t('s3.remove')}
                       </button>
@@ -578,51 +597,6 @@ export function BusinessForm({
                 <p className={s.small}>{t('s3.consentNote')}</p>
               </>
             )}
-            {teamPhotoUploads && (
-              <div className={s.card}>
-                <h2 className={s.cardTitle}>{t('s3.photosTitle')}</h2>
-                <p id="b-photo-hint" className={s.small}>
-                  {t('s3.photosHint')}
-                </p>
-                {form.photos.map((photo, i) => (
-                  <PhotoPicker
-                    key={photo.url}
-                    id={`b-photo-${i}`}
-                    label={t('s3.photoLabel', { n: i + 1 })}
-                    alt={t('s3.photoAlt', { n: i + 1 })}
-                    photo={photo}
-                    onChange={() =>
-                      set(
-                        'photos',
-                        form.photos.filter((_, j) => j !== i),
-                      )
-                    }
-                    onError={setPhotoError}
-                  />
-                ))}
-                {form.photos.length < MAX_PHOTOS && (
-                  <PhotoPicker
-                    id="b-photo-new"
-                    label={t('s3.photoLabel', { n: form.photos.length + 1 })}
-                    alt=""
-                    error={photoError}
-                    describedBy="b-photo-hint"
-                    onChange={(photo) =>
-                      photo && set('photos', [...form.photos, photo])
-                    }
-                    onError={setPhotoError}
-                  />
-                )}
-                {form.photos.length > 0 && (
-                  <PhotoConsent
-                    id="b-photo-consent"
-                    checked={form.photoConsent}
-                    error={errors.photoConsent}
-                    onChange={(v) => set('photoConsent', v)}
-                  />
-                )}
-              </div>
-            )}
           </div>
         )}
 
@@ -632,9 +606,9 @@ export function BusinessForm({
             <div className={s.field}>
               <p className={s.label}>{place?.name}</p>
               <TeamBlock team={buildTeam()} level={level} />
-              {form.photos.length > 0 && (
+              {photoCount > 0 && (
                 <p className={s.small}>
-                  {t('s4.photos', { count: form.photos.length })}
+                  {t('s4.photos', { count: photoCount })}
                 </p>
               )}
             </div>

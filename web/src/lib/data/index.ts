@@ -129,12 +129,16 @@ export async function submitCorrection(input: CorrectionInput): Promise<void> {
 }
 
 // El equipo que cuenta un negocio (POST /api/v1/teams). Entra en moderación,
-// que escribe al correo para confirmar que lo envía el negocio. Las fotos no
-// se envían todavía (falta POST /uploads).
+// que escribe al correo para confirmar que lo envía el negocio. Primero suben
+// las fotos de las personas (si las hay) y el envío lleva sus claves; si una
+// subida falla, no se envía nada y las ya subidas caducan solas a las 24 h.
 export async function submitBusinessTeam(
   input: BusinessTeamInput,
 ): Promise<void> {
   if (input.website) return; // honeypot: se descarta en silencio
+  const photoKeys = await Promise.all(
+    (input.stories ?? []).map(({ photo }) => photo && uploadPhoto(photo)),
+  );
   await apiPost('/teams', {
     restaurantSlug: input.restaurantSlug,
     level: input.level,
@@ -142,11 +146,12 @@ export async function submitBusinessTeam(
     areas: input.areas,
     disabilityTypes: input.disabilityTypes,
     stories: input.stories?.map(
-      ({ displayName, role, storyText, consentBy }) => ({
+      ({ displayName, role, storyText, consentBy }, i) => ({
         displayName,
         role,
         storyText,
         consentBy,
+        photoKey: photoKeys[i],
       }),
     ),
     contactEmail: input.contactEmail,
