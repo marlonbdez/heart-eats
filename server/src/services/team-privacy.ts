@@ -1,5 +1,6 @@
 import type { TeamRecord } from '../models/team.js';
 import type { PublicTeam } from '../types.js';
+import { photoUrls } from './photo-keys.js';
 
 // Por debajo de este tamaño, dar detalles puede hacer reconocible a una
 // persona. ❓ Umbral provisional (docs/01_ESPECIFICACION_DATOS.md §2.2). Es el
@@ -15,6 +16,7 @@ export const SMALL_TEAM_THRESHOLD = 5;
 export function publicTeam(
   team: TeamRecord | null | undefined,
   ownerConfirmedAt: Date | undefined,
+  apiUrl?: string,
 ): PublicTeam | undefined {
   if (!team) return undefined;
 
@@ -39,12 +41,16 @@ export function publicTeam(
   if (team.visibilityLevel === 'full') {
     const stories = (team.stories ?? [])
       .filter((s) => s.consentRecordedAt && !s.revokedAt)
-      .map(({ displayName, role, storyText, photoUrl }) => ({
-        displayName,
-        role,
-        storyText,
-        ...(photoUrl ? { photoUrl } : {}),
-      }));
+      .map(({ displayName, role, storyText, photo, photoUrl }) => {
+        // La foto de una persona se enseña pequeña: sale la miniatura.
+        const url = photo ? photoUrls(apiUrl).thumb(photo) : photoUrl;
+        return {
+          displayName,
+          role,
+          storyText,
+          ...(url ? { photoUrl: url } : {}),
+        };
+      });
     if (stories.length) result.stories = stories;
   }
 

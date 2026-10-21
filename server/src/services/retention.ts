@@ -20,12 +20,21 @@ export const CONTACT_EMAIL_DAYS = 270;
 
 const BATCH = 100;
 
+// Las dos formas de una foto publicada (`p/<archivo>` y su miniatura).
+const publicObjects = (file: string) => [`p/${file}`, `p/${thumbOf(file)}`];
+
 // Borra el contenido (nombre, puesto, texto y foto) de las historias retiradas
 // hace más del plazo. Conserva el hueco, el consentimiento y las fechas, y deja
 // una línea de auditoría sin actor y sin contenido: solo qué posiciones.
 // Devuelve cuántas historias vació. Es seguro lanzarlo desde varias instancias:
-// la actualización es condicional.
-export async function purgeRevokedStories(now = new Date()): Promise<number> {
+// la actualización es condicional. La foto se borra del almacén antes que el
+// resto, y se puede borrar dos veces sin problema: si algo falla, la historia
+// sigue ahí y se reintenta en la próxima pasada. Sin almacén no se vacía un
+// equipo con fotos que borrar, para no dejarlas huérfanas.
+export async function purgeRevokedStories(
+  now = new Date(),
+  store?: PhotoStore,
+): Promise<number> {
   const limit = new Date(now.getTime() - REVOKED_STORY_DAYS * DAY);
   const pending = {
     revokedAt: { $lt: limit },
@@ -38,9 +47,23 @@ export async function purgeRevokedStories(now = new Date()): Promise<number> {
 
   let purged = 0;
   for (const team of teams) {
-    const indexes = (team.stories ?? []).flatMap((s, i) =>
-      s.revokedAt && s.revokedAt < limit && !s.purgedAt ? [i] : [],
+    const due = (team.stories ?? []).flatMap((s, i) =>
+      s.revokedAt && s.revokedAt < limit && !s.purgedAt ? [{ i, s }] : [],
     );
+    const indexes = due.map(({ i }) => i);
+    const objects = due.flatMap(({ s }) =>
+      s.photo ? publicObjects(s.photo) : [],
+    );
+    if (objects.length > 0 && !store) continue;
+    try {
+      for (const key of objects) await store?.remove(key);
+    } catch (err) {
+      console.error(
+        'No se pudo borrar la foto de una historia retirada:',
+        err instanceof Error ? err.message : err,
+      );
+      continue;
+    }
     const done = await Team.updateOne(
       { _id: team._id, stories: { $elemMatch: pending } },
       {
@@ -50,6 +73,7 @@ export async function purgeRevokedStories(now = new Date()): Promise<number> {
           'stories.$[s].role': 1,
           'stories.$[s].storyText': 1,
           'stories.$[s].photoUrl': 1,
+          'stories.$[s].photo': 1,
         },
       },
       {
@@ -102,19 +126,18 @@ export async function purgeOldContactEmails(now = new Date()): Promise<number> {
   return purged;
 }
 
-// Los archivos de fotos de una ficha: las del local y las de sus platos, cada
-// una con su miniatura, tal como viven en `p/`.
+// Los archivos de fotos de una ficha: las del local, las de sus platos y las de
+// las personas de su equipo, cada una con su miniatura, tal como viven en `p/`.
 function photoObjects(
   place: Pick<RestaurantRecord, 'photos' | 'signatureDishes'>,
+  team?: Pick<TeamRecord, 'stories'> | null,
 ) {
   const files = [
     ...(place.photos ?? []).map((p) => p.file),
     ...(place.signatureDishes ?? []).flatMap((d) => (d.photo ? [d.photo] : [])),
+    ...(team?.stories ?? []).flatMap((s) => (s.photo ? [s.photo] : [])),
   ];
-  return [...new Set(files)].flatMap((file) => [
-    `p/${file}`,
-    `p/${thumbOf(file)}`,
-  ]);
+  return [...new Set(files)].flatMap(publicObjects);
 }
 
 // Borra del todo las fichas retiradas a petición del negocio hace más del plazo:
@@ -139,7 +162,10 @@ export async function purgeRetiredListings(
 
   let purged = 0;
   for (const place of due) {
-    const objects = photoObjects(place);
+    const team = await Team.findOne({ restaurantId: place._id })
+      .select('stories.photo')
+      .lean<Pick<TeamRecord, 'stories'>>();
+    const objects = photoObjects(place, team);
     if (objects.length > 0 && !store) continue;
     try {
       for (const key of objects) await store?.remove(key);

@@ -21,6 +21,7 @@ import {
   contentTypeOf,
   fileOf,
   photoKeysIn,
+  storyPhotoKeysIn,
   thumbOf,
 } from '../services/photo-keys.js';
 import type { PhotoStore } from '../services/photo-store.js';
@@ -196,10 +197,12 @@ export function suggestionsRouter({
       scopeOf(authOf(res)),
     );
     const file = String(req.params.file);
-    const files = photoKeysIn(record.payload).flatMap((key) => [
-      fileOf(key),
-      thumbOf(fileOf(key)),
-    ]);
+    // Las fotos de las personas de un equipo solo las ve quien decide sobre él.
+    const hidden =
+      authOf(res).role === 'admin' ? [] : storyPhotoKeysIn(record.payload);
+    const files = photoKeysIn(record.payload)
+      .filter((key) => !hidden.includes(key))
+      .flatMap((key) => [fileOf(key), thumbOf(fileOf(key))]);
     const open =
       record.status === 'pending' || record.status === 'info_requested';
     const photo =
@@ -420,7 +423,7 @@ export function suggestionsRouter({
           : record.type === 'removal'
             ? await approveRemoval(record, user, req.body, now)
             : record.type === 'team'
-              ? await approveTeam(record, user, req.body, now)
+              ? await approveTeam(record, user, req.body, now, photoStore)
               : await approveNewPlace(record, user, req.body, now);
     } else if (decision.action === 'reject') {
       // El correo ya no hace falta: se borra al resolver (docs/08) y el enlace

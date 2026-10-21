@@ -13,7 +13,14 @@ import {
 } from '../services/decision-input.js';
 import { cityNamesFor } from '../services/city-names.js';
 import type { Geocoder } from '../services/geocoder.js';
+import { fileOf, photoKeysIn } from '../services/photo-keys.js';
+import type { PhotoStore } from '../services/photo-store.js';
 import type { TeamInput } from '../services/team-input.js';
+import {
+  discardPhotos,
+  promotePhotos,
+  unpublishPhotos,
+} from '../services/uploads.js';
 import { parseOrThrow } from '../validation.js';
 
 type User = ReturnType<typeof authOf>;
@@ -321,14 +328,17 @@ const tooManyStories = (current: number, adding: number) =>
 // nuevas se añaden detrás de las que ya había (también las retiradas, para que
 // las posiciones no cambien: las retiradas apuntan a ellas por su índice) con el
 // consentimiento de cuando se enviaron. Después salen de la solicitud, donde
-// solo estaban de paso hasta esta decisión.
+// solo estaban de paso hasta esta decisión. Las fotos de las personas pasan de
+// la cuarentena al espacio público antes que la historia (salvo las que se dejan
+// fuera con `skipPhotos`), para que nunca apunte a una foto que no está.
 export async function approveTeam(
   record: SuggestionRecord,
   user: User,
   body: unknown,
   now: Date,
+  store?: PhotoStore,
 ) {
-  parseOrThrow(teamApprovalSchema, body);
+  const approval = parseOrThrow(teamApprovalSchema, body);
   const id = targetOf(record);
   const place = await Restaurant.exists({ _id: id, status: 'published' });
   if (!place) throw unavailable();
@@ -337,60 +347,95 @@ export async function approveTeam(
     TeamInput,
     'level' | 'summary' | 'areas' | 'disabilityTypes' | 'stories'
   >;
+  const skipPhotos = new Set(approval.skipPhotos);
+  const allPhotos = photoKeysIn(record.payload);
+  const toPublish = allPhotos.filter((key) => !skipPhotos.has(key));
   const incoming = (payload.stories ?? []).map((s) => ({
     displayName: s.displayName,
     role: s.role,
     storyText: s.storyText,
     consentBy: s.consentBy,
     consentRecordedAt: record.createdAt,
+    ...(s.photoKey && !skipPhotos.has(s.photoKey)
+      ? { photo: fileOf(s.photoKey) }
+      : {}),
   }));
   const current = await Team.findOne({ restaurantId: id }).lean<TeamRecord>();
   const kept = current?.stories?.length ?? 0;
   if (kept + incoming.length > 3) throw tooManyStories(kept, incoming.length);
 
-  const approved = await approveAndApply(record, user, now, id, async () => {
-    const level = payload.level;
-    const doc =
-      (await Team.findOne({ restaurantId: id })) ??
-      new Team({ restaurantId: id });
-    const created = doc.isNew;
-    if (kept !== (doc.stories?.length ?? 0)) {
-      throw tooManyStories(doc.stories?.length ?? 0, incoming.length);
+  if (toPublish.length > 0) {
+    if (!store) {
+      throw new ApiError(
+        503,
+        'uploads_unavailable',
+        'Por ahora no se pueden publicar fotos',
+      );
     }
-    doc.set({
-      visibilityLevel: level,
-      summary: payload.summary,
-      areas: payload.areas,
-      disabilityTypes: payload.disabilityTypes,
+    await promotePhotos(store, toPublish);
+  }
+
+  let approved;
+  try {
+    approved = await approveAndApply(record, user, now, id, async () => {
+      const level = payload.level;
+      const doc =
+        (await Team.findOne({ restaurantId: id })) ??
+        new Team({ restaurantId: id });
+      const created = doc.isNew;
+      if (kept !== (doc.stories?.length ?? 0)) {
+        throw tooManyStories(doc.stories?.length ?? 0, incoming.length);
+      }
+      doc.set({
+        visibilityLevel: level,
+        summary: payload.summary,
+        areas: payload.areas,
+        disabilityTypes: payload.disabilityTypes,
+      });
+      if (incoming.length) {
+        if (doc.stories) doc.stories.push(...incoming);
+        else doc.set('stories', incoming);
+      }
+      await doc.save();
+      await Suggestion.updateOne(
+        { _id: record._id },
+        { $unset: { 'payload.stories': 1 } },
+      );
+      // Sin nombres ni textos: solo cuántas historias se añaden y cuántas fotos
+      // se publican o se dejan fuera.
+      return {
+        entity: 'team',
+        entityId: doc._id,
+        action: created ? 'create' : 'update',
+        diff: {
+          level: { from: current?.visibilityLevel, to: level },
+          totalStaff: {
+            from: current?.summary.totalStaff,
+            to: payload.summary.totalStaff,
+          },
+          staffWithDisability: {
+            from: current?.summary.staffWithDisability,
+            to: payload.summary.staffWithDisability,
+          },
+          storiesAdded: incoming.length,
+          ...(allPhotos.length > 0
+            ? {
+                photos: {
+                  published: toPublish.length,
+                  skipped: allPhotos.length - toPublish.length,
+                },
+              }
+            : {}),
+        },
+      };
     });
-    if (incoming.length) {
-      if (doc.stories) doc.stories.push(...incoming);
-      else doc.set('stories', incoming);
-    }
-    await doc.save();
-    await Suggestion.updateOne(
-      { _id: record._id },
-      { $unset: { 'payload.stories': 1 } },
-    );
-    // Sin nombres ni textos: solo cuántas historias se añaden.
-    return {
-      entity: 'team',
-      entityId: doc._id,
-      action: created ? 'create' : 'update',
-      diff: {
-        level: { from: current?.visibilityLevel, to: level },
-        totalStaff: {
-          from: current?.summary.totalStaff,
-          to: payload.summary.totalStaff,
-        },
-        staffWithDisability: {
-          from: current?.summary.staffWithDisability,
-          to: payload.summary.staffWithDisability,
-        },
-        storiesAdded: incoming.length,
-      },
-    };
-  });
+  } catch (err) {
+    // La solicitud no cambió: las fotos ya copiadas vuelven a no ser públicas.
+    if (store && toPublish.length > 0) await unpublishPhotos(store, toPublish);
+    throw err;
+  }
+  // Ya publicadas, las de la cuarentena sobran (también las dejadas fuera).
+  await discardPhotos(store, allPhotos);
   // La respuesta ya sin las historias, igual que queda guardada.
   const payloadWithout = { ...approved.payload };
   delete payloadWithout.stories;

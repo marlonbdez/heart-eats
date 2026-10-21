@@ -65,7 +65,7 @@
 | `stories[]` | ver abajo | nivel `full` | |
 | `updatedAt` | Date | ✔ | |
 
-`stories[]`: `displayName` (puede ser seudónimo), `role`, `storyText` (≤ 2000), `photoUrl?`, `consentRecordedAt`, `consentBy` (persona o representante legal), `revocable: true`, `revokedAt?`.
+`stories[]`: `displayName` (puede ser seudónimo), `role`, `storyText` (≤ 2000), `photo?` (archivo de la foto en el almacén, con su miniatura; la API publica `photoUrl`), `consentRecordedAt`, `consentBy` (persona o representante legal), `revocable: true`, `revokedAt?`.
 
 **Reglas**
 - Una historia sin `consentRecordedAt` no se guarda.
