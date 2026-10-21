@@ -50,6 +50,8 @@ export function ModerationPanel({
 }) {
   const t = useTranslations('moderation');
   const [section, setSection] = useState<Section>('queue');
+  // El local cuyas fotos se abren desde una solicitud de retirada de foto.
+  const [photosSlug, setPhotosSlug] = useState<string>();
   const isAdmin = session.role === 'admin';
   return (
     <>
@@ -79,16 +81,27 @@ export function ModerationPanel({
             type="button"
             className={styles.tab}
             aria-pressed={section === s}
-            onClick={() => setSection(s)}
+            onClick={() => {
+              setSection(s);
+              setPhotosSlug(undefined);
+            }}
           >
             {t(`sections.${s}`)}
           </button>
         ))}
       </div>
       {section === 'queue' ? (
-        <QueueSection role={session.role} />
+        <QueueSection
+          role={session.role}
+          onOpenPhotos={(slug) => {
+            setPhotosSlug(slug);
+            setSection('photos');
+          }}
+        />
       ) : section === 'photos' ? (
         <PlacePhotosAdmin
+          key={photosSlug ?? ''}
+          initialSlug={photosSlug}
           defaultCountry={
             session.moderationScope.find((s) => /^[A-Z]{2}$/.test(s.country))
               ?.country
@@ -103,11 +116,19 @@ export function ModerationPanel({
   );
 }
 
-function QueueSection({ role }: { role: ModerationSession['role'] }) {
+function QueueSection({
+  role,
+  onOpenPhotos,
+}: {
+  role: ModerationSession['role'];
+  onOpenPhotos: (slug: string) => void;
+}) {
   const queue = useLoad(loadQueue);
   return (
     <Remote state={queue}>
-      {(items) => <Queue items={items} role={role} />}
+      {(items) => (
+        <Queue items={items} role={role} onOpenPhotos={onOpenPhotos} />
+      )}
     </Remote>
   );
 }
@@ -115,9 +136,11 @@ function QueueSection({ role }: { role: ModerationSession['role'] }) {
 function Queue({
   items,
   role,
+  onOpenPhotos,
 }: {
   items: ModerationItem[];
   role: ModerationSession['role'];
+  onOpenPhotos: (slug: string) => void;
 }) {
   const t = useTranslations('moderation');
   const [tab, setTab] = useState<Tab>('pending');
@@ -272,6 +295,7 @@ function Queue({
               loading={loadingId === selected.id}
               onBack={() => setSelectedId(null)}
               onDecide={(d) => decide(selected, d)}
+              onOpenPhotos={onOpenPhotos}
             />
           ) : (
             <p className={styles.choose}>{t('choose')}</p>

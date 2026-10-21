@@ -47,6 +47,8 @@ interface Props {
   loading?: boolean;
   onBack: () => void;
   onDecide: (decision: ModerationDecision) => Promise<void>;
+  // Abre las fotos de un local en la sección «Fotos» (para retirar una).
+  onOpenPhotos?: (slug: string) => void;
 }
 
 // Qué mensaje enseñar según lo que contestó el servidor.
@@ -89,6 +91,7 @@ export function ModerationDetail({
   loading = false,
   onBack,
   onDecide,
+  onOpenPhotos,
 }: Props) {
   const locale = useLocale();
   const t = useTranslations('moderation');
@@ -146,6 +149,10 @@ export function ModerationDetail({
   }, []);
 
   const isStoryRemoval = isRemoval && item.removal?.what === 'story';
+  // Una foto se retira desde «Fotos» y un derecho sobre datos se atiende por
+  // correo: aquí solo se marca como atendida.
+  const removalWhat = isRemoval ? item.removal?.what : undefined;
+  const isHandledRemoval = removalWhat === 'photo' || removalWhat === 'data';
   const waiting = item.status === 'info_requested';
   // Solo un administrador decide lo que toca a personas del equipo (ADR 0008).
   const adminOnly = (isTeam || isRemoval) && role !== 'admin';
@@ -265,7 +272,12 @@ export function ModerationDetail({
     }
     if (d.action === 'ask_info') return t('log.info', { name });
     if (isTeam) return t('log.approvedTeam', { name });
-    if (isRemoval) return t('log.approvedRemoval', { name });
+    if (isRemoval) {
+      return t(
+        isHandledRemoval ? 'log.approvedRemovalHandled' : 'log.approvedRemoval',
+        { name },
+      );
+    }
     if (!isNew || !d.level || !d.method) return t('log.approvedEdit', { name });
     return t('log.approvedNew', {
       name,
@@ -277,7 +289,11 @@ export function ModerationDetail({
   function resultText(o: 'approved' | 'rejected' | 'info'): string {
     if (o === 'rejected') return t('result.rejected');
     if (o === 'info') return t('result.info');
-    return t('result.approved' + k);
+    return t(
+      isHandledRemoval
+        ? 'result.approvedRemovalHandled'
+        : 'result.approved' + k,
+    );
   }
 
   return (
@@ -363,6 +379,18 @@ export function ModerationDetail({
               <dd>{item.removal.details || t('none')}</dd>
             </div>
           </dl>
+          {isHandledRemoval && (
+            <p className={styles.meta}>{t(`removalHelp.${removalWhat}`)}</p>
+          )}
+          {removalWhat === 'photo' && item.restaurantSlug && onOpenPhotos && (
+            <button
+              type="button"
+              className={form.linkButton}
+              onClick={() => onOpenPhotos(item.restaurantSlug!)}
+            >
+              {t('openPhotos')}
+            </button>
+          )}
           {item.restaurantSlug && (
             <Link
               href={`/place/${item.restaurantSlug}`}
@@ -857,7 +885,13 @@ export function ModerationDetail({
                 disabled={saving}
                 onClick={approve}
               >
-                {saving ? t('saving') : t('approve' + k)}
+                {saving
+                  ? t('saving')
+                  : t(
+                      isHandledRemoval
+                        ? 'approveRemovalHandled'
+                        : 'approve' + k,
+                    )}
               </button>
               {!waiting && (
                 <button

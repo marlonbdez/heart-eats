@@ -1030,7 +1030,8 @@
       "rejected": "Rechazada",
       "info": "A la espera de más información",
       "approvedTeam": "Equipo publicado",
-      "approvedRemoval": "Retirado"
+      "approvedRemoval": "Retirado",
+      "approvedRemovalHandled": "Atendida"
     },
     "auditTitle": "Registro de auditoría",
     "log": {
@@ -1040,7 +1041,8 @@
       "rejected": "Hoy · Moderación · rechazó «{name}» · motivo: {reason}",
       "info": "Hoy · Moderación · pidió más información sobre «{name}»",
       "approvedTeam": "Hoy · Moderación · aprobó y publicó el equipo de «{name}»",
-      "approvedRemoval": "Hoy · Moderación · retiró lo pedido en «{name}»"
+      "approvedRemoval": "Hoy · Moderación · retiró lo pedido en «{name}»",
+      "approvedRemovalHandled": "Hoy · Moderación · marcó como atendida la solicitud de «{name}»"
     },
     "proposal": "Propuesta",
     "teamTitle": "Equipo que cuenta el negocio",
@@ -1062,6 +1064,12 @@
     "removalWhat": "Qué",
     "removalDetails": "Detalles",
     "approveRemoval": "Retirar ahora",
+    "approveRemovalHandled": "Marcar como atendida",
+    "openPhotos": "Abrir las fotos de este local",
+    "removalHelp": {
+      "photo": "Retira la foto en «Fotos», donde se borra al momento, y vuelve aquí para marcar la solicitud como atendida.",
+      "data": "Atiéndela por correo con quien la pide (acceso, rectificación, supresión…) y márcala como atendida cuando esté hecho. Desde aquí no se cambia ningún dato."
+    },
     "signedInAs": "Has entrado como {email}",
     "signOut": "Salir",
     "adminOnly": "Esta solicitud la decide un administrador. Puedes verla, pero no decidirla.",
@@ -1220,6 +1228,7 @@
         "auto_close": "Cerrada por plazo",
         "create": "Creada",
         "update": "Modificada",
+        "handle_removal": "Solicitud atendida",
         "purge_email": "Correo borrado",
         "purge_listing": "Ficha borrada",
         "purge_stories": "Historias borradas",

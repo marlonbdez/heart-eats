@@ -26,6 +26,7 @@ const knownActions = new Set([
   'auto_close',
   'create',
   'update',
+  'handle_removal',
   'purge_email',
   'purge_listing',
   'purge_stories',
