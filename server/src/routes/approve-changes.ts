@@ -287,10 +287,26 @@ export async function approveRemoval(
     });
   }
 
+  if (what === 'photo' || what === 'data') {
+    // Una foto se retira desde «Fotos» (`DELETE /restaurants/:slug/photos/:file`,
+    // que borra el archivo al momento) y un derecho sobre datos personales se
+    // atiende a mano por correo: aquí solo se deja constancia de que Moderación
+    // lo ha atendido, sin el texto de lo pedido.
+    if (!(await Restaurant.exists({ _id: id }))) throw unavailable();
+    return approveAndApply(record, user, now, id, () =>
+      Promise.resolve({
+        entity: 'restaurant',
+        entityId: id,
+        action: 'handle_removal',
+        diff: { what },
+      }),
+    );
+  }
+
   throw new ApiError(
-    501,
-    'not_implemented',
-    'Por ahora solo se pueden retirar una ficha o una historia',
+    422,
+    'unknown_removal',
+    'No se sabe qué se pide retirar en esta solicitud',
   );
 }
 

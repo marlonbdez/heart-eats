@@ -452,16 +452,50 @@ describe('aprobar una retirada', () => {
     });
   });
 
-  it('fotos y datos todavía no: 501 y no cambia nada', async () => {
-    const cookie = await admin();
-    for (const what of ['photo', 'data']) {
+  describe.each(['photo', 'data'])('una retirada de %s', (what) => {
+    it('se marca como atendida: cierra la solicitud, borra el correo y no toca la ficha', async () => {
       const s = await removal(what);
-      const res = await decide(s._id, confirmed(), cookie);
-      expect(res.status).toBe(501);
+      const res = await decide(s._id, confirmed(), await admin());
+
+      expect(res.status).toBe(200);
+      expect(await stored(s._id)).toMatchObject({ status: 'approved' });
+      expect((await stored(s._id))?.contactEmail).toBeUndefined();
+      expect((await place())?.status).toBe('published');
+      expect((await place())?.retiredAt).toBeUndefined();
+
+      const logs = await AuditLog.find({ action: 'handle_removal' }).lean();
+      expect(logs).toHaveLength(1);
+      expect(logs[0]).toMatchObject({
+        entity: 'restaurant',
+        entityId: new Types.ObjectId(placeId),
+        diff: { what },
+      });
+      // Sin el texto de lo pedido.
+      expect(JSON.stringify(logs[0])).not.toContain('Quiero');
+    });
+
+    it('un moderador no puede: solo un administrador', async () => {
+      const s = await removal(what);
+      const res = await decide(s._id, confirmed(), await signedInCookie());
+      expect(res.status).toBe(403);
       expect((await stored(s._id))?.status).toBe('pending');
-    }
-    expect((await place())?.status).toBe('published');
-    expect(await AuditLog.countDocuments()).toBe(0);
+    });
+
+    it('sin confirmar quién la pide, 422 y no se cierra', async () => {
+      const s = await removal(what);
+      const res = await decide(s._id, approve(), await admin());
+      expect(res.status).toBe(422);
+      expect((await stored(s._id))?.status).toBe('pending');
+      expect(await AuditLog.countDocuments()).toBe(0);
+    });
+
+    it('con la ficha ya borrada no se puede atender y la solicitud sigue pendiente', async () => {
+      const s = await removal(what);
+      await Restaurant.deleteMany({});
+      const res = await decide(s._id, confirmed(), await admin());
+      expect(res.status).toBeGreaterThanOrEqual(400);
+      expect((await stored(s._id))?.status).toBe('pending');
+    });
   });
 });
 

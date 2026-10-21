@@ -1030,7 +1030,8 @@
       "rejected": "Rejected",
       "info": "Waiting for more information",
       "approvedTeam": "Team published",
-      "approvedRemoval": "Removed"
+      "approvedRemoval": "Removed",
+      "approvedRemovalHandled": "Handled"
     },
     "auditTitle": "Audit log",
     "log": {
@@ -1040,7 +1041,8 @@
       "rejected": "Today · Moderation · rejected «{name}» · reason: {reason}",
       "info": "Today · Moderation · asked for more information about «{name}»",
       "approvedTeam": "Today · Moderation · approved and published the team of “{name}”",
-      "approvedRemoval": "Today · Moderation · removed what was requested on “{name}”"
+      "approvedRemoval": "Today · Moderation · removed what was requested on “{name}”",
+      "approvedRemovalHandled": "Today · Moderation · marked the request for “{name}” as handled"
     },
     "proposal": "Proposal",
     "teamTitle": "Team shared by the business",
@@ -1062,6 +1064,12 @@
     "removalWhat": "What",
     "removalDetails": "Details",
     "approveRemoval": "Remove now",
+    "approveRemovalHandled": "Mark as handled",
+    "openPhotos": "Open this place’s photos",
+    "removalHelp": {
+      "photo": "Remove the photo in “Photos”, where it is deleted at once, then come back here to mark the request as handled.",
+      "data": "Handle it by email with the person who asked (access, correction, erasure…) and mark it as handled when done. No data is changed from here."
+    },
     "signedInAs": "Signed in as {email}",
     "signOut": "Sign out",
     "adminOnly": "An administrator decides this request. You can see it, but not decide it.",
@@ -1220,6 +1228,7 @@
         "auto_close": "Closed on deadline",
         "create": "Created",
         "update": "Edited",
+        "handle_removal": "Request handled",
         "purge_email": "Email deleted",
         "purge_listing": "Listing deleted",
         "purge_stories": "Stories deleted",

@@ -1,3 +1,4 @@
+import { suggestions } from './fixtures/moderation';
 import { expect, test } from './support/test';
 
 test('sin sesión pide el correo y el enlace no revela quién modera', async ({
@@ -403,6 +404,91 @@ test.describe('con la sesión abierta', () => {
       {
         path: '/suggestions/s4/decision',
         body: { action: 'approve', identityConfirmed: true, storyIndex: 1 },
+      },
+    ]);
+  });
+
+  // La solicitud s4 es una retirada de historia; aquí se cambia lo que pide.
+  async function asRemoval(what: string, run: () => Promise<void>) {
+    const s4 = suggestions.find((s) => s.id === 's4')!;
+    const original = s4.removal;
+    s4.removal = { what, details: 'Quiero que la quiten.' };
+    try {
+      await run();
+    } finally {
+      s4.removal = original;
+    }
+  }
+
+  test('retirar una foto: enlaza con «Fotos» y se marca como atendida', async ({
+    page,
+    sent,
+  }) => {
+    await asRemoval('photo', async () => {
+      await page.goto('/es/moderation');
+      await page
+        .getByRole('button', { name: /Retirada.*La Masa Madre/s })
+        .click();
+      await expect(page.getByText(/Retira la foto en «Fotos»/)).toBeVisible();
+      await expect(
+        page.getByRole('button', { name: 'Retirar ahora' }),
+      ).toHaveCount(0);
+
+      // El enlace lleva a las fotos de ese local, sin tener que buscarlo.
+      await page
+        .getByRole('button', { name: 'Abrir las fotos de este local' })
+        .click();
+      await expect(
+        page.getByRole('heading', { name: '[DEMO] La Masa Madre' }),
+      ).toBeFocused();
+      await expect(
+        page.getByRole('heading', { name: /Fotos de la galería/ }),
+      ).toBeVisible();
+
+      // Y la solicitud se cierra de vuelta en la cola, confirmando quién pide.
+      await page
+        .getByRole('button', { name: 'Solicitudes', exact: true })
+        .click();
+      await page
+        .getByRole('button', { name: /Retirada.*La Masa Madre/s })
+        .click();
+      await page.getByRole('button', { name: 'Marcar como atendida' }).click();
+      await expect(page.locator('p[role=alert]')).toContainText(
+        'confirmar la identidad',
+      );
+      await page.getByLabel(/He confirmado, por el correo/).check();
+      await page.getByRole('button', { name: 'Marcar como atendida' }).click();
+      await expect(page.getByRole('status')).toContainText('Atendida');
+    });
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s4/decision',
+        body: { action: 'approve', identityConfirmed: true },
+      },
+    ]);
+  });
+
+  test('retirar datos: se explica que va por correo y se marca como atendida', async ({
+    page,
+    sent,
+  }) => {
+    await asRemoval('data', async () => {
+      await page.goto('/es/moderation');
+      await page
+        .getByRole('button', { name: /Retirada.*La Masa Madre/s })
+        .click();
+      await expect(page.getByText(/Atiéndela por correo/)).toBeVisible();
+      await expect(
+        page.getByRole('button', { name: 'Abrir las fotos de este local' }),
+      ).toHaveCount(0);
+      await page.getByLabel(/He confirmado, por el correo/).check();
+      await page.getByRole('button', { name: 'Marcar como atendida' }).click();
+      await expect(page.getByRole('status')).toContainText('Atendida');
+    });
+    expect(sent).toEqual([
+      {
+        path: '/suggestions/s4/decision',
+        body: { action: 'approve', identityConfirmed: true },
       },
     ]);
   });

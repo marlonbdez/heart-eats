@@ -29,11 +29,14 @@ type Notice = 'altSaved' | 'covered' | 'removed' | 'added';
 // (docs/02_API_SPEC.md, `/restaurants/:slug/photos`).
 export function PlacePhotosAdmin({
   defaultCountry,
+  initialSlug,
 }: {
   defaultCountry?: string;
+  // Abre directamente las fotos de este local (desde una solicitud).
+  initialSlug?: string;
 }) {
   const regions = useLoad(loadRegions);
-  const [slug, setSlug] = useState<string | null>(null);
+  const [slug, setSlug] = useState<string | null>(initialSlug ?? null);
   return (
     <Remote state={regions}>
       {(countries) =>
