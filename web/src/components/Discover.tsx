@@ -186,6 +186,19 @@ export function Discover({
     (tag) => !food.includes(tag.key),
   );
 
+  // Solo las categorías con locales en la zona, de más a menos; las elegidas
+  // siguen a la vista aunque la zona no tenga ninguno.
+  const zoneTags = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of restaurants) {
+      for (const key of r.foodTags) counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    const count = (tag: FoodTag) => counts.get(tag.key) ?? 0;
+    return foodTags
+      .filter((tag) => count(tag) > 0 || food.includes(tag.key))
+      .sort((a, b) => count(b) - count(a));
+  }, [foodTags, restaurants, food]);
+
   const toggleFood = (key: string) =>
     setFood((cur) =>
       cur.includes(key) ? cur.filter((k) => k !== key) : [...cur, key],
@@ -267,7 +280,7 @@ export function Discover({
               ))}
             </div>
           )}
-          <FoodFilters tags={foodTags} selected={food} onToggle={toggleFood} />
+          <FoodFilters tags={zoneTags} selected={food} onToggle={toggleFood} />
         </div>
 
         <div className={styles.area} data-split={split}>

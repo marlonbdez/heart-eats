@@ -61,17 +61,28 @@ export const cuisineTypes = [
   'vegetarian',
 ] as const;
 
+// Orden en que se ofrecen por defecto: lo más buscado primero.
 export const foodTags = [
-  { key: 'pizza', icon: '🍕' },
-  { key: 'burgers', icon: '🍔' },
-  { key: 'sushi', icon: '🍣' },
-  { key: 'italian', icon: '🍝' },
-  { key: 'coffee', icon: '☕' },
-  { key: 'desserts', icon: '🍰' },
+  { key: 'spanish', icon: '🥘' },
   { key: 'tapas', icon: '🫒' },
   { key: 'set_menu', icon: '🍽️' },
+  { key: 'coffee', icon: '☕' },
+  { key: 'brunch', icon: '🥞' },
   { key: 'bakery', icon: '🥖' },
+  { key: 'desserts', icon: '🍰' },
+  { key: 'italian', icon: '🍝' },
+  { key: 'pizza', icon: '🍕' },
+  { key: 'burgers', icon: '🍔' },
+  { key: 'asian', icon: '🥢' },
+  { key: 'sushi', icon: '🍣' },
+  { key: 'mexican', icon: '🌮' },
+  { key: 'latin', icon: '🥑' },
+  { key: 'arab', icon: '🧆' },
+  { key: 'seafood', icon: '🦐' },
+  { key: 'rice', icon: '🍚' },
+  { key: 'grill', icon: '🥩' },
   { key: 'vegetarian', icon: '🥗' },
+  { key: 'vegan', icon: '🌱' },
 ] as const;
 
 export type BusinessType = (typeof businessTypes)[number];

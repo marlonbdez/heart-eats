@@ -445,6 +445,10 @@ test.describe('vista partida (escritorio)', () => {
       await page.emulateMedia({ colorScheme: scheme });
       await page.goto('/es');
       await expect(page.getByRole('listitem').first()).toBeVisible();
+      // Las categorías no caben: la flecha del ratón también se revisa.
+      await expect(
+        page.getByRole('button', { name: 'Categorías siguientes' }),
+      ).toBeVisible();
       await page.locator('[data-marker]').first().click();
       await expect(page.locator('[data-selected="true"]')).toHaveCount(1);
       await expectNoViolations(page);

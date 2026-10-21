@@ -52,6 +52,8 @@
 | D3 | Escribe algo que no existe («zzzz») | Mensaje tranquilo, con «Quitar filtros» y «Proponer un local» |
 | D4 | «Quitar filtros» | Vuelve a la zona entera |
 | D5 | Recarga con una búsqueda hecha | La búsqueda y la zona siguen en la dirección (se puede compartir) |
+| D6 | En el ordenador, con ratón, mira la fila de categorías | Solo salen las que tienen locales en la zona; una flecha › al final y, tras usarla, ‹ al principio; sin botón «Más» |
+| D7 | En el móvil, desliza la fila de categorías | Se desliza con el dedo; un degradado en el borde avisa de que hay más y no hay flechas |
 
 ## E · «Cerca de mí»
 
