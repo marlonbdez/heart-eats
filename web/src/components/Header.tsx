@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { navGroups } from '@/lib/nav';
 import { LanguageMenu } from './LanguageMenu';
+import { LanguageSwitch } from './LanguageSwitch';
 import { LogoMark } from './LogoMark';
 import { Tagline } from './Tagline';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -121,7 +122,10 @@ export function Header() {
           ))}
         </nav>
 
-        <ThemeSwitch />
+        <div className={styles.settings}>
+          <LanguageSwitch />
+          <ThemeSwitch />
+        </div>
 
         <footer className={styles.drawerFoot}>
           <Tagline className={styles.tagline} />

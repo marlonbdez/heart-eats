@@ -23,17 +23,14 @@ test('una categoría marcada no cambia de tamaño ni lleva marca añadida', asyn
   );
 });
 
-test('las flechas de los selectores de lugar e idioma se ven a buen tamaño', async ({
+test('la flecha del selector de lugar se ve a buen tamaño', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 700 });
   await page.goto('/es');
-  const chevrons = page.locator('svg:has(path[d="M6 9l6 6 6-6"])');
-  await expect(chevrons).toHaveCount(2);
-  for (const chevron of await chevrons.all()) {
-    await expect(chevron).toBeVisible();
-    expect((await chevron.boundingBox())!.width).toBeGreaterThanOrEqual(16);
-  }
+  const chevron = page.locator('svg:has(path[d="M6 9l6 6 6-6"])');
+  await expect(chevron).toBeVisible();
+  expect((await chevron.boundingBox())!.width).toBeGreaterThanOrEqual(16);
 });
 
 test('el logo queda cerca del menú, sin pisarlo', async ({ page }) => {
