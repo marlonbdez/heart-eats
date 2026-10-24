@@ -8,7 +8,8 @@ import { uploadPhoto } from './uploads';
 // Texto alternativo por idioma: al menos uno, o nada.
 export type PhotoAlt = { es?: string; en?: string };
 
-const SEARCH_LIMIT = 20;
+// Cuántos locales devuelve la búsqueda por nombre; si llegan todos, puede haber más.
+export const PLACE_SEARCH_LIMIT = 20;
 export const MAX_GALLERY_PHOTOS = 12;
 
 // Buscar un local publicado por su nombre dentro de un país.
@@ -19,7 +20,7 @@ export async function searchPlaces(
   const res = await apiGet<{ items: Restaurant[] }>('/restaurants', {
     country,
     q,
-    limit: SEARCH_LIMIT,
+    limit: PLACE_SEARCH_LIMIT,
   });
   return res.items;
 }

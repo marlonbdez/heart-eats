@@ -1,4 +1,4 @@
-import { expect, test } from './support/test';
+import { choosePlace, expect, test } from './support/test';
 
 test.use({ viewport: { width: 360, height: 800 } });
 
@@ -20,9 +20,12 @@ test('pedir una retirada: 3 pasos, valida y se envía a la API', async ({
   // Paso 2: hay que elegir el local.
   await page.getByRole('button', { name: 'Continuar' }).click();
   await expect(page.locator('p[role=alert]')).toContainText('Elige el local');
-  await page
-    .getByLabel('¿En qué local aparece?')
-    .selectOption('demo-la-masa-madre');
+  await choosePlace(
+    page,
+    '¿En qué local aparece?',
+    'masa madre',
+    'La Masa Madre',
+  );
   await page.getByRole('button', { name: 'Continuar' }).click();
 
   // Paso 3: sin correo válido no se envía (es lo que confirma la identidad).

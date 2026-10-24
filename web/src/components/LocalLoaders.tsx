@@ -1,16 +1,15 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { Link } from '@/i18n/navigation';
 import { getRestaurant } from '@/lib/data';
-import { loadDefaultZoneRestaurants } from '@/lib/regions';
 import type { Restaurant } from '@/lib/types';
 import { useLoad } from '@/lib/use-load';
 import { useSlug } from '@/lib/use-slug';
-import { BusinessForm, type PlaceOption } from './BusinessForm';
+import { BusinessForm } from './BusinessForm';
 import { CorrectForm } from './CorrectForm';
-import { RemovalForm } from './RemovalForm';
+import { toPlaceOption } from './PlacePicker';
 import { Remote } from './Remote';
 import { RestaurantDetail } from './RestaurantDetail';
 import styles from './Remote.module.css';
@@ -72,58 +71,23 @@ export function CorrectLoader() {
   );
 }
 
-// Los locales entre los que el negocio elige el suyo, por orden alfabético.
-export function toPlaceOptions(
-  all: Restaurant[],
-  locale: string,
-): PlaceOption[] {
-  return all
-    .map((r) => ({
-      slug: r.slug,
-      name: r.name,
-      neighborhood: r.address.neighborhood,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name, locale));
-}
-
-// Desde la ficha (/business/<slug>) basta el propio local, esté donde esté;
-// sin local, se elige de la lista de la zona por defecto.
+// Desde la ficha (/business/<slug>) el local ya está elegido, esté donde esté;
+// sin ficha, el formulario lo busca por país y nombre.
 export function BusinessLoader({ fromAddress }: { fromAddress?: boolean }) {
-  const locale = useLocale();
-  const slug = useSlug();
-  const state = useLoad(
-    (s: string | null) =>
-      fromAddress
-        ? s
-          ? getRestaurant(s).then((r) => (r ? [r] : []))
-          : Promise.resolve([])
-        : loadDefaultZoneRestaurants(),
-    slug,
-  );
-  const initial = fromAddress ? slug : null;
-  return (
-    <Remote
-      state={fromAddress && !slug ? ({ status: 'loading' } as const) : state}
-    >
-      {(all) => {
-        const places = toPlaceOptions(all, locale);
-        if (fromAddress && !places.some((p) => p.slug === initial)) {
-          return <Missing />;
-        }
-        return (
-          <BusinessForm places={places} initialSlug={initial ?? undefined} />
-        );
-      }}
-    </Remote>
-  );
+  return fromAddress ? <BusinessFromPlace /> : <BusinessForm />;
 }
 
-export function RemovalLoader() {
-  const locale = useLocale();
-  const state = useLoad(loadDefaultZoneRestaurants);
+function BusinessFromPlace() {
+  const state = useRestaurant();
   return (
     <Remote state={state}>
-      {(all) => <RemovalForm places={toPlaceOptions(all, locale)} />}
+      {(restaurant) =>
+        restaurant ? (
+          <BusinessForm initialPlace={toPlaceOption(restaurant)} />
+        ) : (
+          <Missing />
+        )
+      }
     </Remote>
   );
 }

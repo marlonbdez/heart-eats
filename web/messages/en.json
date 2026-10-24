@@ -496,7 +496,6 @@
         "You can change or withdraw it whenever you like. We delete it within 7 days at most."
       ],
       "place": "Which place is it?",
-      "placeholder": "Choose your place",
       "placeError": "Choose your place to continue.",
       "notListed": "Can’t find your place?",
       "notListedLink": "Suggest it first"
@@ -1364,6 +1363,18 @@
       "moreError": "We could not load more. You can try again."
     }
   },
+  "placePicker": {
+    "country": "Country",
+    "hint": "Type at least two letters of the place’s name.",
+    "searching": "Searching…",
+    "found": "{count, plural, one {# place found} other {# places found}}",
+    "noResults": "We found no place with that name. Try another part of the name or change the country.",
+    "more": "There are more places with that name. Type more letters to narrow it down.",
+    "change": "Choose another place",
+    "error": "We could not search right now.",
+    "retry": "Try again",
+    "noRegions": "There are no published places yet."
+  },
   "removal": {
     "title": "Ask for something to be removed",
     "stepOf": "Step {n} of {total}",
@@ -1392,7 +1403,6 @@
     "s2": {
       "intro": "Tell us which place it appears on, so we can find it.",
       "place": "Which place does it appear on?",
-      "placeholder": "Choose the place",
       "placeError": "Choose the place to continue.",
       "details": "Anything else that helps us find it?",
       "detailsHint": "For example, the name or pseudonym shown. Please do not write health information or other people’s names."
