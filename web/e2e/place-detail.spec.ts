@@ -7,7 +7,7 @@ const PLACE = '/es/place/demo-la-masa-madre';
 const top = async (page: Page, locator: ReturnType<Page['locator']>) =>
   (await locator.boundingBox())!.y;
 
-test('la ficha va de lo que atrae a lo que informa: platos, horario, equipo y verificación', async ({
+test('en el móvil la ficha va de lo práctico a lo que atrae: acciones y horario, platos, equipo y verificación', async ({
   page,
 }) => {
   await page.goto(PLACE);
@@ -21,7 +21,7 @@ test('la ficha va de lo que atrae a lo que informa: platos, horario, equipo y ve
     'Mexicana',
   ]);
 
-  // Cómo llegar y llamar, enseguida y antes que los platos.
+  // Cómo llegar, llamar y el horario, enseguida y antes que los platos.
   const actions = page.getByRole('navigation', { name: 'Acciones' });
   const dishes = page.getByRole('heading', {
     name: 'Lo que te recomendamos probar',
@@ -33,7 +33,7 @@ test('la ficha va de lo que atrae a lo que informa: platos, horario, equipo y ve
   const verification = page.getByRole('heading', {
     name: /Datos (verificados|confirmados)/,
   });
-  const order = [actions, dishes, hours, team, verification];
+  const order = [actions, hours, dishes, team, verification];
   const ys = [];
   for (const block of order) ys.push(await top(page, block));
   expect(ys).toEqual([...ys].sort((a, b) => a - b));
@@ -72,3 +72,49 @@ for (const [width, font] of [
     else expect(new Set(boxes).size).toBe(boxes.length);
   });
 }
+
+test.describe('escritorio', () => {
+  test.use({
+    isMobile: false,
+    hasTouch: false,
+    deviceScaleFactor: 1,
+    viewport: { width: 1280, height: 800 },
+  });
+
+  test('lo práctico va a la derecha, se queda a la vista al bajar y las horas se alinean', async ({
+    page,
+  }) => {
+    await page.goto(PLACE);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    const actions = page.getByRole('navigation', { name: 'Acciones' });
+    const heading = (await page
+      .getByRole('heading', { level: 1 })
+      .boundingBox())!;
+    const side = (await actions.locator('xpath=..').boundingBox())!;
+    expect(side.x).toBeGreaterThan(heading.x + 400);
+    expect(side.width).toBeGreaterThanOrEqual(300);
+
+    // Los platos quedan en la columna principal, al lado y no debajo.
+    const dish = (await page
+      .locator('#platos + ul > li')
+      .first()
+      .boundingBox())!;
+    expect(dish.x + dish.width).toBeLessThanOrEqual(side.x);
+
+    // Al bajar, «Cómo llegar» sigue a la vista.
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await expect(
+      page.getByRole('link', { name: 'Cómo llegar' }),
+    ).toBeInViewport();
+
+    // Las horas empiezan todas en la misma columna.
+    const xs = await page
+      .locator('dl dd')
+      .evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().x)),
+      );
+    expect(xs.length).toBeGreaterThan(1);
+    expect(new Set(xs).size).toBe(1);
+  });
+});

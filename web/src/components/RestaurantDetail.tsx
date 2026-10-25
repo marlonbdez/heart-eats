@@ -85,74 +85,80 @@ export function RestaurantDetail({
           </p>
         </header>
 
-        <nav className={styles.actions} aria-label={t('actions')}>
-          {actions.map((a) => (
-            <a
-              key={a.label}
-              href={a.href}
-              className={a.primary ? styles.primary : styles.secondary}
-              {...(a.external
-                ? { target: '_blank', rel: 'noopener noreferrer' }
-                : {})}
-            >
-              {a.label}
-            </a>
-          ))}
-        </nav>
+        <div className={styles.side}>
+          <nav className={styles.actions} aria-label={t('actions')}>
+            {actions.map((a) => (
+              <a
+                key={a.label}
+                href={a.href}
+                className={a.primary ? styles.primary : styles.secondary}
+                {...(a.external
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
+                {a.label}
+              </a>
+            ))}
+          </nav>
+          {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
+        </div>
 
-        {r.signatureDishes.length > 0 && (
-          <section aria-labelledby="platos">
-            <h2 id="platos">{t('dishes')}</h2>
-            <ul className={styles.dishes}>
-              {r.signatureDishes.map((d) => (
-                <li key={d.name} className={styles.dish}>
-                  <div className={styles.dishPhoto}>
-                    {d.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={d.thumbUrl ?? d.photoUrl} alt="" />
-                    ) : (
-                      <span aria-hidden="true">🍽️</span>
-                    )}
-                  </div>
-                  <div>
-                    <p className={styles.dishName}>{d.name}</p>
-                    {d.description && (
-                      <p className={styles.muted}>{d.description}</p>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+        <div className={styles.rest}>
+          {r.signatureDishes.length > 0 && (
+            <section aria-labelledby="platos">
+              <h2 id="platos">{t('dishes')}</h2>
+              <ul className={styles.dishes}>
+                {r.signatureDishes.map((d) => (
+                  <li key={d.name} className={styles.dish}>
+                    <div className={styles.dishPhoto}>
+                      {d.photoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={d.thumbUrl ?? d.photoUrl} alt="" />
+                      ) : (
+                        <span aria-hidden="true">🍽️</span>
+                      )}
+                    </div>
+                    <div>
+                      <p className={styles.dishName}>{d.name}</p>
+                      {d.description && (
+                        <p className={styles.muted}>{d.description}</p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {teamLevel && r.team && <TeamBlock team={r.team} level={teamLevel} />}
+
+          <section
+            className={styles.verification}
+            aria-labelledby="verificacion"
+          >
+            <h2 id="verificacion" className={styles.verificationTitle}>
+              <span aria-hidden="true">{isAdmin ? '🟢' : '🟡'}</span>{' '}
+              {isAdmin ? t('verifiedAdmin') : t('verifiedCommunity')}
+            </h2>
+            <p>
+              {tc(`methods.${verification.method}`)} ·{' '}
+              {format.dateTime(new Date(verification.lastVerifiedAt), {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
+              {verification.needsReview && ` · ${tc('needsReview')}`}
+            </p>
+            <Link href="/verification">{t('howWeVerify')}</Link>
           </section>
-        )}
 
-        {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
-
-        {teamLevel && r.team && <TeamBlock team={r.team} level={teamLevel} />}
-
-        <section className={styles.verification} aria-labelledby="verificacion">
-          <h2 id="verificacion" className={styles.verificationTitle}>
-            <span aria-hidden="true">{isAdmin ? '🟢' : '🟡'}</span>{' '}
-            {isAdmin ? t('verifiedAdmin') : t('verifiedCommunity')}
-          </h2>
-          <p>
-            {tc(`methods.${verification.method}`)} ·{' '}
-            {format.dateTime(new Date(verification.lastVerifiedAt), {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric',
-            })}
-            {verification.needsReview && ` · ${tc('needsReview')}`}
-          </p>
-          <Link href="/verification">{t('howWeVerify')}</Link>
-        </section>
-
-        <Link href={`/correct/${r.slug}`} className={styles.suggest}>
-          {t('suggest')}
-        </Link>
-        <Link href={`/business/${r.slug}`} className={styles.suggest}>
-          {t('isYours')}
-        </Link>
+          <Link href={`/correct/${r.slug}`} className={styles.suggest}>
+            {t('suggest')}
+          </Link>
+          <Link href={`/business/${r.slug}`} className={styles.suggest}>
+            {t('isYours')}
+          </Link>
+        </div>
       </div>
     </article>
   );
