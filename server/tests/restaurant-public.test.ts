@@ -44,6 +44,19 @@ describe('toPublicRestaurant', () => {
     });
   });
 
+  it('da la zona horaria del local, que sale de su pin', () => {
+    const at = (lng: number, lat: number) =>
+      toPublicRestaurant(
+        record({ location: { type: 'Point', coordinates: [lng, lat] } }),
+        undefined,
+        now,
+      ).timezone;
+    expect(at(-3.7, 40.4)).toBe('Europe/Madrid');
+    expect(at(-15.43, 28.12)).toBe('Atlantic/Canary');
+    expect(at(139.69, 35.68)).toBe('Asia/Tokyo');
+    expect(at(-58.38, -34.6)).toBe('America/Argentina/Buenos_Aires');
+  });
+
   it('no filtra campos internos', () => {
     const result = toPublicRestaurant(
       { ...record(), searchText: 'x', cityKey: 'madrid', __v: 0 } as never,
