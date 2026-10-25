@@ -10,11 +10,12 @@ const DAY = 24 * 60 * 60_000;
 
 // ❓ Plazos provisionales hasta la revisión legal (docs/08_PRIVACIDAD_LEGAL.md).
 // Lo retirado se oculta al instante; el contenido se borra pasado este plazo.
-// La política dice 7 días: aquí hay más margen, sin pasar del mes que da el RGPD.
-export const REVOKED_STORY_DAYS = 21;
+// 30 días: el plazo que damos a quien retira algo. Es el límite de «un mes» del
+// RGPD si el mes tiene 30 días o más (❓ revisión legal: febrero tiene 28).
+export const REVOKED_STORY_DAYS = 30;
 // Una ficha retirada a petición del negocio se borra del todo (con su equipo y
 // sus fotos) pasado este plazo, el mismo que las historias.
-export const RETIRED_LISTING_DAYS = 21;
+export const RETIRED_LISTING_DAYS = 30;
 // Tope del correo de una solicitud que sigue sin resolverse (≈ 9 meses).
 export const CONTACT_EMAIL_DAYS = 270;
 

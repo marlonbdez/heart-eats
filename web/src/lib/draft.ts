@@ -1,9 +1,9 @@
 // Borrador de un formulario, guardado SOLO en este navegador (localStorage).
 // Sirve para no perder lo escrito si se cierra la pestaña o se corta la
-// conexión. No sale del dispositivo, caduca a los 7 días y se puede borrar.
+// conexión. No sale del dispositivo, caduca a los 30 días y se puede borrar.
 // Quien lo use decide qué campos guarda: nunca los privados (correo).
 const DAY = 24 * 60 * 60 * 1000;
-const TTL = 7 * DAY;
+const TTL = 30 * DAY;
 
 interface Stored<T> {
   data: T;

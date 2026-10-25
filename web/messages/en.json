@@ -306,7 +306,7 @@
     "draft": {
       "restored": "We restored the draft you left unfinished.",
       "clear": "Start over",
-      "note": "While you type, a draft is saved only on this device (without your email). It is deleted when you send or after 7 days."
+      "note": "While you type, a draft is saved on this device. It is deleted when you send."
     }
   },
   "correct": {
@@ -493,7 +493,7 @@
       "guarantees": [
         "You choose how much to share. You can share just a number or, with permission, personal stories.",
         "No one appears without their permission. Each person decides for themselves.",
-        "You can change or withdraw it whenever you like. We delete it within 7 days at most."
+        "You can change or withdraw it whenever you like. We delete it within 30 days at most."
       ],
       "place": "Which place is it?",
       "placeError": "Choose your place to continue.",
@@ -549,8 +549,8 @@
       "who": "Who gives permission?",
       "self": "The person themselves",
       "representative": "Their legal representative",
-      "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my job, what is written above and my photo, if I have added one. It is voluntary, I can change my mind at any time and, if I ask, it will be deleted within 7 days at most.",
-      "consentRepresentative": "As their legal representative, I give permission for HeartEats to publish this person’s name (or pseudonym), job, what is written above and photo, if one has been added. It is voluntary, they can change their mind at any time and, if they ask, it will be deleted within 7 days at most.",
+      "consentSelf": "I give my permission for HeartEats to publish my name (or pseudonym), my job, what is written above and my photo, if I have added one. It is voluntary, I can change my mind at any time and, if I ask, it will be deleted within 30 days at most.",
+      "consentRepresentative": "As their legal representative, I give permission for HeartEats to publish this person’s name (or pseudonym), job, what is written above and photo, if one has been added. It is voluntary, they can change their mind at any time and, if they ask, it will be deleted within 30 days at most.",
       "consentNote": "Provisional consent text: it must be reviewed by a professional before it is published.",
       "storyError": "Complete the name, role and story, and tick the permission, to continue.",
       "add": "+ Add another person"
@@ -638,7 +638,7 @@
           "Only the business can tell the story of its team, and never in detail without its knowledge. Until the business confirms, we only show public, verifiable information.",
           "Each person decides for themselves whether to appear, under what name (it can be a pseudonym) and with what photo. Where it applies, their legal representative decides.",
           "A story without recorded consent is not saved.",
-          "It can be withdrawn at any time, without giving reasons. The story stops being shown immediately and the data is deleted within 21 days at most.",
+          "It can be withdrawn at any time, without giving reasons. The story stops being shown immediately and the data is deleted within 30 days at most.",
           "In small teams (fewer than 5 people) we make sure nobody can be recognised: we do not publish figures by type of disability or by role when they could identify someone, and we only give general figures.",
           "Stories, names and photos are not offered for download or reuse: they are only shown on HeartEats, with permission and can be withdrawn."
         ]
@@ -791,7 +791,7 @@
         "items": [
           "Your language: if you change it with the selector in the header, it is remembered for your next visit. It is a two-letter code (es or en) with no expiry date; it is deleted with the site data.",
           "Your theme: if you choose light or dark in the side menu, it is remembered for your next visit. It is a single word (light or dark) with no expiry date; going back to System deletes it. It is also deleted with the site data.",
-          "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 7 days at most and is deleted when you send it or press Start over."
+          "The draft of Suggest a place: while you type, so you do not lose your text if you close the page. It does not include your email, the website or the photos. It is kept for 30 days at most and is deleted when you send it or press Start over."
         ],
         "paragraphs": [
           "Everything stays on your device and is not sent to anyone. Your browser keeps it for a feature you asked for, so we do not ask for permission."

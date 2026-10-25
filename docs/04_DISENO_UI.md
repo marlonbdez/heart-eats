@@ -64,11 +64,11 @@ Desde el menú ☰, la cabecera o los estados vacíos. Formulario de **4 pasos**
 3. **Equipo:** cómo conoce el negocio quien propone, un enlace que lo confirme y casilla "negocio independiente". Aviso: **no escribir nombres ni datos de salud de personas**; el detalle del equipo lo cuenta solo el negocio con consentimiento (F3).
 4. **Enviar:** correo opcional (no público), resumen y aviso de privacidad.
 Confirmación: "Gracias, lo revisaremos", volver al mapa o proponer otro.
-- Antispam: honeypot y rate limit. **Borrador:** se guarda en el dispositivo mientras se escribe (sin el correo, 7 días), se recupera al volver y se borra al enviar o con «Empezar de cero».
+- Antispam: honeypot y rate limit. **Borrador:** se guarda en el dispositivo mientras se escribe (sin el correo, 30 días), se recupera al volver y se borra al enviar o con «Empezar de cero».
 
 ### F3 · Negocio cuenta su equipo y da los consentimientos
 Pantalla para el negocio (acceso desde el menú "Soy de un negocio", desde el enlace «¿Es tu local?» de cada ficha —que deja el local ya elegido, `/business/[slug]`— o desde el contacto de moderación). **4 pasos**:
-1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 7 días ❓). Aquí se elige también **de qué local se trata** (lista de locales; si no está, enlace a «Proponer un local»).
+1. **Antes de empezar:** "Tú decides cuánto contar". Tres garantías: eliges el nivel, nadie aparece sin su permiso, se puede cambiar o retirar (borrado en máx. 30 días ❓). Aquí se elige también **de qué local se trata** (lista de locales; si no está, enlace a «Proponer un local»).
 2. **Nivel:** tres tarjetas con ejemplo de cómo se verá: **Solo cifras** (recomendado para empezar), **Áreas y tipos**, **Historias con nombre** (solo con permiso de cada persona).
 3. **Datos:** personas en el equipo y cuántas tienen discapacidad (validaciones: ≥1, ≤ total); en nivel medio, áreas y tipos de discapacidad sin identificar; en nivel máximo, hasta 3 historias, cada una con **su propio consentimiento** (la persona o su representante legal).
    - Áreas y tipos de discapacidad se eligen **por separado**, sin cruzarlos (ver `01_ESPECIFICACION_DATOS.md`).
