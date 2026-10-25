@@ -129,7 +129,10 @@ test.describe('selector de idioma de la cabecera', () => {
       const boxes = await Promise.all(
         [
           page.getByRole('button', { name: 'ES · Idioma' }),
-          page.getByRole('link', { name: 'Proponer un local' }),
+          // La página puede traer otro enlace igual (el de «sin locales»).
+          page
+            .getByRole('banner')
+            .getByRole('link', { name: 'Proponer un local' }),
         ].map((l) => l.boundingBox()),
       );
       const [lang, cta] = boxes;
