@@ -119,6 +119,18 @@ export async function chooseNearMe(page: Page) {
     .click();
 }
 
+// Elegir un local en el buscador de los formularios: se escribe parte del
+// nombre y se toca el resultado.
+export async function choosePlace(
+  page: Page,
+  label: string,
+  search: string,
+  name: string,
+) {
+  await page.getByLabel(label, { exact: true }).fill(search);
+  await page.getByRole('button', { name: new RegExp(name) }).click();
+}
+
 export const test = base.extend<{ sent: Sent[]; session: Session }>({
   sent: async ({}, provide) => {
     await provide([]);

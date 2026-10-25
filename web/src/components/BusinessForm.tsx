@@ -16,6 +16,7 @@ import type {
 } from '@/lib/types';
 import { isEmail } from '@/lib/validation';
 import { PhotoPicker } from './PhotoPicker';
+import { PlacePicker, type PlaceOption } from './PlacePicker';
 import { TeamBlock } from './TeamBlock';
 import { SlowNotice } from './SlowNotice';
 import { Spinner } from './Spinner';
@@ -35,12 +36,6 @@ const TYPES: DisabilityType[] = [
   'other',
 ];
 
-export interface PlaceOption {
-  slug: string;
-  name: string;
-  neighborhood?: string;
-}
-
 interface StoryState {
   name: string;
   role: string;
@@ -50,7 +45,7 @@ interface StoryState {
   photo?: PreparedPhoto; // reducida; no sale del navegador hasta enviar
 }
 interface FormState {
-  slug: string;
+  place: PlaceOption | null;
   level: TeamLevel | '';
   total: string;
   withDisability: string;
@@ -70,7 +65,7 @@ const emptyStory: StoryState = {
   consent: false,
 };
 const initial: FormState = {
-  slug: '',
+  place: null,
   level: '',
   total: '',
   withDisability: '',
@@ -87,14 +82,8 @@ const capitalize = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
 const toggle = <T,>(list: T[], item: T) =>
   list.includes(item) ? list.filter((x) => x !== item) : [...list, item];
 
-// `initialSlug`: el local ya elegido, cuando se llega desde su ficha.
-export function BusinessForm({
-  places,
-  initialSlug,
-}: {
-  places: PlaceOption[];
-  initialSlug?: string;
-}) {
+// `initialPlace`: el local ya elegido, cuando se llega desde su ficha.
+export function BusinessForm({ initialPlace }: { initialPlace?: PlaceOption }) {
   const t = useTranslations('business');
   const tTeam = useTranslations('team');
   const tSubmit = useTranslations('submit');
@@ -102,7 +91,7 @@ export function BusinessForm({
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>({
     ...initial,
-    slug: initialSlug ?? '',
+    place: initialPlace ?? null,
   });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<
@@ -138,7 +127,7 @@ export function BusinessForm({
     setErrors((e) => ({ ...e, [`story${i}`]: false }));
   };
 
-  const place = places.find((p) => p.slug === form.slug);
+  const place = form.place;
   const total = toInt(form.total);
   const withDisability = toInt(form.withDisability);
   const small = total >= 1 && isSmallTeam(total);
@@ -168,7 +157,7 @@ export function BusinessForm({
 
   const validate = (): boolean => {
     const next: Record<string, boolean> = {};
-    if (step === 1 && !place) next.slug = true;
+    if (step === 1 && !place) next.place = true;
     if (step === 2 && !form.level) next.level = true;
     if (step === 3) {
       if (!(total >= 1)) next.total = true;
@@ -192,7 +181,7 @@ export function BusinessForm({
     const team = buildTeam();
     try {
       await submitBusinessTeam({
-        restaurantSlug: form.slug,
+        restaurantSlug: form.place?.slug ?? '',
         level: team.level,
         summary: team.summary,
         areas: team.areas,
@@ -298,31 +287,13 @@ export function BusinessForm({
                 <li key={g}>{g}</li>
               ))}
             </ul>
-            <div className={s.field}>
-              <label htmlFor="b-place" className={s.label}>
-                {t('s1.place')}
-              </label>
-              <select
-                id="b-place"
-                className={`${s.input} ${errors.slug ? s.invalid : ''}`}
-                value={form.slug}
-                onChange={(e) => set('slug', e.target.value)}
-                aria-invalid={errors.slug || undefined}
-                aria-describedby={errors.slug ? 'e-place' : undefined}
-              >
-                <option value="">{t('s1.placeholder')}</option>
-                {places.map((p) => (
-                  <option key={p.slug} value={p.slug}>
-                    {p.neighborhood ? `${p.name} · ${p.neighborhood}` : p.name}
-                  </option>
-                ))}
-              </select>
-              {errors.slug && (
-                <p id="e-place" role="alert" className={s.error}>
-                  {t('s1.placeError')}
-                </p>
-              )}
-            </div>
+            <PlacePicker
+              id="b-place"
+              label={t('s1.place')}
+              value={form.place}
+              onChange={(p) => set('place', p)}
+              error={errors.place ? t('s1.placeError') : undefined}
+            />
             <p className={s.small}>
               {t('s1.notListed')}{' '}
               <Link href="/propose">{t('s1.notListedLink')}</Link>

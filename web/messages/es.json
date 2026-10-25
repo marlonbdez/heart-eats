@@ -496,7 +496,6 @@
         "Puedes cambiarlo o retirarlo cuando quieras. Lo borramos en un máximo de 7 días."
       ],
       "place": "¿De qué local se trata?",
-      "placeholder": "Elige tu local",
       "placeError": "Elige tu local para poder continuar.",
       "notListed": "¿No encuentras tu local?",
       "notListedLink": "Propónlo primero"
@@ -1364,6 +1363,18 @@
       "moreError": "No hemos podido cargar más. Puedes intentarlo de nuevo."
     }
   },
+  "placePicker": {
+    "country": "País",
+    "hint": "Escribe al menos dos letras del nombre del local.",
+    "searching": "Buscando…",
+    "found": "{count, plural, one {# local encontrado} other {# locales encontrados}}",
+    "noResults": "No hemos encontrado ningún local con ese nombre. Prueba con otra parte del nombre o cambia de país.",
+    "more": "Hay más locales con ese nombre. Escribe más letras para afinar.",
+    "change": "Cambiar de local",
+    "error": "No hemos podido buscar ahora mismo.",
+    "retry": "Intentarlo de nuevo",
+    "noRegions": "Todavía no hay locales publicados."
+  },
   "removal": {
     "title": "Pedir una retirada",
     "stepOf": "Paso {n} de {total}",
@@ -1392,7 +1403,6 @@
     "s2": {
       "intro": "Dinos en qué local aparece, para que podamos encontrarlo.",
       "place": "¿En qué local aparece?",
-      "placeholder": "Elige el local",
       "placeError": "Elige el local para poder continuar.",
       "details": "¿Algo más que nos ayude a encontrarlo?",
       "detailsHint": "Por ejemplo, el nombre o el seudónimo que aparece. Por favor, no escribas datos de salud ni nombres de otras personas."

@@ -1,4 +1,4 @@
-import { expect, test, type Page } from './support/test';
+import { choosePlace, expect, test, type Page } from './support/test';
 
 test('soy de un negocio: solo cifras, en 4 pasos', async ({ page, sent }) => {
   await page.goto('/es/business');
@@ -9,9 +9,12 @@ test('soy de un negocio: solo cifras, en 4 pasos', async ({ page, sent }) => {
   // Sin elegir el local no se avanza.
   await page.getByRole('button', { name: 'Empezar' }).click();
   await expect(page.locator('p[role=alert]')).toContainText('Elige tu local');
-  await page.getByLabel('¿De qué local se trata?').selectOption({
-    label: '[DEMO] Café Paso a Paso · Malasaña',
-  });
+  await choosePlace(
+    page,
+    '¿De qué local se trata?',
+    'paso a paso',
+    'Café Paso a Paso',
+  );
   await page.getByRole('button', { name: 'Empezar' }).click();
 
   // Hay que elegir qué mostrar.
@@ -63,9 +66,12 @@ test('soy de un negocio: una historia no se envía sin el permiso de la persona'
   sent,
 }) => {
   await page.goto('/es/business');
-  await page
-    .getByLabel('¿De qué local se trata?')
-    .selectOption('demo-la-masa-madre');
+  await choosePlace(
+    page,
+    '¿De qué local se trata?',
+    'masa madre',
+    'La Masa Madre',
+  );
   await page.getByRole('button', { name: 'Empezar' }).click();
   await page.getByLabel(/Historias con nombre/).check();
   await page.getByRole('button', { name: 'Continuar' }).click();
@@ -145,9 +151,12 @@ test('soy de un negocio: en un equipo pequeño solo se muestra la cifra', async 
   page,
 }) => {
   await page.goto('/es/business');
-  await page
-    .getByLabel('¿De qué local se trata?')
-    .selectOption('demo-la-masa-madre');
+  await choosePlace(
+    page,
+    '¿De qué local se trata?',
+    'masa madre',
+    'La Masa Madre',
+  );
   await page.getByRole('button', { name: 'Empezar' }).click();
   await page.getByLabel(/Áreas y tipos/).check();
   await page.getByRole('button', { name: 'Continuar' }).click();
@@ -174,9 +183,9 @@ test('soy de un negocio: desde la ficha, el local ya viene elegido', async ({
   await expect(
     page.getByRole('heading', { name: 'Cuenta tu equipo' }),
   ).toBeVisible();
-  await expect(page.getByLabel('¿De qué local se trata?')).toHaveValue(
-    'demo-la-masa-madre',
-  );
+  await expect(
+    page.getByRole('group', { name: '¿De qué local se trata?' }),
+  ).toContainText('La Masa Madre');
   // Sin tocar nada más, se puede seguir al paso 2.
   await page.getByRole('button', { name: 'Empezar' }).click();
   await expect(page.getByText('Paso 2 de 4')).toBeVisible();
@@ -203,9 +212,12 @@ const png = { name: 'foto.png', mimeType: 'image/png', buffer: PIXEL };
 // Hasta el paso 3 con «Historias con nombre» y una persona rellenada.
 async function toStory(page: Page) {
   await page.goto('/es/business');
-  await page
-    .getByLabel('¿De qué local se trata?')
-    .selectOption('demo-la-masa-madre');
+  await choosePlace(
+    page,
+    '¿De qué local se trata?',
+    'masa madre',
+    'La Masa Madre',
+  );
   await page.getByRole('button', { name: 'Empezar' }).click();
   await page.getByLabel(/Historias con nombre/).check();
   await page.getByRole('button', { name: 'Continuar' }).click();

@@ -7,7 +7,7 @@ import { submitRemoval } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import type { RemovalWhat } from '@/lib/types';
 import { isEmail } from '@/lib/validation';
-import type { PlaceOption } from './BusinessForm';
+import { PlacePicker, type PlaceOption } from './PlacePicker';
 import { SlowNotice } from './SlowNotice';
 import { Spinner } from './Spinner';
 import s from './Form.module.css';
@@ -17,7 +17,7 @@ const WHATS: RemovalWhat[] = ['story', 'photo', 'listing', 'data'];
 
 interface FormState {
   what: RemovalWhat | null;
-  slug: string;
+  place: PlaceOption | null;
   details: string;
   email: string;
   website: string; // honeypot
@@ -25,7 +25,7 @@ interface FormState {
 
 const initial: FormState = {
   what: null,
-  slug: '',
+  place: null,
   details: '',
   email: '',
   website: '',
@@ -34,7 +34,7 @@ const initial: FormState = {
 // Pedir que se retire una historia, una foto o una ficha, o ejercer un derecho
 // sobre los propios datos. No hace falta cuenta ni justificarlo; sí un correo,
 // para confirmar que quien lo pide es quien dice ser antes de ocultar nada.
-export function RemovalForm({ places }: { places: PlaceOption[] }) {
+export function RemovalForm() {
   const t = useTranslations('removal');
   const tSubmit = useTranslations('submit');
   const locale = useLocale() === 'en' ? 'en' : 'es';
@@ -62,23 +62,23 @@ export function RemovalForm({ places }: { places: PlaceOption[] }) {
     setErrors((e) => ({ ...e, [key]: false }));
   };
 
-  const place = places.find((p) => p.slug === form.slug);
+  const place = form.place;
 
   const validate = (): boolean => {
     const next: Record<string, boolean> = {};
     if (step === 1 && !form.what) next.what = true;
-    if (step === 2 && !place) next.slug = true;
+    if (step === 2 && !place) next.place = true;
     if (step === 3 && !isEmail(form.email.trim())) next.email = true;
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
   const send = async () => {
-    if (!form.what) return;
+    if (!form.what || !form.place) return;
     setStatus('sending');
     try {
       await submitRemoval({
-        restaurantSlug: form.slug,
+        restaurantSlug: form.place?.slug ?? '',
         what: form.what,
         details: form.details.trim() || undefined,
         contactEmail: form.email.trim(),
@@ -194,31 +194,13 @@ export function RemovalForm({ places }: { places: PlaceOption[] }) {
         {step === 2 && (
           <div className={s.step}>
             <p className={s.intro}>{t('s2.intro')}</p>
-            <div className={s.field}>
-              <label htmlFor="r-place" className={s.label}>
-                {t('s2.place')}
-              </label>
-              <select
-                id="r-place"
-                className={`${s.input} ${errors.slug ? s.invalid : ''}`}
-                value={form.slug}
-                onChange={(e) => set('slug', e.target.value)}
-                aria-invalid={errors.slug || undefined}
-                aria-describedby={errors.slug ? 'e-place' : undefined}
-              >
-                <option value="">{t('s2.placeholder')}</option>
-                {places.map((p) => (
-                  <option key={p.slug} value={p.slug}>
-                    {p.neighborhood ? `${p.name} · ${p.neighborhood}` : p.name}
-                  </option>
-                ))}
-              </select>
-              {errors.slug && (
-                <p id="e-place" role="alert" className={s.error}>
-                  {t('s2.placeError')}
-                </p>
-              )}
-            </div>
+            <PlacePicker
+              id="r-place"
+              label={t('s2.place')}
+              value={form.place}
+              onChange={(p) => set('place', p)}
+              error={errors.place ? t('s2.placeError') : undefined}
+            />
             <div className={s.field}>
               <label htmlFor="r-details" className={s.label}>
                 {t('s2.details')}{' '}

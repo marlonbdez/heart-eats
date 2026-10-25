@@ -304,6 +304,32 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('buscador de local: sin elegir, resultados, sin resultados y elegido', async ({
+      page,
+    }) => {
+      await page.goto('/es/removal');
+      await page.getByLabel(/Una historia/).check();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await page.getByRole('button', { name: 'Continuar' }).click();
+      await expect(page.locator('p[role=alert]')).toBeVisible();
+      await expectNoViolations(page);
+
+      const search = page.getByLabel('¿En qué local aparece?', { exact: true });
+      await search.fill('zzz');
+      await expect(page.getByText('No hemos encontrado ningún')).toBeVisible();
+      await expectNoViolations(page);
+
+      await search.fill('café');
+      await expect(page.getByText('2 locales encontrados')).toBeVisible();
+      await expectNoViolations(page);
+
+      await page.getByRole('button', { name: /Café Paso a Paso/ }).click();
+      await expect(
+        page.getByRole('button', { name: 'Cambiar de local' }),
+      ).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('proponer un local: paso de platos con fotos y aviso de permiso', async ({
       page,
     }) => {

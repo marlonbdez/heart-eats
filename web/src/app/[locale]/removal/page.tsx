@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { RemovalLoader } from '@/components/LocalLoaders';
+import { RemovalForm } from '@/components/RemovalForm';
 
 export async function generateMetadata({
   params,
@@ -19,5 +19,5 @@ export default async function RemovalPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <RemovalLoader />;
+  return <RemovalForm />;
 }

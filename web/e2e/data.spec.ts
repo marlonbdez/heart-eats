@@ -66,9 +66,7 @@ test('corregir y contar el equipo funcionan con la dirección del local', async 
   await page.goto('/es/correct/demo-la-masa-madre');
   await expect(page.getByText(/La Masa Madre/).first()).toBeVisible();
   await page.goto('/es/business/demo-la-masa-madre');
-  await expect(page.getByRole('combobox').first()).toHaveValue(
-    'demo-la-masa-madre',
-  );
+  await expect(page.getByRole('group').first()).toContainText('La Masa Madre');
   await page.goto('/es/business/no-existe');
   await expect(
     page.getByRole('heading', { name: 'No encontramos este local' }),
