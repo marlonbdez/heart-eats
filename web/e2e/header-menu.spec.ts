@@ -123,12 +123,12 @@ const menuGroup = (page: Page, name: string) =>
     .locator('section')
     .filter({ has: page.getByRole('heading', { name, exact: true }) });
 
-test('«Pedir una retirada» y «Cuenta tu equipo» están en «Participar»', async ({
+test('«Pedir una retirada» y «Cuenta tu equipo» están en «Colaborar»', async ({
   page,
 }) => {
   await page.goto('/es');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
-  const take = menuGroup(page, 'Participar');
+  const take = menuGroup(page, 'Colaborar');
   await expect(take.getByRole('link')).toHaveText([
     'Proponer un local',
     'Corregir un dato',
@@ -190,12 +190,12 @@ test('el menú existe en inglés con las mismas agrupaciones', async ({
   await page.goto('/en');
   await page.getByRole('button', { name: 'Open menu' }).click();
   await expect(
-    menuGroup(page, 'Take part').getByRole('link', {
+    menuGroup(page, 'Contribute').getByRole('link', {
       name: 'Ask for a removal',
     }),
   ).toBeVisible();
   await expect(
-    menuGroup(page, 'Take part').getByRole('link', {
+    menuGroup(page, 'Contribute').getByRole('link', {
       name: 'Tell us about your team',
     }),
   ).toBeVisible();

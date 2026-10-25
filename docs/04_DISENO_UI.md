@@ -40,7 +40,7 @@ Moderación (acceso con magic link): Cola ──► Detalle de sugerencia ──
 Cabecera fija: botón de menú (☰) · logo · "Proponer un local"; debajo, buscador y filtros de comida. El ☰ abre un **panel lateral** (cierra con ×, tocando fuera o con Esc) con:
 
 - **Navegar:** en móvil, Lista de locales · Mapa; desde 900 px, donde lista y mapa se ven a la vez, una sola entrada: Explorar locales
-- **Participar:** Proponer un local · Corregir un dato · Pedir una retirada · Cuenta tu equipo (el nombre de la pantalla del negocio) · Cómo ayudar
+- **Colaborar:** Proponer un local · Corregir un dato · Pedir una retirada · Cuenta tu equipo (el nombre de la pantalla del negocio) · Cómo ayudar
 - **Sobre HeartEats:** Qué es · Cómo verificamos · Privacidad y datos · Cookies · Aviso legal · Contacto
 - **Pie:** selector de idioma (ES/EN) y lema del proyecto
 
