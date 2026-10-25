@@ -299,9 +299,3 @@ select.input {
   border-radius: 12px;
   background: var(--hover);
 }
-.fileInput {
-  width: 100%;
-  min-height: 48px;
-  font: inherit;
-  color: inherit;
-}

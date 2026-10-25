@@ -14,10 +14,11 @@ import {
   type PhotoAlt,
 } from '@/lib/data';
 import { countryName } from '@/lib/countries';
-import { PHOTO_TYPES, preparePhoto, type PreparedPhoto } from '@/lib/image';
+import { preparePhoto, type PreparedPhoto } from '@/lib/image';
 import { loadRegions } from '@/lib/regions';
 import type { PlacePhoto, RegionCountry, Restaurant } from '@/lib/types';
 import { useLoad } from '@/lib/use-load';
+import { PhotoDropzone } from './PhotoDropzone';
 import { Remote } from './Remote';
 import form from './Form.module.css';
 import styles from './Moderation.module.css';
@@ -514,17 +515,15 @@ function AddPhoto({
       <h3>{t('addTitle')}</h3>
       <p className={styles.meta}>{t('addHint')}</p>
       <div className={form.field}>
-        <label className={form.label} htmlFor={`${id}-file`}>
+        <p className={form.label} id={`${id}-file-label`}>
           {t('file')}
-        </label>
-        <input
+        </p>
+        <PhotoDropzone
           key={round}
           id={`${id}-file`}
-          type="file"
-          accept={PHOTO_TYPES.join(',')}
-          className={form.fileInput}
-          aria-describedby={error ? `${id}-error` : undefined}
-          onChange={(e) => void choose(e.target.files?.[0])}
+          labelledBy={`${id}-file-label`}
+          describedBy={error ? `${id}-error` : undefined}
+          onFile={(file) => void choose(file)}
         />
       </div>
       {photo && (

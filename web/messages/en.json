@@ -206,6 +206,9 @@
   "photo": {
     "optional": "(optional)",
     "remove": "Remove photo",
+    "choose": "Choose a photo",
+    "drag": "or drag it here",
+    "hint": "JPG, PNG or WebP · resized on your device",
     "preparing": "Preparing the photo…",
     "consent": "These photos are mine, or I have the business’s permission to use them.",
     "consentError": "Tick the box to continue with the photos.",

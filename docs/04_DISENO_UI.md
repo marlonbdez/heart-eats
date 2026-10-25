@@ -143,6 +143,7 @@ Criterio rector: **simple, claro y útil; sin vanidad ni adornos. Servir, no ven
 | 13 | **Buscador = sitios** (local, ciudad/barrio, código postal); **comida = categorías con icono**. Direcciones exactas fuera del MVP (requieren geocodificador, P4) | Cada cosa en su sitio, sin duplicar |
 | 12 | **Cabecera con menú lateral (☰)** que agrupa navegación, colaboración e información | Pantalla principal limpia y todo fácil de encontrar |
 | 11 | En la ficha, el bloque de verificación va **después** del contenido gastronómico | Transparente pero sin protagonismo |
+| 14 | **Dondequiera que se pida una foto** (`PhotoDropzone`: proponer, equipo del negocio y moderación) hay una zona única: se pulsa para elegir (galería o cámara en el móvil) o se arrastra encima. El campo de archivo nativo la cubre, así que teclado y lectores de pantalla funcionan igual | Misma experiencia en todas partes, sin librerías |
 
 ## 9. Gate de aprobación
 
