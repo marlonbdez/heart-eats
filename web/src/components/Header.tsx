@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
-import { navGroups } from '@/lib/nav';
+import { isCurrent, navGroups } from '@/lib/nav';
 import { LanguageMenu } from './LanguageMenu';
 import { LanguageSetting } from './LanguageSetting';
 import { LogoMark } from './LogoMark';
@@ -107,11 +107,16 @@ export function Header() {
               </h2>
               <ul className={styles.list}>
                 {group.links.map((link) => (
-                  <li key={link.href}>
+                  <li
+                    key={`${link.href}-${link.key}`}
+                    className={link.only && styles[link.only]}
+                  >
                     <Link
                       href={link.href}
                       className={styles.link}
-                      aria-current={pathname === link.href ? 'page' : undefined}
+                      aria-current={
+                        isCurrent(link, pathname) ? 'page' : undefined
+                      }
                     >
                       {t(`menu.links.${link.key}`)}
                     </Link>
