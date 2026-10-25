@@ -85,6 +85,8 @@ export interface Restaurant {
     instagram?: string;
   };
   openingHours: OpeningHours[];
+  // Zona horaria del local (IANA), en la que se leen `openingHours`.
+  timezone?: string;
   signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
   // La primera es la portada. En las listas solo viene esa.
   photos?: PlacePhoto[];

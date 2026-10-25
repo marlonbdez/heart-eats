@@ -7,6 +7,7 @@ import type { Restaurant } from '@/lib/types';
 import { BackLink } from './BackLink';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
+import { OpenNow } from './OpenNow';
 import { PlaceGallery } from './PlaceGallery';
 import { TeamBlock } from './TeamBlock';
 import styles from './RestaurantDetail.module.css';
@@ -72,6 +73,7 @@ export function RestaurantDetail({
             {t(`businessTypes.${r.businessType}`)} · {address}
             <Distance location={r.location} />
           </p>
+          <OpenNow hours={r.openingHours} timezone={r.timezone} />
           {foodTags.length > 0 && (
             <ul className={styles.tags} aria-label={t('foodTypes')}>
               {foodTags.map((tag) => (
@@ -80,9 +82,12 @@ export function RestaurantDetail({
             </ul>
           )}
           {description && <p>{description}</p>}
-          <p className={styles.seal}>
-            <span aria-hidden="true">♥</span> {t('seal')}
-          </p>
+          {/* Con bloque de equipo, el sello va dentro de él. */}
+          {!(teamLevel && r.team) && (
+            <p className={styles.seal}>
+              <span aria-hidden="true">♥</span> {t('seal')}
+            </p>
+          )}
         </header>
 
         <div className={styles.side}>
