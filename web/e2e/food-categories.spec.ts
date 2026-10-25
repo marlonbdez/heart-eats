@@ -93,11 +93,27 @@ test.describe('flechas con ratón', () => {
     await expect.poll(() => scrolled(page)).toBeGreaterThan(200);
     await expect(previous(page)).toBeVisible();
 
-    // Hasta el final: ya no hay más a la derecha.
-    await expect(async () => {
-      if (await next(page).count()) await next(page).click();
-      await expect(next(page)).toHaveCount(0, { timeout: 500 });
-    }).toPass({ timeout: 10_000 });
+    // Hasta el final: ya no hay más a la derecha. Cada clic se espera a que el
+    // desplazamiento suave termine antes del siguiente (en el CI va más lento).
+    for (let i = 0; i < 12 && (await next(page).count()); i++) {
+      // Si la flecha desaparece justo antes del clic, ya se llegó al final.
+      await next(page)
+        .click({ timeout: 2000 })
+        .catch(() => undefined);
+      let last = -1;
+      await expect
+        .poll(
+          async () => {
+            const now = await scrolled(page);
+            const still = now === last;
+            last = now;
+            return still;
+          },
+          { intervals: [150] },
+        )
+        .toBe(true);
+    }
+    await expect(next(page)).toHaveCount(0);
     await expect(previous(page)).toBeVisible();
 
     await previous(page).click();
