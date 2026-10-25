@@ -1,4 +1,4 @@
-import { expect, test } from './support/test';
+import { expect, test, type Page } from './support/test';
 
 test('el idioma de la cabecera es solo un icono, con nombre accesible', async ({
   page,
@@ -115,3 +115,88 @@ for (const width of [320, 390]) {
     ).toBeLessThanOrEqual(0);
   });
 }
+
+// El menú agrupa por lo que se hace: navegar, participar y saber más.
+const menuGroup = (page: Page, name: string) =>
+  page
+    .getByRole('dialog', { name: /^Men[uú]$/ })
+    .locator('section')
+    .filter({ has: page.getByRole('heading', { name, exact: true }) });
+
+test('«Pedir una retirada» y «Cuenta tu equipo» están en «Participar»', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  const take = menuGroup(page, 'Participar');
+  await expect(take.getByRole('link')).toHaveText([
+    'Proponer un local',
+    'Corregir un dato',
+    'Pedir una retirada',
+    'Cuenta tu equipo',
+    'Cómo ayudar',
+  ]);
+  // Ya no está entre los textos de «Sobre HeartEats».
+  await expect(
+    menuGroup(page, 'Sobre HeartEats').getByRole('link', {
+      name: 'Pedir una retirada',
+    }),
+  ).toHaveCount(0);
+
+  await take.getByRole('link', { name: 'Cuenta tu equipo' }).click();
+  await expect(page).toHaveURL(/\/es\/business$/);
+  await expect(
+    page.getByRole('heading', { name: 'Cuenta tu equipo', level: 1 }),
+  ).toBeVisible();
+});
+
+test('en pantalla ancha el menú tiene una sola entrada para lista y mapa', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/es');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  const browse = menuGroup(page, 'Navegar');
+  await expect(browse.getByRole('link')).toHaveText(['Explorar locales']);
+  await expect(
+    browse.getByRole('link', { name: 'Explorar locales' }),
+  ).toHaveAttribute('aria-current', 'page');
+  await expect(
+    browse.getByRole('link', { name: 'Explorar locales' }),
+  ).toHaveAttribute('href', '/es');
+
+  // En el mapa sigue siendo la misma pantalla.
+  await page.goto('/es/map');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await expect(
+    menuGroup(page, 'Navegar').getByRole('link', { name: 'Explorar locales' }),
+  ).toHaveAttribute('aria-current', 'page');
+});
+
+test('en el móvil el menú sigue teniendo Lista de locales y Mapa por separado', async ({
+  page,
+}) => {
+  await page.goto('/es');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await expect(menuGroup(page, 'Navegar').getByRole('link')).toHaveText([
+    'Lista de locales',
+    'Mapa',
+  ]);
+});
+
+test('el menú existe en inglés con las mismas agrupaciones', async ({
+  page,
+}) => {
+  await page.goto('/en');
+  await page.getByRole('button', { name: 'Open menu' }).click();
+  await expect(
+    menuGroup(page, 'Take part').getByRole('link', {
+      name: 'Ask for a removal',
+    }),
+  ).toBeVisible();
+  await expect(
+    menuGroup(page, 'Take part').getByRole('link', {
+      name: 'Tell us about your team',
+    }),
+  ).toBeVisible();
+});

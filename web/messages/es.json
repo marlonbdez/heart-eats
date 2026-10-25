@@ -24,15 +24,16 @@
     },
     "groups": {
       "navigate": "Navegar",
-      "collaborate": "Colaborar",
+      "participate": "Participar",
       "about": "Sobre HeartEats"
     },
     "links": {
+      "explore": "Explorar locales",
       "map": "Mapa",
       "list": "Lista de locales",
       "propose": "Proponer un local",
       "correct": "Corregir un dato",
-      "business": "Soy de un negocio",
+      "business": "Cuenta tu equipo",
       "what": "Qué es HeartEats",
       "verify": "Cómo verificamos",
       "privacy": "Privacidad y datos",

@@ -153,6 +153,17 @@
   padding: 0;
   list-style: none;
 }
+.wide {
+  display: none;
+}
+@media (min-width: 900px) {
+  .wide {
+    display: block;
+  }
+  .narrow {
+    display: none;
+  }
+}
 .link {
   display: flex;
   align-items: center;

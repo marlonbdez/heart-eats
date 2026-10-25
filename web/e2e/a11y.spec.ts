@@ -120,6 +120,16 @@ for (const scheme of ['light', 'dark'] as const) {
       await expectNoViolations(page);
     });
 
+    test('menú lateral en pantalla ancha (una sola entrada de locales)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('/es');
+      await page.getByRole('button', { name: /menú/i }).first().click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expectNoViolations(page);
+    });
+
     test('menú lateral con el tema elegido a mano', async ({ page }) => {
       await page.goto('/es');
       await page.getByRole('button', { name: /menú/i }).first().click();

@@ -86,8 +86,13 @@ test('el menú tiene Lista y Mapa', async ({ page }) => {
   await page.goto('/es');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
   const menu = page.getByRole('dialog');
-  await expect(menu.locator('a[href="/es"]')).toBeVisible();
-  await expect(menu.locator('a[href="/es/map"]')).toBeVisible();
+  await expect(
+    menu.getByRole('link', { name: 'Lista de locales' }),
+  ).toHaveAttribute('href', '/es');
+  await expect(menu.getByRole('link', { name: 'Mapa' })).toHaveAttribute(
+    'href',
+    '/es/map',
+  );
 });
 
 test('en desktop, la portada y el mapa enseñan lista y mapa a la vez', async ({
