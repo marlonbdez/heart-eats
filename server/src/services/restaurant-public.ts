@@ -2,6 +2,7 @@ import type { RestaurantRecord } from '../models/restaurant.js';
 import type { TeamRecord } from '../models/team.js';
 import type { PublicRestaurant } from '../types.js';
 import { photoUrls } from './photo-keys.js';
+import { timezoneOf } from './timezone.js';
 import { publicTeam } from './team-privacy.js';
 
 // Una verificación de más de 12 meses pide revisión (calculado, no guardado).
@@ -31,6 +32,7 @@ export function toPublicRestaurant(
   const photos = (allPhotos ? r.photos : r.photos?.slice(0, 1)) ?? [];
   const [lng, lat] = r.location.coordinates;
   const { level, method, lastVerifiedAt } = r.verification;
+  const timezone = timezoneOf(lat, lng);
 
   const publicTeamData = team
     ? publicTeam(team, r.ownerConfirmedAt, apiUrl)
@@ -65,6 +67,7 @@ export function toPublicRestaurant(
       open,
       close,
     })),
+    ...(timezone ? { timezone } : {}),
     signatureDishes: r.signatureDishes.map(
       ({ name, description, photoUrl, photo }) => ({
         name,

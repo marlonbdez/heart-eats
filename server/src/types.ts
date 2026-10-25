@@ -51,6 +51,8 @@ export interface PublicRestaurant {
     instagram?: string;
   };
   openingHours: { day: number; open: string; close: string }[];
+  // Zona horaria del local (IANA), en la que se leen `openingHours`.
+  timezone?: string;
   signatureDishes: {
     name: string;
     description?: string;

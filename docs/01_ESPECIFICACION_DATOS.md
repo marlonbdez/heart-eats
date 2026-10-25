@@ -32,6 +32,7 @@
 | `location` | GeoJSON Point | ✔ | `coordinates: [lng, lat]`, rangos válidos |
 | `contact.phone/email/website/instagram` | string | | `website` URL https; `email` formato válido |
 | `openingHours` | `{day 0-6, open, close}[]` | | `HH:mm`; permitir varios tramos por día ❓ cierre tras medianoche |
+| `timezone` (calculado) | string | | Zona horaria IANA del local, sacada de `location` con una tabla offline (`@photostructure/tz-lookup`, CC0). **No se guarda**: la API la da en cada respuesta y cambia sola si el pin cambia. Es la zona en la que se leen `openingHours` (para «abierto ahora») |
 | `signatureDishes` | `{name, description?, photoUrl?}[]` | | 0–3 platos estrella (opcional: un café o una panadería puede no tener ninguno; sin platos, la ficha no muestra el bloque); `name` ≤ 80, `description` ≤ 160. `photoUrl` apunta a una imagen en almacenamiento de objetos (R2 ❓ P1), ya reducida y aprobada por Moderación |
 | `foodTags` | string[] | ✔ | ≥1, catálogo `foodTag` (20 categorías mezclando cocina y formato: española, tapas, menú del día, café, brunch, pizza, asiática, vegana…; lista en `server/src/catalog.ts`) usado en los filtros públicos |
 | `inclusionTypes` | enum[] | | **Opcional y no filtrable públicamente.** Solo se muestra en "El Equipo" (nivel medio o máximo) si el negocio lo decide. ≥1: `intellectual_disability`, `physical_disability`, `hearing_impairment`, `visual_impairment`, `mental_health`, `autism_spectrum`, `other` |
