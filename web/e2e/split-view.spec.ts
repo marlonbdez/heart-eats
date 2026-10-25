@@ -83,6 +83,33 @@ test('tocar un pin marca su tarjeta y la lleva a la vista, sin globo', async ({
   await expect(last).toHaveAttribute('data-selected', 'false');
 });
 
+test('al tocar un pin, el pin y su tarjeta se animan juntos (y no con menos movimiento)', async ({
+  page,
+}) => {
+  const animation = (selector: string) =>
+    page
+      .locator(selector)
+      .first()
+      .evaluate((el) => getComputedStyle(el).animationName);
+
+  await page.goto('/es');
+  await expect(cards(page)).toHaveCount(6);
+  const slug = await cards(page).first().getAttribute('data-slug');
+  const pin = `[data-marker="${slug}"] svg`;
+  const card = `[data-slug="${slug}"]`;
+  expect(await animation(pin)).toBe('none');
+
+  await page.locator(`[data-marker="${slug}"]`).click();
+  await expect(cards(page).first()).toHaveAttribute('data-selected', 'true');
+  expect(await animation(pin)).toMatch(/pop/);
+  expect(await animation(card)).toMatch(/beat/);
+
+  // Con «reducir movimiento» solo queda el estado fijo.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await animation(pin)).toBe('none');
+  expect(await animation(card)).toBe('none');
+});
+
 test('la lista sigue al mapa: al alejarlo salen los locales de otras ciudades', async ({
   page,
 }) => {

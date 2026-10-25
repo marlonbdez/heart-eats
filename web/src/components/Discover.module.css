@@ -279,6 +279,21 @@
   border-color: var(--accent-text);
   box-shadow: 0 0 0 2px var(--accent-text);
 }
+/* Con el mapa al lado, la tarjeta del pin marcado late una vez (con un breve
+   retraso, para que ya esté a la vista): así se ve que van juntos. */
+@media (prefers-reduced-motion: no-preference) {
+  .area[data-split='true'] .item[data-selected='true'] {
+    animation: beat 0.7s ease-out 0.2s;
+  }
+}
+@keyframes beat {
+  40% {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 2px var(--accent-text),
+      0 0 0 9px color-mix(in srgb, var(--accent-text) 22%, transparent);
+  }
+}
 
 /* Carga en curso con la pantalla ya dibujada (cambio de zona, mover el mapa):
    una barra fina arriba y un aviso que no tapa los controles. */

@@ -364,8 +364,9 @@ export function MapView({
   useEffect(() => {
     markers.current.forEach(({ el }, slug) => {
       el.classList.toggle(styles.selected, slug === selected);
+      el.classList.toggle(styles.announce, split && slug === selected);
     });
-  }, [selected, restaurants, ready]);
+  }, [selected, restaurants, ready, split]);
 
   // El marcador del local que se resalta desde su tarjeta.
   useEffect(() => {
