@@ -21,7 +21,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    key: 'participate',
+    key: 'collaborate',
     links: [
       { href: '/propose', key: 'propose' },
       { href: '/correct', key: 'correct' },

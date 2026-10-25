@@ -88,11 +88,32 @@ test('un borrador roto o caducado no estropea el formulario', async ({
         k,
         JSON.stringify({
           data: { form: { name: 'Viejo' }, step: 1 },
-          savedAt: Date.now() - 8 * 24 * 60 * 60 * 1000,
+          savedAt: Date.now() - 31 * 24 * 60 * 60 * 1000,
         }),
       ),
     KEY,
   );
   await page.reload();
   await expect(page.getByLabel('Nombre del local')).toHaveValue('');
+});
+
+test('un borrador de hace dos semanas todavía se recupera (caduca a los 30 días)', async ({
+  page,
+}) => {
+  await page.goto('/es/propose');
+  await page.evaluate(
+    (k) =>
+      window.localStorage.setItem(
+        k,
+        JSON.stringify({
+          data: { form: { name: 'De hace dos semanas' }, step: 1 },
+          savedAt: Date.now() - 14 * 24 * 60 * 60 * 1000,
+        }),
+      ),
+    KEY,
+  );
+  await page.reload();
+  await expect(page.getByLabel('Nombre del local')).toHaveValue(
+    'De hace dos semanas',
+  );
 });

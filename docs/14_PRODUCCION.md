@@ -212,7 +212,7 @@ Lo hace la propia API, **dentro de su proceso**: al arrancar y **cada hora** (`s
 | Tarea | Qué hace | Plazo |
 |---|---|---|
 | Cerrar solicitudes sin respuesta | Pasa a `rejected` las de «Info pedida» sin respuesta, borra el correo y las historias de paso | 30 días + 3 de cortesía |
-| Vaciar historias retiradas | Borra nombre, puesto, texto y foto; conserva el hueco, el consentimiento y las fechas | 21 días tras retirarlas |
+| Vaciar historias retiradas | Borra nombre, puesto, texto y foto; conserva el hueco, el consentimiento y las fechas | 30 días tras retirarlas |
 | Borrar correos por antigüedad | Quita el correo de las solicitudes que aún lo conservan | ≈ 9 meses (270 días) |
 
 Los plazos son **provisionales** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.md`). Sesiones y enlaces de acceso caducan solos con un índice TTL de Mongo.

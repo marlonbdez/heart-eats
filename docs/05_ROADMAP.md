@@ -33,7 +33,7 @@ Siguiente (por orden):
 - [x] Los envíos de F2, F3 y F4 llegan a la cola de moderación (buzón de prueba en el navegador)
 - [x] «Pedir retirada» de una ficha o historia (`/removal`), con su flujo, sin depender del correo
 - [x] Pruebas automáticas de accesibilidad (axe, WCAG 2.2 AA) en todas las páginas y estados, en móvil, ES/EN y modo claro/oscuro (no sustituyen las pruebas con personas)
-- [x] «Guardar borrador» en proponer un local (en el propio dispositivo, sin el correo, 7 días)
+- [x] «Guardar borrador» en proponer un local (en el propio dispositivo, sin el correo, 30 días)
 - [x] Fotos opcionales desde la web, al proponer un local (una por plato) y desde el formulario del negocio (hasta 3): se reducen en el navegador, con permiso y en cuarentena; la subida es simulada y el almacenamiento real (R2) llega con el servidor
 - [x] Correo del dominio (`contact@hearteats.org`, reenvío gratuito con ImprovMX; ver `09_CORREO.md`), puesto en `/contact` y `/privacy`
 
@@ -67,8 +67,8 @@ Una PR por paso:
   - [x] Aprobar correcciones (nombre, dirección, pin, horario, cerrado) y retiradas (ficha o historia)
   - [x] Aprobar el equipo (solo admin): crea o actualiza el `Team`, añade las historias con su consentimiento y las saca de la solicitud; el admin las lee al abrirla
   - [x] Retiradas de fotos y de datos: se marcan como atendidas (la foto se retira antes desde «Fotos», que la borra al momento; los datos se atienden por correo) con auditoría `handle_removal` sin el texto; la solicitud enlaza con las fotos del local
-  - [x] Borrado definitivo de las historias retiradas (21 días) y tope de conservación del correo (9 meses), en el trabajo horario
-  - [x] Borrado definitivo de una ficha retirada a petición del negocio: al aprobar la retirada se marca `retiredAt` y, pasados 21 días, el trabajo horario borra la ficha, su equipo y sus fotos (con miniaturas) del almacén; auditoría `purge_listing`. No toca lo archivado por cierre del local ni las retiradas aprobadas antes de este cambio (sin `retiredAt`)
+  - [x] Borrado definitivo de las historias retiradas (30 días) y tope de conservación del correo (9 meses), en el trabajo horario
+  - [x] Borrado definitivo de una ficha retirada a petición del negocio: al aprobar la retirada se marca `retiredAt` y, pasados 30 días, el trabajo horario borra la ficha, su equipo y sus fotos (con miniaturas) del almacén; auditoría `purge_listing`. No toca lo archivado por cierre del local ni las retiradas aprobadas antes de este cambio (sin `retiredAt`)
   - [x] Retiradas pendientes de borrar (`GET /retired`, solo admin) y «Restaurar» una ficha retirada por error (`POST /retired/listings/:id/restore`, auditoría `restore`); sección «Retiradas» en Administración. Las historias salen solo por local y posición, sin contenido, y no se restauran
   - [x] Responder a «Info pedida» (`/replies/:token`) y cierre automático a los 30 días (más 3 de margen)
   - [x] Consulta de la auditoría (`GET /audit`, solo admin, con filtros y paginación)

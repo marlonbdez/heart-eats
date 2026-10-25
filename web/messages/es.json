@@ -24,7 +24,7 @@
     },
     "groups": {
       "navigate": "Navegar",
-      "participate": "Participar",
+      "collaborate": "Colaborar",
       "about": "Sobre HeartEats"
     },
     "links": {
@@ -307,7 +307,7 @@
     "draft": {
       "restored": "Hemos recuperado el borrador que dejaste a medias.",
       "clear": "Empezar de cero",
-      "note": "Mientras escribes, se guarda un borrador solo en este dispositivo (sin tu correo). Se borra al enviar o a los 7 días."
+      "note": "Mientras escribes, se guarda un borrador en este dispositivo. Se borra al enviar."
     }
   },
   "correct": {
@@ -494,7 +494,7 @@
       "guarantees": [
         "Tú eliges cuánto contar. Puedes compartir solo una cifra o, con permiso, historias personales.",
         "Nadie aparece sin su permiso. Cada persona decide por sí misma.",
-        "Puedes cambiarlo o retirarlo cuando quieras. Lo borramos en un máximo de 7 días."
+        "Puedes cambiarlo o retirarlo cuando quieras. Lo borramos en un máximo de 30 días."
       ],
       "place": "¿De qué local se trata?",
       "placeError": "Elige tu local para poder continuar.",
@@ -550,8 +550,8 @@
       "who": "¿Quién da el permiso?",
       "self": "La propia persona",
       "representative": "Su representante legal",
-      "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto, lo escrito arriba y mi foto, si he añadido una. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 7 días.",
-      "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto, lo escrito arriba y la foto de esta persona, si se ha añadido una. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 7 días.",
+      "consentSelf": "Doy mi permiso para que HeartEats publique mi nombre (o seudónimo), mi puesto, lo escrito arriba y mi foto, si he añadido una. Es voluntario, puedo cambiar de opinión cuando quiera y, si lo pido, se borrará en un máximo de 30 días.",
+      "consentRepresentative": "Como representante legal, doy permiso para que HeartEats publique el nombre (o seudónimo), el puesto, lo escrito arriba y la foto de esta persona, si se ha añadido una. Es voluntario, puede cambiar de opinión cuando quiera y, si lo pide, se borrará en un máximo de 30 días.",
       "consentNote": "Texto de consentimiento provisional: debe revisarlo un profesional antes de publicarse.",
       "storyError": "Completa el nombre, el puesto y la historia, y marca el permiso, para continuar.",
       "add": "+ Añadir otra persona"
@@ -639,7 +639,7 @@
           "Solo el negocio puede contar la historia de su equipo, y nunca con detalle sin que lo sepa. Hasta que el negocio lo confirme, solo mostramos información pública y verificable.",
           "Cada persona decide por sí misma si aparece, con qué nombre (puede ser un seudónimo) y con qué foto. Si corresponde, lo decide su representante legal.",
           "Una historia sin consentimiento registrado no se guarda.",
-          "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 21 días.",
+          "Se puede retirar en cualquier momento y sin dar explicaciones. La historia deja de mostrarse al instante y los datos se borran en un máximo de 30 días.",
           "En equipos pequeños (menos de 5 personas) cuidamos que nadie pueda reconocerse: no publicamos cifras por tipo de discapacidad ni por puesto cuando podrían identificar a alguien, y damos solo cifras generales.",
           "Las historias, nombres y fotos no se ofrecen para descarga ni reutilización: solo se ven en HeartEats, con permiso y retirables."
         ]
@@ -792,7 +792,7 @@
         "items": [
           "Tu idioma: si lo cambias con el selector de la cabecera, se recuerda para tu próxima visita. Es un código de dos letras (es o en), sin fecha de caducidad; se borra con los datos del sitio.",
           "Tu tema: si eliges claro u oscuro en el menú lateral, se recuerda para tu próxima visita. Es una sola palabra (light o dark), sin fecha de caducidad; al volver a «Sistema» se borra. También se borra con los datos del sitio.",
-          "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 7 días como máximo y se borra al enviar o al pulsar «Empezar de cero»."
+          "El borrador de «Proponer un local»: mientras escribes, para que no pierdas lo escrito si cierras la página. No incluye tu correo, la web ni las fotos. Se conserva 30 días como máximo y se borra al enviar o al pulsar «Empezar de cero»."
         ],
         "paragraphs": [
           "Todo se queda en tu dispositivo y no se envía a nadie. Lo guarda tu navegador para una función que has pedido tú, por eso no te pedimos permiso."

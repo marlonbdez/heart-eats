@@ -44,7 +44,7 @@
 | `verification.method` | enum | | `visit`, `call`, `documentation`, `owner_confirmed` |
 | `verification.evidence[]` | `{type,url,note}` | | |
 | `ownerConfirmedAt` | Date | | el negocio sabe que aparece (§11.5 handoff) |
-| `retiredAt` | Date | | se pone al aprobar la retirada de la ficha a petición del negocio; 21 días después se borra la ficha con su equipo y sus fotos (`02_API_SPEC.md`, «Conservación») |
+| `retiredAt` | Date | | se pone al aprobar la retirada de la ficha a petición del negocio; 30 días después se borra la ficha con su equipo y sus fotos (`02_API_SPEC.md`, «Conservación») |
 | `createdAt`, `updatedAt` | Date | ✔ | |
 
 **Reglas de negocio**
@@ -69,7 +69,7 @@
 
 **Reglas**
 - Una historia sin `consentRecordedAt` no se guarda.
-- Si `revokedAt` existe, la historia se oculta y los datos se eliminan en un plazo máximo definido en la política de privacidad ❓ (propuesta: 7 días).
+- Si `revokedAt` existe, la historia se oculta y los datos se eliminan en un plazo máximo definido en la política de privacidad ❓ (el servidor usa 30 días).
 - **Umbral de privacidad:** si `totalStaff` < 5 ❓, solo se publica la cifra: no se muestran `areas`, `disabilityTypes` ni `stories` (la API los ignora y el formulario no los pide).
 - **Áreas y tipos van por separado**, nunca cruzados («una persona sorda en cocina» podría identificar a alguien). Por eso no hay `count` por área ni por tipo.
 
@@ -111,6 +111,6 @@ Los datos semilla son **ficticios** y deben llevar `name` con prefijo `[DEMO]` y
 
 1. ❓ ¿`teamVisibilityLevel` solo en `Team`? (propuesto)
 2. ❓ Umbral de plantilla mínima para nivel `medium` (propuesto 5).
-3. ❓ Plazo de borrado tras revocación (propuesto 7 días).
+3. ❓ Plazo de borrado tras revocación (30 días, provisional hasta la revisión legal).
 4. ❓ Horarios: tramos múltiples y cierre pasada la medianoche.
 5. ❓ Búsqueda de texto: índice nativo de Mongo vs. Atlas Search.

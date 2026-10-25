@@ -359,3 +359,26 @@ test('soy de un negocio: mientras se prepara la foto se avisa y no se puede eleg
   ).toBeVisible();
   await expect(page.getByText('Preparando la foto')).toHaveCount(0);
 });
+
+test('los plazos de borrado que se prometen son de 30 días, en español e inglés', async ({
+  page,
+}) => {
+  await page.goto('/es/business/demo-la-masa-madre');
+  await expect(page.locator('main')).toContainText(
+    'Lo borramos en un máximo de 30 días.',
+  );
+  await page.goto('/en/business/demo-la-masa-madre');
+  await expect(page.locator('main')).toContainText(
+    'We delete it within 30 days at most.',
+  );
+  await page.goto('/es/privacy');
+  await expect(page.locator('main')).toContainText(
+    'los datos se borran en un máximo de 30 días',
+  );
+  await page.goto('/es/cookies');
+  await expect(page.locator('main')).toContainText(
+    'Se conserva 30 días como máximo',
+  );
+  // La sesión de moderación sigue caducando a los 7 días: es seguridad.
+  await expect(page.locator('main')).toContainText('Caduca tras 7 días');
+});

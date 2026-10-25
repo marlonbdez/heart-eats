@@ -174,9 +174,9 @@ test.describe('administración', () => {
         .filter({ hasText: 'Retirada el' });
       const lola = listings.filter({ hasText: 'Casa Lola' }).first();
       await expect(lola).toContainText('Madrid');
-      await expect(lola).toContainText('en 3 días');
+      await expect(lola).toContainText('en 12 días');
       await expect(listings.filter({ hasText: 'Bar Esperanza' })).toContainText(
-        'en 19 días',
+        'en 28 días',
       );
       // Las historias salen por local y posición, nunca con su contenido, y
       // no se pueden restaurar.
@@ -184,7 +184,7 @@ test.describe('administración', () => {
         .getByRole('listitem')
         .filter({ hasText: 'historia 2' });
       await expect(story).toContainText('Casa Lola');
-      await expect(story).toContainText('en 9 días');
+      await expect(story).toContainText('en 18 días');
       await expect(story.getByRole('button')).toHaveCount(0);
       await expect(page.getByText(/No se pueden restaurar/)).toBeVisible();
     });
