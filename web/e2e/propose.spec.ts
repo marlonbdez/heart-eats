@@ -54,6 +54,39 @@ async function toStepTwo(page: Page, name: string) {
   await page.getByLabel('Nombre del plato').fill('Tarta de la casa');
 }
 
+test('las fotos se piden en una zona que también admite arrastrar y soltar', async ({
+  page,
+}) => {
+  await toStepTwo(page, 'Local con zona de fotos');
+
+  const zone = page.locator('#d0p').locator('..');
+  await expect(zone).toContainText('Elige una foto');
+  await expect(zone).toContainText(
+    'JPG, PNG o WebP · se reduce en tu dispositivo',
+  );
+
+  // Soltar una imagen encima funciona igual que elegirla.
+  const data = await page.evaluateHandle((base64) => {
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    const dt = new DataTransfer();
+    dt.items.add(new File([bytes], 'foto.png', { type: 'image/png' }));
+    return dt;
+  }, PIXEL.toString('base64'));
+  await zone.dispatchEvent('dragover', { dataTransfer: data });
+  await zone.dispatchEvent('drop', { dataTransfer: data });
+  await expect(
+    page.getByRole('img', { name: 'Foto del plato 1' }),
+  ).toBeVisible();
+
+  // Sin desbordes horizontales a 360 px.
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 test('proponer un local: fotos del plato y del local, con permiso, subidas al enviar', async ({
   page,
   sent,

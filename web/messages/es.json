@@ -206,6 +206,9 @@
   "photo": {
     "optional": "(opcional)",
     "remove": "Quitar foto",
+    "choose": "Elige una foto",
+    "drag": "o arrástrala aquí",
+    "hint": "JPG, PNG o WebP · se reduce en tu dispositivo",
     "preparing": "Preparando la foto…",
     "consent": "Estas fotos son mías o tengo permiso del negocio para usarlas.",
     "consentError": "Marca la casilla para poder continuar con las fotos.",

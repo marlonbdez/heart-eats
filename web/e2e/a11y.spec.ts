@@ -354,6 +354,7 @@ for (const scheme of ['light', 'dark'] as const) {
           'base64',
         ),
       };
+      await expectNoViolations(page); // zonas de fotos vacías
       await page.locator('#d0p').setInputFiles(png);
       await page.locator('#v-photo-new').setInputFiles(png);
       await expect(

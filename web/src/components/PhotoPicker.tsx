@@ -2,11 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { PHOTO_TYPES, preparePhoto, type PreparedPhoto } from '@/lib/image';
+import { preparePhoto, type PreparedPhoto } from '@/lib/image';
+import { PhotoDropzone } from './PhotoDropzone';
 import { Spinner } from './Spinner';
 import s from './Form.module.css';
 
-// Campo de una foto opcional: elegir, ver la vista previa y quitarla. La foto
+// Campo de una foto opcional: elegir o arrastrar, ver la vista previa y quitarla. La foto
 // se reduce en el navegador (puede tardar un par de segundos, y se avisa); se
 // sube al enviar el formulario.
 export function PhotoPicker({
@@ -63,17 +64,11 @@ export function PhotoPicker({
           <Spinner /> {t('preparing')}
         </p>
       ) : (
-        <input
+        <PhotoDropzone
           id={id}
-          type="file"
-          accept={PHOTO_TYPES.join(',')}
-          className={s.fileInput}
-          aria-labelledby={`${id}-label`}
-          aria-describedby={error ? `${id}-error` : describedBy}
-          onChange={(e) => {
-            void choose(e.target.files?.[0]);
-            e.target.value = '';
-          }}
+          labelledBy={`${id}-label`}
+          describedBy={error ? `${id}-error` : describedBy}
+          onFile={(file) => void choose(file)}
         />
       )}
       {error && (
