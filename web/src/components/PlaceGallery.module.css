@@ -67,6 +67,13 @@
   }
 }
 
+/* En escritorio la portada es más apaisada, para no ocupar toda la pantalla. */
+@media (min-width: 900px) {
+  .mosaic {
+    aspect-ratio: 21 / 9;
+  }
+}
+
 /* Visor a pantalla completa. Siempre oscuro, sea cual sea el tema. */
 .viewer {
   width: 100%;
