@@ -64,7 +64,7 @@ test('«Cómo ayudar»: una forma para casi todo el mundo, en español y en ingl
   await expect(page.getByRole('heading', { level: 2 })).toHaveCount(6);
 });
 
-test('«Cómo ayudar» está en el menú lateral, en «Colaborar»', async ({
+test('«Cómo ayudar» está en el menú lateral, en «Participar»', async ({
   page,
 }) => {
   await page.goto('/es');

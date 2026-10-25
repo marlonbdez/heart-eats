@@ -24,15 +24,16 @@
     },
     "groups": {
       "navigate": "Browse",
-      "collaborate": "Contribute",
+      "participate": "Take part",
       "about": "About HeartEats"
     },
     "links": {
+      "explore": "Explore places",
       "map": "Map",
       "list": "List of places",
       "propose": "Suggest a place",
       "correct": "Correct a detail",
-      "business": "I run a business",
+      "business": "Tell us about your team",
       "what": "What is HeartEats",
       "verify": "How we verify",
       "privacy": "Privacy and data",
