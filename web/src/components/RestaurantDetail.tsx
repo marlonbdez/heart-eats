@@ -18,6 +18,7 @@ export function RestaurantDetail({
 }) {
   const t = useTranslations('detail');
   const tc = useTranslations('card');
+  const tf = useTranslations();
   const format = useFormatter();
   const locale = useLocale();
   const photos = galleryOf(r, locale);
@@ -29,6 +30,7 @@ export function RestaurantDetail({
   const verification = r.verification;
   const isAdmin = verification.level === 'admin';
   const teamLevel = effectiveTeamLevel(r);
+  const foodTags = r.foodTags.filter((tag) => tf.has(`foodTags.${tag}`));
 
   const actions = [
     { href: directions, label: t('directions'), primary: true, external: true },
@@ -70,11 +72,33 @@ export function RestaurantDetail({
             {t(`businessTypes.${r.businessType}`)} · {address}
             <Distance location={r.location} />
           </p>
+          {foodTags.length > 0 && (
+            <ul className={styles.tags} aria-label={t('foodTypes')}>
+              {foodTags.map((tag) => (
+                <li key={tag}>{tf(`foodTags.${tag}`)}</li>
+              ))}
+            </ul>
+          )}
+          {description && <p>{description}</p>}
           <p className={styles.seal}>
             <span aria-hidden="true">♥</span> {t('seal')}
           </p>
-          {description && <p>{description}</p>}
         </header>
+
+        <nav className={styles.actions} aria-label={t('actions')}>
+          {actions.map((a) => (
+            <a
+              key={a.label}
+              href={a.href}
+              className={a.primary ? styles.primary : styles.secondary}
+              {...(a.external
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+            >
+              {a.label}
+            </a>
+          ))}
+        </nav>
 
         {r.signatureDishes.length > 0 && (
           <section aria-labelledby="platos">
@@ -102,24 +126,9 @@ export function RestaurantDetail({
           </section>
         )}
 
-        <nav className={styles.actions} aria-label={t('actions')}>
-          {actions.map((a) => (
-            <a
-              key={a.label}
-              href={a.href}
-              className={a.primary ? styles.primary : styles.secondary}
-              {...(a.external
-                ? { target: '_blank', rel: 'noopener noreferrer' }
-                : {})}
-            >
-              {a.label}
-            </a>
-          ))}
-        </nav>
+        {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
 
         {teamLevel && r.team && <TeamBlock team={r.team} level={teamLevel} />}
-
-        {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
 
         <section className={styles.verification} aria-labelledby="verificacion">
           <h2 id="verificacion" className={styles.verificationTitle}>
