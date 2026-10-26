@@ -7,10 +7,10 @@ import { photoUploads } from '@/lib/features';
 import { submitProposal } from '@/lib/data';
 import { Link } from '@/i18n/navigation';
 import { countryOptions, isPostalCode } from '@/lib/countries';
-import type { FoodTag, LatLng } from '@/lib/types';
+import type { FoodTag, LatLng, PriceRange } from '@/lib/types';
 import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
 import type { PreparedPhoto } from '@/lib/image';
-import { isEmail, isHttpUrl, isPlaceText } from '@/lib/validation';
+import { isEmail, isHttpsUrl, isHttpUrl, isPlaceText } from '@/lib/validation';
 import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
 import { PinPickerLoader } from './PinPickerLoader';
@@ -22,6 +22,7 @@ const MAX_DISHES = 3;
 const MAX_PHOTOS = 5;
 const OTHER = 'other';
 const DRAFT_KEY = 'hearteats:draft-propose';
+const PRICES: PriceRange[] = [1, 2, 3];
 
 interface Dish {
   name: string;
@@ -37,6 +38,8 @@ interface FormState {
   location: LatLng | null; // el pin que coloca en el mapa
   postalCode: string;
   foods: string[];
+  priceRange: PriceRange | null;
+  menuUrl: string;
   dishes: Dish[];
   // Fotos del local, ya reducidas. No se guardan en el borrador.
   photos: PreparedPhoto[];
@@ -56,6 +59,8 @@ const initial: FormState = {
   location: null,
   postalCode: '',
   foods: [],
+  priceRange: null,
+  menuUrl: '',
   dishes: [{ name: '', description: '' }],
   photos: [],
   howKnown: '',
@@ -123,6 +128,8 @@ function sanitizeDraft(d: Draft | null): Draft | null {
       foods: Array.isArray(f.foods)
         ? f.foods.filter((k) => typeof k === 'string')
         : [],
+      priceRange: PRICES.find((p) => p === f.priceRange) ?? null,
+      menuUrl: str(f.menuUrl),
       dishes: dishes.length ? dishes : initial.dishes,
       howKnown: str(f.howKnown),
       evidenceUrl: str(f.evidenceUrl),
@@ -136,6 +143,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
   const tSubmit = useTranslations('submit');
   const locale = useLocale() === 'en' ? 'en' : 'es';
   const tFood = useTranslations('foodTags');
+  const tPrice = useTranslations('price');
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -235,6 +243,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
       if (code && form.country && !isPostalCode(code, form.country)) {
         next.postalCode = true;
       }
+      const menu = form.menuUrl.trim();
+      if (menu && !isHttpsUrl(menu)) next.menuUrl = true;
     }
     if (step === 2 && hasPhotos && !form.photoConsent) next.photoConsent = true;
     if (step === 3) {
@@ -261,6 +271,8 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
         location: form.location ?? undefined,
         postalCode: clean(form.postalCode),
         foodTags: form.foods,
+        priceRange: form.priceRange ?? undefined,
+        menuUrl: clean(form.menuUrl),
         dishes: form.dishes
           .filter((d) => d.name.trim())
           .map((d) => ({
@@ -575,6 +587,61 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   </button>
                 ))}
               </div>
+            </div>
+            <div className={s.field}>
+              <div className={s.label} id="f-price-label">
+                {t('s1.price')}{' '}
+                <span className={s.optional}>{t('s1.priceHint')}</span>
+              </div>
+              <div
+                role="group"
+                aria-labelledby="f-price-label"
+                aria-describedby="f-price-help"
+                className={s.chips}
+              >
+                {PRICES.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    className={s.chip}
+                    aria-pressed={form.priceRange === p}
+                    onClick={() =>
+                      set('priceRange', form.priceRange === p ? null : p)
+                    }
+                  >
+                    {tPrice(`short.${p}`)}
+                  </button>
+                ))}
+              </div>
+              <p id="f-price-help" className={s.small}>
+                {t('s1.priceHelp')}
+              </p>
+            </div>
+            <div className={s.field}>
+              <label htmlFor="f-menu" className={s.label}>
+                {t('s1.menu')}{' '}
+                <span className={s.optional}>{t('s1.menuHint')}</span>
+              </label>
+              <input
+                id="f-menu"
+                type="url"
+                className={`${s.input} ${errors.menuUrl ? s.invalid : ''}`}
+                placeholder="https://"
+                value={form.menuUrl}
+                onChange={(e) => set('menuUrl', e.target.value)}
+                aria-invalid={errors.menuUrl || undefined}
+                aria-describedby={
+                  errors.menuUrl ? 'e-menu f-menu-help' : 'f-menu-help'
+                }
+              />
+              <p id="f-menu-help" className={s.small}>
+                {t('s1.menuHelp')}
+              </p>
+              {errors.menuUrl && (
+                <p id="e-menu" role="alert" className={s.error}>
+                  {t('s1.menuError')}
+                </p>
+              )}
             </div>
           </div>
         )}

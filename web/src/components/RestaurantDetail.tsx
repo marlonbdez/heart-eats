@@ -44,6 +44,11 @@ export function RestaurantDetail({
       label: t('website'),
       external: true,
     },
+    r.menuUrl && {
+      href: r.menuUrl,
+      label: t('menu'),
+      external: true,
+    },
   ].filter(Boolean) as {
     href: string;
     label: string;
@@ -70,7 +75,13 @@ export function RestaurantDetail({
         <header className={styles.header}>
           <h1>{r.name}</h1>
           <p className={styles.muted}>
-            {t(`businessTypes.${r.businessType}`)} · {address}
+            {[
+              t(`businessTypes.${r.businessType}`),
+              r.priceRange && tf(`price.long.${r.priceRange}`),
+              address,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
             <Distance location={r.location} />
           </p>
           <OpenNow hours={r.openingHours} timezone={r.timezone} />

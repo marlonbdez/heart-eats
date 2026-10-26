@@ -125,6 +125,14 @@
     "list": "List"
   },
   "_view": "View place →",
+  "price": {
+    "short": { "1": "Affordable", "2": "Moderate", "3": "Upscale" },
+    "long": {
+      "1": "Affordable prices",
+      "2": "Moderate prices",
+      "3": "Upscale prices"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Open the photos of {name}",
@@ -155,6 +163,7 @@
     "directions": "Directions",
     "call": "Call",
     "website": "Website",
+    "menu": "See the menu",
     "hours": "Opening hours",
     "dayRange": "{from} to {to}",
     "closed": "Closed",
@@ -273,6 +282,13 @@
       "food": "What kind of food?",
       "foodHint": "(choose all that apply)",
       "foodGroup": "Kind of food",
+      "price": "Average price per person",
+      "priceHint": "(optional)",
+      "priceHelp": "A rough idea of what a meal or a drink costs there. It does not have to be exact.",
+      "menu": "The place’s menu",
+      "menuHint": "(optional)",
+      "menuHelp": "A link to the menu the place itself publishes on its website. There is no need to copy the prices.",
+      "menuError": "That link does not look valid: it should start with https://. You can check it or leave it empty.",
       "other": "Other"
     },
     "s2": {
@@ -1057,6 +1073,8 @@
     "photoOfPerson": "Photo of {name}",
     "photoSkip": "Do not publish this photo",
     "howKnown": "How the sender knows the place",
+    "price": "Average price",
+    "menu": "Menu",
     "evidence": "Link provided",
     "none": "Not given",
     "noLink": "No link",
@@ -1120,6 +1138,7 @@
       "needStory": "Choose which story is withdrawn.",
       "needChange": "Write what changes on the listing.",
       "badPin": "The coordinates are not valid.",
+      "badMenu": "The menu has to be a link that starts with https://.",
       "badHours": "Each day needs an opening and a closing time, or neither if it is closed. Fill in at least one day.",
       "forbidden": "You do not have permission to decide this.",
       "notImplemented": "This cannot be done from here yet.",
@@ -1201,6 +1220,9 @@
     "changeStreet": "Street",
     "changePostalCode": "Postal code",
     "changeCity": "City",
+    "changePrice": "Average price",
+    "changePriceKeep": "No change",
+    "changeMenu": "The place’s menu (https link)",
     "changeClosed": "The place has closed for good (the listing will stop being shown)",
     "changePinHelp": "If the pin is wrong, write the right coordinates (for example, 40.4168 and -3.7038). If you change the address and add them, the pin is not looked up on its own.",
     "changeHours": "Change the opening hours",

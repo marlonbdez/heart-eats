@@ -8,6 +8,9 @@ export const isHttpUrl = (v: string) => {
   }
 };
 
+// Un enlace seguro (https), como el de la carta de un local.
+export const isHttpsUrl = (v: string) => isHttpUrl(v) && /^https:/i.test(v);
+
 export const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 // Un texto que parece una calle o una ciudad: algo más que un par de signos,
