@@ -260,6 +260,18 @@ Si un local de ejemplo no existe, lo crea con su equipo; si su slug lo usa un lo
 
 **No uses `npm run seed` a secas contra producción**: borra *todo* lo marcado `isDemo` (también los ~630 de `seed:stress`) y recrea solo los 6.
 
+### Poner fotos a los locales de ejemplo
+Las fotos de los locales de ejemplo no están en `seed/restaurants.json`: son archivos del bucket de fotos (`p/`) enlazados desde cada local. Si se recrean los locales con `npm run seed`, o hay locales sin fotos, se reparten las que ya están en R2:
+
+```bash
+cd server
+# En server/.env: MONGODB_URI de producción y las cuatro R2_* de Railway
+# (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_PHOTOS_BUCKET; y R2_JURISDICTION=eu si el bucket es de la UE)
+npm run seed:photos
+```
+
+Dice la base, cuántas fotos hay disponibles y a cuántos locales se las pondrá, y pide escribir «repartir». Solo toca locales de ejemplo **sin fotos** (los que ya tienen, y los reales, se quedan como están) y no usa fotos que ya estén en la ficha de un local real o en la historia de una persona del equipo. No sube ni borra nada; el reparto es el mismo cada vez (de una a cinco fotos por local, por orden de slug) y se puede repetir sin riesgo. Quita después las líneas de producción del `.env`.
+
 ### Quitar los locales de ejemplo de producción
 Solo borra los marcados `isDemo`; no toca locales reales. Dice en qué base está y cuántos borrará, y pide escribir «borrar».
 
