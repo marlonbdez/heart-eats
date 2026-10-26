@@ -64,7 +64,7 @@ describe('refreshDemoPlaces', () => {
       }),
     );
     const real = await Restaurant.create(
-      restaurantData({ slug: 'casa-real', name: 'Casa Real' }),
+      restaurantData({ slug: 'casa-real', name: 'Casa Real', isDemo: false }),
     );
 
     await refreshDemoPlaces(entries);
@@ -80,7 +80,11 @@ describe('refreshDemoPlaces', () => {
 
   it('si el slug de un local de ejemplo lo usa uno real, lo deja y lo dice', async () => {
     const real = await Restaurant.create(
-      restaurantData({ slug: 'demo-la-masa-madre', name: 'Mi pizzería' }),
+      restaurantData({
+        slug: 'demo-la-masa-madre',
+        name: 'Mi pizzería',
+        isDemo: false,
+      }),
     );
 
     const result = await refreshDemoPlaces(entries);
