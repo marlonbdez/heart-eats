@@ -18,7 +18,8 @@ function toPayload(input: ProposalInput) {
   const { name, street, city, postalCode, foodTags, dishes } = input;
   const { country, location } = input;
   const { photoKeys } = input;
-  const { priceRange, menuUrl, howKnown, independent } = input;
+  const { priceRange, menuUrl, accessibility } = input;
+  const { howKnown, independent } = input;
   return {
     name,
     street,
@@ -31,6 +32,7 @@ function toPayload(input: ProposalInput) {
     photoKeys,
     priceRange,
     menuUrl,
+    accessibility,
     howKnown,
     independent,
   };

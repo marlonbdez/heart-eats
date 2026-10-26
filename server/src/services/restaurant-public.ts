@@ -70,6 +70,7 @@ export function toPublicRestaurant(
     ...(timezone ? { timezone } : {}),
     ...(r.priceRange ? { priceRange: r.priceRange } : {}),
     ...(r.menuUrl ? { menuUrl: r.menuUrl } : {}),
+    ...(r.accessibility?.length ? { accessibility: r.accessibility } : {}),
     signatureDishes: r.signatureDishes.map(
       ({ name, description, photoUrl, photo }) => ({
         name,

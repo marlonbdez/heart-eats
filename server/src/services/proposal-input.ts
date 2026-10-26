@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { foodTags } from '../catalog.js';
 import {
+  accessibility,
   countryCode,
   email,
   httpUrl,
@@ -43,6 +44,7 @@ export const proposalSchema = z.object({
   // Datos útiles para quien busca dónde ir; el negocio los confirma al publicar.
   priceRange: priceRange.optional(),
   menuUrl: httpsUrl.optional(),
+  accessibility: accessibility.optional(),
   howKnown: text(1000).optional(),
   evidenceUrl: httpUrl.optional(),
   independent: z.boolean(),

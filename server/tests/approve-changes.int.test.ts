@@ -207,6 +207,28 @@ describe('aprobar una corrección', () => {
     expect(read.body.menuUrl).toBe('https://uno.example/carta');
   });
 
+  it('pone la accesibilidad, la cambia y puede dejarla sin datos', async () => {
+    const s = await correction({
+      payload: { kind: 'other', details: 'Accesibilidad' },
+    });
+    const cookie = await signedInCookie();
+    const accessibility = ['accessible_restroom', 'quiet_space'];
+    expect(
+      (await decide(s._id, approve({ accessibility }), cookie)).status,
+    ).toBe(200);
+    expect((await place())?.accessibility).toEqual(accessibility);
+    const read = await request(app).get('/api/v1/restaurants/demo-uno');
+    expect(read.body.accessibility).toEqual(accessibility);
+
+    const again = await correction({
+      payload: { kind: 'other', details: 'Ya no hay baño adaptado' },
+    });
+    await decide(again._id, approve({ accessibility: [] }), cookie);
+    expect((await place())?.accessibility).toEqual([]);
+    const after = await request(app).get('/api/v1/restaurants/demo-uno');
+    expect(after.body).not.toHaveProperty('accessibility');
+  });
+
   it('«cerrado» archiva la ficha: deja de verse en la lectura pública', async () => {
     const s = await correction({
       payload: { kind: 'closed', details: 'Cerró' },
@@ -268,6 +290,7 @@ describe('aprobar una corrección', () => {
       { openingHours: [{ day: 7, open: '09:00', close: '10:00' }] },
       { openingHours: [{ day: 1, open: '9:00', close: '10:00' }] },
       { priceRange: 4 },
+      { accessibility: ['jacuzzi'] },
       { menuUrl: 'http://uno.example/carta' },
     ];
     for (const changes of bad) {

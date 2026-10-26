@@ -4,7 +4,7 @@ import {
   publicVerificationLevels,
   verificationMethods,
 } from '../catalog.js';
-import { httpsUrl, priceRange, text } from './input-fields.js';
+import { accessibility, httpsUrl, priceRange, text } from './input-fields.js';
 import { quarantineKey } from './photo-keys.js';
 
 export const rejectReasons = [
@@ -91,6 +91,8 @@ export const correctionApprovalSchema = z
       .optional(),
     priceRange: priceRange.optional(),
     menuUrl: httpsUrl.optional(),
+    // La lista completa: sustituye a la de la ficha (vacía, la deja sin datos).
+    accessibility: accessibility.optional(),
     // El local ha cerrado para siempre: deja de mostrarse.
     closed: z.literal(true).optional(),
   })

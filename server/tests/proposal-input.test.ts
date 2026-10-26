@@ -44,8 +44,18 @@ describe('proposalSchema', () => {
     expect(result.menuUrl).toBe('https://casalola.example/carta');
   });
 
+  it('acepta la accesibilidad del local, sin repetidos y en el orden de la ficha', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      accessibility: ['quiet_space', 'step_free_entrance', 'quiet_space'],
+    });
+    expect(result.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
+  });
+
   it.each([
     ['nombre muy corto', { name: 'A' }],
+    ['accesibilidad desconocida', { accessibility: ['jacuzzi'] }],
+    ['accesibilidad como texto', { accessibility: 'quiet_space' }],
     ['precio fuera de rango', { priceRange: 4 }],
     ['precio como texto', { priceRange: '€€' }],
     ['carta sin https', { menuUrl: 'http://casalola.example/carta' }],

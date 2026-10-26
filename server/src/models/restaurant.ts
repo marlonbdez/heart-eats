@@ -1,5 +1,6 @@
 import { Schema, model, type Types } from 'mongoose';
 import {
+  accessibilityFeatures,
   businessTypes,
   restaurantStatuses,
   verificationLevels,
@@ -40,6 +41,8 @@ export interface RestaurantRecord {
   priceRange?: 1 | 2 | 3;
   // Carta del propio local, en su web.
   menuUrl?: string;
+  // Accesibilidad del local (`accessibilityFeatures`); sin la clave, no se sabe.
+  accessibility?: (typeof accessibilityFeatures)[number][];
   signatureDishes: {
     name: string;
     description?: string;
@@ -139,6 +142,7 @@ const restaurantSchema = new Schema(
     },
     priceRange: { type: Number, enum: [1, 2, 3] },
     menuUrl: { type: String, match: /^https:\/\//i, maxlength: 500 },
+    accessibility: { type: [{ type: String, enum: accessibilityFeatures }] },
     signatureDishes: {
       type: [
         new Schema(
