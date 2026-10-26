@@ -46,7 +46,7 @@ Cada envío crea una solicitud (`Suggestion`) en estado `pending`. Ninguno publi
 
 **País y pin de una propuesta.** `ProposalInput` admite `country` (código de dos letras, ISO 3166-1) y `location` (`{lat,lng}`, el pin que quien propone coloca en el mapa). Ambos son opcionales mientras la web antigua siga en circulación; con `country`, la propuesta se reparte por país y ciudad y la dirección se busca dentro de ese país. Moderación sigue pudiendo mover el pin.
 
-**Precio y carta.** `ProposalInput` admite `priceRange` (`1`, `2` o `3`: €, €€ o €€€) y `menuUrl` (enlace `https` a la carta del propio local), ambos opcionales. Se guardan en la propuesta, los ve Moderación y se publican con la ficha. Toda ficha que los tenga los devuelve (`GET /restaurants` y `GET /restaurants/:slug`); si no, no llevan la clave.
+**Precio y carta.** `ProposalInput` admite `priceRange` (`1`, `2` o `3`: €, €€ o €€€) y `menuUrl` (enlace `https` a la carta del propio local), ambos opcionales. Se guardan en la propuesta, los ve Moderación y se publican con la ficha. Cada plato de la propuesta admite un `price` opcional (texto de hasta 20 caracteres con su moneda, p. ej. `8,50 €`); sale en el plato de la ficha y en la lista de platos de Moderación. Una corrección no cambia platos todavía. Toda ficha que los tenga los devuelve (`GET /restaurants` y `GET /restaurants/:slug`); si no, no llevan la clave.
 
 **Accesibilidad del local.** `ProposalInput` admite `accessibility`: lista de claves del catálogo (`step_free_entrance`, `accessible_restroom`, `room_to_move`, `easy_read_menu`, `large_print_menu`, `quiet_space`, `sign_language`; una desconocida da `422`). Se devuelve sin repetidos y en ese orden; una ficha sin datos no lleva la clave.
 

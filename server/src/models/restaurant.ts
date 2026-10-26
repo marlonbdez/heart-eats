@@ -46,6 +46,8 @@ export interface RestaurantRecord {
   signatureDishes: {
     name: string;
     description?: string;
+    // Precio como lo escribe el local, con su moneda («8,50 €»).
+    price?: string;
     photoUrl?: string;
     // Foto subida a HeartEats (nombre del archivo en `p/`); `photoUrl` queda
     // para imágenes externas, como las de los datos de prueba.
@@ -149,6 +151,7 @@ const restaurantSchema = new Schema(
           {
             name: { type: String, required: true, maxlength: 80 },
             description: { type: String, maxlength: 160 },
+            price: { type: String, maxlength: 20 },
             photoUrl: String,
             photo: String,
           },

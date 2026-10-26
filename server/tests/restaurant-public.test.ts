@@ -88,6 +88,21 @@ describe('toPublicRestaurant', () => {
     expect(full.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
   });
 
+  it('da el precio de un plato solo si lo tiene', () => {
+    const { signatureDishes } = toPublicRestaurant(
+      record({
+        signatureDishes: [
+          { name: 'Tortilla', price: '8,50 €' },
+          { name: 'Café' },
+        ],
+      }),
+      undefined,
+      now,
+    );
+    expect(signatureDishes[0]?.price).toBe('8,50 €');
+    expect(signatureDishes[1]).not.toHaveProperty('price');
+  });
+
   it('no filtra campos internos', () => {
     const result = toPublicRestaurant(
       { ...record(), searchText: 'x', cityKey: 'madrid', __v: 0 } as never,

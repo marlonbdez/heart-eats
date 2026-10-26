@@ -59,6 +59,7 @@ export interface PublicRestaurant {
   signatureDishes: {
     name: string;
     description?: string;
+    price?: string;
     photoUrl?: string;
     thumbUrl?: string;
   }[];

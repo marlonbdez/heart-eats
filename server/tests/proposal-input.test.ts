@@ -52,8 +52,29 @@ describe('proposalSchema', () => {
     expect(result.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
   });
 
+  it('acepta el precio de un plato, con su moneda, y lo recorta', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      dishes: [
+        { name: 'Tortilla', price: ' 8,50 € ' },
+        { name: 'Sushi', price: '¥900' },
+        { name: 'Café' },
+      ],
+    });
+    expect(result.dishes.map((d) => d.price)).toEqual([
+      '8,50 €',
+      '¥900',
+      undefined,
+    ]);
+  });
+
   it.each([
     ['nombre muy corto', { name: 'A' }],
+    ['precio de plato vacío', { dishes: [{ name: 'Tortilla', price: '  ' }] }],
+    [
+      'precio de plato larguísimo',
+      { dishes: [{ name: 'Tortilla', price: 'x'.repeat(21) }] },
+    ],
     ['accesibilidad desconocida', { accessibility: ['jacuzzi'] }],
     ['accesibilidad como texto', { accessibility: 'quiet_space' }],
     ['precio fuera de rango', { priceRange: 4 }],
