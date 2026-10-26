@@ -1,5 +1,6 @@
 import { Schema, model, type Types } from 'mongoose';
 import {
+  accessibilityFeatures,
   businessTypes,
   restaurantStatuses,
   verificationLevels,
@@ -36,9 +37,17 @@ export interface RestaurantRecord {
     instagram?: string;
   };
   openingHours: { day: number; open: string; close: string }[];
+  // Precio medio por persona: 1 (€), 2 (€€) o 3 (€€€).
+  priceRange?: 1 | 2 | 3;
+  // Carta del propio local, en su web.
+  menuUrl?: string;
+  // Accesibilidad del local (`accessibilityFeatures`); sin la clave, no se sabe.
+  accessibility?: (typeof accessibilityFeatures)[number][];
   signatureDishes: {
     name: string;
     description?: string;
+    // Precio como lo escribe el local, con su moneda («8,50 €»).
+    price?: string;
     photoUrl?: string;
     // Foto subida a HeartEats (nombre del archivo en `p/`); `photoUrl` queda
     // para imágenes externas, como las de los datos de prueba.
@@ -133,12 +142,16 @@ const restaurantSchema = new Schema(
       ],
       default: [],
     },
+    priceRange: { type: Number, enum: [1, 2, 3] },
+    menuUrl: { type: String, match: /^https:\/\//i, maxlength: 500 },
+    accessibility: { type: [{ type: String, enum: accessibilityFeatures }] },
     signatureDishes: {
       type: [
         new Schema(
           {
             name: { type: String, required: true, maxlength: 80 },
             description: { type: String, maxlength: 160 },
+            price: { type: String, maxlength: 20 },
             photoUrl: String,
             photo: String,
           },

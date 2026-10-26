@@ -125,6 +125,25 @@
     "list": "Lista"
   },
   "_view": "Ver local →",
+  "price": {
+    "short": { "1": "Económico", "2": "Moderado", "3": "Alto" },
+    "long": {
+      "1": "Precio económico",
+      "2": "Precio moderado",
+      "3": "Precio alto"
+    }
+  },
+  "accessibility": {
+    "features": {
+      "step_free_entrance": "Entrada sin escalones",
+      "accessible_restroom": "Baño adaptado",
+      "room_to_move": "Espacio para moverse entre las mesas",
+      "easy_read_menu": "Carta en lectura fácil o con pictogramas",
+      "large_print_menu": "Carta en letra grande o en braille",
+      "quiet_space": "Ambiente tranquilo",
+      "sign_language": "Atención en lengua de signos"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Abrir las fotos de {name}",
@@ -139,12 +158,27 @@
     },
     "back": "Volver",
     "seal": "Negocio con equipo inclusivo",
+    "accessibility": {
+      "title": "Accesibilidad del local",
+      "note": "Nos lo ha contado quien conoce el sitio. Si te hace falta, confírmalo con el local antes de ir."
+    },
     "foodTypes": "Tipo de comida",
+    "openNow": {
+      "open": "Abierto ahora · hasta las {time}",
+      "closingSoon": "Cierra pronto · a las {time}",
+      "closed": "Cerrado ahora",
+      "closedOpens": {
+        "today": "Cerrado ahora · abre hoy a las {time}",
+        "tomorrow": "Cerrado ahora · abre mañana a las {time}",
+        "day": "Cerrado ahora · abre el {day} a las {time}"
+      }
+    },
     "dishes": "Lo que te recomendamos probar",
     "actions": "Acciones",
     "directions": "Cómo llegar",
     "call": "Llamar",
     "website": "Web",
+    "menu": "Ver la carta",
     "hours": "Horario",
     "dayRange": "{from} a {to}",
     "closed": "Cerrado",
@@ -263,6 +297,16 @@
       "food": "¿Qué tipo de comida?",
       "foodHint": "(elige las que apliquen)",
       "foodGroup": "Tipo de comida",
+      "price": "Precio medio por persona",
+      "priceHint": "(opcional)",
+      "priceHelp": "Una idea de lo que cuesta comer o tomar algo allí. Tú decides: no hace falta ser exacto.",
+      "menu": "Carta del local",
+      "menuHint": "(opcional)",
+      "menuHelp": "El enlace a la carta que el propio local publica en su web. No hace falta copiar los precios.",
+      "access": "Accesibilidad del local",
+      "accessHint": "(opcional)",
+      "accessHelp": "Marca solo lo que sepas seguro. Lo que no marques no se muestra: no damos por hecho que no lo haya.",
+      "menuError": "Ese enlace no parece válido: debería empezar por https://. Puedes revisarlo o dejarlo vacío.",
       "other": "Otra"
     },
     "s2": {
@@ -270,6 +314,8 @@
       "dish": "Plato {n}",
       "dishName": "Nombre del plato",
       "dishDesc": "Descripción corta",
+      "dishPrice": "Precio",
+      "priceHint": "El precio de cada plato es opcional. Escríbelo con su moneda, como lo pondría el local (por ejemplo, 8,50 €). Si no lo sabes, déjalo vacío.",
       "optional": "(opcional)",
       "add": "+ Añadir otro plato",
       "photo": "Foto",
@@ -1047,6 +1093,9 @@
     "photoOfPerson": "Foto de {name}",
     "photoSkip": "No publicar esta foto",
     "howKnown": "Cómo lo conoce quien propone",
+    "price": "Precio medio",
+    "menu": "Carta",
+    "access": "Accesibilidad",
     "evidence": "Enlace aportado",
     "none": "Sin indicar",
     "noLink": "Sin enlace",
@@ -1110,6 +1159,7 @@
       "needStory": "Elige qué historia se retira.",
       "needChange": "Escribe qué cambia en la ficha.",
       "badPin": "Las coordenadas no son válidas.",
+      "badMenu": "La carta tiene que ser un enlace que empiece por https://.",
       "badHours": "Cada día lleva hora de apertura y de cierre, o ninguna si está cerrado. Rellena al menos un día.",
       "forbidden": "No tienes permiso para decidir esto.",
       "notImplemented": "Esto todavía no se puede hacer desde aquí.",
@@ -1191,6 +1241,11 @@
     "changeStreet": "Calle",
     "changePostalCode": "Código postal",
     "changeCity": "Ciudad",
+    "changePrice": "Precio medio",
+    "changePriceKeep": "Sin cambios",
+    "changeMenu": "Carta del local (enlace https)",
+    "changeAccess": "Cambiar la accesibilidad",
+    "changeAccessHelp": "Marca todo lo que ofrece el local: sustituye a lo que hay. Si no marcas nada, la ficha se queda sin datos de accesibilidad.",
     "changeClosed": "El local ha cerrado para siempre (la ficha dejará de verse)",
     "changePinHelp": "Si el pin está mal, escribe las coordenadas correctas (por ejemplo, 40.4168 y -3.7038). Si cambias la dirección y las pones, no se busca el pin solo.",
     "changeHours": "Cambiar el horario",

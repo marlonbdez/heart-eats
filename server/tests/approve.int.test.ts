@@ -125,6 +125,25 @@ describe('aprobar un local nuevo', () => {
     expect(place?.ownerConfirmedAt).toBeInstanceOf(Date);
   });
 
+  it('publica el precio de los platos que dio quien propone', async () => {
+    const s = await proposal({
+      payload: payload({
+        dishes: [{ name: 'Tortilla', price: '8,50 €' }, { name: 'Croquetas' }],
+      }),
+    });
+    await decide(s._id, approval(), await signedInCookie());
+    const [place] = await published();
+    expect(place?.signatureDishes).toEqual([
+      { name: 'Tortilla', price: '8,50 €' },
+      { name: 'Croquetas' },
+    ]);
+    const read = await request(app).get(
+      '/api/v1/restaurants/casa-nueva-madrid',
+    );
+    expect(read.body.signatureDishes[0].price).toBe('8,50 €');
+    expect(read.body.signatureDishes[1]).not.toHaveProperty('price');
+  });
+
   it('cierra la solicitud, apunta a la ficha y borra el correo', async () => {
     const s = await proposal();
     const cookie = await signedInCookie();
@@ -148,6 +167,33 @@ describe('aprobar un local nuevo', () => {
         name: 'Casa Nueva',
         locale: 'en',
       },
+    ]);
+  });
+
+  it('publica el precio medio y la carta que dio quien propone', async () => {
+    const s = await proposal({
+      payload: payload({
+        priceRange: 2,
+        menuUrl: 'https://casanueva.example/carta',
+      }),
+    });
+    await decide(s._id, approval(), await signedInCookie());
+    const [place] = await published();
+    expect(place?.priceRange).toBe(2);
+    expect(place?.menuUrl).toBe('https://casanueva.example/carta');
+  });
+
+  it('publica la accesibilidad que dio quien propone', async () => {
+    const s = await proposal({
+      payload: payload({
+        accessibility: ['step_free_entrance', 'easy_read_menu'],
+      }),
+    });
+    await decide(s._id, approval(), await signedInCookie());
+    const [place] = await published();
+    expect(place?.accessibility).toEqual([
+      'step_free_entrance',
+      'easy_read_menu',
     ]);
   });
 

@@ -58,7 +58,11 @@ export function NavigationProgress() {
   return (
     <>
       {navigating && visible && (
-        <div className={styles.bar} aria-hidden="true" />
+        <div
+          className={styles.bar}
+          data-navigation-progress=""
+          aria-hidden="true"
+        />
       )}
       <SlowNotice active={navigating} className={styles.slow} />
     </>

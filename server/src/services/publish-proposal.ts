@@ -13,6 +13,9 @@ const storedProposal = proposalSchema.pick({
   foodTags: true,
   dishes: true,
   photoKeys: true,
+  priceRange: true,
+  menuUrl: true,
+  accessibility: true,
   independent: true,
 });
 
@@ -100,6 +103,11 @@ export async function publishProposal({
           const file = kept(key);
           return file ? [{ file }] : [];
         }),
+        ...(proposal.priceRange ? { priceRange: proposal.priceRange } : {}),
+        ...(proposal.menuUrl ? { menuUrl: proposal.menuUrl } : {}),
+        ...(proposal.accessibility?.length
+          ? { accessibility: proposal.accessibility }
+          : {}),
         isIndependent: proposal.independent,
         status: 'published',
         verification: {

@@ -7,6 +7,7 @@ import type { Restaurant } from '@/lib/types';
 import { BackLink } from './BackLink';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
+import { OpenNow } from './OpenNow';
 import { PlaceGallery } from './PlaceGallery';
 import { TeamBlock } from './TeamBlock';
 import styles from './RestaurantDetail.module.css';
@@ -43,6 +44,11 @@ export function RestaurantDetail({
       label: t('website'),
       external: true,
     },
+    r.menuUrl && {
+      href: r.menuUrl,
+      label: t('menu'),
+      external: true,
+    },
   ].filter(Boolean) as {
     href: string;
     label: string;
@@ -69,9 +75,16 @@ export function RestaurantDetail({
         <header className={styles.header}>
           <h1>{r.name}</h1>
           <p className={styles.muted}>
-            {t(`businessTypes.${r.businessType}`)} · {address}
+            {[
+              t(`businessTypes.${r.businessType}`),
+              r.priceRange && tf(`price.long.${r.priceRange}`),
+              address,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
             <Distance location={r.location} />
           </p>
+          <OpenNow hours={r.openingHours} timezone={r.timezone} />
           {foodTags.length > 0 && (
             <ul className={styles.tags} aria-label={t('foodTypes')}>
               {foodTags.map((tag) => (
@@ -80,9 +93,12 @@ export function RestaurantDetail({
             </ul>
           )}
           {description && <p>{description}</p>}
-          <p className={styles.seal}>
-            <span aria-hidden="true">♥</span> {t('seal')}
-          </p>
+          {/* Con bloque de equipo, el sello va dentro de él. */}
+          {!(teamLevel && r.team) && (
+            <p className={styles.seal}>
+              <span aria-hidden="true">♥</span> {t('seal')}
+            </p>
+          )}
         </header>
 
         <div className={styles.side}>
@@ -101,6 +117,20 @@ export function RestaurantDetail({
             ))}
           </nav>
           {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
+          {r.accessibility && r.accessibility.length > 0 && (
+            <section aria-labelledby="accesibilidad">
+              <h2 id="accesibilidad">{t('accessibility.title')}</h2>
+              <ul className={styles.access}>
+                {r.accessibility.map((key) => (
+                  <li key={key}>
+                    <span aria-hidden="true">✓</span>
+                    {tf(`accessibility.features.${key}`)}
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.note}>{t('accessibility.note')}</p>
+            </section>
+          )}
         </div>
 
         <div className={styles.rest}>
@@ -119,7 +149,12 @@ export function RestaurantDetail({
                       )}
                     </div>
                     <div>
-                      <p className={styles.dishName}>{d.name}</p>
+                      <p className={styles.dishHead}>
+                        <span className={styles.dishName}>{d.name}</span>
+                        {d.price && (
+                          <span className={styles.dishPrice}>{d.price}</span>
+                        )}
+                      </p>
                       {d.description && (
                         <p className={styles.muted}>{d.description}</p>
                       )}

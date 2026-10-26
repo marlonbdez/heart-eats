@@ -1,6 +1,8 @@
 // Tipos de lectura pública. Reflejan docs/01_ESPECIFICACION_DATOS.md.
 // Cuando haya backend, estos tipos pasarán a shared/types.
 
+import type { AccessibilityFeature } from './accessibility';
+
 // Texto con una versión por idioma: { es: '...', en: '...' }. Si falta el
 // idioma pedido, se usa el del lanzamiento (es).
 export type LocalizedText = Record<string, string>;
@@ -16,6 +18,8 @@ export type VerificationMethod =
 export interface SignatureDish {
   name: string;
   description?: string;
+  // Con su moneda, como lo escribe el local: «8,50 €», «¥900».
+  price?: string;
   photoUrl?: string;
   // La miniatura (400 px), si la foto se subió a HeartEats.
   thumbUrl?: string;
@@ -62,6 +66,9 @@ export interface OpeningHours {
   close: string; // HH:mm
 }
 
+// Precio medio por persona: 1 económico, 2 moderado, 3 alto.
+export type PriceRange = 1 | 2 | 3;
+
 export interface Restaurant {
   slug: string;
   name: string;
@@ -85,6 +92,13 @@ export interface Restaurant {
     instagram?: string;
   };
   openingHours: OpeningHours[];
+  // Zona horaria del local (IANA), en la que se leen `openingHours`.
+  timezone?: string;
+  priceRange?: PriceRange;
+  // La carta que el propio local publica en su web (https).
+  menuUrl?: string;
+  // Accesibilidad del local; sin ella no se sabe nada (no es «no hay»).
+  accessibility?: AccessibilityFeature[];
   signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
   // La primera es la portada. En las listas solo viene esa.
   photos?: PlacePhoto[];
@@ -143,6 +157,9 @@ export interface ProposalInput {
   foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
   dishes: ProposalDish[]; // 0-3, solo con nombre
   photos?: PhotoBlobs[]; // 0-5, del local
+  priceRange?: PriceRange;
+  menuUrl?: string; // https
+  accessibility?: AccessibilityFeature[];
   howKnown?: string;
   evidenceUrl?: string;
   independent: boolean;
@@ -249,6 +266,9 @@ export interface ModerationItem {
   // Solo en un local nuevo:
   foodTags?: string[];
   dishes?: string[];
+  priceRange?: PriceRange;
+  menuUrl?: string;
+  accessibility?: AccessibilityFeature[];
   // Las fotos de un local nuevo, en cuarentena hasta que se decide. `key` es lo
   // que se manda en `skipPhotos` para no publicar una.
   photos?: ModerationPhoto[];
@@ -309,6 +329,10 @@ export interface CorrectionChange {
   location?: { lat: number; lng: number };
   // El horario completo: sustituye al de la ficha.
   openingHours?: OpeningHours[];
+  priceRange?: PriceRange;
+  menuUrl?: string; // https
+  // La lista completa: sustituye a la de la ficha; vacía, la deja sin datos.
+  accessibility?: AccessibilityFeature[];
   closed?: true;
 }
 

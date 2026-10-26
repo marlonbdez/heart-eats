@@ -4,7 +4,7 @@ import {
   publicVerificationLevels,
   verificationMethods,
 } from '../catalog.js';
-import { text } from './input-fields.js';
+import { accessibility, httpsUrl, priceRange, text } from './input-fields.js';
 import { quarantineKey } from './photo-keys.js';
 
 export const rejectReasons = [
@@ -65,8 +65,8 @@ const hasValue = (value: object) =>
 
 // Aprobar una corrección. Lo que cuenta quien la envía es texto libre, así que
 // quien aprueba escribe aquí el cambio ya comprobado. Solo se puede tocar lo
-// que se corrige a menudo; el resto (contacto, descripción…) llegará cuando
-// haga falta. Si cambia la dirección y no viene `location`, se geocodifica.
+// que se corrige a menudo (y el precio medio y la carta); el resto (contacto,
+// descripción…) llegará cuando haga falta. Si cambia la dirección y no viene `location`, se geocodifica.
 export const correctionApprovalSchema = z
   .object({
     name: z.string().trim().min(2).max(120).optional(),
@@ -89,6 +89,10 @@ export const correctionApprovalSchema = z
       )
       .max(21)
       .optional(),
+    priceRange: priceRange.optional(),
+    menuUrl: httpsUrl.optional(),
+    // La lista completa: sustituye a la de la ficha (vacía, la deja sin datos).
+    accessibility: accessibility.optional(),
     // El local ha cerrado para siempre: deja de mostrarse.
     closed: z.literal(true).optional(),
   })

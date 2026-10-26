@@ -57,6 +57,52 @@ describe('toPublicRestaurant', () => {
     expect(at(-58.38, -34.6)).toBe('America/Argentina/Buenos_Aires');
   });
 
+  it('da el precio medio y la carta solo si el local los tiene', () => {
+    const bare = toPublicRestaurant(record(), undefined, now);
+    expect(bare).not.toHaveProperty('priceRange');
+    expect(bare).not.toHaveProperty('menuUrl');
+
+    const full = toPublicRestaurant(
+      record({ priceRange: 2, menuUrl: 'https://uno.example/carta' }),
+      undefined,
+      now,
+    );
+    expect(full.priceRange).toBe(2);
+    expect(full.menuUrl).toBe('https://uno.example/carta');
+  });
+
+  it('da la accesibilidad solo si se sabe algo', () => {
+    for (const none of [undefined, []]) {
+      const bare = toPublicRestaurant(
+        record({ accessibility: none }),
+        undefined,
+        now,
+      );
+      expect(bare).not.toHaveProperty('accessibility');
+    }
+    const full = toPublicRestaurant(
+      record({ accessibility: ['step_free_entrance', 'quiet_space'] }),
+      undefined,
+      now,
+    );
+    expect(full.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
+  });
+
+  it('da el precio de un plato solo si lo tiene', () => {
+    const { signatureDishes } = toPublicRestaurant(
+      record({
+        signatureDishes: [
+          { name: 'Tortilla', price: '8,50 €' },
+          { name: 'Café' },
+        ],
+      }),
+      undefined,
+      now,
+    );
+    expect(signatureDishes[0]?.price).toBe('8,50 €');
+    expect(signatureDishes[1]).not.toHaveProperty('price');
+  });
+
   it('no filtra campos internos', () => {
     const result = toPublicRestaurant(
       { ...record(), searchText: 'x', cityKey: 'madrid', __v: 0 } as never,

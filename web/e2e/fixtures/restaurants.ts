@@ -39,11 +39,14 @@ const photo = (n: number, alt?: Record<string, string>) => ({
 });
 
 // Datos ficticios. Nada de esto es un negocio real.
-export const restaurants: Restaurant[] = [
+const base: Restaurant[] = [
   {
     slug: 'demo-la-masa-madre',
     name: '[DEMO] La Masa Madre',
     description: { es: 'Pizzería de barrio con masa de 48 horas.' },
+    priceRange: 2,
+    menuUrl: 'https://masamadre.example/carta',
+    accessibility: ['step_free_entrance', 'accessible_restroom', 'quiet_space'],
     businessType: 'restaurant',
     cuisineTypes: ['italian'],
     foodTags: ['pizza', 'italian', 'mexican'],
@@ -61,6 +64,7 @@ export const restaurants: Restaurant[] = [
       {
         name: 'Margarita de la casa',
         description: 'Tomate, mozzarella fresca y albahaca.',
+        price: '9,50 €',
         photoUrl:
           'http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-000000000106.webp',
         thumbUrl:
@@ -341,3 +345,11 @@ export const restaurants: Restaurant[] = [
     isDemo: true,
   },
 ];
+
+const ZONES: Record<string, string> = { ES: 'Europe/Madrid', JP: 'Asia/Tokyo' };
+
+// La API da la zona horaria de cada local; aquí sale del país.
+export const restaurants: Restaurant[] = base.map((r) => ({
+  ...r,
+  timezone: ZONES[r.address.country],
+}));

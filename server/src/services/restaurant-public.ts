@@ -68,10 +68,14 @@ export function toPublicRestaurant(
       close,
     })),
     ...(timezone ? { timezone } : {}),
+    ...(r.priceRange ? { priceRange: r.priceRange } : {}),
+    ...(r.menuUrl ? { menuUrl: r.menuUrl } : {}),
+    ...(r.accessibility?.length ? { accessibility: r.accessibility } : {}),
     signatureDishes: r.signatureDishes.map(
-      ({ name, description, photoUrl, photo }) => ({
+      ({ name, description, price, photoUrl, photo }) => ({
         name,
         ...(description ? { description } : {}),
+        ...(price ? { price } : {}),
         // La foto subida a HeartEats manda sobre una dirección externa.
         ...(photo
           ? { photoUrl: urls.photo(photo), thumbUrl: urls.thumb(photo) }

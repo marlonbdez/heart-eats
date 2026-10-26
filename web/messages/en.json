@@ -125,6 +125,25 @@
     "list": "List"
   },
   "_view": "View place →",
+  "price": {
+    "short": { "1": "Affordable", "2": "Moderate", "3": "Upscale" },
+    "long": {
+      "1": "Affordable prices",
+      "2": "Moderate prices",
+      "3": "Upscale prices"
+    }
+  },
+  "accessibility": {
+    "features": {
+      "step_free_entrance": "Step-free entrance",
+      "accessible_restroom": "Accessible restroom",
+      "room_to_move": "Room to move between tables",
+      "easy_read_menu": "Easy-read or pictogram menu",
+      "large_print_menu": "Large-print or braille menu",
+      "quiet_space": "Quiet atmosphere",
+      "sign_language": "Service in sign language"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Open the photos of {name}",
@@ -139,12 +158,27 @@
     },
     "back": "Back",
     "seal": "Business with an inclusive team",
+    "accessibility": {
+      "title": "Accessibility of the place",
+      "note": "Shared by people who know the place. If it matters to you, please check with the place before you go."
+    },
     "foodTypes": "Type of food",
+    "openNow": {
+      "open": "Open now · until {time}",
+      "closingSoon": "Closing soon · at {time}",
+      "closed": "Closed now",
+      "closedOpens": {
+        "today": "Closed now · opens today at {time}",
+        "tomorrow": "Closed now · opens tomorrow at {time}",
+        "day": "Closed now · opens {day} at {time}"
+      }
+    },
     "dishes": "Dishes we recommend",
     "actions": "Actions",
     "directions": "Directions",
     "call": "Call",
     "website": "Website",
+    "menu": "See the menu",
     "hours": "Opening hours",
     "dayRange": "{from} to {to}",
     "closed": "Closed",
@@ -263,6 +297,16 @@
       "food": "What kind of food?",
       "foodHint": "(choose all that apply)",
       "foodGroup": "Kind of food",
+      "price": "Average price per person",
+      "priceHint": "(optional)",
+      "priceHelp": "A rough idea of what a meal or a drink costs there. It does not have to be exact.",
+      "menu": "The place’s menu",
+      "menuHint": "(optional)",
+      "menuHelp": "A link to the menu the place itself publishes on its website. There is no need to copy the prices.",
+      "access": "Accessibility of the place",
+      "accessHint": "(optional)",
+      "accessHelp": "Tick only what you are sure of. What you leave unticked is not shown: we do not assume it is missing.",
+      "menuError": "That link does not look valid: it should start with https://. You can check it or leave it empty.",
       "other": "Other"
     },
     "s2": {
@@ -270,6 +314,8 @@
       "dish": "Dish {n}",
       "dishName": "Name of the dish",
       "dishDesc": "Short description",
+      "dishPrice": "Price",
+      "priceHint": "The price of each dish is optional. Write it with its currency, the way the place would (for example, €8.50). If you do not know it, leave it empty.",
       "optional": "(optional)",
       "add": "+ Add another dish",
       "photo": "Photo",
@@ -1047,6 +1093,9 @@
     "photoOfPerson": "Photo of {name}",
     "photoSkip": "Do not publish this photo",
     "howKnown": "How the sender knows the place",
+    "price": "Average price",
+    "menu": "Menu",
+    "access": "Accessibility",
     "evidence": "Link provided",
     "none": "Not given",
     "noLink": "No link",
@@ -1110,6 +1159,7 @@
       "needStory": "Choose which story is withdrawn.",
       "needChange": "Write what changes on the listing.",
       "badPin": "The coordinates are not valid.",
+      "badMenu": "The menu has to be a link that starts with https://.",
       "badHours": "Each day needs an opening and a closing time, or neither if it is closed. Fill in at least one day.",
       "forbidden": "You do not have permission to decide this.",
       "notImplemented": "This cannot be done from here yet.",
@@ -1191,6 +1241,11 @@
     "changeStreet": "Street",
     "changePostalCode": "Postal code",
     "changeCity": "City",
+    "changePrice": "Average price",
+    "changePriceKeep": "No change",
+    "changeMenu": "The place’s menu (https link)",
+    "changeAccess": "Change the accessibility",
+    "changeAccessHelp": "Tick everything the place offers: it replaces what is there. If you tick nothing, the listing is left without accessibility information.",
     "changeClosed": "The place has closed for good (the listing will stop being shown)",
     "changePinHelp": "If the pin is wrong, write the right coordinates (for example, 40.4168 and -3.7038). If you change the address and add them, the pin is not looked up on its own.",
     "changeHours": "Change the opening hours",

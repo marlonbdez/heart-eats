@@ -1,11 +1,14 @@
 import { z } from 'zod';
 import { foodTags } from '../catalog.js';
 import {
+  accessibility,
   countryCode,
   email,
   httpUrl,
+  httpsUrl,
   latLng,
   locale,
+  priceRange,
   text,
 } from './input-fields.js';
 import { quarantineKey } from './photo-keys.js';
@@ -17,6 +20,8 @@ import { quarantineKey } from './photo-keys.js';
 const dishSchema = z.object({
   name: text(80),
   description: text(160).optional(),
+  // Con su moneda, tal como lo escribiría el local: «8,50 €», «¥900».
+  price: text(20).optional(),
   // La foto del plato: la clave que devolvió POST /uploads.
   photoKey: quarantineKey.optional(),
 });
@@ -38,6 +43,10 @@ export const proposalSchema = z.object({
   dishes: z.array(dishSchema).max(3),
   // Fotos del local, también ya subidas; Moderación las mira antes de publicarlas.
   photoKeys: z.array(quarantineKey).max(5).default([]),
+  // Datos útiles para quien busca dónde ir; el negocio los confirma al publicar.
+  priceRange: priceRange.optional(),
+  menuUrl: httpsUrl.optional(),
+  accessibility: accessibility.optional(),
   howKnown: text(1000).optional(),
   evidenceUrl: httpUrl.optional(),
   independent: z.boolean(),

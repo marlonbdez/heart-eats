@@ -34,8 +34,53 @@ describe('proposalSchema', () => {
     );
   });
 
+  it('acepta el precio medio y la carta del local', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      priceRange: 2,
+      menuUrl: 'https://casalola.example/carta',
+    });
+    expect(result.priceRange).toBe(2);
+    expect(result.menuUrl).toBe('https://casalola.example/carta');
+  });
+
+  it('acepta la accesibilidad del local, sin repetidos y en el orden de la ficha', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      accessibility: ['quiet_space', 'step_free_entrance', 'quiet_space'],
+    });
+    expect(result.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
+  });
+
+  it('acepta el precio de un plato, con su moneda, y lo recorta', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      dishes: [
+        { name: 'Tortilla', price: ' 8,50 € ' },
+        { name: 'Sushi', price: '¥900' },
+        { name: 'Café' },
+      ],
+    });
+    expect(result.dishes.map((d) => d.price)).toEqual([
+      '8,50 €',
+      '¥900',
+      undefined,
+    ]);
+  });
+
   it.each([
     ['nombre muy corto', { name: 'A' }],
+    ['precio de plato vacío', { dishes: [{ name: 'Tortilla', price: '  ' }] }],
+    [
+      'precio de plato larguísimo',
+      { dishes: [{ name: 'Tortilla', price: 'x'.repeat(21) }] },
+    ],
+    ['accesibilidad desconocida', { accessibility: ['jacuzzi'] }],
+    ['accesibilidad como texto', { accessibility: 'quiet_space' }],
+    ['precio fuera de rango', { priceRange: 4 }],
+    ['precio como texto', { priceRange: '€€' }],
+    ['carta sin https', { menuUrl: 'http://casalola.example/carta' }],
+    ['carta que no es web', { menuUrl: 'javascript:alert(1)' }],
     ['sin ciudad', { city: '  ' }],
     ['comida desconocida', { foodTags: ['nope'] }],
     [

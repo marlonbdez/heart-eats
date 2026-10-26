@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { accessibilityFeatures } from '../catalog.js';
 import { slugPattern } from './restaurant-query.js';
 
 // Piezas comunes de los cuerpos de los envíos de la comunidad. Lo que un
@@ -10,6 +11,23 @@ export const httpUrl = z
   .url({ protocol: /^https?$/ })
   .max(500)
   .refine((value) => !/\s/.test(value));
+
+// Precio medio por persona (€, €€ o €€€) y carta del local: en una propuesta y
+// al aprobar una corrección. La carta solo se acepta con https.
+export const priceRange = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+
+// Lo que ofrece el local para quien lo necesita: sin repetidos y en el orden
+// de la ficha.
+export const accessibility = z
+  .array(z.enum(accessibilityFeatures))
+  .max(accessibilityFeatures.length)
+  .transform((keys) =>
+    accessibilityFeatures.filter((key) => keys.includes(key)),
+  );
+
+export const httpsUrl = httpUrl.refine((value) => /^https:/i.test(value), {
+  error: 'la carta tiene que ser un enlace https',
+});
 
 export const email = z
   .email()

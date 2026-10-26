@@ -53,9 +53,13 @@ export interface PublicRestaurant {
   openingHours: { day: number; open: string; close: string }[];
   // Zona horaria del local (IANA), en la que se leen `openingHours`.
   timezone?: string;
+  priceRange?: 1 | 2 | 3;
+  menuUrl?: string;
+  accessibility?: string[];
   signatureDishes: {
     name: string;
     description?: string;
+    price?: string;
     photoUrl?: string;
     thumbUrl?: string;
   }[];
