@@ -1,0 +1,30 @@
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.open {
+  color: var(--fg);
+}
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  background: var(--muted);
+  border-radius: 50%;
+}
+.open .dot {
+  background: #2e7d32;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .open .dot {
+    background: #66bb6a;
+  }
+}
+:root[data-theme='dark'] .open .dot {
+  background: #66bb6a;
+}

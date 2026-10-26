@@ -140,6 +140,16 @@
     "back": "Volver",
     "seal": "Negocio con equipo inclusivo",
     "foodTypes": "Tipo de comida",
+    "openNow": {
+      "open": "Abierto ahora · hasta las {time}",
+      "closingSoon": "Cierra pronto · a las {time}",
+      "closed": "Cerrado ahora",
+      "closedOpens": {
+        "today": "Cerrado ahora · abre hoy a las {time}",
+        "tomorrow": "Cerrado ahora · abre mañana a las {time}",
+        "day": "Cerrado ahora · abre el {day} a las {time}"
+      }
+    },
     "dishes": "Lo que te recomendamos probar",
     "actions": "Acciones",
     "directions": "Cómo llegar",

@@ -205,6 +205,19 @@
 .teamCount {
   font-size: 1.05rem;
 }
+/* La proporción de un vistazo; el texto de arriba dice lo mismo. */
+.teamBar {
+  height: 8px;
+  overflow: hidden;
+  background: var(--line);
+  border-radius: 4px;
+}
+.teamBar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
 .teamDetails {
   display: grid;
   gap: 4px;

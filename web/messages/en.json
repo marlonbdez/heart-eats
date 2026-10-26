@@ -140,6 +140,16 @@
     "back": "Back",
     "seal": "Business with an inclusive team",
     "foodTypes": "Type of food",
+    "openNow": {
+      "open": "Open now · until {time}",
+      "closingSoon": "Closing soon · at {time}",
+      "closed": "Closed now",
+      "closedOpens": {
+        "today": "Closed now · opens today at {time}",
+        "tomorrow": "Closed now · opens tomorrow at {time}",
+        "day": "Closed now · opens {day} at {time}"
+      }
+    },
     "dishes": "Dishes we recommend",
     "actions": "Actions",
     "directions": "Directions",

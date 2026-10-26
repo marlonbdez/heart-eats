@@ -39,7 +39,7 @@ const photo = (n: number, alt?: Record<string, string>) => ({
 });
 
 // Datos ficticios. Nada de esto es un negocio real.
-export const restaurants: Restaurant[] = [
+const base: Restaurant[] = [
   {
     slug: 'demo-la-masa-madre',
     name: '[DEMO] La Masa Madre',
@@ -341,3 +341,11 @@ export const restaurants: Restaurant[] = [
     isDemo: true,
   },
 ];
+
+const ZONES: Record<string, string> = { ES: 'Europe/Madrid', JP: 'Asia/Tokyo' };
+
+// La API da la zona horaria de cada local; aquí sale del país.
+export const restaurants: Restaurant[] = base.map((r) => ({
+  ...r,
+  timezone: ZONES[r.address.country],
+}));

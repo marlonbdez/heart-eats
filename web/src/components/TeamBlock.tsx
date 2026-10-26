@@ -7,6 +7,7 @@ import styles from './RestaurantDetail.module.css';
 // solo se pinta. También sirve para la vista previa de F3.
 export function TeamBlock({ team, level }: { team: Team; level: TeamLevel }) {
   const t = useTranslations('team');
+  const tDetail = useTranslations('detail');
   const format = useFormatter();
   const { totalStaff, staffWithDisability } = team.summary;
   const areas = team.areas ?? [];
@@ -14,6 +15,9 @@ export function TeamBlock({ team, level }: { team: Team; level: TeamLevel }) {
 
   return (
     <section className={styles.team} aria-labelledby="equipo">
+      <p className={styles.seal}>
+        <span aria-hidden="true">♥</span> {tDetail('seal')}
+      </p>
       <h2 id="equipo">{t('title')}</h2>
       <p className={styles.teamCount}>
         {t.rich('summary', {
@@ -22,6 +26,15 @@ export function TeamBlock({ team, level }: { team: Team; level: TeamLevel }) {
           b: (chunks) => <strong>{chunks}</strong>,
         })}
       </p>
+      {totalStaff > 0 && (
+        <div className={styles.teamBar} aria-hidden="true">
+          <span
+            style={{
+              width: `${Math.min(100, (staffWithDisability / totalStaff) * 100)}%`,
+            }}
+          />
+        </div>
+      )}
 
       {level !== 'minimal' && (areas.length > 0 || types.length > 0) && (
         <ul className={styles.teamDetails}>
