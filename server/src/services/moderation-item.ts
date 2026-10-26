@@ -100,7 +100,7 @@ interface ProposalPayload {
   country?: string;
   postalCode?: string;
   foodTags: string[];
-  dishes: { name: string; photoKey?: string }[];
+  dishes: { name: string; price?: string; photoKey?: string }[];
   photoKeys?: string[];
   priceRange?: number;
   menuUrl?: string;
@@ -175,7 +175,9 @@ export function toModerationItem(
       address: join(p.street, p.postalCode, p.city),
       ...(p.country ? { country: p.country } : {}),
       foodTags: p.foodTags,
-      dishes: p.dishes.map((d) => d.name),
+      dishes: p.dishes.map((d) =>
+        d.price ? `${d.name} (${d.price})` : d.name,
+      ),
       ...(photos.length > 0 ? { photos } : {}),
       ...(p.priceRange ? { priceRange: p.priceRange } : {}),
       ...(p.menuUrl ? { menuUrl: p.menuUrl } : {}),

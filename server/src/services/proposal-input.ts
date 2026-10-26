@@ -20,6 +20,8 @@ import { quarantineKey } from './photo-keys.js';
 const dishSchema = z.object({
   name: text(80),
   description: text(160).optional(),
+  // Con su moneda, tal como lo escribiría el local: «8,50 €», «¥900».
+  price: text(20).optional(),
   // La foto del plato: la clave que devolvió POST /uploads.
   photoKey: quarantineKey.optional(),
 });
