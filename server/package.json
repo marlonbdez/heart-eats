@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "seed": "tsx --env-file-if-exists=.env seed/seed.ts",
     "seed:stress": "tsx --env-file-if-exists=.env seed/stress.ts",
+    "seed:photos": "tsx --env-file-if-exists=.env seed/photos.ts",
     "test:unit": "vitest run --exclude \"**/*.int.test.ts\""
   },
   "dependencies": {
