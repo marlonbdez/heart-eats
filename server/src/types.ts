@@ -55,6 +55,7 @@ export interface PublicRestaurant {
   timezone?: string;
   priceRange?: 1 | 2 | 3;
   menuUrl?: string;
+  accessibility?: string[];
   signatureDishes: {
     name: string;
     description?: string;

@@ -45,6 +45,7 @@ export interface ModerationItem {
   // Precio medio (1–3) y carta del local, si quien propone los dio.
   priceRange?: number;
   menuUrl?: string;
+  accessibility?: string[];
   howKnown?: string;
   // Solo en correcciones y retiradas:
   restaurantSlug?: string;
@@ -103,6 +104,7 @@ interface ProposalPayload {
   photoKeys?: string[];
   priceRange?: number;
   menuUrl?: string;
+  accessibility?: string[];
   howKnown?: string;
 }
 interface CorrectionPayload {
@@ -177,6 +179,7 @@ export function toModerationItem(
       ...(photos.length > 0 ? { photos } : {}),
       ...(p.priceRange ? { priceRange: p.priceRange } : {}),
       ...(p.menuUrl ? { menuUrl: p.menuUrl } : {}),
+      ...(p.accessibility?.length ? { accessibility: p.accessibility } : {}),
       howKnown: p.howKnown,
       location:
         s.geocode?.lat !== undefined && s.geocode.lng !== undefined

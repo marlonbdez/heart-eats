@@ -144,6 +144,9 @@ function correctionEntries(
     entries.push(['openingHours', changes.openingHours]);
   if (changes.priceRange) entries.push(['priceRange', changes.priceRange]);
   if (changes.menuUrl) entries.push(['menuUrl', changes.menuUrl]);
+  if (changes.accessibility) {
+    entries.push(['accessibility', changes.accessibility]);
+  }
   if (changes.closed) entries.push(['status', 'archived']);
   return entries;
 }

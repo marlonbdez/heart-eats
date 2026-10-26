@@ -164,6 +164,20 @@ describe('aprobar un local nuevo', () => {
     expect(place?.menuUrl).toBe('https://casanueva.example/carta');
   });
 
+  it('publica la accesibilidad que dio quien propone', async () => {
+    const s = await proposal({
+      payload: payload({
+        accessibility: ['step_free_entrance', 'easy_read_menu'],
+      }),
+    });
+    await decide(s._id, approval(), await signedInCookie());
+    const [place] = await published();
+    expect(place?.accessibility).toEqual([
+      'step_free_entrance',
+      'easy_read_menu',
+    ]);
+  });
+
   it('sin correo no hay aviso, y si el aviso falla la ficha sigue publicada', async () => {
     const quiet = await proposal({ contactEmail: undefined });
     await decide(quiet._id, approval(), await signedInCookie());

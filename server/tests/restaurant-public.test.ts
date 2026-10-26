@@ -71,6 +71,23 @@ describe('toPublicRestaurant', () => {
     expect(full.menuUrl).toBe('https://uno.example/carta');
   });
 
+  it('da la accesibilidad solo si se sabe algo', () => {
+    for (const none of [undefined, []]) {
+      const bare = toPublicRestaurant(
+        record({ accessibility: none }),
+        undefined,
+        now,
+      );
+      expect(bare).not.toHaveProperty('accessibility');
+    }
+    const full = toPublicRestaurant(
+      record({ accessibility: ['step_free_entrance', 'quiet_space'] }),
+      undefined,
+      now,
+    );
+    expect(full.accessibility).toEqual(['step_free_entrance', 'quiet_space']);
+  });
+
   it('no filtra campos internos', () => {
     const result = toPublicRestaurant(
       { ...record(), searchText: 'x', cityKey: 'madrid', __v: 0 } as never,

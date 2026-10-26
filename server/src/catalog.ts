@@ -52,6 +52,19 @@ export const disabilityTypes = [
   'other',
 ] as const;
 
+// Accesibilidad del local (no de su equipo): lo que se puede dar por hecho al
+// llegar. Lista corta y cerrada, para poder comparar y filtrar; el orden es el
+// de la ficha.
+export const accessibilityFeatures = [
+  'step_free_entrance',
+  'accessible_restroom',
+  'room_to_move',
+  'easy_read_menu',
+  'large_print_menu',
+  'quiet_space',
+  'sign_language',
+] as const;
+
 export const consentBy = ['self', 'legal_representative'] as const;
 
 export const cuisineTypes = [
