@@ -53,7 +53,7 @@ En escritorio el panel puede quedar fijo a la izquierda. Todo accesible por tecl
 2. Ve marcadores y clusters. El **buscador** encuentra **locales, ciudades/barrios y códigos postales** (si escribe una comida, sugiere la categoría como atajo). La **fila de categorías con icono** filtra por comida: pizza, hamburguesas, sushi, italiana, café, postres, tapas, menú del día, panadería, vegetariano.
 3. Toca un marcador → **tarjeta de vista previa**: lidera el **plato estrella** (foto + nombre), después el local, distancia, sello "Equipo inclusivo" e insignia.
 4. Toca la tarjeta → **ficha completa**.
-5. Desde la ficha: cómo llegar (abre app de mapas del dispositivo), llamar, web, **Sugerir corrección**.
+5. Desde la ficha: cómo llegar (en Android abre el selector de apps de mapas del sistema; en iPhone, Apple Maps; en ordenador, el mapa abierto en una pestaña nueva; sin JavaScript, este último), llamar, web, **Sugerir corrección**.
 - Alternativa: conmutador **Mapa / Lista** con los mismos filtros y orden por distancia.
 - Estados: cargando, sin resultados (sugerir ampliar filtros o proponer un local), error de red (reintentar), sin permiso de ubicación.
 
