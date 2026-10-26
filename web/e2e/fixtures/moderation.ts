@@ -135,6 +135,7 @@ export const suggestions: ApiSuggestion[] = [
     dishes: ['Tortilla'],
     priceRange: 1,
     menuUrl: 'https://casamarta.example/carta',
+    accessibility: ['step_free_entrance', 'easy_read_menu'],
     country: 'ES',
     location: { lat: 40.4153, lng: -3.7074 },
     locationBy: 'proposer',

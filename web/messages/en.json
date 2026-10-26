@@ -133,6 +133,17 @@
       "3": "Upscale prices"
     }
   },
+  "accessibility": {
+    "features": {
+      "step_free_entrance": "Step-free entrance",
+      "accessible_restroom": "Accessible restroom",
+      "room_to_move": "Room to move between tables",
+      "easy_read_menu": "Easy-read or pictogram menu",
+      "large_print_menu": "Large-print or braille menu",
+      "quiet_space": "Quiet atmosphere",
+      "sign_language": "Service in sign language"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Open the photos of {name}",
@@ -147,6 +158,10 @@
     },
     "back": "Back",
     "seal": "Business with an inclusive team",
+    "accessibility": {
+      "title": "Accessibility of the place",
+      "note": "Shared by people who know the place. If it matters to you, please check with the place before you go."
+    },
     "foodTypes": "Type of food",
     "openNow": {
       "open": "Open now · until {time}",
@@ -288,6 +303,9 @@
       "menu": "The place’s menu",
       "menuHint": "(optional)",
       "menuHelp": "A link to the menu the place itself publishes on its website. There is no need to copy the prices.",
+      "access": "Accessibility of the place",
+      "accessHint": "(optional)",
+      "accessHelp": "Tick only what you are sure of. What you leave unticked is not shown: we do not assume it is missing.",
       "menuError": "That link does not look valid: it should start with https://. You can check it or leave it empty.",
       "other": "Other"
     },
@@ -1075,6 +1093,7 @@
     "howKnown": "How the sender knows the place",
     "price": "Average price",
     "menu": "Menu",
+    "access": "Accessibility",
     "evidence": "Link provided",
     "none": "Not given",
     "noLink": "No link",
@@ -1223,6 +1242,8 @@
     "changePrice": "Average price",
     "changePriceKeep": "No change",
     "changeMenu": "The place’s menu (https link)",
+    "changeAccess": "Change the accessibility",
+    "changeAccessHelp": "Tick everything the place offers: it replaces what is there. If you tick nothing, the listing is left without accessibility information.",
     "changeClosed": "The place has closed for good (the listing will stop being shown)",
     "changePinHelp": "If the pin is wrong, write the right coordinates (for example, 40.4168 and -3.7038). If you change the address and add them, the pin is not looked up on its own.",
     "changeHours": "Change the opening hours",

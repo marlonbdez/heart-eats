@@ -133,6 +133,17 @@
       "3": "Precio alto"
     }
   },
+  "accessibility": {
+    "features": {
+      "step_free_entrance": "Entrada sin escalones",
+      "accessible_restroom": "Baño adaptado",
+      "room_to_move": "Espacio para moverse entre las mesas",
+      "easy_read_menu": "Carta en lectura fácil o con pictogramas",
+      "large_print_menu": "Carta en letra grande o en braille",
+      "quiet_space": "Ambiente tranquilo",
+      "sign_language": "Atención en lengua de signos"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Abrir las fotos de {name}",
@@ -147,6 +158,10 @@
     },
     "back": "Volver",
     "seal": "Negocio con equipo inclusivo",
+    "accessibility": {
+      "title": "Accesibilidad del local",
+      "note": "Nos lo ha contado quien conoce el sitio. Si te hace falta, confírmalo con el local antes de ir."
+    },
     "foodTypes": "Tipo de comida",
     "openNow": {
       "open": "Abierto ahora · hasta las {time}",
@@ -288,6 +303,9 @@
       "menu": "Carta del local",
       "menuHint": "(opcional)",
       "menuHelp": "El enlace a la carta que el propio local publica en su web. No hace falta copiar los precios.",
+      "access": "Accesibilidad del local",
+      "accessHint": "(opcional)",
+      "accessHelp": "Marca solo lo que sepas seguro. Lo que no marques no se muestra: no damos por hecho que no lo haya.",
       "menuError": "Ese enlace no parece válido: debería empezar por https://. Puedes revisarlo o dejarlo vacío.",
       "other": "Otra"
     },
@@ -1075,6 +1093,7 @@
     "howKnown": "Cómo lo conoce quien propone",
     "price": "Precio medio",
     "menu": "Carta",
+    "access": "Accesibilidad",
     "evidence": "Enlace aportado",
     "none": "Sin indicar",
     "noLink": "Sin enlace",
@@ -1223,6 +1242,8 @@
     "changePrice": "Precio medio",
     "changePriceKeep": "Sin cambios",
     "changeMenu": "Carta del local (enlace https)",
+    "changeAccess": "Cambiar la accesibilidad",
+    "changeAccessHelp": "Marca todo lo que ofrece el local: sustituye a lo que hay. Si no marcas nada, la ficha se queda sin datos de accesibilidad.",
     "changeClosed": "El local ha cerrado para siempre (la ficha dejará de verse)",
     "changePinHelp": "Si el pin está mal, escribe las coordenadas correctas (por ejemplo, 40.4168 y -3.7038). Si cambias la dirección y las pones, no se busca el pin solo.",
     "changeHours": "Cambiar el horario",

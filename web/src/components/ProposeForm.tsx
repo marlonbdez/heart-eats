@@ -2,6 +2,10 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  cleanAccessibility,
+  type AccessibilityFeature,
+} from '@/lib/accessibility';
 import { isRateLimited } from '@/lib/api';
 import { photoUploads } from '@/lib/features';
 import { submitProposal } from '@/lib/data';
@@ -11,6 +15,7 @@ import type { FoodTag, LatLng, PriceRange } from '@/lib/types';
 import { clearDraft, loadDraft, saveDraft } from '@/lib/draft';
 import type { PreparedPhoto } from '@/lib/image';
 import { isEmail, isHttpsUrl, isHttpUrl, isPlaceText } from '@/lib/validation';
+import { AccessibilityFields } from './AccessibilityFields';
 import { PhotoConsent } from './PhotoConsent';
 import { PhotoPicker } from './PhotoPicker';
 import { PinPickerLoader } from './PinPickerLoader';
@@ -40,6 +45,7 @@ interface FormState {
   foods: string[];
   priceRange: PriceRange | null;
   menuUrl: string;
+  accessibility: AccessibilityFeature[];
   dishes: Dish[];
   // Fotos del local, ya reducidas. No se guardan en el borrador.
   photos: PreparedPhoto[];
@@ -61,6 +67,7 @@ const initial: FormState = {
   foods: [],
   priceRange: null,
   menuUrl: '',
+  accessibility: [],
   dishes: [{ name: '', description: '' }],
   photos: [],
   howKnown: '',
@@ -130,6 +137,7 @@ function sanitizeDraft(d: Draft | null): Draft | null {
         : [],
       priceRange: PRICES.find((p) => p === f.priceRange) ?? null,
       menuUrl: str(f.menuUrl),
+      accessibility: cleanAccessibility(f.accessibility),
       dishes: dishes.length ? dishes : initial.dishes,
       howKnown: str(f.howKnown),
       evidenceUrl: str(f.evidenceUrl),
@@ -273,6 +281,9 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
         foodTags: form.foods,
         priceRange: form.priceRange ?? undefined,
         menuUrl: clean(form.menuUrl),
+        accessibility: form.accessibility.length
+          ? form.accessibility
+          : undefined,
         dishes: form.dishes
           .filter((d) => d.name.trim())
           .map((d) => ({
@@ -643,6 +654,20 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 </p>
               )}
             </div>
+            <fieldset className={s.options}>
+              <legend className={s.label}>
+                {t('s1.access')}{' '}
+                <span className={s.optional}>{t('s1.accessHint')}</span>
+              </legend>
+              <p id="f-access-help" className={s.small}>
+                {t('s1.accessHelp')}
+              </p>
+              <AccessibilityFields
+                value={form.accessibility}
+                onChange={(next) => set('accessibility', next)}
+                describedBy="f-access-help"
+              />
+            </fieldset>
           </div>
         )}
 

@@ -46,6 +46,7 @@ const base: Restaurant[] = [
     description: { es: 'Pizzería de barrio con masa de 48 horas.' },
     priceRange: 2,
     menuUrl: 'https://masamadre.example/carta',
+    accessibility: ['step_free_entrance', 'accessible_restroom', 'quiet_space'],
     businessType: 'restaurant',
     cuisineTypes: ['italian'],
     foodTags: ['pizza', 'italian', 'mexican'],
