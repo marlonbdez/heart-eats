@@ -51,6 +51,13 @@
         "close": "23:30"
       }
     ],
+    "priceRange": 2,
+    "menuUrl": "https://example.org/carta",
+    "accessibility": [
+      "step_free_entrance",
+      "accessible_restroom",
+      "quiet_space"
+    ],
     "signatureDishes": [
       {
         "name": "Margarita de la casa",
@@ -211,6 +218,8 @@
         "close": "00:00"
       }
     ],
+    "priceRange": 1,
+    "accessibility": ["step_free_entrance"],
     "signatureDishes": [
       {
         "name": "Croquetas de jamón"
@@ -298,6 +307,15 @@
         "close": "16:30"
       }
     ],
+    "priceRange": 2,
+    "menuUrl": "https://example.org/carta",
+    "accessibility": [
+      "step_free_entrance",
+      "accessible_restroom",
+      "room_to_move",
+      "easy_read_menu",
+      "large_print_menu"
+    ],
     "signatureDishes": [
       {
         "name": "Bol de legumbres y verduras asadas"
@@ -369,6 +387,8 @@
         "close": "15:00"
       }
     ],
+    "priceRange": 1,
+    "menuUrl": "https://example.org/carta",
     "signatureDishes": [
       {
         "name": "Pan de masa madre"
