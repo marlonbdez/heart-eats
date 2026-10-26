@@ -64,6 +64,7 @@ const base: Restaurant[] = [
       {
         name: 'Margarita de la casa',
         description: 'Tomate, mozzarella fresca y albahaca.',
+        price: '9,50 €',
         photoUrl:
           'http://localhost:3001/api/v1/photos/0b8e3a52-5a43-4b8a-9d5e-000000000106.webp',
         thumbUrl:

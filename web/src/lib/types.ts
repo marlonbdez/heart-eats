@@ -18,6 +18,8 @@ export type VerificationMethod =
 export interface SignatureDish {
   name: string;
   description?: string;
+  // Con su moneda, como lo escribe el local: «8,50 €», «¥900».
+  price?: string;
   photoUrl?: string;
   // La miniatura (400 px), si la foto se subió a HeartEats.
   thumbUrl?: string;

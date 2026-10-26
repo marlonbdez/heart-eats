@@ -158,9 +158,22 @@
     transform: scale(1.04);
   }
 }
+.dishHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+}
 .dishName {
   font-size: 1.05rem;
   font-weight: 700;
+}
+.dishPrice {
+  font-weight: 600;
+  color: var(--accent-text);
+  white-space: nowrap;
 }
 
 .actions {

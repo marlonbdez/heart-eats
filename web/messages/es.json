@@ -314,6 +314,8 @@
       "dish": "Plato {n}",
       "dishName": "Nombre del plato",
       "dishDesc": "Descripción corta",
+      "dishPrice": "Precio",
+      "priceHint": "El precio de cada plato es opcional. Escríbelo con su moneda, como lo pondría el local (por ejemplo, 8,50 €). Si no lo sabes, déjalo vacío.",
       "optional": "(opcional)",
       "add": "+ Añadir otro plato",
       "photo": "Foto",
