@@ -117,6 +117,20 @@ export function RestaurantDetail({
             ))}
           </nav>
           {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
+          {r.accessibility && r.accessibility.length > 0 && (
+            <section aria-labelledby="accesibilidad">
+              <h2 id="accesibilidad">{t('accessibility.title')}</h2>
+              <ul className={styles.access}>
+                {r.accessibility.map((key) => (
+                  <li key={key}>
+                    <span aria-hidden="true">✓</span>
+                    {tf(`accessibility.features.${key}`)}
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.note}>{t('accessibility.note')}</p>
+            </section>
+          )}
         </div>
 
         <div className={styles.rest}>

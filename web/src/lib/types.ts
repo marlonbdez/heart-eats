@@ -1,6 +1,8 @@
 // Tipos de lectura pública. Reflejan docs/01_ESPECIFICACION_DATOS.md.
 // Cuando haya backend, estos tipos pasarán a shared/types.
 
+import type { AccessibilityFeature } from './accessibility';
+
 // Texto con una versión por idioma: { es: '...', en: '...' }. Si falta el
 // idioma pedido, se usa el del lanzamiento (es).
 export type LocalizedText = Record<string, string>;
@@ -93,6 +95,8 @@ export interface Restaurant {
   priceRange?: PriceRange;
   // La carta que el propio local publica en su web (https).
   menuUrl?: string;
+  // Accesibilidad del local; sin ella no se sabe nada (no es «no hay»).
+  accessibility?: AccessibilityFeature[];
   signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
   // La primera es la portada. En las listas solo viene esa.
   photos?: PlacePhoto[];
@@ -153,6 +157,7 @@ export interface ProposalInput {
   photos?: PhotoBlobs[]; // 0-5, del local
   priceRange?: PriceRange;
   menuUrl?: string; // https
+  accessibility?: AccessibilityFeature[];
   howKnown?: string;
   evidenceUrl?: string;
   independent: boolean;
@@ -261,6 +266,7 @@ export interface ModerationItem {
   dishes?: string[];
   priceRange?: PriceRange;
   menuUrl?: string;
+  accessibility?: AccessibilityFeature[];
   // Las fotos de un local nuevo, en cuarentena hasta que se decide. `key` es lo
   // que se manda en `skipPhotos` para no publicar una.
   photos?: ModerationPhoto[];
@@ -323,6 +329,8 @@ export interface CorrectionChange {
   openingHours?: OpeningHours[];
   priceRange?: PriceRange;
   menuUrl?: string; // https
+  // La lista completa: sustituye a la de la ficha; vacía, la deja sin datos.
+  accessibility?: AccessibilityFeature[];
   closed?: true;
 }
 

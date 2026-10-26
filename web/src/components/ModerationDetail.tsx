@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { ApiRequestError } from '@/lib/api';
+import {
+  cleanAccessibility,
+  type AccessibilityFeature,
+} from '@/lib/accessibility';
 import { countryName } from '@/lib/countries';
 import { isHttpsUrl } from '@/lib/validation';
 import type {
@@ -17,6 +21,7 @@ import type {
   VerificationLevel,
   VerificationMethod,
 } from '@/lib/types';
+import { AccessibilityFields } from './AccessibilityFields';
 import form from './Form.module.css';
 import { HoursFields, hoursFromDraft, type HoursDraft } from './HoursFields';
 import styles from './Moderation.module.css';
@@ -106,6 +111,7 @@ export function ModerationDetail({
   const tCard = useTranslations('card');
   const tFood = useTranslations('foodTags');
   const tPrice = useTranslations('price');
+  const tAccess = useTranslations('accessibility');
   const tKinds = useTranslations('correct.kinds');
   const tTeam = useTranslations('team');
   const tRemoval = useTranslations('removal');
@@ -158,8 +164,10 @@ export function ModerationDetail({
     price: '',
     closed: false,
     hours: false,
+    access: false,
   });
   const [hours, setHours] = useState<HoursDraft>({});
+  const [access, setAccess] = useState<AccessibilityFeature[]>([]);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -222,6 +230,8 @@ export function ModerationDetail({
       ...(openingHours ? { openingHours } : {}),
       ...(priceRange ? { priceRange } : {}),
       ...(menuUrl ? { menuUrl } : {}),
+      // Cambiarla sin marcar nada la deja sin datos.
+      ...(change.access ? { accessibility: cleanAccessibility(access) } : {}),
       ...(change.closed ? { closed: true as const } : {}),
     };
   }
@@ -576,6 +586,16 @@ export function ModerationDetail({
               </dd>
             </div>
             <div>
+              <dt>{t('access')}</dt>
+              <dd>
+                {item.accessibility?.length
+                  ? item.accessibility
+                      .map((k) => tAccess(`features.${k}`))
+                      .join(' · ')
+                  : t('none')}
+              </dd>
+            </div>
+            <div>
               <dt>{t('howKnown')}</dt>
               <dd>{item.howKnown || t('none')}</dd>
             </div>
@@ -786,6 +806,29 @@ export function ModerationDetail({
                   }}
                 />
               </div>
+              <label className={form.check}>
+                <input
+                  type="checkbox"
+                  checked={change.access}
+                  onChange={(e) => {
+                    setChange({ ...change, access: e.target.checked });
+                    setError('');
+                  }}
+                />
+                <span>{t('changeAccess')}</span>
+              </label>
+              {change.access && (
+                <>
+                  <p id="mod-access-help" className={styles.meta}>
+                    {t('changeAccessHelp')}
+                  </p>
+                  <AccessibilityFields
+                    value={access}
+                    onChange={setAccess}
+                    describedBy="mod-access-help"
+                  />
+                </>
+              )}
               <label className={form.check}>
                 <input
                   type="checkbox"

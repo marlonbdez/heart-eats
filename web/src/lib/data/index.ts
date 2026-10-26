@@ -109,6 +109,7 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
     photoKeys,
     priceRange: input.priceRange,
     menuUrl: input.menuUrl,
+    accessibility: input.accessibility,
     howKnown: input.howKnown,
     evidenceUrl: input.evidenceUrl,
     independent: input.independent,
