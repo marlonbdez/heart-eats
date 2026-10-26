@@ -4,8 +4,10 @@ import {
   countryCode,
   email,
   httpUrl,
+  httpsUrl,
   latLng,
   locale,
+  priceRange,
   text,
 } from './input-fields.js';
 import { quarantineKey } from './photo-keys.js';
@@ -38,6 +40,9 @@ export const proposalSchema = z.object({
   dishes: z.array(dishSchema).max(3),
   // Fotos del local, también ya subidas; Moderación las mira antes de publicarlas.
   photoKeys: z.array(quarantineKey).max(5).default([]),
+  // Datos útiles para quien busca dónde ir; el negocio los confirma al publicar.
+  priceRange: priceRange.optional(),
+  menuUrl: httpsUrl.optional(),
   howKnown: text(1000).optional(),
   evidenceUrl: httpUrl.optional(),
   independent: z.boolean(),

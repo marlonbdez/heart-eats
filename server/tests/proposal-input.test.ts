@@ -34,8 +34,22 @@ describe('proposalSchema', () => {
     );
   });
 
+  it('acepta el precio medio y la carta del local', () => {
+    const result = proposalSchema.parse({
+      ...valid,
+      priceRange: 2,
+      menuUrl: 'https://casalola.example/carta',
+    });
+    expect(result.priceRange).toBe(2);
+    expect(result.menuUrl).toBe('https://casalola.example/carta');
+  });
+
   it.each([
     ['nombre muy corto', { name: 'A' }],
+    ['precio fuera de rango', { priceRange: 4 }],
+    ['precio como texto', { priceRange: '€€' }],
+    ['carta sin https', { menuUrl: 'http://casalola.example/carta' }],
+    ['carta que no es web', { menuUrl: 'javascript:alert(1)' }],
     ['sin ciudad', { city: '  ' }],
     ['comida desconocida', { foodTags: ['nope'] }],
     [

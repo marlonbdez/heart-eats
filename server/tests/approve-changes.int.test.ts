@@ -189,6 +189,24 @@ describe('aprobar una corrección', () => {
     expect((await place())?.openingHours).toEqual(openingHours);
   });
 
+  it('pone el precio medio y la carta', async () => {
+    const s = await correction({
+      payload: { kind: 'other', details: 'Precio y carta' },
+    });
+    const res = await decide(
+      s._id,
+      approve({ priceRange: 3, menuUrl: 'https://uno.example/carta' }),
+      await signedInCookie(),
+    );
+    expect(res.status).toBe(200);
+    const saved = await place();
+    expect(saved?.priceRange).toBe(3);
+    expect(saved?.menuUrl).toBe('https://uno.example/carta');
+    const read = await request(app).get('/api/v1/restaurants/demo-uno');
+    expect(read.body.priceRange).toBe(3);
+    expect(read.body.menuUrl).toBe('https://uno.example/carta');
+  });
+
   it('«cerrado» archiva la ficha: deja de verse en la lectura pública', async () => {
     const s = await correction({
       payload: { kind: 'closed', details: 'Cerró' },
@@ -249,6 +267,8 @@ describe('aprobar una corrección', () => {
       { location: { lat: 95, lng: 0 } },
       { openingHours: [{ day: 7, open: '09:00', close: '10:00' }] },
       { openingHours: [{ day: 1, open: '9:00', close: '10:00' }] },
+      { priceRange: 4 },
+      { menuUrl: 'http://uno.example/carta' },
     ];
     for (const changes of bad) {
       const res = await decide(s._id, approve(changes), cookie);

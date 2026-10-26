@@ -11,6 +11,14 @@ export const httpUrl = z
   .max(500)
   .refine((value) => !/\s/.test(value));
 
+// Precio medio por persona (€, €€ o €€€) y carta del local: en una propuesta y
+// al aprobar una corrección. La carta solo se acepta con https.
+export const priceRange = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+
+export const httpsUrl = httpUrl.refine((value) => /^https:/i.test(value), {
+  error: 'la carta tiene que ser un enlace https',
+});
+
 export const email = z
   .email()
   .max(254)

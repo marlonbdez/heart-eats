@@ -57,6 +57,20 @@ describe('toPublicRestaurant', () => {
     expect(at(-58.38, -34.6)).toBe('America/Argentina/Buenos_Aires');
   });
 
+  it('da el precio medio y la carta solo si el local los tiene', () => {
+    const bare = toPublicRestaurant(record(), undefined, now);
+    expect(bare).not.toHaveProperty('priceRange');
+    expect(bare).not.toHaveProperty('menuUrl');
+
+    const full = toPublicRestaurant(
+      record({ priceRange: 2, menuUrl: 'https://uno.example/carta' }),
+      undefined,
+      now,
+    );
+    expect(full.priceRange).toBe(2);
+    expect(full.menuUrl).toBe('https://uno.example/carta');
+  });
+
   it('no filtra campos internos', () => {
     const result = toPublicRestaurant(
       { ...record(), searchText: 'x', cityKey: 'madrid', __v: 0 } as never,

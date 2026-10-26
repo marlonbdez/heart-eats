@@ -36,6 +36,10 @@ export interface RestaurantRecord {
     instagram?: string;
   };
   openingHours: { day: number; open: string; close: string }[];
+  // Precio medio por persona: 1 (€), 2 (€€) o 3 (€€€).
+  priceRange?: 1 | 2 | 3;
+  // Carta del propio local, en su web.
+  menuUrl?: string;
   signatureDishes: {
     name: string;
     description?: string;
@@ -133,6 +137,8 @@ const restaurantSchema = new Schema(
       ],
       default: [],
     },
+    priceRange: { type: Number, enum: [1, 2, 3] },
+    menuUrl: { type: String, match: /^https:\/\//i, maxlength: 500 },
     signatureDishes: {
       type: [
         new Schema(
