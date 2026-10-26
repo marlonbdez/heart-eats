@@ -159,18 +159,14 @@ test('al tocar un enlace con la red lenta aparece la barra y el aviso', async ({
   const release = await hold(page, /\/es\/place\/[^/]+(\.txt|\/?\?_rsc.*)$/);
   await link.click();
   await page.clock.fastForward(300);
-  await expect(
-    page.locator('[class*="NavigationProgress"][class*="bar"]'),
-  ).toBeVisible();
+  await expect(page.locator('[data-navigation-progress]')).toBeVisible();
   await page.clock.fastForward(5000);
   await expect(page.getByText(/La conexión va lenta/)).toBeVisible();
 
   release();
   await expect(page).toHaveURL(/\/es\/place\/demo-/);
   await expect(page.getByText(/La conexión va lenta/)).toHaveCount(0);
-  await expect(
-    page.locator('[class*="NavigationProgress"][class*="bar"]'),
-  ).toHaveCount(0);
+  await expect(page.locator('[data-navigation-progress]')).toHaveCount(0);
 });
 
 test('volver atrás no deja la barra de navegación colgada', async ({
@@ -186,9 +182,7 @@ test('volver atrás no deja la barra de navegación colgada', async ({
   await page.goBack();
   await expect(page).toHaveURL(/\/es$/);
   await page.waitForTimeout(500);
-  await expect(
-    page.locator('[class*="NavigationProgress"][class*="bar"]'),
-  ).toHaveCount(0);
+  await expect(page.locator('[data-navigation-progress]')).toHaveCount(0);
 });
 
 test('pulsado: un botón cambia de aspecto mientras se mantiene pulsado', async ({
