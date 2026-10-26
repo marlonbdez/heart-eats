@@ -151,6 +151,19 @@ describe('aprobar un local nuevo', () => {
     ]);
   });
 
+  it('publica el precio medio y la carta que dio quien propone', async () => {
+    const s = await proposal({
+      payload: payload({
+        priceRange: 2,
+        menuUrl: 'https://casanueva.example/carta',
+      }),
+    });
+    await decide(s._id, approval(), await signedInCookie());
+    const [place] = await published();
+    expect(place?.priceRange).toBe(2);
+    expect(place?.menuUrl).toBe('https://casanueva.example/carta');
+  });
+
   it('sin correo no hay aviso, y si el aviso falla la ficha sigue publicada', async () => {
     const quiet = await proposal({ contactEmail: undefined });
     await decide(quiet._id, approval(), await signedInCookie());

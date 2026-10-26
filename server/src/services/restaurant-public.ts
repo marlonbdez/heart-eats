@@ -68,6 +68,8 @@ export function toPublicRestaurant(
       close,
     })),
     ...(timezone ? { timezone } : {}),
+    ...(r.priceRange ? { priceRange: r.priceRange } : {}),
+    ...(r.menuUrl ? { menuUrl: r.menuUrl } : {}),
     signatureDishes: r.signatureDishes.map(
       ({ name, description, photoUrl, photo }) => ({
         name,
