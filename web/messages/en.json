@@ -314,6 +314,8 @@
       "dish": "Dish {n}",
       "dishName": "Name of the dish",
       "dishDesc": "Short description",
+      "dishPrice": "Price",
+      "priceHint": "The price of each dish is optional. Write it with its currency, the way the place would (for example, €8.50). If you do not know it, leave it empty.",
       "optional": "(optional)",
       "add": "+ Add another dish",
       "photo": "Photo",

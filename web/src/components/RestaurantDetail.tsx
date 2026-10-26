@@ -149,7 +149,12 @@ export function RestaurantDetail({
                       )}
                     </div>
                     <div>
-                      <p className={styles.dishName}>{d.name}</p>
+                      <p className={styles.dishHead}>
+                        <span className={styles.dishName}>{d.name}</span>
+                        {d.price && (
+                          <span className={styles.dishPrice}>{d.price}</span>
+                        )}
+                      </p>
                       {d.description && (
                         <p className={styles.muted}>{d.description}</p>
                       )}

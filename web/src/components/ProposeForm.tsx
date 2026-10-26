@@ -32,6 +32,7 @@ const PRICES: PriceRange[] = [1, 2, 3];
 interface Dish {
   name: string;
   description: string;
+  price: string;
   // Foto ya reducida y su vista previa. No se guarda en el borrador.
   photo?: PreparedPhoto;
 }
@@ -68,7 +69,7 @@ const initial: FormState = {
   priceRange: null,
   menuUrl: '',
   accessibility: [],
-  dishes: [{ name: '', description: '' }],
+  dishes: [{ name: '', description: '', price: '' }],
   photos: [],
   howKnown: '',
   evidenceUrl: '',
@@ -83,7 +84,7 @@ const initial: FormState = {
 type DraftForm = Omit<
   FormState,
   'email' | 'website' | 'photoConsent' | 'dishes' | 'photos'
-> & { dishes: { name: string; description: string }[] };
+> & { dishes: { name: string; description: string; price: string }[] };
 interface Draft {
   form: DraftForm;
   step: number;
@@ -92,7 +93,11 @@ interface Draft {
 const isPristine = (f: FormState) =>
   JSON.stringify({
     ...f,
-    dishes: f.dishes.map(({ name, description }) => ({ name, description })),
+    dishes: f.dishes.map(({ name, description, price }) => ({
+      name,
+      description,
+      price,
+    })),
     photos: [],
     email: '',
     website: '',
@@ -115,14 +120,14 @@ function sanitizeDraft(d: Draft | null): Draft | null {
   const f = d.form;
   const str = (v: unknown, fallback = '') =>
     typeof v === 'string' ? v : fallback;
-  const dishes: { name: string; description: string }[] = Array.isArray(
-    f.dishes,
-  )
-    ? f.dishes.slice(0, MAX_DISHES).map((x) => ({
-        name: str(x?.name),
-        description: str(x?.description),
-      }))
-    : [];
+  const dishes: { name: string; description: string; price: string }[] =
+    Array.isArray(f.dishes)
+      ? f.dishes.slice(0, MAX_DISHES).map((x) => ({
+          name: str(x?.name),
+          description: str(x?.description),
+          price: str(x?.price),
+        }))
+      : [];
   return {
     step: d.step >= 1 && d.step <= 4 ? Math.floor(d.step) : 1,
     form: {
@@ -203,6 +208,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
           dishes: dishes.map((d) => ({
             name: d.name,
             description: d.description,
+            price: d.price,
           })),
         },
         step,
@@ -289,6 +295,7 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
           .map((d) => ({
             name: d.name.trim(),
             description: clean(d.description),
+            price: clean(d.price),
             photo: d.photo,
           })),
         photos: form.photos,
@@ -697,6 +704,18 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                   value={d.description}
                   onChange={(e) => setDish(i, { description: e.target.value })}
                 />
+                <label htmlFor={`d${i}c`} className={s.label}>
+                  {t('s2.dishPrice')}{' '}
+                  <span className={s.optional}>{t('s2.optional')}</span>
+                </label>
+                <input
+                  id={`d${i}c`}
+                  className={s.input}
+                  maxLength={20}
+                  aria-describedby="s2-price-hint"
+                  value={d.price}
+                  onChange={(e) => setDish(i, { price: e.target.value })}
+                />
                 {photoUploads && (
                   <PhotoPicker
                     id={`d${i}p`}
@@ -718,12 +737,18 @@ export function ProposeForm({ foodTags }: { foodTags: FoodTag[] }) {
                 type="button"
                 className={s.dashed}
                 onClick={() =>
-                  set('dishes', [...form.dishes, { name: '', description: '' }])
+                  set('dishes', [
+                    ...form.dishes,
+                    { name: '', description: '', price: '' },
+                  ])
                 }
               >
                 {t('s2.add')}
               </button>
             )}
+            <p id="s2-price-hint" className={s.note}>
+              {t('s2.priceHint')}
+            </p>
             {photoUploads && (
               <p id="s2-photo-hint" className={s.note}>
                 {t('s2.photoHint')}

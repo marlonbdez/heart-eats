@@ -101,9 +101,10 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
     location: input.location,
     postalCode: input.postalCode,
     foodTags: input.foodTags,
-    dishes: input.dishes.map(({ name, description }, i) => ({
+    dishes: input.dishes.map(({ name, description, price }, i) => ({
       name,
       description,
+      price,
       photoKey: dishKeys[i],
     })),
     photoKeys,
