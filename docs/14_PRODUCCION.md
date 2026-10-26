@@ -247,6 +247,19 @@ Cada cambio entra por una PR y la aprueba el responsable. `.github/CODEOWNERS` l
 - **Token de R2**: crear otro, actualizar los dos secretos de GitHub, revocar el viejo.
 - **Clave de cifrado**: generar otra pareja, actualizar `BACKUP_AGE_RECIPIENT`, **guardar la privada vieja** mientras haya copias hechas con ella.
 
+### Poner al día los locales de ejemplo de producción
+Cuando cambian los datos de `server/seed/restaurants.json` (por ejemplo, para que se vean campos nuevos de la ficha), se actualizan **en su sitio**, sin borrar nada: solo los 6 de ese archivo, por su slug. Los de «Datos de prueba por todo el mundo» y los locales reales no se tocan. Dice en qué base está y pide escribir «actualizar».
+
+```bash
+cd server
+# MONGODB_URI de producción en server/.env (que no se sube al repo), o en la línea de comandos
+npm run seed -- --refresh
+```
+
+Si un local de ejemplo no existe, lo crea con su equipo; si su slug lo usa un local que no es de ejemplo, lo deja y lo dice. Quita después la línea del `.env`, como en el apartado siguiente. Se puede repetir sin riesgo.
+
+**No uses `npm run seed` a secas contra producción**: borra *todo* lo marcado `isDemo` (también los ~630 de `seed:stress`) y recrea solo los 6.
+
 ### Quitar los locales de ejemplo de producción
 Solo borra los marcados `isDemo`; no toca locales reales. Dice en qué base está y cuántos borrará, y pide escribir «borrar».
 
@@ -256,7 +269,7 @@ cd server
 npm run seed -- --clear
 ```
 
-Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; **no lo ejecutes contra producción**.
+Quita después la línea del `.env` o bórralo: una terminal con la cadena de producción es un riesgo. Para volver a cargar los de ejemplo en una base **local** basta `npm run seed`; en producción, usa `npm run seed -- --refresh` (apartado anterior).
 
 ### Datos de prueba por todo el mundo (fase de pruebas)
 Mientras se prueba, producción lleva cientos de locales ficticios repartidos por unas 35 ciudades (Madrid con más densidad), con nombres y calles en su idioma o escritura, descripciones solo en ES, solo en EN o ninguna, locales sin horario, archivados o pendientes (no deben verse) y algunos equipos con historia. Todos llevan `isDemo`, «[DEMO]» en el nombre y el slug `demo-stress-…`.

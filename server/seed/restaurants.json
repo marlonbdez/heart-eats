@@ -61,10 +61,12 @@
     "signatureDishes": [
       {
         "name": "Margarita de la casa",
-        "description": "Tomate, mozzarella fresca y albahaca."
+        "description": "Tomate, mozzarella fresca y albahaca.",
+        "price": "9,50 €"
       },
       {
-        "name": "Focaccia de romero"
+        "name": "Focaccia de romero",
+        "price": "4 €"
       }
     ],
     "ownerConfirmedAt": "2026-09-01T00:00:00Z",
@@ -222,7 +224,8 @@
     "accessibility": ["step_free_entrance"],
     "signatureDishes": [
       {
-        "name": "Croquetas de jamón"
+        "name": "Croquetas de jamón",
+        "price": "7 €"
       },
       {
         "name": "Menú del día",
@@ -318,7 +321,8 @@
     ],
     "signatureDishes": [
       {
-        "name": "Bol de legumbres y verduras asadas"
+        "name": "Bol de legumbres y verduras asadas",
+        "price": "11,50 €"
       }
     ],
     "location": {
