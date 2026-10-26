@@ -44,6 +44,8 @@ const base: Restaurant[] = [
     slug: 'demo-la-masa-madre',
     name: '[DEMO] La Masa Madre',
     description: { es: 'Pizzería de barrio con masa de 48 horas.' },
+    priceRange: 2,
+    menuUrl: 'https://masamadre.example/carta',
     businessType: 'restaurant',
     cuisineTypes: ['italian'],
     foodTags: ['pizza', 'italian', 'mexican'],

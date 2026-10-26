@@ -133,6 +133,8 @@ export const suggestions: ApiSuggestion[] = [
     address: 'Calle Mayor 5, 28013, Madrid',
     foodTags: ['tapas'],
     dishes: ['Tortilla'],
+    priceRange: 1,
+    menuUrl: 'https://casamarta.example/carta',
     country: 'ES',
     location: { lat: 40.4153, lng: -3.7074 },
     locationBy: 'proposer',

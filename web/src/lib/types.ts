@@ -62,6 +62,9 @@ export interface OpeningHours {
   close: string; // HH:mm
 }
 
+// Precio medio por persona: 1 económico, 2 moderado, 3 alto.
+export type PriceRange = 1 | 2 | 3;
+
 export interface Restaurant {
   slug: string;
   name: string;
@@ -87,6 +90,9 @@ export interface Restaurant {
   openingHours: OpeningHours[];
   // Zona horaria del local (IANA), en la que se leen `openingHours`.
   timezone?: string;
+  priceRange?: PriceRange;
+  // La carta que el propio local publica en su web (https).
+  menuUrl?: string;
   signatureDishes: SignatureDish[]; // 0-3 (opcional: un café puede no tener ninguno)
   // La primera es la portada. En las listas solo viene esa.
   photos?: PlacePhoto[];
@@ -145,6 +151,8 @@ export interface ProposalInput {
   foodTags: string[]; // claves de FoodTag; 'other' para "Otra"
   dishes: ProposalDish[]; // 0-3, solo con nombre
   photos?: PhotoBlobs[]; // 0-5, del local
+  priceRange?: PriceRange;
+  menuUrl?: string; // https
   howKnown?: string;
   evidenceUrl?: string;
   independent: boolean;
@@ -251,6 +259,8 @@ export interface ModerationItem {
   // Solo en un local nuevo:
   foodTags?: string[];
   dishes?: string[];
+  priceRange?: PriceRange;
+  menuUrl?: string;
   // Las fotos de un local nuevo, en cuarentena hasta que se decide. `key` es lo
   // que se manda en `skipPhotos` para no publicar una.
   photos?: ModerationPhoto[];
@@ -311,6 +321,8 @@ export interface CorrectionChange {
   location?: { lat: number; lng: number };
   // El horario completo: sustituye al de la ficha.
   openingHours?: OpeningHours[];
+  priceRange?: PriceRange;
+  menuUrl?: string; // https
   closed?: true;
 }
 

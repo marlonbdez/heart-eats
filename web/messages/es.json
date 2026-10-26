@@ -125,6 +125,14 @@
     "list": "Lista"
   },
   "_view": "Ver local →",
+  "price": {
+    "short": { "1": "Económico", "2": "Moderado", "3": "Alto" },
+    "long": {
+      "1": "Precio económico",
+      "2": "Precio moderado",
+      "3": "Precio alto"
+    }
+  },
   "detail": {
     "gallery": {
       "open": "Abrir las fotos de {name}",
@@ -155,6 +163,7 @@
     "directions": "Cómo llegar",
     "call": "Llamar",
     "website": "Web",
+    "menu": "Ver la carta",
     "hours": "Horario",
     "dayRange": "{from} a {to}",
     "closed": "Cerrado",
@@ -273,6 +282,13 @@
       "food": "¿Qué tipo de comida?",
       "foodHint": "(elige las que apliquen)",
       "foodGroup": "Tipo de comida",
+      "price": "Precio medio por persona",
+      "priceHint": "(opcional)",
+      "priceHelp": "Una idea de lo que cuesta comer o tomar algo allí. Tú decides: no hace falta ser exacto.",
+      "menu": "Carta del local",
+      "menuHint": "(opcional)",
+      "menuHelp": "El enlace a la carta que el propio local publica en su web. No hace falta copiar los precios.",
+      "menuError": "Ese enlace no parece válido: debería empezar por https://. Puedes revisarlo o dejarlo vacío.",
       "other": "Otra"
     },
     "s2": {
@@ -1057,6 +1073,8 @@
     "photoOfPerson": "Foto de {name}",
     "photoSkip": "No publicar esta foto",
     "howKnown": "Cómo lo conoce quien propone",
+    "price": "Precio medio",
+    "menu": "Carta",
     "evidence": "Enlace aportado",
     "none": "Sin indicar",
     "noLink": "Sin enlace",
@@ -1120,6 +1138,7 @@
       "needStory": "Elige qué historia se retira.",
       "needChange": "Escribe qué cambia en la ficha.",
       "badPin": "Las coordenadas no son válidas.",
+      "badMenu": "La carta tiene que ser un enlace que empiece por https://.",
       "badHours": "Cada día lleva hora de apertura y de cierre, o ninguna si está cerrado. Rellena al menos un día.",
       "forbidden": "No tienes permiso para decidir esto.",
       "notImplemented": "Esto todavía no se puede hacer desde aquí.",
@@ -1201,6 +1220,9 @@
     "changeStreet": "Calle",
     "changePostalCode": "Código postal",
     "changeCity": "Ciudad",
+    "changePrice": "Precio medio",
+    "changePriceKeep": "Sin cambios",
+    "changeMenu": "Carta del local (enlace https)",
     "changeClosed": "El local ha cerrado para siempre (la ficha dejará de verse)",
     "changePinHelp": "Si el pin está mal, escribe las coordenadas correctas (por ejemplo, 40.4168 y -3.7038). Si cambias la dirección y las pones, no se busca el pin solo.",
     "changeHours": "Cambiar el horario",

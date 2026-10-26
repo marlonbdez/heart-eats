@@ -107,6 +107,8 @@ export async function submitProposal(input: ProposalInput): Promise<void> {
       photoKey: dishKeys[i],
     })),
     photoKeys,
+    priceRange: input.priceRange,
+    menuUrl: input.menuUrl,
     howKnown: input.howKnown,
     evidenceUrl: input.evidenceUrl,
     independent: input.independent,
