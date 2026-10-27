@@ -5,6 +5,7 @@ import { galleryOf } from '@/lib/gallery';
 import { effectiveTeamLevel } from '@/lib/team';
 import type { Restaurant } from '@/lib/types';
 import { BackLink } from './BackLink';
+import { DirectionsLink } from './DirectionsLink';
 import { Distance } from './Distance';
 import { HoursBlock } from './HoursBlock';
 import { OpenNow } from './OpenNow';
@@ -27,14 +28,13 @@ export function RestaurantDetail({
     r.description?.[locale] ?? r.description?.[routing.defaultLocale];
   const address = [r.address.street, r.address.city].filter(Boolean).join(', ');
   const { lat, lng } = r.location;
-  const directions = `https://www.openstreetmap.org/directions?to=${lat}%2C${lng}`;
   const verification = r.verification;
   const isAdmin = verification.level === 'admin';
   const teamLevel = effectiveTeamLevel(r);
   const foodTags = r.foodTags.filter((tag) => tf.has(`foodTags.${tag}`));
 
   const actions = [
-    { href: directions, label: t('directions'), primary: true, external: true },
+    { directions: true, label: t('directions'), primary: true },
     r.contact.phone && {
       href: `tel:${r.contact.phone.replace(/\s/g, '')}`,
       label: t('call'),
@@ -50,7 +50,8 @@ export function RestaurantDetail({
       external: true,
     },
   ].filter(Boolean) as {
-    href: string;
+    href?: string;
+    directions?: boolean;
     label: string;
     primary?: boolean;
     external?: boolean;
@@ -103,18 +104,29 @@ export function RestaurantDetail({
 
         <div className={styles.side}>
           <nav className={styles.actions} aria-label={t('actions')}>
-            {actions.map((a) => (
-              <a
-                key={a.label}
-                href={a.href}
-                className={a.primary ? styles.primary : styles.secondary}
-                {...(a.external
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                {a.label}
-              </a>
-            ))}
+            {actions.map((a) =>
+              a.directions ? (
+                <DirectionsLink
+                  key={a.label}
+                  lat={lat}
+                  lng={lng}
+                  name={r.name}
+                  label={a.label}
+                  className={styles.primary}
+                />
+              ) : (
+                <a
+                  key={a.label}
+                  href={a.href}
+                  className={a.primary ? styles.primary : styles.secondary}
+                  {...(a.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                >
+                  {a.label}
+                </a>
+              ),
+            )}
           </nav>
           {r.openingHours.length > 0 && <HoursBlock hours={r.openingHours} />}
           {r.accessibility && r.accessibility.length > 0 && (
