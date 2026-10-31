@@ -70,6 +70,8 @@ mongorestore --uri "mongodb://127.0.0.1:27017" --gzip --archive=copia.archive.gz
 
 Después se ve que están los locales (`db.restaurants.countDocuments()`). Anota aquí la fecha de la última restauración de prueba.
 
+Repite esta restauración de prueba antes de abrir al público, ya con datos reales, y apunta el resultado en el historial de abajo.
+
 Para restaurar en producción tras un desastre: se para la API (o se cambia `MONGODB_URI`), se restaura sobre una base nueva y se apunta la API a ella.
 
 ## Comprobación rápida de que una copia se abre
@@ -91,5 +93,5 @@ Si no sale nada, la copia o la clave no valen.
 
 ## Qué no cubre
 
-- Las fotos (cuando existan) viven en R2, no en la base de datos; se decidirá aparte si se copian.
+- **Las fotos.** Viven en R2 (`p/`, con su miniatura), no en la base de datos, y la copia semanal no las incluye. La base solo guarda sus nombres: si se perdieran los archivos, las fichas quedarían sin fotos aunque la base estuviera intacta. Pendiente de decidir cómo se respaldan (por ejemplo, otro bucket al que se copie a menudo, o versionado del bucket). Mientras tanto, no se borra nada de `p/` a mano: la limpieza automática solo retira las fotos de fichas ya borradas.
 - Una copia semanal puede perder hasta 7 días de datos. Si no basta, se sube a diaria (cambiar el `cron`) o se paga el plan de Atlas con copias automáticas (`06_COSTES.md`).
