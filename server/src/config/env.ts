@@ -17,8 +17,13 @@ const optional = <T extends z.ZodType>(type: T) =>
 
 const schema = z
   .object({
+    // Es el modo de Node, no el nombre del entorno: staging también va en
+    // `production`, y lo que lo distingue es su base de datos y sus direcciones.
     NODE_ENV: z
-      .enum(['development', 'test', 'production'])
+      .enum(['development', 'test', 'production'], {
+        error: (issue) =>
+          `debe ser exactamente development, test o production (llegó ${JSON.stringify(issue.input)}); staging también usa production`,
+      })
       .default('development'),
     PORT: z.coerce.number().int().min(1).max(65535).default(3001),
     // Orígenes de la web que pueden llamar a la API, separados por comas.

@@ -25,6 +25,13 @@ describe('loadConfig', () => {
     });
   });
 
+  it('NODE_ENV solo admite los tres modos de Node y explica qué llegó', () => {
+    expect(() => loadConfig({ NODE_ENV: 'staging' })).toThrow(
+      /llegó "staging"\); staging también usa production/,
+    );
+    expect(() => loadConfig({ NODE_ENV: 'production ' })).toThrow(/NODE_ENV/);
+  });
+
   it('en producción, con fotos, hace falta la dirección pública de la API', () => {
     const production = {
       NODE_ENV: 'production',
