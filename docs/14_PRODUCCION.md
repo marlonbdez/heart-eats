@@ -351,3 +351,77 @@ Al abrir (tras borrar los datos de prueba y terminar el SEO): quitar los tres, p
 5. **Aviso de caída** gratuito (monitorización externa) y alertas del servidor.
 6. **Segunda persona con acceso** a las cuentas (§5).
 7. **Tope de uso** puesto en el panel de Railway.
+
+## 10. Staging y producción
+
+> Estado a 2026-11-01. Staging ya funciona (API, base de datos y bucket propios). Producción nueva, el flujo por tags y los frenos de los scripts de datos están por hacer; lo que no está hecho se marca como tal.
+
+### Entornos y nombres
+
+Un solo patrón, `hearteats-<entorno>`, en todos los sistemas. Staging es un segundo juego completo de lo mismo, con datos de ejemplo, que se parece a producción en todo menos en los datos.
+
+| Sistema | Staging | Producción |
+|---|---|---|
+| Web | `staging.hearteats.org` | `hearteats.org` |
+| API | `api-staging.hearteats.org` | `api.hearteats.org` |
+| Atlas (proyecto y clúster) | `hearteats-staging` | `hearteats-production` |
+| Base de datos | `hearteats_staging` | `hearteats_production` |
+| Entorno de Railway | `staging` | `production` |
+| Bucket de fotos (R2, jurisdicción UE) | `hearteats-photos-staging` | `hearteats-photos-production` |
+
+- Web y API de staging cuelgan de `hearteats.org` (no de `*.netlify.app`) para que sean del **mismo sitio** y la cookie de moderación (`he_session`, `SameSite=Strict`) funcione.
+- En local la base se llama `hearteats`, así que hay tres nombres distintos y no se confunden.
+- Lo de hoy (proyecto de Atlas, clúster y bucket `hearteats-photos` con los datos de las pruebas) pasa a ser el **archivo** (`hearteats-legacy`) cuando producción cambie; se borra pasadas unas semanas.
+- Las copias de seguridad (`hearteats-backups`) son solo de producción; staging no se copia.
+
+### Cómo se pasa de uno a otro
+
+- **Una sola rama de trabajo, `main`.** Lo que se fusiona se despliega solo en staging.
+- **A producción se promueve una versión que ya se probó en staging**, marcada con un tag (`v0.x` hasta el lanzamiento, `v1.0.0` el día que se abra). Volver atrás es publicar el tag anterior.
+- Railway y Netlify despliegan desde una rama, así que existirá una rama `production` que **nadie escribe**: solo señala qué versión está publicada y un botón de GitHub la mueve al tag elegido. ⏳ Pendiente: crear la rama, el botón y apuntar Netlify y Railway a ella. Hasta entonces, producción sigue saliendo de `main`.
+- En Netlify se distinguen por contexto (`netlify.toml`): la rama de producción usa `api.hearteats.org`; `main` (como despliegue de rama) y las vistas previas, `api-staging.hearteats.org`.
+
+### Variables de la API de staging (Railway → `staging`)
+
+Las mismas que en §3.1, con estos valores. Nada se copia de producción.
+
+| Variable | Staging |
+|---|---|
+| `NODE_ENV` | `production`. **Es el modo de Node, no el nombre del entorno**: solo admite `development`, `test` o `production`, y staging corre en `production` para probar lo que va a salir |
+| `MONGODB_URI` | Usuario `api` de Atlas (staging), terminada en `/hearteats_staging` |
+| `REPLY_TOKEN_SECRET` | Uno propio (`openssl rand -hex 32`), distinto del de producción |
+| `RESEND_API_KEY` | Clave propia de Resend (`hearteats-staging`), revocable por separado |
+| `MAIL_FROM` | `HeartEats Staging <staging@mail.hearteats.org>` |
+| `ADMIN_EMAIL` | Correo del responsable |
+| `WEB_URL`, `CORS_ORIGINS` | `https://staging.hearteats.org` |
+| `API_URL` | `https://api-staging.hearteats.org` |
+| `TRUST_PROXY` | `1` |
+| `R2_ACCOUNT_ID` | El de la cuenta de Cloudflare |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Token `hearteats-staging-api`, limitado a su bucket |
+| `R2_PHOTOS_BUCKET`, `R2_JURISDICTION` | `hearteats-photos-staging`, `eu` |
+
+Las variables de Railway que se preparan no valen hasta pulsar *Deploy*: si el servidor sigue leyendo la base equivocada, mirar primero si quedó algún cambio pendiente.
+
+### Usuarios de Atlas (permiso mínimo)
+
+| Proyecto | Usuario | Permiso | Quién lo usa |
+|---|---|---|---|
+| Staging | `api` | `readWrite@hearteats_staging` | Railway (staging) |
+| Staging | `ops` | `readWrite@hearteats_staging` | El ordenador del responsable (`seed`, `seed:stress`, `seed:photos`) |
+| Producción | `api` | `readWrite@hearteats_production` | Solo Railway (producción) |
+| Producción | `backup` | `read@hearteats_production` | Solo el secreto de GitHub de la copia semanal |
+| Producción | `ops` | `readWrite@hearteats_production` | El ordenador, **solo a propósito** y quitándolo después |
+
+El usuario con `atlasAdmin` que Atlas crea solo al montar el clúster se borra. Acceso de red: `0.0.0.0/0`, porque Railway no tiene IP fija; la única barrera son las contraseñas (autogeneradas) y los permisos mínimos.
+
+### Buscadores
+
+El cierre a buscadores (§9) vale para todo hasta el lanzamiento. **Al abrir, solo se abre producción:** staging debe seguir cerrado (hoy `X-Robots-Tag`, `robots.txt` y la etiqueta `robots` son comunes a todos los contextos; habrá que separarlos entonces).
+
+### Hecho y por hacer
+
+- [x] Atlas (staging y producción nuevos), Cloudflare (buckets y tokens de los dos), Railway `staging` y su dominio `api-staging.hearteats.org`.
+- [ ] Web de staging (`staging.hearteats.org`) y rama `production`.
+- [ ] Probar en staging: entrar en moderación, proponer un local, subir una foto (prueba la jurisdicción UE) y cargar datos de ejemplo.
+- [ ] Cambiar las variables del entorno `production` de Railway y el secreto `MONGODB_URI` (y la base copiada) de `backup.yml`.
+- [ ] Frenos en los scripts de datos de ejemplo contra la base de producción; renombrar `heart-eats` a `hearteats`.

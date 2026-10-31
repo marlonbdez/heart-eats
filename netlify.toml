@@ -6,8 +6,19 @@
 
 [build.environment]
   NODE_VERSION = "24"
-  # La web lee los datos de la API desde el navegador.
+  # La web lee los datos de la API desde el navegador. Por defecto, la de
+  # producción; staging y las vistas previas la cambian justo debajo.
   NEXT_PUBLIC_API_URL = "https://api.hearteats.org"
+
+# Entornos (docs/14_PRODUCCION.md, «Staging y producción»): la rama de
+# producción se despliega con el contexto «production» y lo demás, incluido
+# main, que es staging, con «branch-deploy». Las vistas previas de las PR
+# también leen de staging, nunca de la base real.
+[context.branch-deploy.environment]
+  NEXT_PUBLIC_API_URL = "https://api-staging.hearteats.org"
+
+[context.deploy-preview.environment]
+  NEXT_PUBLIC_API_URL = "https://api-staging.hearteats.org"
 
 # Idioma: la raíz (/) la resuelve la propia página en el navegador (el idioma
 # que la persona eligió, si no el del navegador, si no inglés), porque la
