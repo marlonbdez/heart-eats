@@ -379,7 +379,7 @@ Un solo patrón, `hearteats-<entorno>`, en todos los sistemas. Staging es un seg
 - **Una sola rama de trabajo, `main`.** Lo que se fusiona se despliega solo en staging.
 - **A producción se promueve una versión que ya se probó en staging**, marcada con un tag (`v0.x` hasta el lanzamiento, `v1.0.0` el día que se abra). Volver atrás es publicar el tag anterior.
 - Railway y Netlify despliegan desde una rama, así que existirá una rama `production` que **nadie escribe**: solo señala qué versión está publicada y un botón de GitHub la mueve al tag elegido. ⏳ Pendiente: crear la rama, el botón y apuntar Netlify y Railway a ella. Hasta entonces, producción sigue saliendo de `main`.
-- En Netlify se distinguen por contexto (`netlify.toml`): la rama de producción usa `api.hearteats.org`; `main` (como despliegue de rama) y las vistas previas, `api-staging.hearteats.org`.
+- **Dos proyectos de Netlify con el mismo repo**: `hearteats` despliega la rama `production` en `hearteats.org`, y `hearteats-staging` despliega `main` en `staging.hearteats.org`. En `netlify.toml`, el contexto de la rama `main` y el de las vistas previas apuntan a `api-staging.hearteats.org`; lo demás, a `api.hearteats.org`. (Los subdominios de rama de un solo proyecto no estaban disponibles en nuestro plan, y además dos proyectos separan por completo las variables y los dominios.) Las vistas previas de las PR de `hearteats` tampoco pueden llamar a la API (CORS).
 
 ### Variables de la API de staging (Railway → `staging`)
 

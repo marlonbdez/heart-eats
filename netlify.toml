@@ -10,10 +10,15 @@
   # producción; staging y las vistas previas la cambian justo debajo.
   NEXT_PUBLIC_API_URL = "https://api.hearteats.org"
 
-# Entornos (docs/14_PRODUCCION.md, «Staging y producción»): la rama de
-# producción se despliega con el contexto «production» y lo demás, incluido
-# main, que es staging, con «branch-deploy». Las vistas previas de las PR
-# también leen de staging, nunca de la base real.
+# Entornos (docs/14_PRODUCCION.md, «Staging y producción»): hay dos proyectos
+# de Netlify con este mismo repo. El de producción despliega la rama
+# «production»; el de staging despliega «main». Una rama con su propio
+# contexto manda sobre los demás, así que main siempre lee de staging y
+# production, de la API real. Las vistas previas de las PR también leen de
+# staging, nunca de la base real.
+[context.main.environment]
+  NEXT_PUBLIC_API_URL = "https://api-staging.hearteats.org"
+
 [context.branch-deploy.environment]
   NEXT_PUBLIC_API_URL = "https://api-staging.hearteats.org"
 
