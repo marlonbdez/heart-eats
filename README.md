@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/design/brand/logo.svg" width="96" alt="Logo de HeartEats: un corazón con forma de galleta y un mordisco"></p>
+
 # HeartEats
 
 Mapa colaborativo y de código abierto para descubrir y apoyar restaurantes y negocios gastronómicos locales que apuestan por la **inclusión laboral de personas con discapacidad**. Lanzamiento en Madrid, pensado para ser internacional.
