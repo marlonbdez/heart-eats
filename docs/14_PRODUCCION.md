@@ -258,6 +258,8 @@ npm run seed -- --refresh
 
 Si un local de ejemplo no existe, lo crea con su equipo; si su slug lo usa un local que no es de ejemplo, lo deja y lo dice. Quita después la línea del `.env`, como en el apartado siguiente. Se puede repetir sin riesgo.
 
+> **Freno de los scripts de datos (`seed`, `seed:stress`, `seed:photos`).** Solo cargan o borran en una base **local** o de **staging** (nombre terminado en `_staging`). En cualquier otra, la de producción incluida, se niegan e indican que hace falta `--production`. Hoy, mientras producción siga en la base `hearteats`, los comandos de abajo contra producción necesitan ese `--production`; en staging no.
+
 **No uses `npm run seed` a secas contra producción**: borra *todo* lo marcado `isDemo` (también los ~630 de `seed:stress`) y recrea solo los 6.
 
 ### Poner fotos a los locales de ejemplo
@@ -426,4 +428,5 @@ El cierre a buscadores (§9) vale para todo hasta el lanzamiento. **Al abrir, so
 - [ ] Despliegue de `staging` en Netlify y subdominio `staging.hearteats.org`; el entorno `staging` de Railway pasa a desplegar desde la rama `staging`; borrar la rama `production`, que ya no hace falta.
 - [ ] Probar en staging: entrar en moderación, proponer un local, subir una foto (prueba la jurisdicción UE) y cargar datos de ejemplo.
 - [ ] Cambiar las variables del entorno `production` de Railway y el secreto `MONGODB_URI` (y la base copiada) de `backup.yml`.
-- [ ] Frenos en los scripts de datos de ejemplo contra la base de producción; renombrar `heart-eats` a `hearteats`.
+- [x] Frenos en los scripts de datos de ejemplo contra la base de producción (`server/seed/database-guard.ts`).
+- [ ] Renombrar `heart-eats` a `hearteats` en los textos y paquetes.
