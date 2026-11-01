@@ -12,7 +12,7 @@ HeartEats es de código abierto y sin ánimo de lucro, y se construye mejor entr
 
 ## Proponer un cambio de código
 
-- Haz tu propia copia (*fork*) del repositorio y abre una PR contra `main`. Nadie de fuera puede fusionar nada: **cada PR la revisa y la aprueba el responsable del proyecto** antes de entrar, con calma y con ganas de que salga bien.
+- Haz tu propia copia (*fork*) del repositorio y abre una PR contra `staging` (la rama de pruebas; `main` es la de producción y solo la actualiza el responsable). Nadie de fuera puede fusionar nada: **cada PR la revisa y la aprueba el responsable del proyecto** antes de entrar, con calma y con ganas de que salga bien.
 - Antes de empezar algo grande, abre una incidencia y lo hablamos: así no trabajas en vano.
 - Lee [`CLAUDE.md`](CLAUDE.md), que recoge las reglas de trabajo (móvil primero, accesibilidad, textos en ES y EN, una prueba e2e por cambio de interfaz).
 - Ramas: `feature/…`, `fix/…`, `docs/…`.
