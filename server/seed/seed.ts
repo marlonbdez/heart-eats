@@ -16,6 +16,7 @@ import { loadConfig } from '../src/config/env.js';
 import { connectDb, disconnectDb } from '../src/db.js';
 import { Restaurant } from '../src/models/restaurant.js';
 import { Team } from '../src/models/team.js';
+import { requireSafeDatabase } from './database-guard.js';
 import { refreshDemoPlaces, type SeedEntry } from './refresh.js';
 
 const entries = JSON.parse(
@@ -23,6 +24,7 @@ const entries = JSON.parse(
 ) as SeedEntry[];
 
 const config = loadConfig();
+requireSafeDatabase(config.MONGODB_URI);
 await connectDb(config.MONGODB_URI);
 await Restaurant.init();
 await Team.init();

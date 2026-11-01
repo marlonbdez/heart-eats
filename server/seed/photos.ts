@@ -14,9 +14,11 @@ import { loadConfig } from '../src/config/env.js';
 import { connectDb, disconnectDb } from '../src/db.js';
 import { Restaurant } from '../src/models/restaurant.js';
 import { Team } from '../src/models/team.js';
+import { requireSafeDatabase } from './database-guard.js';
 import { planPhotos, usablePhotos } from './photos-plan.js';
 
 const config = loadConfig();
+requireSafeDatabase(config.MONGODB_URI);
 const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY } = config;
 if (
   !config.MONGODB_URI ||
