@@ -224,10 +224,10 @@ Los plazos son **provisionales** hasta la revisión legal (`08_PRIVACIDAD_LEGAL.
 Cada cambio entra por una PR y la aprueba el responsable. `.github/CODEOWNERS` lo nombra dueño de todo (`* @marlonbdez`). Para que sea obligatorio, en GitHub → *Settings → Branches → Branch protection rules* (o *Rulesets*) sobre `main`: exigir una PR antes de fusionar, **exigir revisión de los Code Owners**, exigir que pasen las comprobaciones, no permitir *force-push* ni borrar la rama, y dar permiso de escritura solo a quien deba tenerlo (quien contribuye desde fuera trabaja en su *fork* y no puede fusionar nada). Mientras seas la única persona con permiso de escritura, GitHub no te deja aprobar tu propia PR: deja el número de aprobaciones requeridas en 0 y **pon activa la revisión de Code Owners solo cuando haya más personas con escritura**; entonces cada PR de un tercero necesitará tu aprobación.
 
 ### 6.10 Despliegue
-- **Web**: cada fusión a `main` despliega en Netlify; cada PR tiene su vista previa (que, hoy, **no puede llamar a la API**: `CORS_ORIGINS` solo incluye `https://hearteats.org`).
-- **API**: Railway despliega solo cada vez que cambia `main` (lo hace la integración con GitHub; aparece como *railway-app[bot]* en los despliegues). El panel de Railway muestra como constructor «Railpack» (el predeterminado); el comando de arranque del proyecto es `npm start` (`node dist/server.js`). El `Dockerfile` de `server/` está pensado para desarrollo local y para una opción de despliegue con Docker; ❓ confirmar cuál usa Railway hoy.
-- **CI** (`.github/workflows/ci.yml`): en cada PR y en `main`, servidor (lint, tipos, pruebas con MongoDB en memoria, build) y web (lint, tipos, build, prueba de humo).
-- Nunca se hace *push* a `main`: todo entra por PR.
+- **Web**: cada fusión a `main` despliega producción en Netlify y cada fusión a `staging`, staging; cada PR tiene su vista previa (que, hoy, **no puede llamar a la API**: `CORS_ORIGINS` solo incluye `https://hearteats.org`).
+- **API**: Railway despliega solo: el entorno `production` cada vez que cambia `main` y el entorno `staging` cada vez que cambia `staging` (lo hace la integración con GitHub; aparece como *railway-app[bot]* en los despliegues). El panel de Railway muestra como constructor «Railpack» (el predeterminado); el comando de arranque del proyecto es `npm start` (`node dist/server.js`). El `Dockerfile` de `server/` está pensado para desarrollo local y para una opción de despliegue con Docker; ❓ confirmar cuál usa Railway hoy.
+- **CI** (`.github/workflows/ci.yml`): en cada PR y en `main` y `staging`, servidor (lint, tipos, pruebas con MongoDB en memoria, build) y web (lint, tipos, build, prueba de humo).
+- Nunca se hace *push* directo a `main` ni a `staging`: todo entra por PR (las de trabajo, contra `staging`; la de publicar, de `staging` a `main`).
 
 ## 7. Operación
 
@@ -376,10 +376,11 @@ Un solo patrón, `hearteats-<entorno>`, en todos los sistemas. Staging es un seg
 
 ### Cómo se pasa de uno a otro
 
-- **Una sola rama de trabajo, `main`.** Lo que se fusiona se despliega solo en staging.
-- **A producción se promueve una versión que ya se probó en staging**, marcada con un tag (`v0.x` hasta el lanzamiento, `v1.0.0` el día que se abra). Volver atrás es publicar el tag anterior.
-- Railway y Netlify despliegan desde una rama, así que existirá una rama `production` que **nadie escribe**: solo señala qué versión está publicada y un botón de GitHub la mueve al tag elegido. ⏳ Pendiente: crear la rama, el botón y apuntar Netlify y Railway a ella. Hasta entonces, producción sigue saliendo de `main`.
-- En Netlify se distinguen por contexto (`netlify.toml`): la rama de producción usa `api.hearteats.org`; `main` (como despliegue de rama) y las vistas previas, `api-staging.hearteats.org`.
+- **Dos ramas fijas.** `staging` es donde se fusionan las funcionalidades y se prueban; `main` es producción. Cada una se despliega sola: `staging` en el entorno `staging` de Railway y en `staging.hearteats.org` (Netlify, subdominio de rama), `main` en el entorno `production` y en `hearteats.org`.
+- **Las PR de trabajo van contra `staging`.** Nadie hace push directo a ninguna de las dos.
+- **Publicar** es una PR de `staging` a `main`, que solo fusiona el responsable, con **«Create a merge commit»** y nunca *Squash* (con squash las ramas divergen). Si algún día se arregla algo directamente en `main`, se fusiona luego `main` en `staging`.
+- Volver atrás es revertir esa fusión en `main` con otra PR.
+- En Netlify se distinguen por contexto (`netlify.toml`): `main` usa `api.hearteats.org`; `staging` (despliegue de rama) y las vistas previas, `api-staging.hearteats.org`. El subdominio de rama de Netlify tiene que llamarse igual que la rama, por eso la rama se llama `staging`.
 
 ### Variables de la API de staging (Railway → `staging`)
 
@@ -421,7 +422,8 @@ El cierre a buscadores (§9) vale para todo hasta el lanzamiento. **Al abrir, so
 ### Hecho y por hacer
 
 - [x] Atlas (staging y producción nuevos), Cloudflare (buckets y tokens de los dos), Railway `staging` y su dominio `api-staging.hearteats.org`.
-- [ ] Web de staging (`staging.hearteats.org`) y rama `production`.
+- [x] Rama `staging` creada desde `main`; Netlify con `main` como producción.
+- [ ] Despliegue de `staging` en Netlify y subdominio `staging.hearteats.org`; el entorno `staging` de Railway pasa a desplegar desde la rama `staging`; borrar la rama `production`, que ya no hace falta.
 - [ ] Probar en staging: entrar en moderación, proponer un local, subir una foto (prueba la jurisdicción UE) y cargar datos de ejemplo.
 - [ ] Cambiar las variables del entorno `production` de Railway y el secreto `MONGODB_URI` (y la base copiada) de `backup.yml`.
 - [ ] Frenos en los scripts de datos de ejemplo contra la base de producción; renombrar `heart-eats` a `hearteats`.

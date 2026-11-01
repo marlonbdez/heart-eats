@@ -23,8 +23,9 @@ Mapa abierto y sin ánimo de lucro de negocios de hostelería de Madrid que empl
 
 ## Git
 
-- Rama por funcionalidad (`feature/…`, `fix/…`, `docs/…`) y PR contra `main`. Nunca se hace push a `main`.
-- Si una rama entra en conflicto, se fusiona `main` en ella; no se hace force-push.
+- Dos ramas fijas: **`staging`** (donde se fusiona y se prueba, en `staging.hearteats.org`) y **`main`** (producción real, `hearteats.org`). Rama por funcionalidad (`feature/…`, `fix/…`, `docs/…`) y PR contra `staging`. Nunca se hace push directo a `staging` ni a `main`.
+- Publicar es una PR de `staging` a `main`, fusionada con **«Create a merge commit»** (nunca *Squash*: las dos ramas acabarían divergiendo). Si algún día se arregla algo directamente en `main`, se fusiona luego `main` en `staging`.
+- Si una rama entra en conflicto, se fusiona `staging` en ella; no se hace force-push.
 - No commitear el `package-lock.json` de la raíz (el bueno es `web/package-lock.json`).
 - Commits convencionales, en español, p. ej. `feat(web): …`.
 - Después de abrir una PR no se sondea el CI; se mira su estado cuando haga falta.
